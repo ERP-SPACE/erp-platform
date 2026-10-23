@@ -28,7 +28,7 @@ export const SETTINGS = {
     default: [30, 35, 45, 55, 65, 80, 100],
   },
   "pricing.rateDecimals": {
-    label: "Decimals for derived per-metre rates (pending owner — Q6)",
+    label: "Decimals for derived per-metre rates",
     group: "Pricing",
     schema: z.number().int().min(0).max(4),
     default: 2,
@@ -46,7 +46,7 @@ export const SETTINGS = {
     default: 1,
   },
   "credit.defaults": {
-    label: "Default credit policy for new customers (pending owner — Q7)",
+    label: "Default credit policy for new customers",
     group: "Credit",
     schema: z.object({
       creditLimit: decimalString,
@@ -55,7 +55,13 @@ export const SETTINGS = {
       blockRule: z.enum(["OVER_LIMIT", "OVER_DUE", "BOTH"]),
       autoBlock: z.boolean(),
     }),
-    default: { creditLimit: "0", creditDays: 30, graceDays: 7, blockRule: "BOTH", autoBlock: true },
+    default: {
+      creditLimit: "100000",
+      creditDays: 30,
+      graceDays: 15,
+      blockRule: "BOTH",
+      autoBlock: true,
+    },
   },
   "inventory.aging": {
     label: "Stock aging",
