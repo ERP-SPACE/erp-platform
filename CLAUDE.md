@@ -30,7 +30,7 @@ ERP for a sublimation & speciality paper trading company in Surat, Gujarat. It r
 - **Infrastructure:** PostgreSQL 17, Redis. Auth via Better Auth (session cookies, argon2id, TOTP for Owner, step-up re-auth).
 - **Testing:** Vitest + fast-check, Testcontainers Postgres, Playwright.
 - **Repo (ADR-0019):** a single private monorepo, `ERP-SPACE/erp-platform`.
-- **Local-first:** Docker Compose runs Postgres 17, Redis 7, MinIO (S3) and Mailpit. S3, email and e-invoice sit behind adapters. Config is env vars validated by Zod.
+- **Local-first:** Docker Compose runs Postgres 17, Redis 7 and Mailpit. MinIO is opt-in (`--profile storage`): its public image was withdrawn, so pick a replacement S3-compatible image when Stage 1 needs file storage. S3, email and e-invoice sit behind adapters. Config is env vars validated by Zod.
 - **AWS (Stage 7 — Cloud deployment, after local UAT sign-off):** ap-south-1 — ECS Fargate, RDS, ElastiCache, S3, CloudFront; Terraform; GitHub Actions → ECR. No AWS work before Stage 7.
 
 ## Non-negotiable rules

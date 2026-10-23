@@ -11,7 +11,7 @@ import { keys, meQuery } from "../lib/queries.js";
 export const Route = createFileRoute("/setup-2fa")({
   beforeLoad: async ({ context }) => {
     try {
-      await context.queryClient.ensureQueryData(meQuery);
+      await context.queryClient.fetchQuery(meQuery);
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) throw redirect({ to: "/login" });
       throw error;

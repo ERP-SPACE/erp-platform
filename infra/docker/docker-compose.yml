@@ -31,7 +31,11 @@ services:
       timeout: 3s
       retries: 20
 
+  # Object storage is first used in Stage 1 (KYC uploads). The minio/minio image is no longer
+  # publicly pullable, so this service is opt-in (`--profile storage`) until a replacement
+  # S3-compatible image is chosen.
   minio:
+    profiles: ["storage"]
     image: minio/minio:latest
     command: server /data --console-address ":9001"
     environment:

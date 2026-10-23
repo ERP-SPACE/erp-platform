@@ -7,7 +7,9 @@ import { meQuery } from "../lib/queries.js";
 export const Route = createFileRoute("/_app")({
   beforeLoad: async ({ context, location }) => {
     try {
-      const me = await context.queryClient.ensureQueryData(meQuery);
+      // fetchQuery, not ensureQueryData: after sign-in or TOTP enrolment the cached /me is
+      // invalidated, and the guard must see the fresh value, not the stale one.
+      const me = await context.queryClient.fetchQuery(meQuery);
       if (me.totpEnrolmentRequired) throw redirect({ to: "/setup-2fa" });
       return { me };
     } catch (error) {

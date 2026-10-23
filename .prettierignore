@@ -5,3 +5,8 @@ docs/prd
 **/routeTree.gen.ts
 packages/contracts/src/generated
 packages/db/migrations/meta
+# Hand-written prose and generated files are not machine-formatted
+*.md
+packages/contracts/openapi.json
+apps/web/playwright-report
+apps/web/test-results

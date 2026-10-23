@@ -46,10 +46,11 @@ export default defineConfig({
           },
         ]),
     {
-      command: "pnpm --filter @erp/web dev",
+      // The production build, not the dev server: no on-demand compilation during the first test.
+      command: "pnpm --filter @erp/web build && pnpm --filter @erp/web preview",
       url: "http://localhost:5173/login",
       reuseExistingServer: !process.env.CI,
-      timeout: 60_000,
+      timeout: 180_000,
     },
   ],
 });

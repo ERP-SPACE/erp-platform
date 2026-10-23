@@ -5,7 +5,7 @@ Development happens **locally first** (Docker Compose). AWS comes after local UA
 | Stage | Scope | Status |
 |---|---|---|
 | Part A | CLAUDE.md, legacy port matrix, ADRs, open questions | Done (2026-10-23) |
-| 0 | Foundation: monorepo, Docker Compose, CI (no deploy), auth/RBAC, audit, settings, document series, design system, app shell | Ready to start once Docker + `gh` are installed (Q4a) |
+| 0 | Foundation: monorepo, Docker Compose, CI (no deploy), auth/RBAC, audit, settings, document series, design system, app shell | Built and verified locally (2026-10-23) — awaiting owner sign-off and merge |
 | 1 | Masters: catalogue, suppliers, transporters, customers (`allow_cut`, GST profile), credit policy, per-metre party rates, salesmen, commission rules | Needs Q6–Q11 |
 | 2 | Purchase & inventory: PO, GRN + barcodes, unmapped staging, PI, landed cost, purchase returns, Roll Inspector, roll cutting primitives, `/floor` | Not started |
 | 3 | Sales + **e-invoicing**: pricing engine, SO + credit check, Sales Board, DC picking with cuts, SI + IRN (NIC sandbox), e-way bill, proforma, direct invoice, sales returns, CN/DN with IRN | Needs Q19–Q22, Q27, Q28; CA defaults (Q18) re-raised |

@@ -24,9 +24,9 @@ minimumReleaseAgeExclude:
   - "@swc/core-win32-ia32-msvc@1.16.20"
   - "@swc/core-win32-x64-msvc@1.16.20"
   - "@swc/core@1.16.20"
-  - '@tanstack/react-virtual@3.14.22'
-  - '@tanstack/virtual-core@3.19.7'
-  - '@tanstack/react-router@1.170.46'
-  - '@tanstack/router-core@1.171.39'
-  - '@tanstack/router-generator@1.167.46'
-  - '@tanstack/router-plugin@1.168.48'
+  - "@tanstack/react-virtual@3.14.22"
+  - "@tanstack/virtual-core@3.19.7"
+  - "@tanstack/react-router@1.170.46"
+  - "@tanstack/router-core@1.171.39"
+  - "@tanstack/router-generator@1.167.46"
+  - "@tanstack/router-plugin@1.168.48"
