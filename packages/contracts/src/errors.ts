@@ -16,6 +16,7 @@ export const ERROR_CODES = [
   "INVALID_SERIES",
   "INVALID_AMOUNT",
   "REASON_REQUIRED",
+  "RATE_LIMITED",
   "INTERNAL_ERROR",
 ] as const;
 
