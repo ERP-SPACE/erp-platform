@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { formatINR, formatINRCompact, formatNumber, formatQty, groupIndian } from "../src/format.js";
+import {
+  formatINR,
+  formatINRCompact,
+  formatNumber,
+  formatQty,
+  groupIndian,
+} from "../src/format.js";
 
 describe("Indian formatting", () => {
   it("groups digits in lakh/crore style", () => {

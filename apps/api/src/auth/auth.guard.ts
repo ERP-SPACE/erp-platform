@@ -35,11 +35,16 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const meta = <T>(key: string) =>
-      this.reflector.getAllAndOverride<T | undefined>(key, [context.getHandler(), context.getClass()]);
+      this.reflector.getAllAndOverride<T | undefined>(key, [
+        context.getHandler(),
+        context.getClass(),
+      ]);
     if (meta<boolean>(PUBLIC_KEY)) return true;
 
     const request = context.switchToHttp().getRequest<FastifyRequest>();
-    const result = await this.auth.api.getSession({ headers: fromNodeHeaders(request.raw.headers) });
+    const result = await this.auth.api.getSession({
+      headers: fromNodeHeaders(request.raw.headers),
+    });
     if (!result) throw unauthenticated();
 
     const actor = await this.actors.load({
@@ -59,7 +64,8 @@ export class AuthGuard implements CanActivate {
     const missing = required.filter((code) => !actor.permissions.has(code));
     if (missing.length > 0) throw forbidden(`perform this action (needs ${missing.join(", ")})`);
 
-    if (meta<boolean>(FRESH_AUTH_KEY) && !(await this.actors.freshUntil(actor))) throw stepUpRequired();
+    if (meta<boolean>(FRESH_AUTH_KEY) && !(await this.actors.freshUntil(actor)))
+      throw stepUpRequired();
     if (meta<boolean>(REQUIRE_REASON_KEY) && !store?.reason) throw reasonRequired();
     return true;
   }

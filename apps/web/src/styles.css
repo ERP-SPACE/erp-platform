@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "@erp/ui/tokens.css";
+
+/* Tailwind must see the class names used inside the design-system package. */
+@source "../../../packages/ui/src";

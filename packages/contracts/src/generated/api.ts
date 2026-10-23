@@ -296,7 +296,7 @@ export interface components {
             roles: string[];
             permissions: string[];
             totpEnrolmentRequired: boolean;
-            freshUntil: string[];
+            freshUntil: string | null;
         };
         StepUpDto: {
             password: string;
@@ -310,7 +310,7 @@ export interface components {
             name: string;
             email: string;
             active: boolean;
-            twoFactorEnabled: boolean[];
+            twoFactorEnabled: boolean | null;
             createdAt: string;
             roleCodes: string[];
         };
@@ -355,8 +355,8 @@ export interface components {
             value: unknown;
             defaultValue: unknown;
             version: number;
-            updatedAt: string[];
-            updatedByName: string[];
+            updatedAt: string | null;
+            updatedByName: string | null;
         };
         UpdateSettingDto: {
             value: unknown;
@@ -371,10 +371,10 @@ export interface components {
             id: string;
             code: string;
             legalName: string;
-            tradeName: string[];
-            gstin: string[];
+            tradeName: string | null;
+            gstin: string | null;
             stateCode: string;
-            pan: string[];
+            pan: string | null;
             address: {
                 line1: string;
                 line2?: string;
@@ -389,10 +389,10 @@ export interface components {
                 ifsc: string;
                 branch?: string;
             } | null;
-            email: string[];
-            phone: string[];
-            logoKey: string[];
-            signatoryName: string[];
+            email: string | null;
+            phone: string | null;
+            logoKey: string | null;
+            signatoryName: string | null;
             isPlaceholder: boolean;
             version: number;
             updatedAt: string;
@@ -417,7 +417,6 @@ export interface components {
                 ifsc: string;
                 branch?: string;
             } | null;
-            /** Format: email */
             email: string | null;
             phone: string | null;
             signatoryName: string | null;
@@ -436,7 +435,7 @@ export interface components {
             usedThisYear: number;
             nextNumber: string;
             updatedAt: string;
-            updatedByName: string[];
+            updatedByName: string | null;
         };
         SeriesPreviewDto: {
             entityType: string;
@@ -469,7 +468,7 @@ export interface components {
                 userId: string | null;
                 userName: string | null;
             }[];
-            nextCursor: string[];
+            nextCursor: string | null;
         };
     };
     responses: never;

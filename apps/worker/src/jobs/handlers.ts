@@ -21,12 +21,17 @@ export const handlers: Record<JobName, Handler> = {
 
   /** Keeps monthly audit partitions two months ahead (migration 0001). */
   async "audit.ensure-partitions"({ db }) {
-    const result = await db.db.execute<{ created: number }>(sql`SELECT audit.ensure_partitions(2) AS created`);
+    const result = await db.db.execute<{ created: number }>(
+      sql`SELECT audit.ensure_partitions(2) AS created`,
+    );
     return { created: result.rows[0]?.created ?? 0 };
   },
 
   async "idempotency.purge-expired"({ db }) {
-    const deleted = await db.db.delete(idempotencyKeys).where(lt(idempotencyKeys.expiresAt, new Date())).returning({ key: idempotencyKeys.key });
+    const deleted = await db.db
+      .delete(idempotencyKeys)
+      .where(lt(idempotencyKeys.expiresAt, new Date()))
+      .returning({ key: idempotencyKeys.key });
     return { deleted: deleted.length };
   },
 

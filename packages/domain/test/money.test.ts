@@ -1,6 +1,13 @@
 import fc from "fast-check";
 import { describe, expect, it } from "vitest";
-import { D, InvalidAmountError, allocateLargestRemainder, round, sum, toFixedString } from "../src/money.js";
+import {
+  D,
+  InvalidAmountError,
+  allocateLargestRemainder,
+  round,
+  sum,
+  toFixedString,
+} from "../src/money.js";
 
 const strings = (values: { toFixed(n: number): string }[]) => values.map((v) => v.toFixed(2));
 
@@ -58,7 +65,11 @@ describe("allocateLargestRemainder", () => {
   });
 
   it("supports other precisions", () => {
-    expect(allocateLargestRemainder("10", [1, 1, 1], 0).map((v) => v.toString())).toEqual(["4", "3", "3"]);
+    expect(allocateLargestRemainder("10", [1, 1, 1], 0).map((v) => v.toString())).toEqual([
+      "4",
+      "3",
+      "3",
+    ]);
   });
 
   it("rejects bad input", () => {
@@ -79,7 +90,9 @@ describe("allocateLargestRemainder", () => {
           const weightSum = weights.reduce((a, b) => a + b, 0);
           parts.forEach((part, i) => {
             const ideal =
-              weightSum === 0 ? total.dividedBy(weights.length) : total.times(weights[i]!).dividedBy(weightSum);
+              weightSum === 0
+                ? total.dividedBy(weights.length)
+                : total.times(weights[i]!).dividedBy(weightSum);
             expect(part.minus(ideal).abs().lessThan("0.01")).toBe(true);
             expect(part.decimalPlaces()).toBeLessThanOrEqual(2);
           });

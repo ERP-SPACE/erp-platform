@@ -63,7 +63,13 @@ export async function seed(db: Db, options: SeedOptions): Promise<SeedResult> {
 
     await tx
       .insert(branches)
-      .values({ companyId: company.id, code: "SRT", name: "Surat Hub", stateCode: "24", isDefault: true })
+      .values({
+        companyId: company.id,
+        code: "SRT",
+        name: "Surat Hub",
+        stateCode: "24",
+        isDefault: true,
+      })
       .onConflictDoNothing();
     const branch = (
       await tx
@@ -93,7 +99,10 @@ export async function seed(db: Db, options: SeedOptions): Promise<SeedResult> {
       )[0]!;
       roleIds.set(role.code, row.id);
       for (const permissionCode of expandGrants(role.grants)) {
-        await tx.insert(rolePermissions).values({ roleId: row.id, permissionCode }).onConflictDoNothing();
+        await tx
+          .insert(rolePermissions)
+          .values({ roleId: row.id, permissionCode })
+          .onConflictDoNothing();
       }
     }
 

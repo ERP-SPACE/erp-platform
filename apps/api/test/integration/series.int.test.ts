@@ -22,7 +22,8 @@ describe("document numbering (ADR-0003)", () => {
     sessionCreatedAt: new Date(),
     twoFactorEnabled: false,
   });
-  const asOwner = <T>(fn: () => Promise<T>) => requestContext.run({ requestId: "test", actor: systemActor() }, fn);
+  const asOwner = <T>(fn: () => Promise<T>) =>
+    requestContext.run({ requestId: "test", actor: systemActor() }, fn);
 
   beforeAll(async () => {
     t = await startApp();
@@ -40,7 +41,9 @@ describe("document numbering (ADR-0003)", () => {
 
   it("50 concurrent allocations produce exactly 1..50 — no gaps, no duplicates", async () => {
     const numbers = await Promise.all(
-      Array.from({ length: 50 }, () => asOwner(() => uow.run((tx) => series.allocate(tx, "PO", "2026-10-23")))),
+      Array.from({ length: 50 }, () =>
+        asOwner(() => uow.run((tx) => series.allocate(tx, "PO", "2026-10-23"))),
+      ),
     );
     const seqs = numbers.map((n) => Number(n.split("/").at(-1))).sort((a, b) => a - b);
     expect(seqs).toEqual(Array.from({ length: 50 }, (_, i) => i + 1));
@@ -69,12 +72,19 @@ describe("document numbering (ADR-0003)", () => {
 
   it("rejects a GST series that could exceed 16 characters", async () => {
     const owner = await Client.signIn(t.fastify);
-    const list = json<{ entityType: string; version: number }[]>(await owner.get("/api/document-series"));
+    const list = json<{ entityType: string; version: number }[]>(
+      await owner.get("/api/document-series"),
+    );
     const si = list.find((s) => s.entityType === "SI")!;
     const res = await owner.request({
       method: "PATCH",
       url: "/api/document-series/SI",
-      payload: { prefixTemplate: "SALESINV/{FY_FULL}/", padding: 5, resetOnFy: true, version: si.version },
+      payload: {
+        prefixTemplate: "SALESINV/{FY_FULL}/",
+        padding: 5,
+        resetOnFy: true,
+        version: si.version,
+      },
     });
     expect(res.statusCode).toBe(400);
     expect(json(res)).toMatchObject({ code: "VALIDATION_ERROR" });

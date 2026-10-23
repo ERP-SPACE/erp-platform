@@ -72,7 +72,13 @@ export class SettingsService {
       if (version === 0) {
         const inserted = await tx
           .insert(settings)
-          .values({ companyId, key, value: parsed, createdBy: actor().userId, updatedBy: actor().userId })
+          .values({
+            companyId,
+            key,
+            value: parsed,
+            createdBy: actor().userId,
+            updatedBy: actor().userId,
+          })
           .onConflictDoNothing()
           .returning();
         if (!inserted[0]) {
@@ -85,7 +91,14 @@ export class SettingsService {
         }
         row = inserted[0];
       } else {
-        row = await updateVersioned(tx, settings, where, version, { value: parsed }, `Setting "${key}"`);
+        row = await updateVersioned(
+          tx,
+          settings,
+          where,
+          version,
+          { value: parsed },
+          `Setting "${key}"`,
+        );
       }
       this.bus.publishAfterCommit("settings.changed", { key, version: row.version });
       return row;
@@ -95,14 +108,19 @@ export class SettingsService {
   }
 
   async getCompany() {
-    const [company] = await this.uow.db.select().from(companies).where(eq(companies.id, actor().companyId));
+    const [company] = await this.uow.db
+      .select()
+      .from(companies)
+      .where(eq(companies.id, actor().companyId));
     if (!company) throw notFound("Company");
     return company;
   }
 
   async updateCompany(dto: UpdateCompanyDto) {
     if (!(dto.stateCode in GST_STATES)) {
-      throw validationError("Unknown GST state code.", [{ path: "stateCode", message: "Unknown state code" }]);
+      throw validationError("Unknown GST state code.", [
+        { path: "stateCode", message: "Unknown state code" },
+      ]);
     }
     if (dto.gstin) {
       const check = validateGstin(dto.gstin);
@@ -127,7 +145,11 @@ export class SettingsService {
         companies,
         eq(companies.id, companyId),
         version,
-        { ...fields, pan: fields.pan ?? (fields.gstin ? fields.gstin.slice(2, 12) : null), isPlaceholder: false },
+        {
+          ...fields,
+          pan: fields.pan ?? (fields.gstin ? fields.gstin.slice(2, 12) : null),
+          isPlaceholder: false,
+        },
         "Company",
       );
       this.bus.publishAfterCommit("settings.changed", { key: "company", version: saved.version });

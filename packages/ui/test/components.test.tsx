@@ -55,7 +55,16 @@ describe("Register", () => {
 
   it("moves with the arrow keys and opens with Enter", () => {
     const onOpen = vi.fn();
-    render(<Register caption="Parties" data={data} columns={columns} getRowId={(r) => r.id} onSelect={() => {}} onOpen={onOpen} />);
+    render(
+      <Register
+        caption="Parties"
+        data={data}
+        columns={columns}
+        getRowId={(r) => r.id}
+        onSelect={() => {}}
+        onOpen={onOpen}
+      />,
+    );
     const first = screen.getByText("Shree Prints").closest("tr")!;
     act(() => first.focus());
     fireEvent.keyDown(first, { key: "ArrowDown" });

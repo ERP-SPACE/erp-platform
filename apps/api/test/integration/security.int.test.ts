@@ -21,10 +21,25 @@ describe("authentication, permissions, step-up, idempotency", () => {
   });
 
   it("idempotent user creation: replay returns the same result; reuse with another body → 422", async () => {
-    const body = { name: "Godown Staff", email: "godown@test.local", password: "Warehouse-12345", roleCodes: ["warehouse"] };
-    const first = await owner.request({ method: "POST", url: "/api/users", payload: body, idempotencyKey: "create-godown-1" });
+    const body = {
+      name: "Godown Staff",
+      email: "godown@test.local",
+      password: "Warehouse-12345",
+      roleCodes: ["warehouse"],
+    };
+    const first = await owner.request({
+      method: "POST",
+      url: "/api/users",
+      payload: body,
+      idempotencyKey: "create-godown-1",
+    });
     expect(first.statusCode).toBe(201);
-    const replay = await owner.request({ method: "POST", url: "/api/users", payload: body, idempotencyKey: "create-godown-1" });
+    const replay = await owner.request({
+      method: "POST",
+      url: "/api/users",
+      payload: body,
+      idempotencyKey: "create-godown-1",
+    });
     expect(replay.statusCode).toBe(201);
     expect(replay.headers["idempotent-replay"]).toBe("true");
     expect(json(replay)).toEqual(json(first));
@@ -59,28 +74,51 @@ describe("authentication, permissions, step-up, idempotency", () => {
       owner.request({
         method: "PATCH",
         url: "/api/document-series/PO",
-        payload: { prefixTemplate: po.prefixTemplate, padding: 6, resetOnFy: true, version: po.version },
+        payload: {
+          prefixTemplate: po.prefixTemplate,
+          padding: 6,
+          resetOnFy: true,
+          version: po.version,
+        },
       });
 
     const stale = await patch();
     expect(stale.statusCode).toBe(401);
     expect(json(stale)).toMatchObject({ code: "STEP_UP_REQUIRED" });
 
-    const wrong = await owner.request({ method: "POST", url: "/api/identity/step-up", payload: { password: "nope" } });
+    const wrong = await owner.request({
+      method: "POST",
+      url: "/api/identity/step-up",
+      payload: { password: "nope" },
+    });
     expect(wrong.statusCode).toBe(400);
 
-    const ok = await owner.request({ method: "POST", url: "/api/identity/step-up", payload: { password: OWNER.password } });
+    const ok = await owner.request({
+      method: "POST",
+      url: "/api/identity/step-up",
+      payload: { password: OWNER.password },
+    });
     expect(ok.statusCode).toBe(200);
     expect((await patch()).statusCode).toBe(200);
   });
 
   it("deactivated users cannot sign in", async () => {
-    await owner.request({ method: "POST", url: "/api/identity/step-up", payload: { password: OWNER.password } });
+    await owner.request({
+      method: "POST",
+      url: "/api/identity/step-up",
+      payload: { password: OWNER.password },
+    });
     const users = json<{ id: string; email: string }[]>(await owner.get("/api/users"));
     const staff = users.find((u) => u.email === "godown@test.local")!;
-    const res = await owner.request({ method: "PATCH", url: `/api/users/${staff.id}`, payload: { active: false } });
+    const res = await owner.request({
+      method: "PATCH",
+      url: `/api/users/${staff.id}`,
+      payload: { active: false },
+    });
     expect(res.statusCode).toBe(200);
-    await expect(Client.signIn(t.fastify, "godown@test.local", "Warehouse-12345")).rejects.toThrow(/sign-in failed/);
+    await expect(Client.signIn(t.fastify, "godown@test.local", "Warehouse-12345")).rejects.toThrow(
+      /sign-in failed/,
+    );
   });
 });
 

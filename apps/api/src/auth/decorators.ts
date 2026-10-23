@@ -11,7 +11,8 @@ export const REQUIRE_REASON_KEY = "erp:require-reason";
 export const Public = () => SetMetadata(PUBLIC_KEY, true);
 
 /** Every listed permission is required. */
-export const RequirePermission = (...codes: PermissionCode[]) => SetMetadata(PERMISSIONS_KEY, codes);
+export const RequirePermission = (...codes: PermissionCode[]) =>
+  SetMetadata(PERMISSIONS_KEY, codes);
 
 /** Sensitive action: the user must have authenticated within STEP_UP_SECONDS (ADR-0021). */
 export const RequireFreshAuth = () => SetMetadata(FRESH_AUTH_KEY, true);

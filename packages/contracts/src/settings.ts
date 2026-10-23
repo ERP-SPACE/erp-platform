@@ -96,7 +96,12 @@ export const SETTINGS = {
       businessStart: z.string().regex(/^\d{2}:\d{2}$/),
       businessEnd: z.string().regex(/^\d{2}:\d{2}$/),
     }),
-    default: { businessMinutes: 3, offHoursMinutes: 30, businessStart: "08:00", businessEnd: "20:00" },
+    default: {
+      businessMinutes: 3,
+      offHoursMinutes: 30,
+      businessStart: "08:00",
+      businessEnd: "20:00",
+    },
   },
 } as const satisfies Record<
   string,

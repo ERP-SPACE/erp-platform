@@ -17,7 +17,15 @@ const env = loadEnv({
 });
 const app = await createApp(env, { logger: false });
 await app.init();
-const out = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..", "packages", "contracts", "openapi.json");
+const out = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "..",
+  "packages",
+  "contracts",
+  "openapi.json",
+);
 writeFileSync(out, `${JSON.stringify(buildOpenApi(app), null, 2)}\n`);
 await app.close();
 console.log(`OpenAPI written to ${out}`);

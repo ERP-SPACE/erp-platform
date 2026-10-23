@@ -68,12 +68,18 @@ export function validateGstin(input: string): GstinCheck {
   const stateCode = gstin.slice(0, 2);
   if (!(stateCode in GST_STATES)) return { valid: false, error: `Unknown state code ${stateCode}` };
   if (gstinCheckChar(gstin.slice(0, 14)) !== gstin[14]) {
-    return { valid: false, error: "GSTIN check character does not match — please re-check the number" };
+    return {
+      valid: false,
+      error: "GSTIN check character does not match — please re-check the number",
+    };
   }
   return { valid: true, stateCode, pan: gstin.slice(2, 12) };
 }
 
 /** Intra-state supply → CGST + SGST; inter-state → IGST (PRD §8.6). */
-export function gstRegime(companyStateCode: string, placeOfSupplyStateCode: string): "CGST_SGST" | "IGST" {
+export function gstRegime(
+  companyStateCode: string,
+  placeOfSupplyStateCode: string,
+): "CGST_SGST" | "IGST" {
   return companyStateCode === placeOfSupplyStateCode ? "CGST_SGST" : "IGST";
 }

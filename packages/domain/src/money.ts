@@ -75,7 +75,8 @@ export function allocateLargestRemainder(
 
   let leftover = units.minus(sum(shares.map((s) => s.floor))).toNumber();
   const order = [...shares].sort(
-    (a, b) => b.fraction.comparedTo(a.fraction) || b.weight.comparedTo(a.weight) || a.index - b.index,
+    (a, b) =>
+      b.fraction.comparedTo(a.fraction) || b.weight.comparedTo(a.weight) || a.index - b.index,
   );
   const bumps = new Set<number>();
   for (const share of order) {

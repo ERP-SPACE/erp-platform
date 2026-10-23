@@ -10,7 +10,8 @@ const MAX_REASON_LENGTH = 500;
 export class RequestContextMiddleware implements NestMiddleware {
   use(req: IncomingMessage & { id?: string }, res: ServerResponse, next: () => void): void {
     const incoming = req.headers["x-request-id"];
-    const requestId = (typeof incoming === "string" && incoming.length <= 64 && incoming) || req.id || uuidv7();
+    const requestId =
+      (typeof incoming === "string" && incoming.length <= 64 && incoming) || req.id || uuidv7();
     res.setHeader("x-request-id", requestId);
 
     const rawReason = req.headers["x-change-reason"];

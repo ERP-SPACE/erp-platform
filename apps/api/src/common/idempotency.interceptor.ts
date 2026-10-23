@@ -39,7 +39,8 @@ export class IdempotencyInterceptor implements NestInterceptor {
     if (!MUTATING.has(request.method) || typeof key !== "string" || !key || !userId) {
       return next.handle();
     }
-    if (key.length > 100) throw new AppError(400, "VALIDATION_ERROR", "Idempotency-Key is too long.");
+    if (key.length > 100)
+      throw new AppError(400, "VALIDATION_ERROR", "Idempotency-Key is too long.");
 
     const route = request.routeOptions.url ?? request.url;
     const requestHash = createHash("sha256")
@@ -63,10 +64,18 @@ export class IdempotencyInterceptor implements NestInterceptor {
         const [existing] = await db.select().from(idempotencyKeys).where(where);
         if (!existing) return null;
         if (existing.requestHash !== requestHash) {
-          throw new AppError(422, "IDEMPOTENCY_KEY_REUSED", "This Idempotency-Key was used for a different request.");
+          throw new AppError(
+            422,
+            "IDEMPOTENCY_KEY_REUSED",
+            "This Idempotency-Key was used for a different request.",
+          );
         }
         if (existing.statusCode === null) {
-          throw new AppError(409, "IDEMPOTENCY_IN_PROGRESS", "The same request is still being processed.");
+          throw new AppError(
+            409,
+            "IDEMPOTENCY_IN_PROGRESS",
+            "The same request is still being processed.",
+          );
         }
         return existing;
       }),
@@ -84,7 +93,9 @@ export class IdempotencyInterceptor implements NestInterceptor {
               .execute();
           }),
           catchError((error: unknown) =>
-            from(db.delete(idempotencyKeys).where(where)).pipe(switchMap(() => throwError(() => error))),
+            from(db.delete(idempotencyKeys).where(where)).pipe(
+              switchMap(() => throwError(() => error)),
+            ),
           ),
         );
       }),

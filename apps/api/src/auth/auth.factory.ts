@@ -1,4 +1,11 @@
-import { account, type DbHandle, session, twoFactor as twoFactorTable, user, verification } from "@erp/db";
+import {
+  account,
+  type DbHandle,
+  session,
+  twoFactor as twoFactorTable,
+  user,
+  verification,
+} from "@erp/db";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { twoFactor } from "better-auth/plugins";

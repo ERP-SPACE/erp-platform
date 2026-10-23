@@ -12,14 +12,21 @@ const valid = {
 describe("loadEnv", () => {
   it("applies defaults", () => {
     const env = loadEnv(valid);
-    expect(env).toMatchObject({ API_PORT: 3000, STEP_UP_SECONDS: 300, REQUIRE_OWNER_TOTP: true, NODE_ENV: "development" });
+    expect(env).toMatchObject({
+      API_PORT: 3000,
+      STEP_UP_SECONDS: 300,
+      REQUIRE_OWNER_TOTP: true,
+      NODE_ENV: "development",
+    });
   });
 
   it("parses booleans and numbers from strings", () => {
-    expect(loadEnv({ ...valid, REQUIRE_OWNER_TOTP: "false", STEP_UP_SECONDS: "60" })).toMatchObject({
-      REQUIRE_OWNER_TOTP: false,
-      STEP_UP_SECONDS: 60,
-    });
+    expect(loadEnv({ ...valid, REQUIRE_OWNER_TOTP: "false", STEP_UP_SECONDS: "60" })).toMatchObject(
+      {
+        REQUIRE_OWNER_TOTP: false,
+        STEP_UP_SECONDS: 60,
+      },
+    );
   });
 
   it("refuses to boot with a short secret or missing URLs, naming every problem", () => {

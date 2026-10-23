@@ -25,7 +25,10 @@ export class HealthController {
   @Public()
   @Get("readyz")
   async ready() {
-    const checks = await Promise.allSettled([this.handle.pool.query("SELECT 1"), this.redis.ping()]);
+    const checks = await Promise.allSettled([
+      this.handle.pool.query("SELECT 1"),
+      this.redis.ping(),
+    ]);
     const [database, redis] = checks.map((c) => (c.status === "fulfilled" ? "ok" : "down"));
     if (database !== "ok" || redis !== "ok") {
       throw new ServiceUnavailableException({ database, redis });

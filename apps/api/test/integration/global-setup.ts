@@ -3,7 +3,11 @@ import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testconta
 import { RedisContainer, type StartedRedisContainer } from "@testcontainers/redis";
 import type { TestProject } from "vitest/node";
 
-export const OWNER = { email: "owner@test.local", name: "Test Owner", password: "Owner-Pass-12345" };
+export const OWNER = {
+  email: "owner@test.local",
+  name: "Test Owner",
+  password: "Owner-Pass-12345",
+};
 
 declare module "vitest" {
   export interface ProvidedContext {

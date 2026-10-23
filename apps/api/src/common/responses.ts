@@ -12,18 +12,18 @@ import {
   stepUpResponse,
   userItem,
 } from "@erp/contracts";
-import { createZodDto } from "nestjs-zod";
+import { zodDto } from "./dto.js";
 
 /** OpenAPI response DTOs built from the shared Zod schemas in @erp/contracts/api. */
-export class MeResponseDto extends createZodDto(meResponse) {}
-export class StepUpResponseDto extends createZodDto(stepUpResponse) {}
-export class SettingItemDto extends createZodDto(settingItem) {}
-export class SettingSavedDto extends createZodDto(settingSaved) {}
-export class CompanyResponseDto extends createZodDto(companyResponse) {}
-export class SeriesItemDto extends createZodDto(seriesItem) {}
-export class SeriesPreviewDto extends createZodDto(seriesPreview) {}
-export class AuditPageDto extends createZodDto(auditPage) {}
-export class UserItemDto extends createZodDto(userItem) {}
-export class RoleItemDto extends createZodDto(roleItem) {}
-export class PermissionItemDto extends createZodDto(permissionItem) {}
-export class IdResponseDto extends createZodDto(idResponse) {}
+export class MeResponseDto extends zodDto("MeResponseDto", meResponse) {}
+export class StepUpResponseDto extends zodDto("StepUpResponseDto", stepUpResponse) {}
+export class SettingItemDto extends zodDto("SettingItemDto", settingItem) {}
+export class SettingSavedDto extends zodDto("SettingSavedDto", settingSaved) {}
+export class CompanyResponseDto extends zodDto("CompanyResponseDto", companyResponse) {}
+export class SeriesItemDto extends zodDto("SeriesItemDto", seriesItem) {}
+export class SeriesPreviewDto extends zodDto("SeriesPreviewDto", seriesPreview) {}
+export class AuditPageDto extends zodDto("AuditPageDto", auditPage) {}
+export class UserItemDto extends zodDto("UserItemDto", userItem) {}
+export class RoleItemDto extends zodDto("RoleItemDto", roleItem) {}
+export class PermissionItemDto extends zodDto("PermissionItemDto", permissionItem) {}
+export class IdResponseDto extends zodDto("IdResponseDto", idResponse) {}

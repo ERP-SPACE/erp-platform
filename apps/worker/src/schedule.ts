@@ -24,9 +24,16 @@ export function buildSchedule(options: {
   businessStartHour: number;
   businessEndHour: number;
 }): ScheduleEntry[] {
-  const { businessMinutes, offHoursMinutes, businessStartHour: start, businessEndHour: end } = options;
+  const {
+    businessMinutes,
+    offHoursMinutes,
+    businessStartHour: start,
+    businessEndHour: end,
+  } = options;
   if (start >= end) throw new Error("Business hours must start before they end");
-  const offHours = [start > 0 ? `0-${start - 1}` : null, end <= 23 ? `${end}-23` : null].filter(Boolean).join(",");
+  const offHours = [start > 0 ? `0-${start - 1}` : null, end <= 23 ? `${end}-23` : null]
+    .filter(Boolean)
+    .join(",");
   return [
     { id: "heartbeat", job: "system.heartbeat", pattern: "* * * * *" },
     { id: "audit-partitions", job: "audit.ensure-partitions", pattern: "15 1 * * *" },
@@ -37,7 +44,13 @@ export function buildSchedule(options: {
       pattern: `*/${businessMinutes} ${start}-${end - 1} * * *`,
     },
     ...(offHours
-      ? [{ id: "analytics-off-hours", job: "analytics.refresh" as const, pattern: `*/${offHoursMinutes} ${offHours} * * *` }]
+      ? [
+          {
+            id: "analytics-off-hours",
+            job: "analytics.refresh" as const,
+            pattern: `*/${offHoursMinutes} ${offHours} * * *`,
+          },
+        ]
       : []),
   ];
 }

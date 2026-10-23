@@ -18,7 +18,10 @@ const env = z
 const log = pino({
   level: env.LOG_LEVEL,
   base: { service: "worker" },
-  transport: env.NODE_ENV === "development" ? { target: "pino-pretty", options: { singleLine: true } } : undefined,
+  transport:
+    env.NODE_ENV === "development"
+      ? { target: "pino-pretty", options: { singleLine: true } }
+      : undefined,
 });
 
 const QUEUE = "erp-system";
@@ -29,8 +32,17 @@ const db = createDb(env.DATABASE_URL, { max: 3 });
 
 const queue = new Queue(QUEUE, { connection });
 // TODO(stage 5): read analytics.refresh from the settings table instead of these defaults.
-for (const entry of buildSchedule({ businessMinutes: 3, offHoursMinutes: 30, businessStartHour: 8, businessEndHour: 20 })) {
-  await queue.upsertJobScheduler(entry.id, { pattern: entry.pattern, tz: TZ }, { name: entry.job, opts: { removeOnComplete: 100, removeOnFail: 500 } });
+for (const entry of buildSchedule({
+  businessMinutes: 3,
+  offHoursMinutes: 30,
+  businessStartHour: 8,
+  businessEndHour: 20,
+})) {
+  await queue.upsertJobScheduler(
+    entry.id,
+    { pattern: entry.pattern, tz: TZ },
+    { name: entry.job, opts: { removeOnComplete: 100, removeOnFail: 500 } },
+  );
 }
 
 const worker = new Worker(

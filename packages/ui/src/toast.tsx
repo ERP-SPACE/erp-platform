@@ -28,7 +28,10 @@ const rule: Record<Tone, string> = {
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<ToastItem[]>([]);
   const notify = useCallback<Notify>((toast) => {
-    setItems((current) => [...current, { id: Date.now() + Math.random(), tone: "neutral", ...toast }]);
+    setItems((current) => [
+      ...current,
+      { id: Date.now() + Math.random(), tone: "neutral", ...toast },
+    ]);
   }, []);
   const value = useMemo(() => notify, [notify]);
 
@@ -50,10 +53,18 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           >
             <div className="min-w-0 flex-1">
               <RToast.Title className="text-sm font-medium text-ink">{item.title}</RToast.Title>
-              {item.description ? <RToast.Description className="mt-0.5 text-xs text-ink-2">{item.description}</RToast.Description> : null}
+              {item.description ? (
+                <RToast.Description className="mt-0.5 text-xs text-ink-2">
+                  {item.description}
+                </RToast.Description>
+              ) : null}
             </div>
             {item.action ? (
-              <RToast.Action altText={item.action.label} onClick={item.action.onClick} className="text-xs font-medium text-accent hover:underline">
+              <RToast.Action
+                altText={item.action.label}
+                onClick={item.action.onClick}
+                className="text-xs font-medium text-accent hover:underline"
+              >
                 {item.action.label}
               </RToast.Action>
             ) : null}

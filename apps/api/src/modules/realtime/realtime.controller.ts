@@ -20,7 +20,9 @@ export class RealtimeController {
       filter((event) => event.companyId === companyId),
       map((event): MessageEvent => ({ type: event.topic, data: event })),
     );
-    const heartbeat = interval(HEARTBEAT_MS).pipe(map((): MessageEvent => ({ type: "ping", data: String(Date.now()) })));
+    const heartbeat = interval(HEARTBEAT_MS).pipe(
+      map((): MessageEvent => ({ type: "ping", data: String(Date.now()) })),
+    );
     return merge(events, heartbeat);
   }
 }

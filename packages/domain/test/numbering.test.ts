@@ -35,8 +35,14 @@ describe("document numbering (ADR-0003)", () => {
 
   it("validates a whole series against its longest possible number", () => {
     expect(validateGstSeries(si, "2026-10-23")).toEqual([]);
-    expect(validateGstSeries({ prefixTemplate: "INVOICE/{FY_FULL}/", padding: 5 }, "2026-10-23")).toHaveLength(1);
-    expect(validateGstSeries({ prefixTemplate: "SI#{FY}#", padding: 3 }, "2026-10-23")[0]).toMatch(/Only letters/);
-    expect(validateGstSeries({ prefixTemplate: "SI/{BAD}/", padding: 3 }, "2026-10-23")[0]).toMatch(/Unknown token/);
+    expect(
+      validateGstSeries({ prefixTemplate: "INVOICE/{FY_FULL}/", padding: 5 }, "2026-10-23"),
+    ).toHaveLength(1);
+    expect(validateGstSeries({ prefixTemplate: "SI#{FY}#", padding: 3 }, "2026-10-23")[0]).toMatch(
+      /Only letters/,
+    );
+    expect(validateGstSeries({ prefixTemplate: "SI/{BAD}/", padding: 3 }, "2026-10-23")[0]).toMatch(
+      /Unknown token/,
+    );
   });
 });

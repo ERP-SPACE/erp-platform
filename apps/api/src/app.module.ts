@@ -1,4 +1,9 @@
-import { type DynamicModule, type MiddlewareConsumer, Module, type NestModule } from "@nestjs/common";
+import {
+  type DynamicModule,
+  type MiddlewareConsumer,
+  Module,
+  type NestModule,
+} from "@nestjs/common";
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from "@nestjs/core";
 import { LoggerModule } from "nestjs-pino";
 import { ZodValidationPipe } from "nestjs-zod";
@@ -19,7 +24,12 @@ import { RedisModule } from "./redis/redis.module.js";
 @Module({})
 class ConfigModule {
   static forRoot(env: Env): DynamicModule {
-    return { module: ConfigModule, global: true, providers: [{ provide: ENV, useValue: env }], exports: [ENV] };
+    return {
+      module: ConfigModule,
+      global: true,
+      providers: [{ provide: ENV, useValue: env }],
+      exports: [ENV],
+    };
   }
 }
 
@@ -33,8 +43,15 @@ export class AppModule implements NestModule {
         LoggerModule.forRoot({
           pinoHttp: {
             level: env.LOG_LEVEL,
-            transport: env.NODE_ENV === "development" ? { target: "pino-pretty", options: { singleLine: true } } : undefined,
-            redact: ["req.headers.cookie", "req.headers.authorization", 'res.headers["set-cookie"]'],
+            transport:
+              env.NODE_ENV === "development"
+                ? { target: "pino-pretty", options: { singleLine: true } }
+                : undefined,
+            redact: [
+              "req.headers.cookie",
+              "req.headers.authorization",
+              'res.headers["set-cookie"]',
+            ],
             customProps: (req) => ({ requestId: (req as { id?: string }).id }),
             autoLogging: { ignore: (req) => req.url === "/api/healthz" },
           },

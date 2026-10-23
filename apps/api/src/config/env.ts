@@ -8,7 +8,9 @@ const envSchema = z.object({
   API_PORT: z.coerce.number().int().positive().default(3000),
   API_PUBLIC_URL: z.url(),
   WEB_ORIGIN: z.url(),
-  AUTH_SECRET: z.string().min(32, "AUTH_SECRET must be at least 32 characters (run pnpm setup:local)"),
+  AUTH_SECRET: z
+    .string()
+    .min(32, "AUTH_SECRET must be at least 32 characters (run pnpm setup:local)"),
   STEP_UP_SECONDS: z.coerce.number().int().positive().default(300),
   REQUIRE_OWNER_TOTP: z.stringbool().default(true),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),

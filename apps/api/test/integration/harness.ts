@@ -14,7 +14,9 @@ export interface TestApp {
   close(): Promise<void>;
 }
 
-export async function startApp(overrides: Partial<Record<keyof Env, string>> = {}): Promise<TestApp> {
+export async function startApp(
+  overrides: Partial<Record<keyof Env, string>> = {},
+): Promise<TestApp> {
   const env = loadEnv({
     NODE_ENV: "test",
     DATABASE_URL: inject("databaseUrl"),
@@ -40,7 +42,11 @@ export class Client {
     readonly cookie: string,
   ) {}
 
-  static async signIn(fastify: FastifyInstance, email = OWNER.email, password = OWNER.password): Promise<Client> {
+  static async signIn(
+    fastify: FastifyInstance,
+    email = OWNER.email,
+    password = OWNER.password,
+  ): Promise<Client> {
     const res = await fastify.inject({
       method: "POST",
       url: "/api/auth/sign-in/email",
@@ -53,7 +59,9 @@ export class Client {
     return new Client(fastify, cookie);
   }
 
-  request(options: InjectOptions & { reason?: string; idempotencyKey?: string }): Promise<LightMyRequestResponse> {
+  request(
+    options: InjectOptions & { reason?: string; idempotencyKey?: string },
+  ): Promise<LightMyRequestResponse> {
     const { reason, idempotencyKey, headers, ...rest } = options;
     return this.fastify.inject({
       ...rest,

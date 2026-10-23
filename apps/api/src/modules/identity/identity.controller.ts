@@ -10,7 +10,12 @@ import {
   StepUpResponseDto,
   UserItemDto,
 } from "../../common/responses.js";
-import { CreateUserDto, StepUpDto, UpdateRolePermissionsDto, UpdateUserDto } from "./identity.dto.js";
+import {
+  CreateUserDto,
+  StepUpDto,
+  UpdateRolePermissionsDto,
+  UpdateUserDto,
+} from "./identity.dto.js";
 import { IdentityService } from "./identity.service.js";
 
 @ApiTags("identity")

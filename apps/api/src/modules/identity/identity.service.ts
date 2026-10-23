@@ -33,7 +33,12 @@ export class IdentityService {
   async me() {
     const a = actor();
     const [company] = await this.uow.db
-      .select({ id: companies.id, legalName: companies.legalName, tradeName: companies.tradeName, isPlaceholder: companies.isPlaceholder })
+      .select({
+        id: companies.id,
+        legalName: companies.legalName,
+        tradeName: companies.tradeName,
+        isPlaceholder: companies.isPlaceholder,
+      })
       .from(companies)
       .where(eq(companies.id, a.companyId));
     const freshUntil = await this.actors.freshUntil(a);
@@ -54,22 +59,36 @@ export class IdentityService {
     const attempts = await this.redis.incr(attemptsKey);
     if (attempts === 1) await this.redis.expire(attemptsKey, STEP_UP_WINDOW_SECONDS);
     if (attempts > STEP_UP_MAX_ATTEMPTS) {
-      throw new AppError(429, "RATE_LIMITED", "Too many attempts. Wait a few minutes and try again.");
+      throw new AppError(
+        429,
+        "RATE_LIMITED",
+        "Too many attempts. Wait a few minutes and try again.",
+      );
     }
 
     const [credential] = await this.uow.db
       .select({ hash: account.password })
       .from(account)
       .where(and(eq(account.userId, a.userId), eq(account.providerId, "credential")));
-    const passwordOk = credential?.hash ? await verifyPassword({ hash: credential.hash, password }) : false;
-    if (!passwordOk) throw validationError("Password is incorrect.", [{ path: "password", message: "Incorrect password" }]);
+    const passwordOk = credential?.hash
+      ? await verifyPassword({ hash: credential.hash, password })
+      : false;
+    if (!passwordOk)
+      throw validationError("Password is incorrect.", [
+        { path: "password", message: "Incorrect password" },
+      ]);
 
     if (a.twoFactorEnabled) {
-      if (!code) throw validationError("Enter the 6-digit code from your authenticator app.", [{ path: "code", message: "Required" }]);
+      if (!code)
+        throw validationError("Enter the 6-digit code from your authenticator app.", [
+          { path: "code", message: "Required" },
+        ]);
       try {
         await this.auth.api.verifyTOTP({ body: { code }, headers: fromNodeHeaders(headers) });
       } catch {
-        throw validationError("The authenticator code is incorrect.", [{ path: "code", message: "Incorrect code" }]);
+        throw validationError("The authenticator code is incorrect.", [
+          { path: "code", message: "Incorrect code" },
+        ]);
       }
     }
 
@@ -107,11 +126,19 @@ export class IdentityService {
   async createUser(dto: CreateUserDto) {
     const companyId = actor().companyId;
     return this.uow.run(async (tx) => {
-      const [existing] = await tx.select({ id: user.id }).from(user).where(eq(user.email, dto.email));
-      if (existing) throw validationError("A user with this email already exists.", [{ path: "email", message: "Already in use" }]);
+      const [existing] = await tx
+        .select({ id: user.id })
+        .from(user)
+        .where(eq(user.email, dto.email));
+      if (existing)
+        throw validationError("A user with this email already exists.", [
+          { path: "email", message: "Already in use" },
+        ]);
       const roleIds = await this.resolveRoles(tx, companyId, dto.roleCodes);
       const userId = uuidv7();
-      await tx.insert(user).values({ id: userId, name: dto.name, email: dto.email, emailVerified: true, companyId });
+      await tx
+        .insert(user)
+        .values({ id: userId, name: dto.name, email: dto.email, emailVerified: true, companyId });
       await tx.insert(account).values({
         id: uuidv7(),
         accountId: userId,
@@ -139,7 +166,11 @@ export class IdentityService {
       if (dto.name !== undefined || dto.active !== undefined) {
         await tx
           .update(user)
-          .set({ ...(dto.name !== undefined && { name: dto.name }), ...(dto.active !== undefined && { active: dto.active }), updatedAt: new Date() })
+          .set({
+            ...(dto.name !== undefined && { name: dto.name }),
+            ...(dto.active !== undefined && { active: dto.active }),
+            updatedAt: new Date(),
+          })
           .where(eq(user.id, userId));
       }
       if (dto.active === false) await tx.delete(session).where(eq(session.userId, userId)); // sign out everywhere
@@ -158,11 +189,20 @@ export class IdentityService {
 
   async listRoles() {
     const companyId = actor().companyId;
-    const rows = await this.uow.db.select().from(roles).where(eq(roles.companyId, companyId)).orderBy(asc(roles.name));
+    const rows = await this.uow.db
+      .select()
+      .from(roles)
+      .where(eq(roles.companyId, companyId))
+      .orderBy(asc(roles.name));
     const grants = await this.uow.db
       .select()
       .from(rolePermissions)
-      .where(inArray(rolePermissions.roleId, rows.map((r) => r.id)));
+      .where(
+        inArray(
+          rolePermissions.roleId,
+          rows.map((r) => r.id),
+        ),
+      );
     return rows.map((r) => ({
       id: r.id,
       code: r.code,
@@ -170,7 +210,10 @@ export class IdentityService {
       isSystem: r.isSystem,
       locked: r.code === "owner",
       version: r.version,
-      permissionCodes: grants.filter((g) => g.roleId === r.id).map((g) => g.permissionCode).sort(),
+      permissionCodes: grants
+        .filter((g) => g.roleId === r.id)
+        .map((g) => g.permissionCode)
+        .sort(),
     }));
   }
 
@@ -186,26 +229,41 @@ export class IdentityService {
   async updateRolePermissions(roleId: string, permissionCodes: string[], version: number) {
     const companyId = actor().companyId;
     return this.uow.run(async (tx) => {
-      const [role] = await tx.select().from(roles).where(and(eq(roles.id, roleId), eq(roles.companyId, companyId)));
+      const [role] = await tx
+        .select()
+        .from(roles)
+        .where(and(eq(roles.id, roleId), eq(roles.companyId, companyId)));
       if (!role) throw notFound("Role");
-      if (role.code === "owner") throw validationError("The Owner role always has every permission.");
+      if (role.code === "owner")
+        throw validationError("The Owner role always has every permission.");
       await updateVersioned(tx, roles, eq(roles.id, roleId), version, {}, "Role");
       await tx.delete(rolePermissions).where(eq(rolePermissions.roleId, roleId));
       if (permissionCodes.length) {
-        await tx.insert(rolePermissions).values([...new Set(permissionCodes)].map((permissionCode) => ({ roleId, permissionCode })));
+        await tx
+          .insert(rolePermissions)
+          .values(
+            [...new Set(permissionCodes)].map((permissionCode) => ({ roleId, permissionCode })),
+          );
       }
       this.bus.publishAfterCommit("users.changed", { roleId });
       return { id: roleId };
     });
   }
 
-  private async resolveRoles(tx: Parameters<Parameters<UnitOfWork["run"]>[0]>[0], companyId: string, codes: string[]) {
+  private async resolveRoles(
+    tx: Parameters<Parameters<UnitOfWork["run"]>[0]>[0],
+    companyId: string,
+    codes: string[],
+  ) {
     const rows = await tx
       .select({ id: roles.id, code: roles.code })
       .from(roles)
       .where(and(eq(roles.companyId, companyId), inArray(roles.code, codes)));
     const unknown = codes.filter((c) => !rows.some((r) => r.code === c));
-    if (unknown.length) throw validationError(`Unknown role(s): ${unknown.join(", ")}`, [{ path: "roleCodes", message: "Unknown role" }]);
+    if (unknown.length)
+      throw validationError(`Unknown role(s): ${unknown.join(", ")}`, [
+        { path: "roleCodes", message: "Unknown role" },
+      ]);
     return rows.map((r) => r.id);
   }
 }

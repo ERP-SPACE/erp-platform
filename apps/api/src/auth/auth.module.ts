@@ -10,7 +10,11 @@ import { AuthGuard } from "./auth.guard.js";
 @Global()
 @Module({
   providers: [
-    { provide: AUTH, inject: [ENV, DB], useFactory: (env: Env, db: DbHandle) => createAuth(env, db) },
+    {
+      provide: AUTH,
+      inject: [ENV, DB],
+      useFactory: (env: Env, db: DbHandle) => createAuth(env, db),
+    },
     ActorService,
     { provide: APP_GUARD, useClass: AuthGuard },
   ],

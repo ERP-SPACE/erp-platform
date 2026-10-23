@@ -2,14 +2,15 @@ import { auditLog, user } from "@erp/db";
 import { Controller, Get, Query } from "@nestjs/common";
 import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import { and, desc, eq, gte, lt, lte, or, type SQL } from "drizzle-orm";
-import { createZodDto } from "nestjs-zod";
 import { z } from "zod";
 import { RequirePermission } from "../../auth/decorators.js";
 import { actor } from "../../common/context.js";
 import { AuditPageDto } from "../../common/responses.js";
 import { UnitOfWork } from "../../db/unit-of-work.js";
+import { zodDto } from "../../common/dto.js";
 
-class AuditQueryDto extends createZodDto(
+class AuditQueryDto extends zodDto(
+  "AuditQueryDto",
   z.object({
     table: z.string().max(64).optional(),
     rowId: z.string().max(200).optional(),
@@ -41,7 +42,9 @@ export class AuditController {
     if (q.cursor) {
       const [at, id] = q.cursor.split("|");
       const cursorAt = new Date(at!);
-      filters.push(or(lt(auditLog.at, cursorAt), and(eq(auditLog.at, cursorAt), lt(auditLog.id, Number(id)))));
+      filters.push(
+        or(lt(auditLog.at, cursorAt), and(eq(auditLog.at, cursorAt), lt(auditLog.id, Number(id)))),
+      );
     }
 
     const rows = await this.uow.db

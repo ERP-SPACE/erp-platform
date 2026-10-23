@@ -16,7 +16,15 @@ export interface DialogProps {
 const widths = { sm: "max-w-sm", md: "max-w-lg", lg: "max-w-2xl" };
 
 /** A modal sheet: paper surface, serif title, hairline-separated footer. */
-export function Dialog({ open, onOpenChange, title, description, children, footer, width = "md" }: DialogProps) {
+export function Dialog({
+  open,
+  onOpenChange,
+  title,
+  description,
+  children,
+  footer,
+  width = "md",
+}: DialogProps) {
   return (
     <RDialog.Root open={open} onOpenChange={onOpenChange}>
       <RDialog.Portal>
@@ -30,10 +38,20 @@ export function Dialog({ open, onOpenChange, title, description, children, foote
         >
           <div className="px-6 pb-4 pt-5">
             <RDialog.Title className="font-serif text-lg text-ink">{title}</RDialog.Title>
-            {description ? <RDialog.Description className="mt-1 text-sm text-ink-2">{description}</RDialog.Description> : <RDialog.Description className="sr-only">{typeof title === "string" ? title : "Dialog"}</RDialog.Description>}
+            {description ? (
+              <RDialog.Description className="mt-1 text-sm text-ink-2">
+                {description}
+              </RDialog.Description>
+            ) : (
+              <RDialog.Description className="sr-only">
+                {typeof title === "string" ? title : "Dialog"}
+              </RDialog.Description>
+            )}
           </div>
           {children ? <div className="px-6 pb-5">{children}</div> : null}
-          {footer ? <div className="flex justify-end gap-2 border-t border-rule px-6 py-3">{footer}</div> : null}
+          {footer ? (
+            <div className="flex justify-end gap-2 border-t border-rule px-6 py-3">{footer}</div>
+          ) : null}
         </RDialog.Content>
       </RDialog.Portal>
     </RDialog.Root>
@@ -80,12 +98,24 @@ export function ConfirmDialog({
   );
 }
 
-export function Popover({ trigger, children, align = "start" }: { trigger: ReactNode; children: ReactNode; align?: "start" | "center" | "end" }) {
+export function Popover({
+  trigger,
+  children,
+  align = "start",
+}: {
+  trigger: ReactNode;
+  children: ReactNode;
+  align?: "start" | "center" | "end";
+}) {
   return (
     <RPopover.Root>
       <RPopover.Trigger asChild>{trigger}</RPopover.Trigger>
       <RPopover.Portal>
-        <RPopover.Content align={align} sideOffset={6} className="z-50 rounded-sm border border-rule-strong bg-sheet p-3 shadow-sheet">
+        <RPopover.Content
+          align={align}
+          sideOffset={6}
+          className="z-50 rounded-sm border border-rule-strong bg-sheet p-3 shadow-sheet"
+        >
           {children}
         </RPopover.Content>
       </RPopover.Portal>

@@ -150,7 +150,11 @@ export const userRoles = pgTable(
   (t) => [primaryKey({ columns: [t.userId, t.roleId] })],
 );
 
-export const scopeType = pgEnum("scope_type", ["customer_group", "product_family", "own_customers"]);
+export const scopeType = pgEnum("scope_type", [
+  "customer_group",
+  "product_family",
+  "own_customers",
+]);
 
 /** Data scoping (PRD §4.2) — enforced in repository queries from Stage 1. */
 export const userScopes = pgTable(

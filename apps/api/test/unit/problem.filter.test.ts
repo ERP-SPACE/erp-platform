@@ -6,7 +6,9 @@ import { AppError, versionConflict } from "../../src/common/errors.js";
 import { ProblemFilter } from "../../src/common/problem.filter.js";
 
 function render(error: unknown) {
-  const sent: { status?: number; headers: Record<string, string>; body?: unknown } = { headers: {} };
+  const sent: { status?: number; headers: Record<string, string>; body?: unknown } = {
+    headers: {},
+  };
   const reply = {
     status(code: number) {
       sent.status = code;
@@ -28,10 +30,16 @@ function render(error: unknown) {
 
 describe("ProblemFilter", () => {
   it("renders AppError as problem+json with code and request id", () => {
-    const sent = render(versionConflict({ version: 3, updatedBy: "u1", updatedAt: "2026-10-23T09:00:00.000Z" }));
+    const sent = render(
+      versionConflict({ version: 3, updatedBy: "u1", updatedAt: "2026-10-23T09:00:00.000Z" }),
+    );
     expect(sent.status).toBe(409);
     expect(sent.headers["content-type"]).toBe("application/problem+json");
-    expect(sent.body).toMatchObject({ code: "VERSION_CONFLICT", requestId: "req-1", current: { version: 3 } });
+    expect(sent.body).toMatchObject({
+      code: "VERSION_CONFLICT",
+      requestId: "req-1",
+      current: { version: 3 },
+    });
   });
 
   it("maps domain errors", () => {

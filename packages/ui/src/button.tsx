@@ -28,7 +28,17 @@ const sizes: Record<ButtonSize, string> = {
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
-  { variant = "secondary", size = "md", asChild, shortcut, busy, className, children, disabled, ...rest },
+  {
+    variant = "secondary",
+    size = "md",
+    asChild,
+    shortcut,
+    busy,
+    className,
+    children,
+    disabled,
+    ...rest
+  },
   ref,
 ) {
   const Component = asChild ? Slot.Root : "button";
@@ -51,9 +61,22 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         children
       ) : (
         <>
-          {busy ? <span className="size-3 animate-spin rounded-full border border-current border-t-transparent" aria-hidden /> : null}
+          {busy ? (
+            <span
+              className="size-3 animate-spin rounded-full border border-current border-t-transparent"
+              aria-hidden
+            />
+          ) : null}
           {children}
-          {shortcut ? <Kbd className={variant === "primary" ? "border-accent-ink/30 text-accent-ink/80" : undefined}>{shortcut}</Kbd> : null}
+          {shortcut ? (
+            <Kbd
+              className={
+                variant === "primary" ? "border-accent-ink/30 text-accent-ink/80" : undefined
+              }
+            >
+              {shortcut}
+            </Kbd>
+          ) : null}
         </>
       )}
     </Component>

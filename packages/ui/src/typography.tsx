@@ -16,7 +16,9 @@ export function PageTitle({
   className?: string;
 }) {
   return (
-    <header className={cn("flex items-end justify-between gap-6 border-b border-rule pb-4", className)}>
+    <header
+      className={cn("flex items-end justify-between gap-6 border-b border-rule pb-4", className)}
+    >
       <div className="min-w-0">
         {eyebrow ? <p className="smallcaps mb-1.5">{eyebrow}</p> : null}
         <h1 className="text-xl text-ink">{title}</h1>
@@ -53,7 +55,15 @@ export function Mono({ className, ...rest }: HTMLAttributes<HTMLSpanElement>) {
 }
 
 /** Quiet empty state: a serif italic line and an optional hint. */
-export function EmptyState({ title, hint, action }: { title: ReactNode; hint?: ReactNode; action?: ReactNode }) {
+export function EmptyState({
+  title,
+  hint,
+  action,
+}: {
+  title: ReactNode;
+  hint?: ReactNode;
+  action?: ReactNode;
+}) {
   return (
     <div className="flex flex-col items-center gap-2 px-6 py-14 text-center">
       <p className="font-serif text-lg italic text-ink-2">{title}</p>

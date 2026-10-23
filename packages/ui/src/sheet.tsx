@@ -25,7 +25,12 @@ export function Sheet({
   className?: string;
 }) {
   return (
-    <article className={cn("mx-auto w-full max-w-[840px] rounded-xs border border-rule bg-sheet shadow-sheet", className)}>
+    <article
+      className={cn(
+        "mx-auto w-full max-w-[840px] rounded-xs border border-rule bg-sheet shadow-sheet",
+        className,
+      )}
+    >
       <header className="flex items-start justify-between gap-6 border-b border-rule px-8 pb-5 pt-7">
         <div className="min-w-0">
           {kicker ? <p className="smallcaps mb-2">{kicker}</p> : null}
@@ -76,7 +81,10 @@ export function Timeline({ entries }: { entries: TimelineEntry[] }) {
     <ol className="relative ml-1 border-l border-rule">
       {entries.map((entry) => (
         <li key={entry.id} className="relative pb-4 pl-4 last:pb-0">
-          <span className="absolute -left-[3.5px] top-1.5 size-1.5 rounded-full bg-rule-strong" aria-hidden />
+          <span
+            className="absolute -left-[3.5px] top-1.5 size-1.5 rounded-full bg-rule-strong"
+            aria-hidden
+          />
           <p className="text-sm text-ink">{entry.what}</p>
           <p className="tnum text-xs text-ink-3">
             {entry.when}
@@ -90,9 +98,22 @@ export function Timeline({ entries }: { entries: TimelineEntry[] }) {
 }
 
 /** Label/value pairs laid out like an invoice header block. */
-export function DefinitionList({ items, columns = 2 }: { items: { label: ReactNode; value: ReactNode }[]; columns?: 1 | 2 | 3 }) {
+export function DefinitionList({
+  items,
+  columns = 2,
+}: {
+  items: { label: ReactNode; value: ReactNode }[];
+  columns?: 1 | 2 | 3;
+}) {
   return (
-    <dl className={cn("grid gap-x-8 gap-y-3", columns === 1 && "grid-cols-1", columns === 2 && "grid-cols-1 sm:grid-cols-2", columns === 3 && "grid-cols-1 sm:grid-cols-3")}>
+    <dl
+      className={cn(
+        "grid gap-x-8 gap-y-3",
+        columns === 1 && "grid-cols-1",
+        columns === 2 && "grid-cols-1 sm:grid-cols-2",
+        columns === 3 && "grid-cols-1 sm:grid-cols-3",
+      )}
+    >
       {items.map((item, index) => (
         <div key={index} className="min-w-0">
           <dt className="smallcaps mb-0.5">{item.label}</dt>
@@ -110,7 +131,11 @@ export function Stepper({ steps, current }: { steps: string[]; current: number }
       {steps.map((step, index) => {
         const state = index < current ? "done" : index === current ? "current" : "todo";
         return (
-          <li key={step} className="flex items-center gap-3" aria-current={state === "current" ? "step" : undefined}>
+          <li
+            key={step}
+            className="flex items-center gap-3"
+            aria-current={state === "current" ? "step" : undefined}
+          >
             <span
               className={cn(
                 "smallcaps",
@@ -119,10 +144,17 @@ export function Stepper({ steps, current }: { steps: string[]; current: number }
                 state === "todo" && "text-ink-3",
               )}
             >
-              <span className="tnum mr-1.5 font-serif text-sm normal-case italic tracking-normal">{["i", "ii", "iii", "iv", "v", "vi"][index] ?? index + 1}.</span>
+              <span className="tnum mr-1.5 font-serif text-sm normal-case italic tracking-normal">
+                {["i", "ii", "iii", "iv", "v", "vi"][index] ?? index + 1}.
+              </span>
               {step}
             </span>
-            {index < steps.length - 1 ? <span className={cn("h-px w-10", index < current ? "bg-accent" : "bg-rule")} aria-hidden /> : null}
+            {index < steps.length - 1 ? (
+              <span
+                className={cn("h-px w-10", index < current ? "bg-accent" : "bg-rule")}
+                aria-hidden
+              />
+            ) : null}
           </li>
         );
       })}

@@ -17,7 +17,11 @@ class DbLifecycle implements OnApplicationShutdown {
 @Global()
 @Module({
   providers: [
-    { provide: DB, inject: [ENV], useFactory: (env: Env) => createDb(env.DATABASE_URL, { max: 10 }) },
+    {
+      provide: DB,
+      inject: [ENV],
+      useFactory: (env: Env) => createDb(env.DATABASE_URL, { max: 10 }),
+    },
     DbLifecycle,
     UnitOfWork,
   ],

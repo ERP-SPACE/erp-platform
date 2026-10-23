@@ -1,14 +1,15 @@
 import { seriesUpdateSchema } from "@erp/contracts";
 import { Body, Controller, Get, Param, Patch, Query } from "@nestjs/common";
 import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
-import { createZodDto } from "nestjs-zod";
 import { z } from "zod";
 import { RequireFreshAuth, RequirePermission } from "../../auth/decorators.js";
 import { SeriesItemDto, SeriesPreviewDto } from "../../common/responses.js";
 import { SeriesService } from "./series.service.js";
+import { zodDto } from "../../common/dto.js";
 
-class UpdateSeriesDto extends createZodDto(seriesUpdateSchema) {}
-class PreviewQueryDto extends createZodDto(
+class UpdateSeriesDto extends zodDto("UpdateSeriesDto", seriesUpdateSchema) {}
+class PreviewQueryDto extends zodDto(
+  "PreviewQueryDto",
   z.object({
     type: z.string(),
     date: z.iso.date().optional(),

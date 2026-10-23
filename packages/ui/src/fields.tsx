@@ -19,7 +19,11 @@ export interface FieldProps {
   error?: string;
   required?: boolean;
   className?: string;
-  children: (props: { id: string; "aria-invalid": boolean; "aria-describedby"?: string }) => ReactNode;
+  children: (props: {
+    id: string;
+    "aria-invalid": boolean;
+    "aria-describedby"?: string;
+  }) => ReactNode;
 }
 
 /** Label + control + hint/error, wired for accessibility. */
@@ -30,7 +34,11 @@ export function Field({ label, hint, error, required, className, children }: Fie
     <div className={cn("flex flex-col gap-1.5", className)}>
       <Label.Root htmlFor={id} className="text-xs font-medium text-ink-2">
         {label}
-        {required ? <span className="ml-0.5 text-accent" aria-hidden>*</span> : null}
+        {required ? (
+          <span className="ml-0.5 text-accent" aria-hidden>
+            *
+          </span>
+        ) : null}
       </Label.Root>
       {children({ id, "aria-invalid": Boolean(error), "aria-describedby": describedBy })}
       {error ? (
@@ -46,21 +54,23 @@ export function Field({ label, hint, error, required, className, children }: Fie
   );
 }
 
-export const TextInput = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(function TextInput(
-  { className, ...rest },
-  ref,
-) {
-  return <input ref={ref} className={cn(control, "h-[var(--field-h)]", className)} {...rest} />;
-});
+export const TextInput = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
+  function TextInput({ className, ...rest }, ref) {
+    return <input ref={ref} className={cn(control, "h-[var(--field-h)]", className)} {...rest} />;
+  },
+);
 
-export const TextArea = forwardRef<HTMLTextAreaElement, TextareaHTMLAttributes<HTMLTextAreaElement>>(function TextArea(
-  { className, ...rest },
-  ref,
-) {
+export const TextArea = forwardRef<
+  HTMLTextAreaElement,
+  TextareaHTMLAttributes<HTMLTextAreaElement>
+>(function TextArea({ className, ...rest }, ref) {
   return <textarea ref={ref} className={cn(control, "min-h-20 py-2", className)} {...rest} />;
 });
 
-export interface NumberInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "value" | "onChange" | "type"> {
+export interface NumberInputProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "value" | "onChange" | "type"
+> {
   /** Kept as a string so decimals are never rounded by floats (ADR-0002). */
   value: string;
   onValueChange: (value: string) => void;
@@ -74,14 +84,21 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
   { value, onValueChange, decimals = 2, allowNegative = false, suffix, className, ...rest },
   ref,
 ) {
-  const pattern = new RegExp(`^${allowNegative ? "-?" : ""}\\d*${decimals > 0 ? `(\\.\\d{0,${decimals}})?` : ""}$`);
+  const pattern = new RegExp(
+    `^${allowNegative ? "-?" : ""}\\d*${decimals > 0 ? `(\\.\\d{0,${decimals}})?` : ""}$`,
+  );
   return (
     <div className="relative">
       <input
         ref={ref}
         inputMode="decimal"
         autoComplete="off"
-        className={cn(control, "tnum h-[var(--field-h)] text-right", suffix ? "pr-9" : null, className)}
+        className={cn(
+          control,
+          "tnum h-[var(--field-h)] text-right",
+          suffix ? "pr-9" : null,
+          className,
+        )}
         value={value}
         onChange={(e) => {
           const next = e.target.value.replace(/,/g, "");
@@ -90,7 +107,9 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
         {...rest}
       />
       {suffix ? (
-        <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-xs text-ink-3">{suffix}</span>
+        <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-xs text-ink-3">
+          {suffix}
+        </span>
       ) : null}
     </div>
   );
@@ -120,8 +139,17 @@ export function Select({
 }) {
   return (
     <RSelect.Root value={value} onValueChange={onValueChange} disabled={disabled}>
-      <RSelect.Trigger id={id} aria-invalid={invalid} className={cn(control, "flex h-[var(--field-h)] items-center justify-between gap-2 text-left")}>
-        <RSelect.Value placeholder={<span className="text-ink-3">{placeholder ?? "Choose…"}</span>} />
+      <RSelect.Trigger
+        id={id}
+        aria-invalid={invalid}
+        className={cn(
+          control,
+          "flex h-[var(--field-h)] items-center justify-between gap-2 text-left",
+        )}
+      >
+        <RSelect.Value
+          placeholder={<span className="text-ink-3">{placeholder ?? "Choose…"}</span>}
+        />
         <RSelect.Icon className="text-ink-3" aria-hidden>
           <Chevron />
         </RSelect.Icon>
@@ -232,7 +260,11 @@ export function Segmented<T extends string>({
   label: string;
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="inline-flex rounded-sm border border-rule-strong p-0.5">
+    <div
+      role="radiogroup"
+      aria-label={label}
+      className="inline-flex rounded-sm border border-rule-strong p-0.5"
+    >
       {options.map((option) => (
         <button
           key={option.value}

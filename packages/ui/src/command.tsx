@@ -41,7 +41,9 @@ export function CommandPalette({
               className="h-12 w-full border-b border-rule bg-transparent px-5 font-serif text-base text-ink outline-none placeholder:italic placeholder:text-ink-3"
             />
             <Command.List className="max-h-[50vh] overflow-auto p-2">
-              <Command.Empty className="px-3 py-6 text-center font-serif italic text-ink-2">Nothing matches.</Command.Empty>
+              <Command.Empty className="px-3 py-6 text-center font-serif italic text-ink-2">
+                Nothing matches.
+              </Command.Empty>
               {groups.map((group) => (
                 <Command.Group
                   key={group}
@@ -87,7 +89,15 @@ export interface Shortcut {
 }
 
 /** `?` overlay listing the shortcuts available on the current screen. */
-export function ShortcutOverlay({ open, onOpenChange, shortcuts }: { open: boolean; onOpenChange: (open: boolean) => void; shortcuts: Shortcut[] }) {
+export function ShortcutOverlay({
+  open,
+  onOpenChange,
+  shortcuts,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  shortcuts: Shortcut[];
+}) {
   const groups = [...new Set(shortcuts.map((s) => s.group))];
   return (
     <RDialog.Root open={open} onOpenChange={onOpenChange}>
@@ -95,7 +105,9 @@ export function ShortcutOverlay({ open, onOpenChange, shortcuts }: { open: boole
         <RDialog.Overlay className="fixed inset-0 z-40 bg-ink/20" />
         <RDialog.Content className="fixed left-1/2 top-[14vh] z-50 w-[calc(100vw-2rem)] max-w-lg -translate-x-1/2 rounded-sm border border-rule bg-sheet p-6 shadow-sheet">
           <RDialog.Title className="font-serif text-lg text-ink">Keyboard shortcuts</RDialog.Title>
-          <RDialog.Description className="sr-only">Shortcuts available on this screen</RDialog.Description>
+          <RDialog.Description className="sr-only">
+            Shortcuts available on this screen
+          </RDialog.Description>
           <div className="mt-4 grid gap-5">
             {groups.map((group) => (
               <section key={group}>
@@ -104,7 +116,10 @@ export function ShortcutOverlay({ open, onOpenChange, shortcuts }: { open: boole
                   {shortcuts
                     .filter((s) => s.group === group)
                     .map((s) => (
-                      <div key={s.keys + s.label} className="flex items-center justify-between border-b border-rule pb-1.5 text-sm">
+                      <div
+                        key={s.keys + s.label}
+                        className="flex items-center justify-between border-b border-rule pb-1.5 text-sm"
+                      >
                         <dt className="text-ink">{s.label}</dt>
                         <dd className="flex gap-1">
                           {s.keys.split(" ").map((k) => (
@@ -124,13 +139,17 @@ export function ShortcutOverlay({ open, onOpenChange, shortcuts }: { open: boole
 }
 
 const isTyping = (target: EventTarget | null) =>
-  target instanceof HTMLElement && (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
+  target instanceof HTMLElement &&
+  (target.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName));
 
 /**
  * Global key bindings. Single keys are ignored while typing in a field; "mod+k" means ⌘K on
  * macOS and Ctrl+K elsewhere.
  */
-export function useHotkeys(bindings: Record<string, (event: KeyboardEvent) => void>, enabled = true): void {
+export function useHotkeys(
+  bindings: Record<string, (event: KeyboardEvent) => void>,
+  enabled = true,
+): void {
   useEffect(() => {
     if (!enabled) return;
     const handler = (event: KeyboardEvent) => {

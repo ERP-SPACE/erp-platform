@@ -39,7 +39,17 @@ export interface RegisterProps<T> {
  * The ruled register (brief B3): ledger-style rows, small-caps header, tabular numerals,
  * ↑/↓ to move, Enter to open. Virtualised when a height is given.
  */
-export function Register<T>({ data, columns, getRowId, selectedId, onSelect, onOpen, empty, height, caption }: RegisterProps<T>) {
+export function Register<T>({
+  data,
+  columns,
+  getRowId,
+  selectedId,
+  onSelect,
+  onOpen,
+  empty,
+  height,
+  caption,
+}: RegisterProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [focusIndex, setFocusIndex] = useState(0);
   const table = useReactTable({
@@ -67,7 +77,9 @@ export function Register<T>({ data, columns, getRowId, selectedId, onSelect, onO
       const next = Math.max(0, Math.min(rows.length - 1, to));
       setFocusIndex(next);
       if (height) virtualizer.scrollToIndex(next);
-      (scrollRef.current?.querySelector(`[data-row-index="${next}"]`) as HTMLElement | null)?.focus();
+      (
+        scrollRef.current?.querySelector(`[data-row-index="${next}"]`) as HTMLElement | null
+      )?.focus();
       event.preventDefault();
     };
     if (event.key === "ArrowDown" || event.key === "j") move(focusIndex + 1);
@@ -82,9 +94,16 @@ export function Register<T>({ data, columns, getRowId, selectedId, onSelect, onO
 
   if (!data.length) return <>{empty ?? <EmptyState title="Nothing here yet." />}</>;
 
-  const visible = height ? virtualizer.getVirtualItems() : rows.map((_, index) => ({ index, start: 0, size: 0, key: index }));
+  const visible = height
+    ? virtualizer.getVirtualItems()
+    : rows.map((_, index) => ({ index, start: 0, size: 0, key: index }));
   const padTop = height && visible.length ? visible[0]!.start : 0;
-  const padBottom = height && visible.length ? virtualizer.getTotalSize() - visible[visible.length - 1]!.start - visible[visible.length - 1]!.size : 0;
+  const padBottom =
+    height && visible.length
+      ? virtualizer.getTotalSize() -
+        visible[visible.length - 1]!.start -
+        visible[visible.length - 1]!.size
+      : 0;
 
   return (
     <div ref={scrollRef} className="overflow-auto" style={height ? { height } : undefined}>
@@ -101,11 +120,20 @@ export function Register<T>({ data, columns, getRowId, selectedId, onSelect, onO
                     key={header.id}
                     scope="col"
                     style={meta?.width ? { width: meta.width } : undefined}
-                    className={cn("smallcaps h-9 px-[var(--pad-x)] font-semibold", meta?.numeric || meta?.align === "right" ? "text-right" : "text-left")}
-                    aria-sort={sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined}
+                    className={cn(
+                      "smallcaps h-9 px-[var(--pad-x)] font-semibold",
+                      meta?.numeric || meta?.align === "right" ? "text-right" : "text-left",
+                    )}
+                    aria-sort={
+                      sorted === "asc" ? "ascending" : sorted === "desc" ? "descending" : undefined
+                    }
                   >
                     {header.isPlaceholder ? null : header.column.getCanSort() ? (
-                      <button type="button" className="inline-flex items-center gap-1 uppercase hover:text-ink" onClick={header.column.getToggleSortingHandler()}>
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1 uppercase hover:text-ink"
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
                         {flexRender(header.column.columnDef.header, header.getContext())}
                         <span className="text-ink-3" aria-hidden>
                           {sorted === "asc" ? "↑" : sorted === "desc" ? "↓" : ""}
@@ -139,7 +167,8 @@ export function Register<T>({ data, columns, getRowId, selectedId, onSelect, onO
                 className={cn(
                   "h-[var(--row-h)] border-b border-rule outline-none transition-colors",
                   onSelect && "cursor-pointer hover:bg-wash/70 focus-visible:bg-wash",
-                  selected && "bg-accent-wash/60 shadow-[inset_2px_0_0_var(--accent)] hover:bg-accent-wash/60",
+                  selected &&
+                    "bg-accent-wash/60 shadow-[inset_2px_0_0_var(--accent)] hover:bg-accent-wash/60",
                 )}
               >
                 {row.getVisibleCells().map((cell) => {

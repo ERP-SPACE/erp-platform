@@ -1,7 +1,8 @@
-import { createZodDto } from "nestjs-zod";
 import { z } from "zod";
+import { zodDto } from "../../common/dto.js";
 
-export class UpdateSettingDto extends createZodDto(
+export class UpdateSettingDto extends zodDto(
+  "UpdateSettingDto",
   z.object({
     value: z.unknown(),
     /** Version the client last saw; 0 when the key has never been saved. */
@@ -25,7 +26,8 @@ const bank = z.object({
   branch: z.string().trim().max(80).optional(),
 });
 
-export class UpdateCompanyDto extends createZodDto(
+export class UpdateCompanyDto extends zodDto(
+  "UpdateCompanyDto",
   z.object({
     legalName: z.string().trim().min(2).max(160),
     tradeName: z.string().trim().max(160).nullable(),

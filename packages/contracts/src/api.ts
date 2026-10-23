@@ -5,7 +5,12 @@ import { z } from "zod";
  * gets matching types through the generated client (pnpm api:gen).
  */
 export const meResponse = z.object({
-  user: z.object({ id: z.string(), name: z.string(), email: z.string(), twoFactorEnabled: z.boolean() }),
+  user: z.object({
+    id: z.string(),
+    name: z.string(),
+    email: z.string(),
+    twoFactorEnabled: z.boolean(),
+  }),
   company: z.object({
     id: z.string(),
     legalName: z.string(),
@@ -31,7 +36,11 @@ export const settingItem = z.object({
   updatedByName: z.string().nullable(),
 });
 
-export const settingSaved = z.object({ key: z.string(), value: z.unknown(), version: z.number().int() });
+export const settingSaved = z.object({
+  key: z.string(),
+  value: z.unknown(),
+  version: z.number().int(),
+});
 
 const address = z.object({
   line1: z.string(),
@@ -83,7 +92,11 @@ export const seriesItem = z.object({
   updatedByName: z.string().nullable(),
 });
 
-export const seriesPreview = z.object({ entityType: z.string(), date: z.string(), nextNumber: z.string() });
+export const seriesPreview = z.object({
+  entityType: z.string(),
+  date: z.string(),
+  nextNumber: z.string(),
+});
 
 export const auditItem = z.object({
   id: z.number().int(),

@@ -46,7 +46,9 @@ export class ActorService {
       companyId: u.companyId,
       branchId: branch?.id ?? null,
       roles: [...new Set(grants.map((g) => g.code))],
-      permissions: new Set(grants.flatMap((g) => (g.permission ? [g.permission as PermissionCode] : []))),
+      permissions: new Set(
+        grants.flatMap((g) => (g.permission ? [g.permission as PermissionCode] : [])),
+      ),
       sessionId: session.id,
       sessionCreatedAt: session.createdAt,
       twoFactorEnabled: Boolean(u.twoFactorEnabled),
@@ -70,7 +72,12 @@ export class ActorService {
 
   async markSteppedUp(actor: Actor): Promise<Date> {
     const now = Date.now();
-    await this.redis.set(this.stepUpKey(actor.sessionId), String(now), "EX", this.env.STEP_UP_SECONDS);
+    await this.redis.set(
+      this.stepUpKey(actor.sessionId),
+      String(now),
+      "EX",
+      this.env.STEP_UP_SECONDS,
+    );
     return new Date(now + this.env.STEP_UP_SECONDS * 1000);
   }
 

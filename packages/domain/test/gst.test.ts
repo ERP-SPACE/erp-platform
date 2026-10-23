@@ -17,9 +17,15 @@ describe("GSTIN", () => {
 
   it("rejects a wrong check character, a bad format and an unknown state", () => {
     const wrong = stem + (valid.endsWith("A") ? "B" : "A");
-    expect(validateGstin(wrong)).toMatchObject({ valid: false, error: expect.stringMatching(/check character/) });
+    expect(validateGstin(wrong)).toMatchObject({
+      valid: false,
+      error: expect.stringMatching(/check character/),
+    });
     expect(validateGstin("24AAACB1234C1X5").valid).toBe(false);
-    expect(validateGstin("99AAACB1234C1Z5")).toMatchObject({ valid: false, error: "Unknown state code 99" });
+    expect(validateGstin("99AAACB1234C1Z5")).toMatchObject({
+      valid: false,
+      error: "Unknown state code 99",
+    });
   });
 
   it("knows Gujarat and decides the GST regime", () => {

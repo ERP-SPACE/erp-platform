@@ -36,7 +36,11 @@ export const SYSTEM_ROLES = [
   { code: "sales_manager", name: "Sales Manager", grants: ["settings.view"] },
   { code: "sales_executive", name: "Sales Executive", grants: ["settings.view"] },
   { code: "warehouse", name: "Warehouse", grants: [] },
-  { code: "accountant", name: "Accountant", grants: ["settings.view", "settings.series.view", "audit.view"] },
+  {
+    code: "accountant",
+    name: "Accountant",
+    grants: ["settings.view", "settings.series.view", "audit.view"],
+  },
 ] as const;
 
 export type RoleCode = (typeof SYSTEM_ROLES)[number]["code"];

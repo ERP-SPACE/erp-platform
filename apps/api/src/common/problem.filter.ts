@@ -1,6 +1,12 @@
 import { InvalidAmountError, InvalidSeriesError, InvalidTransitionError } from "@erp/domain";
 import type { ErrorCode, Problem } from "@erp/contracts";
-import { type ArgumentsHost, Catch, type ExceptionFilter, HttpException, Logger } from "@nestjs/common";
+import {
+  type ArgumentsHost,
+  Catch,
+  type ExceptionFilter,
+  HttpException,
+  Logger,
+} from "@nestjs/common";
 import type { FastifyReply } from "fastify";
 import { ZodValidationException } from "nestjs-zod";
 import { type ZodError } from "zod";
@@ -25,11 +31,19 @@ export class ProblemFilter implements ExceptionFilter {
     const problem = this.toProblem(exception);
     problem.requestId = requestContext.getStore()?.requestId;
     if (problem.status >= 500) this.logger.error(exception);
-    void reply.status(problem.status).header("content-type", "application/problem+json").send(problem);
+    void reply
+      .status(problem.status)
+      .header("content-type", "application/problem+json")
+      .send(problem);
   }
 
   private toProblem(e: unknown): Problem {
-    const make = (status: number, code: ErrorCode, title: string, extra: Partial<Problem> = {}): Problem => ({
+    const make = (
+      status: number,
+      code: ErrorCode,
+      title: string,
+      extra: Partial<Problem> = {},
+    ): Problem => ({
       type: `https://erp.local/problems/${code.toLowerCase().replace(/_/g, "-")}`,
       title,
       status,

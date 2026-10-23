@@ -51,7 +51,10 @@ export const idempotencyKeys = pgTable(
       .notNull()
       .default(sql`now() + interval '24 hours'`),
   },
-  (t) => [primaryKey({ columns: [t.userId, t.key] }), index("idempotency_expires_idx").on(t.expiresAt)],
+  (t) => [
+    primaryKey({ columns: [t.userId, t.key] }),
+    index("idempotency_expires_idx").on(t.expiresAt),
+  ],
 );
 
 /**
@@ -83,7 +86,12 @@ export const postingEvents = pgTable(
 );
 
 export const notificationChannel = pgEnum("notification_channel", ["in_app", "email", "whatsapp"]);
-export const notificationStatus = pgEnum("notification_status", ["pending", "sent", "failed", "read"]);
+export const notificationStatus = pgEnum("notification_status", [
+  "pending",
+  "sent",
+  "failed",
+  "read",
+]);
 
 /** Notification outbox; WhatsApp becomes another channel adapter later (brief §A7). */
 export const notifications = pgTable(

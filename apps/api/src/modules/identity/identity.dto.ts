@@ -1,10 +1,11 @@
 import { PERMISSION_CODES, type PermissionCode } from "@erp/contracts";
-import { createZodDto } from "nestjs-zod";
 import { z } from "zod";
+import { zodDto } from "../../common/dto.js";
 
 const permissionCode = z.enum(PERMISSION_CODES as [PermissionCode, ...PermissionCode[]]);
 
-export class StepUpDto extends createZodDto(
+export class StepUpDto extends zodDto(
+  "StepUpDto",
   z.object({
     password: z.string().min(1).max(128),
     /** Required when the user has two-factor authentication enabled. */
@@ -15,7 +16,8 @@ export class StepUpDto extends createZodDto(
   }),
 ) {}
 
-export class CreateUserDto extends createZodDto(
+export class CreateUserDto extends zodDto(
+  "CreateUserDto",
   z.object({
     name: z.string().trim().min(2).max(80),
     email: z.email().toLowerCase(),
@@ -24,7 +26,8 @@ export class CreateUserDto extends createZodDto(
   }),
 ) {}
 
-export class UpdateUserDto extends createZodDto(
+export class UpdateUserDto extends zodDto(
+  "UpdateUserDto",
   z.object({
     name: z.string().trim().min(2).max(80).optional(),
     active: z.boolean().optional(),
@@ -32,7 +35,8 @@ export class UpdateUserDto extends createZodDto(
   }),
 ) {}
 
-export class UpdateRolePermissionsDto extends createZodDto(
+export class UpdateRolePermissionsDto extends zodDto(
+  "UpdateRolePermissionsDto",
   z.object({
     permissionCodes: z.array(permissionCode),
     version: z.number().int().positive(),

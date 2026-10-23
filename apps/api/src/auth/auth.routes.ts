@@ -13,7 +13,8 @@ export function registerAuthRoutes(fastify: FastifyInstance, auth: Auth, publicU
     config: { rateLimit: { max: 20, timeWindow: "1 minute" } },
     async handler(request: FastifyRequest, reply: FastifyReply) {
       const url = new URL(request.url, publicUrl);
-      const hasBody = request.method !== "GET" && request.body !== undefined && request.body !== null;
+      const hasBody =
+        request.method !== "GET" && request.body !== undefined && request.body !== null;
       const response = await auth.handler(
         new Request(url, {
           method: request.method,

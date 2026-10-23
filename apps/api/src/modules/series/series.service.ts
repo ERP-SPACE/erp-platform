@@ -36,7 +36,10 @@ export class SeriesService {
         documentSequences,
         and(
           eq(documentSequences.seriesId, documentSeries.id),
-          eq(documentSequences.fy, sql`CASE WHEN ${documentSeries.resetOnFy} THEN ${fy} ELSE ${NO_RESET_FY} END`),
+          eq(
+            documentSequences.fy,
+            sql`CASE WHEN ${documentSeries.resetOnFy} THEN ${fy} ELSE ${NO_RESET_FY} END`,
+          ),
         ),
       )
       .leftJoin(user, eq(user.id, documentSeries.updatedBy))
@@ -73,10 +76,17 @@ export class SeriesService {
       .select({ currentSeq: documentSequences.currentSeq })
       .from(documentSequences)
       .where(and(eq(documentSequences.seriesId, series.id), eq(documentSequences.fy, fy)));
-    return { entityType, date, nextNumber: formatDocNo(series, date, (counter?.currentSeq ?? 0) + 1) };
+    return {
+      entityType,
+      date,
+      nextNumber: formatDocNo(series, date, (counter?.currentSeq ?? 0) + 1),
+    };
   }
 
-  async update(type: string, input: { prefixTemplate: string; padding: number; resetOnFy: boolean; version: number }) {
+  async update(
+    type: string,
+    input: { prefixTemplate: string; padding: number; resetOnFy: boolean; version: number },
+  ) {
     const entityType = docTypeSchema.parse(type);
     const format = { prefixTemplate: input.prefixTemplate, padding: input.padding };
     const today = istToday();
@@ -85,7 +95,10 @@ export class SeriesService {
     if (DOC_TYPES[entityType].gst) {
       const errors = validateGstSeries(format, today);
       if (errors.length) {
-        throw validationError("This series would produce invalid GST document numbers.", errors.map((message) => ({ path: "prefixTemplate", message })));
+        throw validationError(
+          "This series would produce invalid GST document numbers.",
+          errors.map((message) => ({ path: "prefixTemplate", message })),
+        );
       }
     }
 
@@ -96,7 +109,11 @@ export class SeriesService {
         documentSeries,
         eq(documentSeries.id, series.id),
         input.version,
-        { prefixTemplate: input.prefixTemplate, padding: input.padding, resetOnFy: input.resetOnFy },
+        {
+          prefixTemplate: input.prefixTemplate,
+          padding: input.padding,
+          resetOnFy: input.resetOnFy,
+        },
         `${entityType} series`,
       );
       this.bus.publishAfterCommit("series.changed", { entityType, version: saved.version });
@@ -108,7 +125,10 @@ export class SeriesService {
   async allocate(tx: Tx, type: DocType, date: string): Promise<string> {
     const series = await this.find(tx, type);
     const fy = series.resetOnFy ? fyCode(date) : NO_RESET_FY;
-    await tx.insert(documentSequences).values({ seriesId: series.id, fy, currentSeq: 0 }).onConflictDoNothing();
+    await tx
+      .insert(documentSequences)
+      .values({ seriesId: series.id, fy, currentSeq: 0 })
+      .onConflictDoNothing();
     const [row] = await tx
       .update(documentSequences)
       .set({ currentSeq: sql`${documentSequences.currentSeq} + 1`, updatedAt: new Date() })
@@ -121,7 +141,9 @@ export class SeriesService {
     const [series] = await db
       .select()
       .from(documentSeries)
-      .where(and(eq(documentSeries.companyId, actor().companyId), eq(documentSeries.entityType, type)));
+      .where(
+        and(eq(documentSeries.companyId, actor().companyId), eq(documentSeries.entityType, type)),
+      );
     if (!series) throw notFound(`${type} series`);
     return series;
   }

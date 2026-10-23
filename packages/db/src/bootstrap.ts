@@ -12,7 +12,8 @@ export async function bootstrapRoles(
   const client = new pg.Client({ connectionString: superuserUrl });
   await client.connect();
   try {
-    const database = (await client.query<{ db: string }>("SELECT current_database() AS db")).rows[0]!.db;
+    const database = (await client.query<{ db: string }>("SELECT current_database() AS db"))
+      .rows[0]!.db;
     for (const [role, password] of [
       ["erp_owner", passwords.owner],
       ["erp_app", passwords.app],

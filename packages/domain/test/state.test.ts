@@ -29,8 +29,8 @@ describe("defineMachine", () => {
   });
 
   it("refuses transitions to undeclared states at definition time", () => {
-    expect(() =>
-      defineMachine("Broken", { A: ["B"] } as unknown as { A: readonly "A"[] }),
-    ).toThrow(/undeclared state/);
+    expect(() => defineMachine("Broken", { A: ["B"] } as unknown as { A: readonly "A"[] })).toThrow(
+      /undeclared state/,
+    );
   });
 });

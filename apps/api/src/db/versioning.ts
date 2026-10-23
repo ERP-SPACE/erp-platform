@@ -39,7 +39,8 @@ export async function updateVersioned<T extends VersionedTable>(
     .select({ version: table.version, updatedBy: table.updatedBy, updatedAt: table.updatedAt })
     .from(table as PgTable)
     .where(where);
-  const row = current[0] as { version: number; updatedBy: string | null; updatedAt: Date } | undefined;
+  const row = current[0] as
+    { version: number; updatedBy: string | null; updatedAt: Date } | undefined;
   if (!row) throw notFound(what);
   throw versionConflict({
     version: row.version,
