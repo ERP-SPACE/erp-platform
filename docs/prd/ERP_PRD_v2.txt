@@ -1,0 +1,1206 @@
+
+Product Requirements Document
+Paper Trading ERP System
+Sublimation & Speciality Paper  |  Phase 1  |  Surat Hub
+Version 2.0
+
+
+Executive Summary
+This ERP manages end-to-end operations of a sublimation and speciality paper trading business. It integrates purchase workflows, landed cost allocations, roll-level inventory management, barcode-based traceability, customer onboarding, credit management, salesman/broker commission tracking, and a foundational accounting layer.
+The ERP replaces fragmented spreadsheets and external accounting tools (such as Tally) with a unified, scalable platform. Phase 1 focuses on Gujarat (Surat hub) with architecture designed for pan-India rollout.
+
+WhatsApp Automation — Deferred to Phase 2
+WhatsApp-driven ordering, dunning, ledger queries, and broadcast automation are intentionally deferred to Phase 2.
+Phase 1 captures all required data fields (WhatsApp number, language preference, consent flag) so that Phase 2 integration requires no structural schema changes.
+ | 
+Accounting — Phase 1 Scope (Foundational Only)
+Phase 1 implements auto-voucher generation from every PI and SI, a full chart of accounts, GST-ready ledger structure, basic AR/AP aging views, and a monthly GST summary export.
+Full financial statements, bank reconciliation, GSTR API filing, year-end close, and TCS computation are Phase 2 items.
+ | 
+
+1. Objectives & KPI Targets
+1.1 Business Objectives
+Single source of truth for all purchases, stock, sales, and accounts.
+Automate purchase → inward → invoice → accounting with landed cost allocation.
+Streamline sales flow: SO → DC → SI in 2 clicks per stage.
+Track stock roll-by-roll with QR/barcodes, batch, and vendor/customer mapping.
+Enforce 44" benchmark pricing with full rate history and special order deal rates.
+Manage customer rates, discounts, credit days, and grace days with auto-blocking.
+Track salesman/broker commissions with configurable trigger events and payout history.
+Provide analytics dashboards for stock, sales, credit, and profitability.
+Replace Tally with foundational accounting (auto-vouchers, GST-ready ledgers).
+Scalable architecture for new product categories and geographies.
+
+1.2 KPI Targets
+KPI
+ | Target
+ | Rolls with valid barcode lineage
+ | ≥ 99.9%
+ | Average age of Unmapped rolls
+ | ≤ 24 hours from GRN creation
+ | Credit check response on SO confirmation
+ | Real-time, < 1 second
+ | Auto-voucher generation from PI/SI
+ | 100% — zero manual entries in normal operations
+ | Stock dashboard data freshness
+ | ≤ 5 minutes
+ | Dead stock identification
+ | Rolls > 180 days flagged automatically
+ | 
+
+2. Glossary
+Term
+ | Definition
+ | Roll
+ | Physical roll of paper defined by width (inches) and length (metres).
+ | SKU
+ | Sellable variant defined by hierarchy: GSM → Quality → Size (Width).
+ | 44" Benchmark
+ | All customer rates anchored at 44"; other widths derived by ratio unless overridden.
+ | Unmapped Roll
+ | Inwarded roll with incomplete attribute mapping to a SKU.
+ | Mapped Roll
+ | Inwarded roll fully linked to a SKU and ready for allocation.
+ | GRN
+ | Goods Receipt Note — partial receipts allowed.
+ | DC
+ | Delivery Challan.
+ | PI / SI
+ | Purchase Invoice / Sales Invoice.
+ | Proforma Invoice
+ | Non-accounting pre-sale document; converts to SI on dispatch.
+ | Landed Cost
+ | Base price + freight + duties + clearing + misc, allocated to each roll.
+ | Credit Days
+ | Days after invoice date before payment is due.
+ | Grace Days
+ | Internal buffer beyond credit days before auto-block triggers; not shown to customer.
+ | Exposure
+ | Outstanding AR + value of all Confirmed/Partially Fulfilled SOs.
+ | TCS
+ | Tax Collected at Source at 0.1% for eligible B2B buyers; computation deferred to Phase 2.
+ | Document Series
+ | Configurable prefix/suffix + auto-increment sequence per document type, reset per FY.
+ | Transporter
+ | Third-party logistics provider; GSTIN and vehicle number captured on DC for e-way bill readiness (API Phase 2).
+ | Bill of Supply
+ | Invoice format for Composition or Unregistered GST customers — no tax amount shown.
+ | 
+
+3. Scope
+3.1 Phase 1 — In Scope
+Domestic purchases from Surat importers/traders.
+Domestic sales (Gujarat, extendable to all states).
+Sublimation and butter paper products.
+Roll-level inventory with batch/vendor traceability and QR barcodes.
+Transporter master and vehicle/LR fields on DC (data capture; e-way bill API is Phase 2).
+Document number series configuration per document type with financial-year reset.
+Opening balance migration wizard (stock, AR, AP, bank).
+Salesman/broker master with configurable commission methods and payout tracking.
+TCS applicable flag on customer (computation and filing deferred to Phase 2).
+Proforma invoice with own number series, convertible to SI.
+Foundational accounting: auto-vouchers, chart of accounts, GST-ready ledgers, AR/AP aging, GST summary CSV export.
+WhatsApp data fields captured (number, language, consent) — integration Phase 2.
+Standard operational reports and dashboards.
+
+3.2 Phase 2 — Out of Scope
+Import purchase module (LC, forex, consignment).
+Multi-warehouse management.
+E-invoicing / IRN API and e-way bill API.
+Bank API / auto-reconciliation.
+Auto-GST API filing (GSTR-1, GSTR-3B).
+Full financial statements (P&L, Balance Sheet, Trial Balance with drill-down).
+Year-end close and opening balance carry-forward.
+TCS computation engine and TDS handling.
+Multi-currency accounting.
+WhatsApp ordering, dunning, ledger queries, and broadcast automation.
+
+
+4. Users, Roles & Access Policies
+4.1 Roles
+Role
+ | Key Permissions
+ | Notes
+ | Super Admin / Owner
+ | Full access; approve overrides; credit block/unblock; all reports.
+ | Single user; all audit logs visible.
+ | Admin (Sales/Purchase)
+ | Module-scoped; configurable by customer/product group.
+ | Delegated by owner.
+ | Purchase Manager
+ | Create/manage PO, GRN, PI, landed cost.
+ | Cannot override credit policies.
+ | Sales Manager / Exec
+ | SO, DC, SI; customer pricing within configured tolerance.
+ | Override > tolerance → approval modal.
+ | Warehouse Staff
+ | Barcode scan, inwarding, dispatch actions.
+ | No pricing or financial access.
+ | Accountant
+ | Voucher entry, ledger view, AR/AP aging, GST summary.
+ | Phase 1 accounting scope only.
+ | 
+4.2 Access Rules
+Module-based access with optional segmentation by customer group and product family.
+Sales exec can be limited to their own assigned customer set.
+Role-specific dashboards — each role sees only relevant KPI cards.
+All data changes tracked in AuditLog: user, timestamp, before-state (JSON), after-state (JSON).
+Sensitive actions (credit override, rate override) require a mandatory reason logged to AuditLog.
+
+
+5. Data Models
+5.1 Product & SKU
+Product
+Field
+ | Type / Constraints
+ | id
+ | UUID, PK
+ | category_id
+ | FK → Category
+ | category
+ | enum: Sublimation, Butter, Other
+ | gsm
+ | int — e.g. 30, 35, 45, 55, 65, 80, 100
+ | quality_name
+ | str: Premium, Standard, Economy, Custom
+ | quality_aliases
+ | [str] — alternate trade names for same quality grade
+ | default_length_m
+ | int — default 1000; allowed: 1000, 1500, 2000, custom (admin approval)
+ | tax_rate
+ | decimal — default 18%
+ | hsn_code
+ | str
+ | active
+ | bool
+ | 
+SKU
+Field
+ | Type / Constraints
+ | id
+ | UUID, PK
+ | product_id
+ | FK → Product
+ | width_in
+ | decimal(5,2) — e.g. 24, 36, 44, 63
+ | tax_rate
+ | decimal — inherits from Product; editable per SKU
+ | unique constraint
+ | (product_id, width_in)
+ | 
+Validation Rules
+width_in must be from the configured allowed-widths list (24, 36, 44, 63 … configurable in Settings).
+default_length_m must be in {1000, 1500, 2000} or a custom value entered with admin approval.
+ | 
+5.2 Document Number Series  ← NEW
+Every document type has an independent, configurable number sequence.
+Field
+ | Type / Description
+ | Example
+ | id
+ | UUID, PK
+ | 
+ | entity_type
+ | enum: PO, GRN, PI, SO, DC, SI, Proforma, CreditNote, DebitNote, Receipt, Payment, Voucher
+ | 
+ | prefix
+ | str — {FY} token auto-substituted
+ | SI-2526-
+ | current_seq
+ | int — auto-increments on each document creation
+ | 1042
+ | padding
+ | int — zero-pad length
+ | 5 → 01042
+ | reset_on_fy
+ | bool — resets to 1 on 1 April each year
+ | true
+ | last_reset_date
+ | date
+ | 2025-04-01
+ | 
+5.3 Batch & Roll
+Batch
+Field
+ | Type
+ | id
+ | UUID, PK
+ | supplier_id
+ | FK → Supplier
+ | batch_code
+ | str — unique per supplier
+ | date
+ | date
+ | notes
+ | str
+ | 
+Roll
+Field
+ | Type / Constraints
+ | id
+ | UUID, PK
+ | sku_id
+ | FK → SKU (nullable if Unmapped)
+ | batch_id
+ | FK → Batch
+ | vendor_id
+ | FK → Supplier
+ | width_in
+ | decimal
+ | length_m
+ | int, > 0
+ | status
+ | enum: Unmapped, Mapped, Allocated, Dispatched, Returned, ReturnedToSupplier, Scrap
+ | landed_cost
+ | decimal — updated after landed cost allocation run
+ | barcode
+ | str — unique QR + alphanumeric serial
+ | created_at, updated_at
+ | timestamp
+ | 
+Barcode Specification
+Format:   YYMM-SUP-BATCH-SEQ-CHECK
+QR Payload: { roll_id, sku_id, batch_id, vendor_id, width_in, length_m, landed_cost }
+Reprint option available for damaged labels or returned rolls.
+All status transitions logged to AuditLog; illegal transitions are blocked.
+ | 
+5.4 Purchase Entities
+Supplier
+Field
+ | Type
+ | id
+ | UUID, PK
+ | name, code
+ | str
+ | gstin
+ | str (15 char)
+ | state
+ | str
+ | address
+ | str
+ | contact_name, contact_phone, contact_email
+ | str
+ | active
+ | bool
+ | 
+Transporter  ← NEW
+Field
+ | Type / Notes
+ | id
+ | UUID, PK
+ | name
+ | str
+ | gstin
+ | str — required for e-way bill API (Phase 2)
+ | state
+ | str
+ | contact_phone
+ | str
+ | active
+ | bool
+ | 
+Every DC must reference a Transporter and vehicle_no. Capturing this in Phase 1 ensures e-way bill API integration in Phase 2 requires no schema changes.
+
+Purchase Order (PO)
+Field
+ | Type
+ | po_no
+ | from DocumentSequence
+ | supplier_id
+ | FK → Supplier
+ | date
+ | date
+ | status
+ | enum: Draft, Approved, PartiallyReceived, Closed, Cancelled
+ | currency
+ | INR (fixed Phase 1)
+ | lines
+ | {sku_id, gsm, quality, width, qty, rate, tax_rate}
+ | 
+Goods Receipt Note (GRN)
+Field
+ | Type
+ | grn_no
+ | from DocumentSequence
+ | date
+ | date
+ | po_id
+ | FK → PO
+ | status
+ | enum: Created, Posted
+ | lines
+ | {po_line_id, received_qty, accepted_qty, rejected_qty, unmapped_qty}
+ | 
+Purchase Invoice (PI)
+Field
+ | Type
+ | pi_no
+ | from DocumentSequence
+ | date
+ | date
+ | po_id
+ | FK → PO
+ | grn_id
+ | FK → GRN
+ | gst_type
+ | enum: IGST, CGST+SGST
+ | subtotal, tax, total
+ | decimal
+ | lines
+ | {po_line_id, sku_id, qty, rate, tax_rate, line_total}
+ | 
+Landed Cost
+Field
+ | Type
+ | id
+ | UUID, PK
+ | pi_id
+ | FK → PI
+ | type
+ | enum: Freight, Duty, Clearing, Misc, GST
+ | amount
+ | decimal
+ | basis
+ | enum: ROLL, METER, VALUE
+ | allocated
+ | bool — true after allocation run
+ | 
+5.5 Customer & Credit
+Customer
+Field
+ | Type / Notes
+ | id
+ | UUID, PK
+ | name
+ | str
+ | gstin
+ | str
+ | gst_type
+ | enum: Regular, Composition, Unregistered, SEZ  ← NEW
+ | state
+ | str
+ | address
+ | str
+ | phone
+ | str
+ | groups
+ | [enum] — Cash, Wholesale, Big; multi-value; no group also valid  ← CORRECTED
+ | monthly_capacity
+ | decimal
+ | target_sales_mtrs
+ | decimal
+ | tcs_applicable
+ | bool — Phase 1 flag; computation Phase 2  ← NEW
+ | whatsapp_number
+ | str — captured for Phase 2
+ | whatsapp_language
+ | enum: English, Hindi, Gujarati
+ | whatsapp_consent
+ | bool — opt-in flag for Phase 2 messaging
+ | status
+ | bool — active
+ | 
+CustomerContact  ← NEW (replaces single contact fields)
+Field
+ | Type / Notes
+ | id
+ | UUID, PK
+ | customer_id
+ | FK → Customer
+ | name
+ | str
+ | phone
+ | str
+ | email
+ | str
+ | is_primary
+ | bool
+ | role
+ | str — e.g. Owner, Accounts, Purchase
+ | 
+Credit Policy
+Field
+ | Type
+ | customer_id
+ | FK → Customer (1:1)
+ | credit_limit
+ | decimal
+ | credit_days
+ | int
+ | grace_days
+ | int — internal only; not visible to customer
+ | auto_block
+ | bool
+ | rule
+ | enum: OVER_LIMIT, OVER_DUE, BOTH
+ | 
+Party Rate
+Field
+ | Type
+ | id
+ | UUID, PK
+ | customer_id
+ | FK → Customer
+ | base_rate_44
+ | decimal — rate at 44" width
+ | valid_from
+ | date
+ | valid_to
+ | date (nullable)
+ | 
+Rate History
+Field
+ | Type
+ | id
+ | UUID, PK
+ | customer_id
+ | FK → Customer
+ | so_id, si_id
+ | FK (nullable) — source document
+ | effective_rate_44
+ | decimal
+ | override
+ | bool
+ | overridden_by
+ | FK → User
+ | reason
+ | str
+ | at
+ | timestamp
+ | 
+Order Deal Rate
+Field
+ | Type
+ | id
+ | UUID, PK
+ | so_id
+ | FK → SO
+ | customer_id
+ | FK → Customer
+ | product_id or sku_id
+ | FK (nullable — null applies to all SKUs in SO)
+ | agreed_rate_44
+ | decimal
+ | notes
+ | str — reason for special deal
+ | 
+5.6 Salesman / Agent / Broker
+Salesman Master
+Field
+ | Type / Notes
+ | id
+ | UUID, PK
+ | name, address, state
+ | str
+ | phone, whatsapp
+ | str
+ | kyc_documents
+ | [file refs] — upload supported
+ | target_sales_mtrs
+ | decimal
+ | status
+ | bool — active
+ | default_rate_44
+ | decimal — applied to new customers onboarded by this salesman
+ | default_credit_limit, default_credit_days
+ | decimal, int
+ | block_mode
+ | enum: None, All, Selective — blocks new SI/DC for assigned customers
+ | 
+Party-Wise Commission
+Field
+ | Type / Notes
+ | id
+ | UUID, PK
+ | salesman_id
+ | FK → Salesman
+ | customer_id
+ | FK → Customer
+ | method
+ | enum: PER_METER, PERCENT_SALES
+ | rate
+ | decimal — amount per metre OR percentage
+ | trigger_event
+ | enum: ON_SI_POSTED, ON_PAYMENT_RECEIVED  ← NEW
+ | valid_from, valid_to
+ | date
+ | is_default
+ | bool — auto-maps all invoices for this customer to this salesman
+ | 
+Commission Trigger Rules  ← NEW
+ON_SI_POSTED: Commission accrues when the Sales Invoice is posted. If subsequently cancelled via Credit Note, the commission entry is automatically reversed.
+ON_PAYMENT_RECEIVED: Commission accrues when payment against the SI is marked as received. Preferred for credit customers to avoid commission on bad debt.
+Both reversal events are logged in Commission History with a reversal_reason.
+ | 
+Commission History & Payouts
+Field
+ | Type
+ | id
+ | UUID, PK
+ | salesman_id
+ | FK → Salesman
+ | customer_id
+ | FK → Customer
+ | si_id or payment_id
+ | FK — source document
+ | amount
+ | decimal
+ | status
+ | enum: Accrued, Reversed, Paid
+ | paid_on
+ | date (nullable)
+ | reversal_reason
+ | str (nullable)
+ | 
+5.7 Sales Entities
+Sales Order (SO)
+Field
+ | Type
+ | id, so_no
+ | UUID; from DocumentSequence
+ | customer_id
+ | FK → Customer
+ | date
+ | date
+ | status
+ | enum: Draft, Confirmed, OnHold, PartiallyFulfilled, Closed, Cancelled
+ | lines
+ | {sku_id, width_in, length_m_per_roll, qty_rolls, derived_rate_per_roll, override_rate (nullable), tax_rate}
+ | 
+Proforma Invoice  ← ADDED
+Field
+ | Type / Notes
+ | id, proforma_no
+ | UUID; from DocumentSequence (own series)
+ | customer_id
+ | FK → Customer
+ | so_id
+ | FK → SO (nullable)
+ | date, valid_until
+ | date
+ | status
+ | enum: Draft, Sent, Converted, Cancelled
+ | lines
+ | {sku_id, width_in, qty_rolls, rate_per_roll, tax_rate}
+ | converted_si_id
+ | FK → SI — populated on conversion; no accounting impact at any stage
+ | 
+Delivery Challan (DC)
+Field
+ | Type
+ | id, dc_no
+ | UUID; from DocumentSequence
+ | so_id
+ | FK → SO
+ | dc_date
+ | date
+ | transporter_id
+ | FK → Transporter  ← NEW
+ | vehicle_no
+ | str  ← NEW
+ | lr_no
+ | str (nullable) — lorry receipt number  ← NEW
+ | status
+ | enum: Open, Closed
+ | lines
+ | {so_line_id, roll_id, shipped_length_m, shipped_status}
+ | 
+Sales Invoice (SI)
+Field
+ | Type
+ | id, si_no
+ | UUID; from DocumentSequence
+ | so_id, dc_id
+ | FK → SO, DC
+ | si_date
+ | date
+ | gst_type
+ | enum: IGST, CGST+SGST — derived from customer vs company state
+ | subtotal, discount_total, tax_amount, total
+ | decimal
+ | status
+ | enum: Draft, Posted
+ | lines
+ | {so_line_id, roll_id (nullable), qty_rolls, billed_length_m, rate_per_roll, discount_line, tax_rate, line_total}
+ | 
+5.8 Returns
+Sales Return
+Field
+ | Type / Notes
+ | id, return_no
+ | UUID; from DocumentSequence
+ | si_id
+ | FK → original SI
+ | customer_id
+ | FK → Customer
+ | date
+ | date
+ | lines
+ | {si_line_id, roll_id, returned_length_m, reason}
+ | credit_note_id
+ | FK → CreditNote — auto-generated on posting
+ | status
+ | enum: Draft, Posted
+ | 
+Purchase Return
+Field
+ | Type / Notes
+ | id, return_no
+ | UUID; from DocumentSequence
+ | pi_id
+ | FK → original PI
+ | supplier_id
+ | FK → Supplier
+ | date
+ | date
+ | lines
+ | {pi_line_id, roll_id, returned_qty, reason}
+ | debit_note_id
+ | FK → DebitNote — auto-generated on posting
+ | roll_status_after
+ | ReturnedToSupplier — landed cost reversal to Landed Cost Variance ledger
+ | status
+ | enum: Draft, Posted
+ | 
+5.9 Foundational Accounting Entities
+Ledger (Chart of Accounts)
+Field
+ | Type
+ | id
+ | UUID, PK
+ | name
+ | str
+ | group
+ | enum: Assets, Liabilities, Income, Expenses, Equity
+ | sub_group
+ | str — e.g. Current Assets, Fixed Assets
+ | code
+ | str — unique
+ | system_ledger
+ | bool — system-managed ledgers cannot be deleted
+ | 
+Voucher
+Field
+ | Type
+ | id
+ | UUID, PK
+ | voucher_no
+ | from DocumentSequence
+ | type
+ | enum: Payment, Receipt, Contra, Journal, Sales, Purchase, DebitNote, CreditNote
+ | date
+ | date
+ | narration
+ | str
+ | status
+ | enum: Draft, Posted — posted vouchers are immutable
+ | ref_entity_type, ref_entity_id
+ | polymorphic FK — links to PI/SI/Payment/Return
+ | lines
+ | {ledger_id, debit, credit}
+ | 
+Payment & Receipt
+Field
+ | Type
+ | id
+ | UUID, PK
+ | party_type
+ | enum: Customer, Supplier
+ | party_id
+ | FK
+ | mode
+ | enum: Cash, NEFT, UPI, Cheque, RTGS
+ | amount, date
+ | decimal, date
+ | ref_no, remarks
+ | str
+ | voucher_id
+ | FK → Voucher — auto-created on posting
+ | 
+Invoice Allocation
+Field
+ | Type
+ | id
+ | UUID, PK
+ | payment_id
+ | FK → Payment
+ | invoice_id
+ | FK → SI or PI
+ | amount_allocated
+ | decimal
+ | 
+5.10 Opening Balance Migration  ← NEW
+Before Go-Live, the following opening balance import is mandatory. A dedicated import wizard guides each step.
+Category
+ | Import Method
+ | Validation
+ | Opening Stock
+ | Roll-by-roll CSV OR aggregate value per SKU
+ | Sum of landed costs must equal total inventory value in legacy books.
+ | Opening AR
+ | CSV: customer, invoice_no, date, amount
+ | Unrecognised customers flagged before import.
+ | Opening AP
+ | CSV: supplier, invoice_no, date, amount
+ | Unrecognised suppliers flagged before import.
+ | Opening Bank/Cash
+ | Single entry per account
+ | Confirmed by accountant before Go-Live lock.
+ | Opening Ledger Balances
+ | Journal voucher narrated 'Opening Balance'
+ | Voucher must balance (Dr = Cr) before posting.
+ | 
+Go-Live Lock
+After the first live transaction is posted, the Opening Balance wizard is locked.
+Corrections thereafter require a Journal voucher with a mandatory reason.
+ | 
+
+6. Core Modules & Workflows
+6.1 Product Catalogue & Barcoding
+Hierarchy: GSM → Quality → Size (Width).
+Lengths: Default 1000 m; configurable to 1500/2000 or custom odd number (admin approval).
+Barcodes: Unique QR + alphanumeric serial generated automatically on GRN posting.
+Each roll mapped to vendor and batch on inward.
+Reprint option for damaged labels or returned rolls.
+
+Barcode Format
+Format:   YYMM-SUP-BATCH-ROLLID-CHECK
+QR Payload: { roll_id, sku_id, batch_id, vendor_id, length_m, width_in, landed_cost }
+ | 
+6.2 Purchases & Inwarding
+Workflow
+Create PO (Draft → Approved). Supports multiple invoices per PO; SKU or raw attributes on PO lines.
+Receive goods via GRN — partial receipts allowed. Rolls auto-barcoded; Unmapped status if SKU cannot be determined at scan time.
+Map Unmapped Rolls via bulk staging page: inline SKU assignment or new SKU creation.
+Create Purchase Invoice (PI) linked to PO and GRN; GST type auto-determined from supplier state.
+Run Landed Cost Allocation: Freight, Duty, Clearing, Misc split by ROLL/METER/VALUE basis; landed_cost_per_roll updated on each roll.
+System auto-generates accounting voucher (Dr Inventory + Dr Input GST, Cr Accounts Payable).
+
+Edge Cases
+GRN over-receipt (> PO balance): requires admin override with mandatory audit reason.
+PI without PO line: allowed with warning; mandatory audit reason; flagged in PO vs GRN vs PI variance report.
+Multiple PIs per PO: allowed; PO auto-closes when all lines fully received and invoiced, or force-closed by admin.
+Landed cost reallocation after partial dispatch: adjustment posts to Landed Cost Variance ledger; dispatched roll costs are NOT retroactively changed.
+
+Auto Voucher: Purchase Invoice
+Dr  Inventory (SKU @ landed cost)      ₹X
+Dr  Input CGST / SGST / IGST           ₹Y
+Cr  Accounts Payable (Supplier)        ₹X + ₹Y
+ | 
+6.3 Inventory Management
+Roll-level traceability via QR/barcode scan at every stage.
+Status lifecycle: Unmapped → Mapped → Allocated → Dispatched → Returned → Mapped/Scrap.
+Purchase return sub-status: ReturnedToSupplier (landed cost reversal to variance ledger).
+Partial returns: capture measured remaining metres; roll → Returned → inspection → Scrap or re-Mapped with updated length.
+
+Partial Return COGS Rule  ← NEW
+partial_COGS = (returned_length_m / original_dispatched_length_m) × landed_cost_per_roll
+Credit Note value is calculated on this partial COGS basis, not the full roll cost.
+Scrap valuation: at landed_cost_per_roll (full or partial per above); posted to Inventory Write-off expense ledger.
+ | 
+Dashboard: stock by GSM/Quality/Size, batch aging, unmapped rolls alert, dead stock (> 180 days) flag.
+
+6.4 Pricing & Discounts
+All customer rates anchored to the 44" benchmark.
+Auto-calculate other widths: derived_rate(W) = base_rate_44 × (W / 44), rounded to nearest ₹1 (configurable).
+Customer-specific rate history with validity ranges; special order deal rates recorded in Rate History.
+Override at SO/SI requires audit log entry. Override > configured tolerance (e.g. > 5%) triggers approval modal.
+Line discount applied before tax. Bill-level discount allocated proportionally by line value for GST correctness; paise handled by largest-remainder rounding.
+Discount Allowed (bill-level) posts to Dr Discounts Allowed / Cr AR — distinct from Sales Return Credit Note.
+Bulk rate revision: increase or decrease per-metre price across a customer group or product family.
+
+6.5 Sales & Order Management
+Standard Flow: SO → DC → SI
+SO Draft: enter lines with SKU, qty, rate (auto-derived from 44" benchmark). Click Confirm (Click 1) → credit check; if OK → Confirmed; if blocked → OnHold.
+DC: system auto-suggests Mapped rolls. Warehouse staff pick/scan. Enter transporter, vehicle no., LR no. Click Create DC (Click 2).
+SI: from DC, click Create SI (one click). Preview shows HSN/GST, discounts, rounding. Post → immutable; auto-voucher generated.
+
+Additional Flows
+Direct Invoice (Cash Sales): SO → SI directly; no DC required; full voucher generation still runs.
+Proforma Invoice: own series; no accounting impact; Status = Converted when SI is generated from it.
+Partial Deliveries: supported; backorders auto-tracked on original SO.
+Returns & Replacements: Sales Return workflow creates Credit Note; adjusts inventory and AR ledger.
+
+Auto Voucher: Sales Invoice
+Dr  Accounts Receivable (Customer)     ₹X + ₹Z  (net + tax)
+Cr  Sales Income                       ₹X
+Cr  Output CGST / SGST / IGST         ₹Z
+Dr  COGS (landed cost of billed rolls) ₹C
+Cr  Inventory                          ₹C
+ | 
+Edge Cases
+Rate override beyond tolerance blocks SO confirmation until manager approves.
+Cash sales still go through full voucher generation path.
+Partial DC: fulfilled SO lines marked; remaining lines stay open.
+
+6.6 Returns
+Sales Return
+Create Sales Return against original SI; specify rolls and returned_length_m per roll.
+System computes Credit Note value using partial_COGS formula (see Section 6.3).
+Post: roll → Returned. Voucher: Dr Sales Return + Dr Output GST; Cr AR.
+Inspection: roll moves to Scrap (Dr Inventory Write-off, Cr Inventory) or re-Mapped with new length.
+Commission reversal: if trigger was ON_SI_POSTED, reversal entry is automatically created.
+
+Purchase Return
+Create Purchase Return against original PI; specify rolls and reason.
+Post generates Debit Note: Dr AP; Cr Purchase Return + Cr Input GST.
+Roll status → ReturnedToSupplier; landed cost reversal posts to Landed Cost Variance ledger.
+PI partially reversed for returned lines; PO remains traceable.
+
+Defective Roll Scrap
+Warehouse staff marks roll as Scrap via Roll Inspector or barcode scan.
+System posts: Dr Inventory Write-off (at landed_cost_per_roll); Cr Inventory.
+
+6.7 Customer Onboarding & Credit
+Capture: name, GSTIN, GST type, state, address, multiple contacts (CustomerContact table), referral source, base rate 44", credit days, credit limit, grace days.
+Groups: Cash, Wholesale, Big — multi-value; no group also valid.
+WhatsApp number, language preference, and consent flag captured at onboarding (integration Phase 2).
+TCS applicable flag captured (computation Phase 2).
+
+Auto-Blocking Logic
+Credit Block Rules
+Exposure = sum(outstanding AR) + sum(value of Confirmed/PartiallyFulfilled SOs).
+OVER_LIMIT:  block if exposure > credit_limit.
+OVER_DUE:    block if any invoice overdue by (credit_days + grace_days).
+BOTH:        block if either condition is true.
+On block: SO → OnHold; internal notification raised.
+Admin override: mandatory reason logged to AuditLog.
+ | 
+6.8 Foundational Accounting
+Chart of Accounts — Phase 1
+Group
+ | Sub-Group
+ | Key Ledgers
+ | Assets
+ | Current Assets
+ | Inventory, Accounts Receivable, Cash-in-Hand, Bank Accounts, Input CGST, Input SGST, Input IGST, Advances Paid
+ | Liabilities
+ | Current Liabilities
+ | Accounts Payable, Output CGST, Output SGST, Output IGST, Provisions
+ | Liabilities
+ | TCS Payable
+ | TCS Collected (flag only in Phase 1; computation Phase 2)
+ | Income
+ | Sales
+ | Sales — Domestic, Discounts Received, Other Income
+ | Expenses
+ | Direct
+ | Freight-In, Clearing & Forwarding, Customs Duty, Packing, Landed Cost Variance
+ | Expenses
+ | Indirect
+ | Discounts Allowed, Inventory Write-off, Rounding Off
+ | Equity
+ | Capital
+ | Owner Capital, Retained Earnings
+ | 
+Auto Voucher Generation Matrix
+Transaction
+ | Auto Voucher Posting
+ | Purchase Invoice posted
+ | Dr Inventory + Dr Input GST  |  Cr Accounts Payable
+ | Sales Invoice posted
+ | Dr AR  |  Cr Sales + Cr Output GST;  Dr COGS  |  Cr Inventory
+ | Payment to supplier
+ | Dr Accounts Payable  |  Cr Bank/Cash
+ | Receipt from customer
+ | Dr Bank/Cash  |  Cr Accounts Receivable
+ | Contra (Cash ↔ Bank)
+ | Dr Bank  |  Cr Cash (or reverse)
+ | Credit Note (Sales Return)
+ | Dr Sales Return + Dr Output GST  |  Cr AR
+ | Debit Note (Purchase Return)
+ | Dr AP  |  Cr Purchase Return + Cr Input GST
+ | Inventory Write-off (Scrap)
+ | Dr Inventory Write-off  |  Cr Inventory
+ | Discount Allowed (bill level)
+ | Dr Discounts Allowed  |  Cr AR  — distinct from Sales Return
+ | Journal (manual)
+ | User-defined — for accruals, adjustments, reclassifications
+ | 
+Phase 1 Accounting Views
+Ledger Extract: per-ledger transaction list with running balance; date-range filter.
+AR Aging: per-customer outstanding by buckets (0-30, 31-60, 61-90, 90+ days).
+AP Aging: per-supplier outstanding by same buckets.
+GST Summary: Output GST collected vs Input GST paid, per month; CSV export for manual GSTR filing.
+Payment Allocation: link receipts/payments to specific invoices; unallocated amounts flagged.
+
+Phase 2 Accounting Additions
+Trial Balance, P&L Statement, Balance Sheet with drill-down.
+Bank reconciliation with bank statement CSV import and transaction matching.
+GSTR-1 and GSTR-3B structured export for GST portal upload.
+Year-end period lock and opening balance carry-forward.
+TCS computation engine and TDS handling.
+E-invoice / IRN API integration.
+ | 
+
+7. State Machines & Transition Rules
+Entity
+ | States
+ | Key Transitions
+ | Notes
+ | PO
+ | Draft → Approved → PartiallyReceived → Closed/Cancelled
+ | Admin force-close after all lines received and invoiced.
+ | Cancelled PO releases any reserved allocations.
+ | GRN
+ | Created → Posted
+ | No edits post-posting; use adjustment note.
+ | Posting triggers barcode generation for all rolls.
+ | Roll
+ | Unmapped → Mapped → Allocated → Dispatched → Returned → Mapped/Scrap
+ | All transitions logged; illegal transitions blocked.
+ | ReturnedToSupplier is a sub-status for purchase returns.
+ | SO
+ | Draft → Confirmed/OnHold → PartiallyFulfilled → Closed/Cancelled
+ | Credit check runs on Confirm click.
+ | OnHold SO does not consume or reserve inventory.
+ | DC
+ | Open → Closed
+ | Closes automatically when fully invoiced.
+ | Partial DC keeps SO in PartiallyFulfilled.
+ | SI
+ | Draft → Posted
+ | Posted = immutable. Corrections via Credit/Debit Note only.
+ | Posting auto-generates accounting voucher.
+ | Proforma
+ | Draft → Sent → Converted/Cancelled
+ | Converted when SI is generated from it.
+ | No accounting impact at any stage.
+ | Sales Return
+ | Draft → Posted
+ | Posting auto-generates Credit Note voucher.
+ | Triggers commission reversal if applicable.
+ | Voucher
+ | Draft → Posted
+ | Posting locks all lines permanently.
+ | Manual Journal stays Draft until reviewed.
+ | 
+
+8. Algorithms & Calculations
+8.1 Derived Pricing
+Formula
+derived_rate(W) = base_rate_44 × (W / 44)
+Round to nearest ₹1 (configurable precision).
+Override > tolerance (e.g. > 5%) → manager approval required before SO can be confirmed.
+Example: base_rate_44 = ₹2,200; width = 36" → derived = 2200 × (36/44) = ₹1,800.
+ | 
+8.2 Discount Application
+Line discount: applied before tax on the specific line item.
+Bill discount: allocated proportionally by line value across all lines before tax — ensures correct GST per line.
+Rounding: paise handled using the largest-remainder method so that the sum of line totals equals the invoice total exactly.
+
+8.3 Landed Cost Allocation
+Formula
+allocation_per_roll = total_cost_component × (roll_basis / sum_of_all_roll_basis)
+Basis options: ROLL (equal split), METER (proportional to length), VALUE (proportional to base cost).
+After allocation: landed_cost_per_roll is updated on the Roll record.
+Post-dispatch reallocation: variance posts to Landed Cost Variance ledger; dispatched roll costs are NOT retroactively changed.
+ | 
+8.4 COGS on Invoice
+COGS = sum(landed_cost_per_roll) for all rolls billed in the SI.
+Partial return COGS = (returned_length_m / original_dispatched_length_m) × landed_cost_per_roll.
+Inventory credit equals COGS debit exactly; no rounding variance on inventory.
+
+8.5 Credit Blocking
+Algorithm
+1. Compute exposure = sum(outstanding AR) + sum(value of Confirmed/PartiallyFulfilled SOs).
+2. Evaluate rule:
+     OVER_LIMIT  → block if exposure > credit_limit
+     OVER_DUE    → block if any invoice overdue by (credit_days + grace_days)
+     BOTH        → block if either condition is true
+3. On block: SO → OnHold; internal notification raised.
+4. Admin override: reason mandatory; AuditLog entry created.
+ | 
+8.6 GST Determination
+Intra-state supply (customer state = company state): CGST + SGST.
+Inter-state supply: IGST.
+GST type determined at invoice creation from customer.state vs company.state; manual override with audit log.
+HSN code configurable per product category; appears on every invoice line.
+Customer gst_type drives invoice format: Composition and Unregistered → Bill of Supply (no tax line).
+SEZ customers: zero-rated supply; IGST at 0% with Letter of Undertaking reference.
+
+
+9. Reports & Analytics
+9.1 Operational Reports
+Report
+ | Description
+ | Stock by SKU / Batch / Vendor
+ | Current inventory quantity and value by any dimension.
+ | Unmapped Rolls Alert
+ | All rolls in Unmapped status with age since GRN creation.
+ | Batch Aging
+ | Stock age distribution; highlights rolls > 90 and > 180 days.
+ | Dead Stock
+ | Rolls with no movement > 180 days.
+ | PO vs GRN vs PI Variance
+ | Ordered qty vs received qty vs invoiced qty per PO line.
+ | DC Pending Invoice
+ | Delivery Challans not yet converted to Sales Invoice.
+ | SO Backorder Summary
+ | Open SO lines not yet dispatched.
+ | 
+9.2 Sales Reports
+Report
+ | Description
+ | Customer Sales Trend
+ | Volume and value by customer / group / period.
+ | SKU-wise Volume & Value
+ | Units and revenue by SKU.
+ | Override Frequency
+ | Rate overrides by salesman; flags excessive discounting.
+ | Discount Impact
+ | Revenue lost to discounts by customer / period.
+ | Churn Risk
+ | Customers with no orders in > 60 days.
+ | Salesman Performance
+ | Volume, value, and commission earned per salesman.
+ | 
+9.3 Purchase Reports
+Report
+ | Description
+ | Supplier Reliability
+ | GRN rejection rate and short-supply rate by supplier.
+ | Landed Cost Trend
+ | Average landed cost per SKU by supplier over time.
+ | Supplier Lead-Time
+ | Average days from PO approval to GRN posting.
+ | 
+9.4 Credit & AR Reports
+Report
+ | Description
+ | AR Aging Buckets
+ | Outstanding by 0-30, 31-60, 61-90, 90+ days per customer.
+ | Credit Utilisation
+ | Exposure vs credit limit per customer.
+ | Blocked Orders Summary
+ | SOs currently OnHold due to credit block.
+ | Collection Efficiency
+ | Days Sales Outstanding (DSO) trend.
+ | 
+9.5 Accounting Reports (Phase 1)
+Report
+ | Description
+ | Ledger Extract
+ | Transaction list per ledger with running balance; date-range filter.
+ | AR Aging
+ | Per-customer outstanding invoices by age bucket.
+ | AP Aging
+ | Per-supplier outstanding invoices by age bucket.
+ | GST Summary
+ | Output GST collected vs Input GST paid, monthly; CSV export for manual GSTR filing.
+ | Payment Allocation Status
+ | Receipts/payments with unallocated amounts flagged.
+ | 
+9.6 Profitability Reports
+Report
+ | Description
+ | Gross Margin by SKU / Customer / Month
+ | Revenue minus COGS.
+ | Price vs COGS Delta
+ | Selling rate vs landed cost per roll.
+ | Scrap Impact
+ | Value of inventory written off as scrap per period.
+ | Commission Payout Summary
+ | Accrued, paid, and outstanding commission by salesman.
+ | 
+9.7 Dashboards
+Owner Dashboard: KPI cards — Today's Orders, Invoices, Collections, Credit Blocks, Unmapped Rolls, Gross Margin; 30-day sales trend chart; AR aging waterfall; stock aging heatmap.
+Pivot builder: custom queries with filters on SKU, customer, vendor, salesman, date range; save / share / export (CSV, XLSX, PDF).
+
+
+10. UI/UX Screen Blueprints
+Screen
+ | Key Elements
+ | 1. Owner Dashboard
+ | KPI cards: Orders, Invoices, Collections, Credit Blocks, Unmapped Rolls, Gross Margin. Charts: 30-day sales trend, AR aging waterfall, stock heatmap.
+ | 2. Catalogue Manager
+ | Tree: Category → GSM → Quality → Width. Quick-add SKU; HSN/tax editor; bulk width add; document series configurator.
+ | 3. PO / GRN / PI Wizard
+ | Multi-step stepper with field validations; landed cost allocator shows preview per roll before posting.
+ | 4. Unmapped Inventory Staging
+ | Grid of Unmapped rolls; inline SKU create; bulk map; time-since-GRN indicator per row.
+ | 5. Roll Inspector
+ | Scan or search → full lineage: vendor → batch → PI → cost → SO/DC/SI history. Actions: reprint label, mark scrap, adjust length.
+ | 6. Sales Board (Kanban)
+ | Columns: Draft, OnHold, Confirmed, Partial, Closed. Right-pane: 44" pricing calculator; override request modal.
+ | 7. Invoicing Screen
+ | Select DC → Generate SI → Preview (HSN/GST, discounts, rounding) → Post. Transporter/vehicle/LR visible on DC view.
+ | 8. Customer 360
+ | Tabs: Profile (all contacts), Credit (exposure, block status), Rates (history & deals), Orders, Invoices, Ledger, WhatsApp (Phase 2 placeholder).
+ | 9. Salesman Manager
+ | Master list; commission rules per customer; history with payout marking; block settings.
+ | 10. Accounting Workspace
+ | Voucher entry; ledger browser; AR/AP aging; GST summary; payment allocation. Full statements in Phase 2.
+ | 11. Opening Balance Wizard
+ | Step-by-step import: Stock → AR → AP → Bank → Review → Go-Live lock.
+ | 12. Settings
+ | Document series config; allowed widths list; company GST details; user/role management; audit log viewer.
+ | 
+
+11. UAT Scripts & Test Cases
+11.1 Purchases
+Create PO with 3 SKUs → partial GRN (2 of 3 SKUs) → verify Unmapped rolls created → bulk-map to SKUs → raise PI → run landed cost by METER basis → verify landed_cost_per_roll updated correctly on all rolls.
+Attempt GRN over-receipt without admin override → expect block. Approve as admin → verify audit log entry created.
+Raise PI without PO line → confirm warning appears and reason is mandatory.
+
+11.2 Inventory
+Scan roll QR → verify full lineage in Roll Inspector (vendor → batch → PI → cost → SO/DC/SI history).
+Mark roll as Scrap → verify Inventory Write-off voucher generated at landed_cost_per_roll.
+Customer returns 700 m of 1000 m roll → verify Credit Note value = 70% of roll landed cost.
+
+11.3 Pricing & Sales
+Create SO for 36" width; verify rate auto-derived from 44" benchmark.
+Override rate by > 5% → approval modal appears; approve as manager → SO confirmed.
+Confirm SO for credit-blocked customer → SO goes to OnHold; verify exposure calculation includes pending SO value.
+Full SO → DC (with transporter and vehicle no.) → SI → verify auto-voucher generated and all ledger balances updated correctly.
+Create Proforma Invoice → convert to SI → verify Proforma status = Converted and SI links back to Proforma.
+
+11.4 Returns
+Sales return partial roll (700 m of 1000 m) → Credit Note generated with partial_COGS formula → roll to Returned → move to Scrap → verify write-off voucher at partial cost.
+Purchase return → Debit Note generated → AP reduced → verify Input GST reversed → roll status = ReturnedToSupplier.
+
+11.5 Accounting
+Post PI → verify Dr Inventory + Dr Input GST + Cr AP voucher auto-generated with correct amounts.
+Post SI → verify Dr AR + Cr Sales + Cr Output GST + Dr COGS + Cr Inventory voucher generated.
+Post receipt payment → allocate to 2 invoices → verify AR aging updated and unallocated balance = zero.
+GST Summary for a month → verify Output GST = sum of all SI tax lines; Input GST = sum of all PI tax lines.
+
+11.6 Commission
+Set commission ON_SI_POSTED for salesman on customer → post SI → verify commission accrued.
+Raise Credit Note against that SI → verify commission reversal entry created automatically with reversal_reason populated.
+
+11.7 Opening Balances
+Import opening stock CSV → verify roll records created with correct landed cost and Mapped status.
+Import opening AR CSV → verify customer ledger balances match legacy books.
+Post opening balance Journal → verify voucher balances (Dr = Cr). Post first live transaction → verify Opening Balance Wizard is locked.
+
+
+12. Non-Functional Requirements
+Area
+ | Requirement
+ | Notes
+ | Performance
+ | Dashboard load < 3 s; credit check < 1 s; barcode scan response < 500 ms.
+ | Indexes on roll.status, customer.id, si.date.
+ | Availability
+ | 99.5% uptime during business hours (8 AM – 8 PM IST).
+ | Scheduled maintenance outside business hours.
+ | Data Integrity
+ | Strict double-entry — voucher lines must balance (Dr = Cr) before posting.
+ | DB-level constraint + application-level validation.
+ | Security
+ | Role-based access; sensitive actions require re-authentication; AuditLog is immutable.
+ | Passwords hashed; HTTPS enforced.
+ | Scalability
+ | New product categories and branch locations added without schema changes.
+ | Configurable allowed-widths, HSN codes, document series.
+ | Data Migration
+ | Opening balance wizard with validation and rollback before Go-Live lock.
+ | Go-Live lock prevents editing opening balances after first transaction.
+ | Backup
+ | Daily automated backup; point-in-time recovery up to 30 days.
+ | 
+ | Audit
+ | AuditLog stores before/after JSON for every data change; retention minimum 7 years.
+ | Required for GST audit compliance.
+ | 
