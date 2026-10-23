@@ -1,0 +1,190 @@
+/*
+ * Editorial Ledger — design tokens (brief Part B, CLAUDE.md).
+ * Light ("Ledger") is primary; dark is "Night Ledger". Theme comes from
+ * <html data-theme="light|dark|system">; density from <html data-density="comfortable|compact">.
+ * Import after `@import "tailwindcss";` in the app stylesheet.
+ */
+@import "@fontsource-variable/newsreader/index.css";
+@import "@fontsource-variable/newsreader/wght-italic.css";
+@import "@fontsource-variable/inter/index.css";
+@import "@fontsource-variable/jetbrains-mono/index.css";
+
+:root {
+  --paper: #fbf8f2;
+  --sheet: #ffffff;
+  --ink: #1b2433;
+  --ink-2: #5b6472;
+  --ink-3: #8a909a;
+  --rule: #e6dfd2;
+  --rule-strong: #cfc5b3;
+  --wash: #f4efe5;
+  --accent: #7a2e2e;
+  --accent-ink: #ffffff;
+  --accent-wash: #f3e7e4;
+  --positive: #2f6b4f;
+  --caution: #9a6b12;
+  --critical: #a23b2a;
+  --info: #2b5c8a;
+  --shadow-sheet: 0 1px 2px rgb(27 36 51 / 0.04), 0 8px 24px -12px rgb(27 36 51 / 0.08);
+  --focus: 0 0 0 2px var(--paper), 0 0 0 4px color-mix(in oklab, var(--accent) 70%, transparent);
+
+  --row-h: 2.5rem;
+  --pad-x: 1rem;
+  --field-h: 2.25rem;
+  color-scheme: light;
+}
+
+:root[data-density="compact"] {
+  --row-h: 2rem;
+  --pad-x: 0.75rem;
+  --field-h: 1.875rem;
+}
+
+:root[data-theme="dark"] {
+  --paper: #14171c;
+  --sheet: #1a1e24;
+  --ink: #e8e4da;
+  --ink-2: #a3a9b3;
+  --ink-3: #737a85;
+  --rule: #2a2f37;
+  --rule-strong: #3a414b;
+  --wash: #1f242b;
+  --accent: #d08a7a;
+  --accent-ink: #14171c;
+  --accent-wash: #2b2224;
+  --positive: #7fc4a0;
+  --caution: #e0b35a;
+  --critical: #e5806e;
+  --info: #86b3dd;
+  --shadow-sheet: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -16px rgb(0 0 0 / 0.5);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="system"] {
+    --paper: #14171c;
+    --sheet: #1a1e24;
+    --ink: #e8e4da;
+    --ink-2: #a3a9b3;
+    --ink-3: #737a85;
+    --rule: #2a2f37;
+    --rule-strong: #3a414b;
+    --wash: #1f242b;
+    --accent: #d08a7a;
+    --accent-ink: #14171c;
+    --accent-wash: #2b2224;
+    --positive: #7fc4a0;
+    --caution: #e0b35a;
+    --critical: #e5806e;
+    --info: #86b3dd;
+    --shadow-sheet: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -16px rgb(0 0 0 / 0.5);
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-sheet: var(--sheet);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+  --color-wash: var(--wash);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-wash: var(--accent-wash);
+  --color-positive: var(--positive);
+  --color-caution: var(--caution);
+  --color-critical: var(--critical);
+  --color-info: var(--info);
+
+  --font-serif: "Newsreader Variable", "Iowan Old Style", Georgia, serif;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Mono", monospace;
+
+  --text-2xs: 0.75rem;
+  --text-xs: 0.8125rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2.5rem;
+
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+
+  --shadow-sheet: var(--shadow-sheet);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@layer base {
+  html {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.45;
+    font-feature-settings: "cv11", "ss01";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    min-height: 100dvh;
+    background: var(--paper);
+  }
+  ::selection {
+    background: var(--accent-wash);
+    color: var(--ink);
+  }
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus);
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate(var(--tw-translate-x, 0), 6px);
+  }
+}
+
+@utility tnum {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+@utility smallcaps {
+  font-size: var(--text-2xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+@utility hairline {
+  border-color: var(--rule);
+}
