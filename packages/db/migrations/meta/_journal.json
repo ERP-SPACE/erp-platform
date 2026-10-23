@@ -15,6 +15,20 @@
       "when": 1792745721585,
       "tag": "0001_audit_and_grants",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792757521229,
+      "tag": "0002_masters",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792757522937,
+      "tag": "0003_masters_constraints",
+      "breakpoints": true
     }
   ]
 }

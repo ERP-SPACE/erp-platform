@@ -60,7 +60,12 @@ function SetupTwoFactor() {
     const result = await authClient.twoFactor.verifyTotp({ code });
     setBusy(false);
     if (result.error) {
-      setError("That code didn't match. Check the time on your phone and try again.");
+      const msg = result.error.message ?? "";
+      setError(
+        msg.includes("cookie") || msg.includes("Cookie")
+          ? "Your session expired. Sign in again, scan the new QR code, and confirm with a fresh code."
+          : "That code didn't match. Check the time on your phone and try again.",
+      );
       return;
     }
     await queryClient.invalidateQueries({ queryKey: keys.me });

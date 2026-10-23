@@ -54,7 +54,12 @@ function LoginPage() {
     const result = await authClient.twoFactor.verifyTotp({ code });
     setBusy(false);
     if (result.error) {
-      setError("That code didn't match. Codes change every 30 seconds.");
+      const msg = result.error.message ?? "";
+      setError(
+        msg.includes("cookie") || msg.includes("Cookie")
+          ? "Your sign-in session expired. Go back, sign in again, and enter a fresh code."
+          : "That code didn't match. Codes change every 30 seconds.",
+      );
       return;
     }
     await done();

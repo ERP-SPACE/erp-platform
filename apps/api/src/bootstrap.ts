@@ -45,7 +45,7 @@ export async function createApp(
   await app.register(helmet, { contentSecurityPolicy: false }); // API serves JSON only
   await app.register(cookie);
   await app.register(rateLimit, { global: false });
-  registerAuthRoutes(app.getHttpAdapter().getInstance(), app.get<Auth>(AUTH), env.API_PUBLIC_URL);
+  registerAuthRoutes(app.getHttpAdapter().getInstance(), app.get<Auth>(AUTH), env.WEB_ORIGIN);
   return app;
 }
 
