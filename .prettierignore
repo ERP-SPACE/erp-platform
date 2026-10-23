@@ -1,0 +1,7 @@
+pnpm-lock.yaml
+dist
+coverage
+docs/prd
+**/routeTree.gen.ts
+packages/contracts/src/generated
+packages/db/migrations/meta
