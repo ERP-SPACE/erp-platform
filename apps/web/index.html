@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en-IN" data-theme="system" data-density="comfortable">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Ledger · Paper Trading ERP</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script>
+      // Apply saved theme/density before first paint (no flash).
+      try {
+        const prefs = JSON.parse(localStorage.getItem("erp:prefs") || "{}");
+        if (prefs.theme) document.documentElement.dataset.theme = prefs.theme;
+        if (prefs.density) document.documentElement.dataset.density = prefs.density;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

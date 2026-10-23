@@ -1,0 +1,43 @@
+{
+  "name": "@erp/db",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Drizzle schema, SQL migrations and seed data.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "generate": "drizzle-kit generate",
+    "migrate": "tsx --env-file-if-exists=../../.env src/scripts/migrate.ts",
+    "seed": "tsx --env-file-if-exists=../../.env src/scripts/seed.ts",
+    "reset": "tsx --env-file-if-exists=../../.env src/scripts/reset.ts",
+    "bootstrap": "tsx --env-file-if-exists=../../.env src/scripts/bootstrap.ts"
+  },
+  "dependencies": {
+    "@erp/contracts": "workspace:*",
+    "@erp/domain": "workspace:*",
+    "better-auth": "1.7.12",
+    "drizzle-orm": "0.45.4",
+    "pg": "8.23.1",
+    "uuidv7": "1.2.1"
+  },
+  "devDependencies": {
+    "@erp/config": "workspace:*",
+    "@types/node": "24.10.1",
+    "@types/pg": "8.15.6",
+    "drizzle-kit": "0.31.11",
+    "eslint": "9.39.5",
+    "tsx": "4.23.15",
+    "typescript": "6.0.3"
+  }
+}

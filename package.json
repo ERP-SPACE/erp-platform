@@ -1,0 +1,32 @@
+{
+  "name": "erp-platform",
+  "private": true,
+  "description": "Paper trading ERP — sublimation & speciality paper (Surat)",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "setup:local": "node scripts/setup-local.mjs",
+    "dev": "turbo run dev --parallel --filter=./apps/*",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:int": "turbo run test:int --concurrency=1",
+    "test:e2e": "pnpm --filter @erp/web test:e2e",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:up": "docker compose -f infra/docker/docker-compose.yml up -d --wait",
+    "db:down": "docker compose -f infra/docker/docker-compose.yml down",
+    "db:migrate": "pnpm --filter @erp/db migrate",
+    "db:seed": "pnpm --filter @erp/db seed",
+    "db:reset": "pnpm --filter @erp/db reset",
+    "api:gen": "pnpm --filter @erp/api openapi && pnpm --filter @erp/contracts generate"
+  },
+  "devDependencies": {
+    "prettier": "3.9.10",
+    "turbo": "2.11.10",
+    "typescript": "6.0.3"
+  }
+}

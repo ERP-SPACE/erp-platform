@@ -30,7 +30,7 @@ ERP for a sublimation & speciality paper trading company in Surat, Gujarat. It r
 - **Infrastructure:** PostgreSQL 17, Redis. Auth via Better Auth (session cookies, argon2id, TOTP for Owner, step-up re-auth).
 - **Testing:** Vitest + fast-check, Testcontainers Postgres, Playwright.
 - **Repo (ADR-0019):** a single private monorepo, `ERP-SPACE/erp-platform`.
-- **Local-first:** Docker Compose runs Postgres 17, Redis 7, MinIO (S3) and Mailpit. S3, email and e-invoice sit behind adapters. Config is env vars validated by Zod.
+- **Local-first:** Docker Compose runs Postgres 17, Redis 7 and Mailpit. MinIO is opt-in (`--profile storage`): its public image was withdrawn, so pick a replacement S3-compatible image when Stage 1 needs file storage. S3, email and e-invoice sit behind adapters. Config is env vars validated by Zod.
 - **AWS (Stage 7 — Cloud deployment, after local UAT sign-off):** ap-south-1 — ECS Fargate, RDS, ElastiCache, S3, CloudFront; Terraform; GitHub Actions → ECR. No AWS work before Stage 7.
 
 ## Non-negotiable rules
@@ -93,11 +93,11 @@ ERP for a sublimation & speciality paper trading company in Surat, Gujarat. It r
   | `--paper` | `#FBF8F2` | `#14171C` |
   | `--sheet` | `#FFFFFF` | `#1A1E24` |
   | `--ink` | `#1B2433` | `#E8E4DA` |
-  | `--ink-2` | `#5B6472` | `#A3A9B3` |
+  | `--ink-2` | `#4F5866` | `#A3A9B3` |
   | `--rule` | `#E6DFD2` | `#2A2F37` |
   | `--accent` (oxblood) | `#7A2E2E` | `#D08A7A` |
   | `--positive` | `#2F6B4F` | `#7FC4A0` |
-  | `--caution` | `#9A6B12` | `#E0B35A` |
+  | `--caution` | `#8A5F0E` | `#E0B35A` |
   | `--critical` | `#A23B2A` | `#E5806E` |
   | `--info` | `#2B5C8A` | `#86B3DD` |
 
@@ -146,6 +146,17 @@ ERP for a sublimation & speciality paper trading company in Surat, Gujarat. It r
 
 ## Commands
 
-*(Filled in during Stage 0 scaffolding: install, dev, test, lint, typecheck, db:migrate, db:seed.)*
+| Command | What it does |
+|---|---|
+| `pnpm install` | Install everything |
+| `pnpm setup:local` | Create `.env` with generated secrets and the seed Owner password |
+| `pnpm db:up` / `pnpm db:down` | Start/stop Postgres 17, Redis 7, MinIO, Mailpit (Docker Compose) |
+| `pnpm db:reset` | Drop, migrate and seed the local database |
+| `pnpm dev` | API :3000, worker, web :5173 (proxy `/api` → API) |
+| `pnpm build` · `pnpm lint` · `pnpm typecheck` · `pnpm test` | Repo-wide checks |
+| `pnpm test:int` | API integration tests (Testcontainers; needs Docker) |
+| `pnpm test:e2e` | Playwright gate + accessibility (`E2E_PUBLIC_ONLY=1` for no-API pages only) |
+| `pnpm api:gen` | Export OpenAPI and regenerate the typed client (after API changes) |
+| `pnpm --filter @erp/db generate` | New Drizzle migration after schema changes |
 
-Machine prerequisites (ADR-0019): Docker Desktop, Node 22 LTS, pnpm 10+, and `gh` authenticated to `ERP-SPACE`.
+Machine prerequisites (ADR-0019, ADR-0020): Docker Desktop with WSL2, Node 24 LTS, pnpm 11.

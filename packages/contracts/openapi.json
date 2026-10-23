@@ -1,0 +1,1557 @@
+{
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/healthz": {
+      "get": {
+        "operationId": "HealthController_health",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/readyz": {
+      "get": {
+        "operationId": "HealthController_ready",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/events": {
+      "get": {
+        "operationId": "RealtimeController_stream",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "realtime"
+        ]
+      }
+    },
+    "/api/me": {
+      "get": {
+        "operationId": "IdentityController_me",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "identity"
+        ]
+      }
+    },
+    "/api/identity/step-up": {
+      "post": {
+        "operationId": "IdentityController_stepUp",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StepUpDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StepUpResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "identity"
+        ]
+      }
+    },
+    "/api/users": {
+      "get": {
+        "operationId": "IdentityController_users",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "identity"
+        ]
+      },
+      "post": {
+        "operationId": "IdentityController_createUser",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "identity"
+        ]
+      }
+    },
+    "/api/users/{id}": {
+      "patch": {
+        "operationId": "IdentityController_updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "identity"
+        ]
+      }
+    },
+    "/api/roles": {
+      "get": {
+        "operationId": "IdentityController_roles",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RoleItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "identity"
+        ]
+      }
+    },
+    "/api/permissions": {
+      "get": {
+        "operationId": "IdentityController_permissions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermissionItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "identity"
+        ]
+      }
+    },
+    "/api/roles/{id}/permissions": {
+      "put": {
+        "operationId": "IdentityController_updateRolePermissions",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRolePermissionsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "identity"
+        ]
+      }
+    },
+    "/api/settings": {
+      "get": {
+        "operationId": "SettingsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SettingItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "settings"
+        ]
+      }
+    },
+    "/api/settings/{key}": {
+      "patch": {
+        "operationId": "SettingsController_update",
+        "parameters": [
+          {
+            "name": "key",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSettingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingSavedDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "settings"
+        ]
+      }
+    },
+    "/api/company": {
+      "get": {
+        "operationId": "SettingsController_company",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "settings"
+        ]
+      },
+      "patch": {
+        "operationId": "SettingsController_updateCompany",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCompanyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "settings"
+        ]
+      }
+    },
+    "/api/document-series": {
+      "get": {
+        "operationId": "SeriesController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SeriesItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "document-series"
+        ]
+      }
+    },
+    "/api/document-series/preview": {
+      "get": {
+        "operationId": "SeriesController_preview",
+        "parameters": [
+          {
+            "name": "type",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesPreviewDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "document-series"
+        ]
+      }
+    },
+    "/api/document-series/{type}": {
+      "patch": {
+        "operationId": "SeriesController_update",
+        "parameters": [
+          {
+            "name": "type",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateSeriesDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesItemDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "document-series"
+        ]
+      }
+    },
+    "/api/audit": {
+      "get": {
+        "operationId": "AuditController_list",
+        "parameters": [
+          {
+            "name": "table",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 64,
+              "type": "string"
+            }
+          },
+          {
+            "name": "rowId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 64,
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date-time",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 80,
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 200,
+              "default": 50,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuditPageDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "audit"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Paper Trading ERP API",
+    "description": "",
+    "version": "0.1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "cookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "erp.session_token"
+      }
+    },
+    "schemas": {
+      "MeResponseDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "twoFactorEnabled": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "email",
+              "twoFactorEnabled"
+            ]
+          },
+          "company": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "legalName": {
+                "type": "string"
+              },
+              "tradeName": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "isPlaceholder": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "legalName",
+              "tradeName",
+              "isPlaceholder"
+            ]
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "totpEnrolmentRequired": {
+            "type": "boolean"
+          },
+          "freshUntil": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "user",
+          "company",
+          "roles",
+          "permissions",
+          "totpEnrolmentRequired",
+          "freshUntil"
+        ]
+      },
+      "StepUpDto": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "code": {
+            "type": "string",
+            "pattern": "^\\d{6}$"
+          }
+        },
+        "required": [
+          "password"
+        ]
+      },
+      "StepUpResponseDto": {
+        "type": "object",
+        "properties": {
+          "freshUntil": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "freshUntil"
+        ]
+      },
+      "UserItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "roleCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "active",
+          "twoFactorEnabled",
+          "createdAt",
+          "roleCodes"
+        ]
+      },
+      "CreateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 128
+          },
+          "roleCodes": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "password",
+          "roleCodes"
+        ]
+      },
+      "IdResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "roleCodes": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RoleItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "isSystem": {
+            "type": "boolean"
+          },
+          "locked": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "permissionCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "name",
+          "isSystem",
+          "locked",
+          "version",
+          "permissionCodes"
+        ]
+      },
+      "PermissionItemDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "module": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "stepUp": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "code",
+          "module",
+          "description",
+          "stepUp"
+        ]
+      },
+      "UpdateRolePermissionsDto": {
+        "type": "object",
+        "properties": {
+          "permissionCodes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "settings.view",
+                "settings.update",
+                "settings.company.update",
+                "settings.series.view",
+                "settings.series.update",
+                "users.view",
+                "users.manage",
+                "roles.manage",
+                "audit.view"
+              ]
+            }
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "permissionCodes",
+          "version"
+        ]
+      },
+      "SettingItemDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "value": {},
+          "defaultValue": {},
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "updatedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "updatedByName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "group",
+          "value",
+          "defaultValue",
+          "version",
+          "updatedAt",
+          "updatedByName"
+        ]
+      },
+      "UpdateSettingDto": {
+        "type": "object",
+        "properties": {
+          "value": {},
+          "version": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "value",
+          "version"
+        ]
+      },
+      "SettingSavedDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {},
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "key",
+          "value",
+          "version"
+        ]
+      },
+      "CompanyResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "legalName": {
+            "type": "string"
+          },
+          "tradeName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "gstin": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "stateCode": {
+            "type": "string"
+          },
+          "pan": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "line1": {
+                "type": "string"
+              },
+              "line2": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "pincode": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "line1",
+              "city",
+              "state",
+              "pincode"
+            ]
+          },
+          "bank": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "bankName": {
+                    "type": "string"
+                  },
+                  "accountName": {
+                    "type": "string"
+                  },
+                  "accountNumber": {
+                    "type": "string"
+                  },
+                  "ifsc": {
+                    "type": "string"
+                  },
+                  "branch": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "bankName",
+                  "accountName",
+                  "accountNumber",
+                  "ifsc"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "logoKey": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "signatoryName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "isPlaceholder": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "legalName",
+          "tradeName",
+          "gstin",
+          "stateCode",
+          "pan",
+          "address",
+          "bank",
+          "email",
+          "phone",
+          "logoKey",
+          "signatoryName",
+          "isPlaceholder",
+          "version",
+          "updatedAt"
+        ]
+      },
+      "UpdateCompanyDto": {
+        "type": "object",
+        "properties": {
+          "legalName": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 160
+          },
+          "tradeName": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "gstin": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 15,
+                "maxLength": 15
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stateCode": {
+            "type": "string",
+            "pattern": "^\\d{2}$"
+          },
+          "pan": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Z]{5}\\d{4}[A-Z]$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "line1": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 120
+              },
+              "line2": {
+                "type": "string",
+                "maxLength": 120
+              },
+              "city": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60
+              },
+              "state": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 60
+              },
+              "pincode": {
+                "type": "string",
+                "pattern": "^\\d{6}$"
+              }
+            },
+            "required": [
+              "line1",
+              "city",
+              "state",
+              "pincode"
+            ]
+          },
+          "bank": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "bankName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 80
+                  },
+                  "accountName": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 120
+                  },
+                  "accountNumber": {
+                    "type": "string",
+                    "pattern": "^\\d{6,20}$"
+                  },
+                  "ifsc": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{4}0[A-Z0-9]{6}$"
+                  },
+                  "branch": {
+                    "type": "string",
+                    "maxLength": 80
+                  }
+                },
+                "required": [
+                  "bankName",
+                  "accountName",
+                  "accountNumber",
+                  "ifsc"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "email",
+                "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "signatoryName": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "legalName",
+          "tradeName",
+          "gstin",
+          "stateCode",
+          "pan",
+          "address",
+          "bank",
+          "email",
+          "phone",
+          "signatoryName",
+          "version"
+        ]
+      },
+      "SeriesItemDto": {
+        "type": "object",
+        "properties": {
+          "entityType": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "gst": {
+            "type": "boolean"
+          },
+          "prefixTemplate": {
+            "type": "string"
+          },
+          "padding": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "resetOnFy": {
+            "type": "boolean"
+          },
+          "numberedOn": {
+            "type": "string",
+            "enum": [
+              "create",
+              "post"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "usedThisYear": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "nextNumber": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "updatedByName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "entityType",
+          "label",
+          "gst",
+          "prefixTemplate",
+          "padding",
+          "resetOnFy",
+          "numberedOn",
+          "version",
+          "usedThisYear",
+          "nextNumber",
+          "updatedAt",
+          "updatedByName"
+        ]
+      },
+      "SeriesPreviewDto": {
+        "type": "object",
+        "properties": {
+          "entityType": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "nextNumber": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "entityType",
+          "date",
+          "nextNumber"
+        ]
+      },
+      "UpdateSeriesDto": {
+        "type": "object",
+        "properties": {
+          "prefixTemplate": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 24
+          },
+          "padding": {
+            "type": "integer",
+            "minimum": 3,
+            "maximum": 8
+          },
+          "resetOnFy": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "prefixTemplate",
+          "padding",
+          "resetOnFy",
+          "version"
+        ]
+      },
+      "AuditPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "at": {
+                  "type": "string"
+                },
+                "tableName": {
+                  "type": "string"
+                },
+                "rowId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "action": {
+                  "type": "string",
+                  "enum": [
+                    "INSERT",
+                    "UPDATE",
+                    "DELETE"
+                  ]
+                },
+                "before": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "after": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "changedKeys": {
+                  "anyOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "reason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "requestId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "userId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "userName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "at",
+                "tableName",
+                "rowId",
+                "action",
+                "before",
+                "after",
+                "changedKeys",
+                "reason",
+                "requestId",
+                "userId",
+                "userName"
+              ]
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor"
+        ]
+      }
+    }
+  }
+}
