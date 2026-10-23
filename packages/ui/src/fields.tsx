@@ -1,3 +1,4 @@
+import { Check, ChevronDown, Search } from "lucide-react";
 import { Checkbox as RCheckbox, Label, Select as RSelect, Switch as RSwitch } from "radix-ui";
 import {
   type InputHTMLAttributes,
@@ -9,9 +10,9 @@ import {
 import { cn } from "./cn.js";
 
 const control =
-  "w-full rounded-sm border border-rule-strong bg-sheet px-2.5 text-sm text-ink placeholder:text-ink-3 " +
-  "transition-colors duration-150 hover:border-ink-3 focus-visible:border-accent " +
-  "aria-[invalid=true]:border-critical disabled:bg-wash disabled:text-ink-2";
+  "w-full rounded-md border border-border-strong bg-surface px-3 text-sm text-fg shadow-card placeholder:text-fg-3 " +
+  "transition-[border-color,box-shadow] duration-150 hover:border-fg-3 focus-visible:border-primary " +
+  "aria-[invalid=true]:border-danger disabled:cursor-not-allowed disabled:bg-muted disabled:text-fg-3";
 
 export interface FieldProps {
   label: ReactNode;
@@ -32,21 +33,21 @@ export function Field({ label, hint, error, required, className, children }: Fie
   const describedBy = error ? `${id}-error` : hint ? `${id}-hint` : undefined;
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      <Label.Root htmlFor={id} className="text-xs font-medium text-ink-2">
+      <Label.Root htmlFor={id} className="text-sm font-medium text-fg">
         {label}
         {required ? (
-          <span className="ml-0.5 text-accent" aria-hidden>
+          <span className="ml-0.5 text-danger" aria-hidden>
             *
           </span>
         ) : null}
       </Label.Root>
       {children({ id, "aria-invalid": Boolean(error), "aria-describedby": describedBy })}
       {error ? (
-        <p id={`${id}-error`} className="text-xs text-critical">
+        <p id={`${id}-error`} className="text-xs text-danger">
           {error}
         </p>
       ) : hint ? (
-        <p id={`${id}-hint`} className="text-xs text-ink-3">
+        <p id={`${id}-hint`} className="text-xs text-fg-3">
           {hint}
         </p>
       ) : null}
@@ -60,6 +61,26 @@ export const TextInput = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLIn
   },
 );
 
+/** Text input with a leading search icon, for table toolbars. */
+export const SearchInput = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
+  function SearchInput({ className, ...rest }, ref) {
+    return (
+      <div className={cn("relative", className)}>
+        <Search
+          className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-fg-3"
+          aria-hidden
+        />
+        <input
+          ref={ref}
+          type="search"
+          className={cn(control, "h-[var(--field-h)] pl-9")}
+          {...rest}
+        />
+      </div>
+    );
+  },
+);
+
 export const TextArea = forwardRef<
   HTMLTextAreaElement,
   TextareaHTMLAttributes<HTMLTextAreaElement>
@@ -69,19 +90,20 @@ export const TextArea = forwardRef<
 
 export interface NumberInputProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
-  "value" | "onChange" | "type"
+  "value" | "onChange" | "type" | "prefix"
 > {
   /** Kept as a string so decimals are never rounded by floats (ADR-0002). */
   value: string;
   onValueChange: (value: string) => void;
   decimals?: number;
   allowNegative?: boolean;
+  prefix?: ReactNode;
   suffix?: ReactNode;
 }
 
 /** Decimal-safe numeric input: right-aligned, tabular, rejects keystrokes that break the format. */
 export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(function NumberInput(
-  { value, onValueChange, decimals = 2, allowNegative = false, suffix, className, ...rest },
+  { value, onValueChange, decimals = 2, allowNegative = false, prefix, suffix, className, ...rest },
   ref,
 ) {
   const pattern = new RegExp(
@@ -89,6 +111,11 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
   );
   return (
     <div className="relative">
+      {prefix ? (
+        <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-sm text-fg-3">
+          {prefix}
+        </span>
+      ) : null}
       <input
         ref={ref}
         inputMode="decimal"
@@ -96,7 +123,8 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
         className={cn(
           control,
           "tnum h-[var(--field-h)] text-right",
-          suffix ? "pr-9" : null,
+          prefix ? "pl-8" : null,
+          suffix ? "pr-12" : null,
           className,
         )}
         value={value}
@@ -107,7 +135,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(functi
         {...rest}
       />
       {suffix ? (
-        <span className="pointer-events-none absolute inset-y-0 right-2.5 flex items-center text-xs text-ink-3">
+        <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-fg-3">
           {suffix}
         </span>
       ) : null}
@@ -128,6 +156,7 @@ export function Select({
   id,
   disabled,
   "aria-invalid": invalid,
+  "aria-label": ariaLabel,
 }: {
   value: string | undefined;
   onValueChange: (value: string) => void;
@@ -136,39 +165,41 @@ export function Select({
   id?: string;
   disabled?: boolean;
   "aria-invalid"?: boolean;
+  "aria-label"?: string;
 }) {
   return (
     <RSelect.Root value={value} onValueChange={onValueChange} disabled={disabled}>
       <RSelect.Trigger
         id={id}
         aria-invalid={invalid}
+        aria-label={ariaLabel}
         className={cn(
           control,
           "flex h-[var(--field-h)] items-center justify-between gap-2 text-left",
         )}
       >
         <RSelect.Value
-          placeholder={<span className="text-ink-3">{placeholder ?? "Choose…"}</span>}
+          placeholder={<span className="text-fg-3">{placeholder ?? "Select…"}</span>}
         />
-        <RSelect.Icon className="text-ink-3" aria-hidden>
-          <Chevron />
+        <RSelect.Icon className="text-fg-3" aria-hidden>
+          <ChevronDown className="size-4" />
         </RSelect.Icon>
       </RSelect.Trigger>
       <RSelect.Portal>
         <RSelect.Content
           position="popper"
           sideOffset={4}
-          className="z-50 max-h-72 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-sm border border-rule-strong bg-sheet shadow-sheet"
+          className="z-50 max-h-72 min-w-[var(--radix-select-trigger-width)] overflow-hidden rounded-lg border border-border bg-surface shadow-pop"
         >
           <RSelect.Viewport className="p-1">
             {options.map((option) => (
               <RSelect.Item
                 key={option.value}
                 value={option.value}
-                className="relative flex h-8 cursor-default select-none items-center rounded-xs pl-7 pr-3 text-sm text-ink outline-none data-[highlighted]:bg-wash"
+                className="relative flex h-8 cursor-default select-none items-center rounded-md pl-8 pr-3 text-sm text-fg outline-none data-[highlighted]:bg-muted"
               >
-                <RSelect.ItemIndicator className="absolute left-2 text-accent">
-                  <Tick />
+                <RSelect.ItemIndicator className="absolute left-2.5 text-primary">
+                  <Check className="size-4" />
                 </RSelect.ItemIndicator>
                 <RSelect.ItemText>{option.label}</RSelect.ItemText>
               </RSelect.Item>
@@ -186,12 +217,14 @@ export function Checkbox({
   label,
   disabled,
   id,
+  "aria-label": ariaLabel,
 }: {
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
   label?: ReactNode;
   disabled?: boolean;
   id?: string;
+  "aria-label"?: string;
 }) {
   const fallbackId = useId();
   const boxId = id ?? fallbackId;
@@ -200,16 +233,17 @@ export function Checkbox({
       <RCheckbox.Root
         id={boxId}
         checked={checked}
+        aria-label={ariaLabel}
         onCheckedChange={(v) => onCheckedChange(v === true)}
         disabled={disabled}
-        className="flex size-4 items-center justify-center rounded-xs border border-rule-strong bg-sheet data-[state=checked]:border-accent data-[state=checked]:bg-accent disabled:opacity-45"
+        className="flex size-4 shrink-0 items-center justify-center rounded-sm border border-border-strong bg-surface data-[state=checked]:border-primary data-[state=checked]:bg-primary disabled:opacity-50"
       >
-        <RCheckbox.Indicator className="text-accent-ink">
-          <Tick />
+        <RCheckbox.Indicator className="text-primary-fg">
+          <Check className="size-3" strokeWidth={3} />
         </RCheckbox.Indicator>
       </RCheckbox.Root>
       {label ? (
-        <label htmlFor={boxId} className="text-sm text-ink">
+        <label htmlFor={boxId} className="text-sm text-fg">
           {label}
         </label>
       ) : null}
@@ -221,33 +255,38 @@ export function Switch({
   checked,
   onCheckedChange,
   label,
+  description,
   disabled,
 }: {
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
   label: ReactNode;
+  description?: ReactNode;
   disabled?: boolean;
 }) {
   const id = useId();
   return (
-    <span className="inline-flex items-center gap-2.5">
+    <span className="inline-flex items-start gap-3">
       <RSwitch.Root
         id={id}
         checked={checked}
         onCheckedChange={onCheckedChange}
         disabled={disabled}
-        className="relative h-[18px] w-8 rounded-full border border-rule-strong bg-wash transition-colors data-[state=checked]:border-accent data-[state=checked]:bg-accent disabled:opacity-45"
+        className="relative mt-0.5 h-5 w-9 shrink-0 rounded-full bg-border-strong transition-colors data-[state=checked]:bg-primary disabled:opacity-50"
       >
-        <RSwitch.Thumb className="block size-3 translate-x-[2px] rounded-full bg-ink-2 transition-transform duration-150 data-[state=checked]:translate-x-[15px] data-[state=checked]:bg-accent-ink" />
+        <RSwitch.Thumb className="block size-4 translate-x-0.5 rounded-full bg-white shadow-card transition-transform duration-150 data-[state=checked]:translate-x-[18px]" />
       </RSwitch.Root>
-      <label htmlFor={id} className="text-sm text-ink">
-        {label}
-      </label>
+      <span className="flex flex-col">
+        <label htmlFor={id} className="text-sm font-medium text-fg">
+          {label}
+        </label>
+        {description ? <span className="text-xs text-fg-3">{description}</span> : null}
+      </span>
     </span>
   );
 }
 
-/** Small segmented control (theme, density, view toggles). */
+/** Segmented control (theme, density, view toggles). */
 export function Segmented<T extends string>({
   value,
   onValueChange,
@@ -260,11 +299,7 @@ export function Segmented<T extends string>({
   label: string;
 }) {
   return (
-    <div
-      role="radiogroup"
-      aria-label={label}
-      className="inline-flex rounded-sm border border-rule-strong p-0.5"
-    >
+    <div role="radiogroup" aria-label={label} className="inline-flex rounded-md bg-muted p-0.5">
       {options.map((option) => (
         <button
           key={option.value}
@@ -273,29 +308,13 @@ export function Segmented<T extends string>({
           aria-checked={value === option.value}
           onClick={() => onValueChange(option.value)}
           className={cn(
-            "h-6 rounded-xs px-2.5 text-xs text-ink-2 transition-colors",
-            value === option.value ? "bg-ink text-paper" : "hover:text-ink",
+            "h-7 rounded-[5px] px-3 text-xs font-medium text-fg-2 transition-colors",
+            value === option.value ? "bg-surface text-fg shadow-card" : "hover:text-fg",
           )}
         >
           {option.label}
         </button>
       ))}
     </div>
-  );
-}
-
-function Chevron() {
-  return (
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
-      <path d="M2 3.5 5 6.5 8 3.5" stroke="currentColor" strokeWidth="1.25" />
-    </svg>
-  );
-}
-
-export function Tick() {
-  return (
-    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden>
-      <path d="M2 5.2 4.1 7.2 8 2.8" stroke="currentColor" strokeWidth="1.5" />
-    </svg>
   );
 }

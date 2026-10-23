@@ -6,7 +6,7 @@ import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export const base = tseslint.config(
-  { ignores: ["dist/**", "coverage/**", "**/*.gen.ts", "**/generated/**"] },
+  { ignores: ["dist/**", "coverage/**", "**/*.gen.ts", "**/generated/**", "**/.vite/**"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {

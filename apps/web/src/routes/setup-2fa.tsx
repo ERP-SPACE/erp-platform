@@ -1,4 +1,4 @@
-import { Button, Field, Mono, Rule, TextInput } from "@erp/ui";
+import { Button, Divider, Field, Mono, TextInput } from "@erp/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import QRCode from "qrcode";
@@ -49,7 +49,7 @@ function SetupTwoFactor() {
     const qr = await QRCode.toDataURL(uri, {
       margin: 1,
       width: 192,
-      color: { dark: "#1b2433", light: "#ffffff" },
+      color: { dark: "#101828", light: "#ffffff" },
     });
     setEnrolment({ qr, secret, backupCodes: result.data.backupCodes });
   };
@@ -74,7 +74,7 @@ function SetupTwoFactor() {
         subtitle="Keep these one-time backup codes somewhere safe. Each works once if you lose your phone."
       >
         <ol
-          className="grid grid-cols-2 gap-x-6 gap-y-1.5 rounded-xs border border-rule bg-sheet p-4"
+          className="grid grid-cols-2 gap-x-6 gap-y-1.5 rounded-lg border border-border bg-muted p-4 text-sm"
           data-testid="backup-codes"
         >
           {enrolment.backupCodes.map((c) => (
@@ -88,7 +88,7 @@ function SetupTwoFactor() {
           variant="primary"
           onClick={() => void navigate({ to: "/" })}
         >
-          Continue to the ledger
+          Continue to dashboard
         </Button>
       </AuthLayout>
     );
@@ -119,7 +119,13 @@ function SetupTwoFactor() {
               />
             )}
           </Field>
-          <Button type="submit" variant="primary" busy={busy} disabled={!password}>
+          <Button
+            className="w-full"
+            type="submit"
+            variant="primary"
+            busy={busy}
+            disabled={!password}
+          >
             Continue
           </Button>
         </form>
@@ -137,17 +143,17 @@ function SetupTwoFactor() {
               alt="QR code for your authenticator app"
               width={128}
               height={128}
-              className="rounded-xs border border-rule"
+              className="rounded-lg border border-border"
             />
-            <div className="min-w-0 text-sm text-ink-2">
+            <div className="min-w-0 text-sm text-fg-2">
               <p>Scan with Google Authenticator, Microsoft Authenticator or 1Password.</p>
-              <p className="mt-3 smallcaps">Or enter this key</p>
-              <Mono className="break-all text-ink" data-testid="totp-secret">
+              <p className="label-caps mt-3">Or enter this key</p>
+              <Mono className="break-all text-fg" data-testid="totp-secret">
                 {enrolment.secret}
               </Mono>
             </div>
           </div>
-          <Rule />
+          <Divider />
           <Field label="6-digit code from the app" error={error}>
             {(p) => (
               <TextInput
@@ -162,7 +168,13 @@ function SetupTwoFactor() {
               />
             )}
           </Field>
-          <Button type="submit" variant="primary" busy={busy} disabled={code.length !== 6}>
+          <Button
+            className="w-full"
+            type="submit"
+            variant="primary"
+            busy={busy}
+            disabled={code.length !== 6}
+          >
             Turn on two-step verification
           </Button>
         </form>

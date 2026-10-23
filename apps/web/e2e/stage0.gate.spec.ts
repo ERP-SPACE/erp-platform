@@ -29,10 +29,12 @@ test("Owner signs in, enrols TOTP, changes a setting, sees it audited, previews 
   await page.getByLabel("6-digit code from the app").fill(totp.generate());
   await page.getByRole("button", { name: "Turn on two-step verification" }).click();
   await expect(page.getByTestId("backup-codes")).toBeVisible();
-  await page.getByRole("button", { name: "Continue to the ledger" }).click();
+  await page.getByRole("button", { name: "Continue to dashboard" }).click();
 
-  // Today
-  await expect(page.getByRole("heading", { name: "Today" })).toBeVisible();
+  // Dashboard
+  await expect(
+    page.getByRole("heading", { level: 1, name: /^Good (morning|afternoon|evening)/ }),
+  ).toBeVisible();
   await expect(page.getByText("Complete the company GST profile")).toBeVisible();
 
   // Change the override tolerance with a reason.
@@ -54,7 +56,7 @@ test("Owner signs in, enrols TOTP, changes a setting, sees it audited, previews 
   const diff = page.getByTestId("audit-diff");
   await expect(diff.getByRole("row", { name: /value/ })).toContainText("5");
   await expect(diff.getByRole("row", { name: /value/ })).toContainText("7.5");
-  await expect(page.getByText("Festive season pricing")).toBeVisible();
+  await expect(page.getByRole("dialog").getByText("Festive season pricing")).toBeVisible();
 
   // Ctrl K → document series; the SI series previews this FY's first number.
   await page.keyboard.press("Control+k");

@@ -30,25 +30,25 @@ export function CommandPalette({
   return (
     <RDialog.Root open={open} onOpenChange={onOpenChange}>
       <RDialog.Portal>
-        <RDialog.Overlay className="fixed inset-0 z-40 bg-ink/20" />
-        <RDialog.Content className="fixed left-1/2 top-[14vh] z-50 w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2 overflow-hidden rounded-sm border border-rule bg-sheet shadow-sheet">
+        <RDialog.Overlay className="fixed inset-0 z-40 bg-[rgb(16_24_40/0.45)]" />
+        <RDialog.Content className="fixed left-1/2 top-[14vh] z-50 w-[calc(100vw-2rem)] max-w-xl -translate-x-1/2 overflow-hidden rounded-xl border border-border bg-surface shadow-pop">
           <RDialog.Title className="sr-only">Command palette</RDialog.Title>
           <RDialog.Description className="sr-only">Search pages and actions</RDialog.Description>
           <Command loop label="Command palette">
             <Command.Input
               autoFocus
               placeholder={placeholder}
-              className="h-12 w-full border-b border-rule bg-transparent px-5 font-serif text-base text-ink outline-none placeholder:italic placeholder:text-ink-3"
+              className="h-12 w-full border-b border-border bg-transparent px-4 text-base text-fg outline-none placeholder:text-fg-3"
             />
             <Command.List className="max-h-[50vh] overflow-auto p-2">
-              <Command.Empty className="px-3 py-6 text-center font-serif italic text-ink-2">
+              <Command.Empty className="px-3 py-6 text-center text-sm text-fg-3">
                 Nothing matches.
               </Command.Empty>
               {groups.map((group) => (
                 <Command.Group
                   key={group}
                   heading={group}
-                  className="[&_[cmdk-group-heading]]:smallcaps [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:pb-1 [&_[cmdk-group-heading]]:pt-3"
+                  className="[&_[cmdk-group-heading]]:label-caps [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:pb-1 [&_[cmdk-group-heading]]:pt-3"
                 >
                   {items
                     .filter((item) => item.group === group)
@@ -61,12 +61,12 @@ export function CommandPalette({
                           item.onRun();
                         }}
                         className={cn(
-                          "flex h-9 cursor-default items-center justify-between gap-3 rounded-xs px-3 text-sm text-ink",
-                          "data-[selected=true]:bg-wash data-[selected=true]:shadow-[inset_2px_0_0_var(--accent)]",
+                          "flex h-9 cursor-default items-center justify-between gap-3 rounded-md px-3 text-sm text-fg",
+                          "data-[selected=true]:bg-primary-soft data-[selected=true]:text-primary",
                         )}
                       >
                         <span>{item.label}</span>
-                        <span className="flex items-center gap-2 text-xs text-ink-3">
+                        <span className="flex items-center gap-2 text-xs text-fg-3">
                           {item.hint}
                           {item.shortcut ? <Kbd>{item.shortcut}</Kbd> : null}
                         </span>
@@ -102,25 +102,27 @@ export function ShortcutOverlay({
   return (
     <RDialog.Root open={open} onOpenChange={onOpenChange}>
       <RDialog.Portal>
-        <RDialog.Overlay className="fixed inset-0 z-40 bg-ink/20" />
-        <RDialog.Content className="fixed left-1/2 top-[14vh] z-50 w-[calc(100vw-2rem)] max-w-lg -translate-x-1/2 rounded-sm border border-rule bg-sheet p-6 shadow-sheet">
-          <RDialog.Title className="font-serif text-lg text-ink">Keyboard shortcuts</RDialog.Title>
+        <RDialog.Overlay className="fixed inset-0 z-40 bg-[rgb(16_24_40/0.45)]" />
+        <RDialog.Content className="fixed left-1/2 top-[14vh] z-50 w-[calc(100vw-2rem)] max-w-lg -translate-x-1/2 rounded-xl border border-border bg-surface p-6 shadow-pop">
+          <RDialog.Title className="text-lg font-semibold text-fg">
+            Keyboard shortcuts
+          </RDialog.Title>
           <RDialog.Description className="sr-only">
             Shortcuts available on this screen
           </RDialog.Description>
           <div className="mt-4 grid gap-5">
             {groups.map((group) => (
               <section key={group}>
-                <h3 className="smallcaps mb-2 font-sans">{group}</h3>
+                <h3 className="label-caps mb-2">{group}</h3>
                 <dl className="grid gap-1.5">
                   {shortcuts
                     .filter((s) => s.group === group)
                     .map((s) => (
                       <div
                         key={s.keys + s.label}
-                        className="flex items-center justify-between border-b border-rule pb-1.5 text-sm"
+                        className="flex items-center justify-between border-b border-border pb-1.5 text-sm"
                       >
-                        <dt className="text-ink">{s.label}</dt>
+                        <dt className="text-fg">{s.label}</dt>
                         <dd className="flex gap-1">
                           {s.keys.split(" ").map((k) => (
                             <Kbd key={k}>{k}</Kbd>

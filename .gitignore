@@ -13,3 +13,4 @@ test-results/
 # Playwright
 apps/web/playwright-report/
 apps/web/test-results/
+.vite/

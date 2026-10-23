@@ -121,6 +121,7 @@ function LoginPage() {
           </Field>
         )}
         <Button
+          className="w-full"
           type="submit"
           variant="primary"
           busy={busy}
@@ -131,7 +132,7 @@ function LoginPage() {
         {step === "totp" ? (
           <button
             type="button"
-            className="text-left text-xs text-ink-2 hover:text-ink"
+            className="text-left text-sm font-medium text-primary hover:underline"
             onClick={() => setStep("password")}
           >
             ← Use a different account

@@ -1,5 +1,6 @@
+import type { LucideIcon } from "lucide-react";
 import { Slot } from "radix-ui";
-import { type ButtonHTMLAttributes, forwardRef } from "react";
+import { type ButtonHTMLAttributes, type ReactNode, forwardRef } from "react";
 import { cn } from "./cn.js";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "danger";
@@ -10,21 +11,25 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   /** Render as the child element (e.g. a router Link) with button styling. */
   asChild?: boolean;
-  /** Keyboard hint shown at the end, e.g. "P". */
+  /** Leading icon. */
+  icon?: LucideIcon;
+  /** Square, icon-only button; pass an aria-label. */
+  iconOnly?: boolean;
+  /** Keyboard hint shown at the end, e.g. "Ctrl S". */
   shortcut?: string;
   busy?: boolean;
 }
 
 const variants: Record<ButtonVariant, string> = {
-  primary: "bg-accent text-accent-ink hover:brightness-110 active:brightness-95",
-  secondary: "border border-rule-strong bg-sheet text-ink hover:bg-wash",
-  ghost: "text-ink-2 hover:text-ink hover:bg-wash",
-  danger: "border border-critical/40 text-critical hover:bg-critical/8",
+  primary: "bg-primary text-primary-fg shadow-card hover:bg-primary-hover",
+  secondary: "border border-border-strong bg-surface text-fg shadow-card hover:bg-muted",
+  ghost: "text-fg-2 hover:bg-muted hover:text-fg",
+  danger: "border border-danger/40 bg-surface text-danger hover:bg-danger-soft",
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: "h-7 px-2.5 text-xs gap-1.5",
-  md: "h-[var(--field-h)] px-3.5 text-sm gap-2",
+  sm: "h-8 px-3 text-sm gap-1.5",
+  md: "h-[var(--field-h)] px-4 text-sm gap-2",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
@@ -32,6 +37,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     variant = "secondary",
     size = "md",
     asChild,
+    icon: Icon,
+    iconOnly,
     shortcut,
     busy,
     className,
@@ -46,11 +53,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     <Component
       ref={ref}
       className={cn(
-        "inline-flex select-none items-center justify-center whitespace-nowrap rounded-sm font-medium",
-        "transition-[background-color,filter,color] duration-150 ease-out",
-        "disabled:pointer-events-none disabled:opacity-45",
+        "inline-flex select-none items-center justify-center whitespace-nowrap rounded-md font-medium",
+        "transition-colors duration-150 ease-out",
+        "disabled:pointer-events-none disabled:opacity-50",
         variants[variant],
         sizes[size],
+        iconOnly && (size === "sm" ? "w-8 px-0" : "w-[var(--field-h)] px-0"),
         className,
       )}
       disabled={disabled || busy}
@@ -63,15 +71,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         <>
           {busy ? (
             <span
-              className="size-3 animate-spin rounded-full border border-current border-t-transparent"
+              className="size-3.5 animate-spin rounded-full border-2 border-current border-t-transparent"
               aria-hidden
             />
+          ) : Icon ? (
+            <Icon className="size-4 shrink-0" aria-hidden />
           ) : null}
-          {children}
+          {iconOnly ? null : children}
           {shortcut ? (
             <Kbd
               className={
-                variant === "primary" ? "border-accent-ink/30 text-accent-ink/80" : undefined
+                variant === "primary" ? "border-primary-fg/30 text-primary-fg/80" : undefined
               }
             >
               {shortcut}
@@ -83,12 +93,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   );
 });
 
-export function Kbd({ className, children }: { className?: string; children: React.ReactNode }) {
+export function Kbd({ className, children }: { className?: string; children: ReactNode }) {
   return (
     <kbd
       className={cn(
-        "inline-flex h-[1.15rem] min-w-[1.15rem] items-center justify-center rounded-xs border border-rule-strong px-1",
-        "font-mono text-[0.6875rem] font-medium leading-none text-ink-2",
+        "inline-flex h-5 min-w-5 items-center justify-center rounded-sm border border-border-strong bg-surface px-1",
+        "font-sans text-[0.6875rem] font-medium leading-none text-fg-3",
         className,
       )}
     >

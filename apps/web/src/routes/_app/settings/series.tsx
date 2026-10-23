@@ -1,15 +1,14 @@
 import type { SeriesItem } from "@erp/contracts";
 import { formatDocNo, istToday, validateGstSeries } from "@erp/domain";
 import {
+  Badge,
   Button,
+  Card,
+  DataTable,
+  Drawer,
   Field,
-  MarginNote,
   Mono,
-  Register,
   Select,
-  Sheet,
-  SheetLayout,
-  StatusMark,
   Switch,
   TextInput,
   useToast,
@@ -17,6 +16,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
+import { Info } from "lucide-react";
 import { useMemo, useState } from "react";
 import { z } from "zod";
 import { ReasonField } from "../../../components/reason-field.js";
@@ -33,54 +33,86 @@ export const Route = createFileRoute("/_app/settings/series")({
 const columns: ColumnDef<SeriesItem, unknown>[] = [
   {
     accessorKey: "entityType",
-    header: "Type",
-    cell: (c) => <Mono className="font-medium">{c.getValue() as string}</Mono>,
-    meta: { width: "5rem" },
+    header: "Code",
+    cell: (c) => <Mono className="font-semibold">{c.getValue() as string}</Mono>,
+    meta: { width: "5.5rem" },
   },
   { accessorKey: "label", header: "Document" },
   {
+    id: "kind",
+    header: "Type",
+    accessorFn: (r) => (r.gst ? "GST" : "Internal"),
+    cell: (c) =>
+      c.getValue() === "GST" ? <Badge tone="info">GST document</Badge> : <Badge>Internal</Badge>,
+  },
+  {
     accessorKey: "nextNumber",
     header: "Next number",
-    cell: (c) => <Mono>{c.getValue() as string}</Mono>,
+    cell: (c) => (
+      <Mono data-testid={`next-${c.row.original.entityType}`}>{c.getValue() as string}</Mono>
+    ),
   },
   { accessorKey: "usedThisYear", header: "Used this FY", meta: { numeric: true } },
 ];
 
 function SeriesPage() {
-  const { data: series } = useQuery(seriesQuery);
+  const { data: series, isLoading } = useQuery(seriesQuery);
   const { data: me } = useQuery(meQuery);
   const { type } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
-  const selected = series?.find((s) => s.entityType === (type ?? "SI")) ?? series?.[0];
-  if (!series || !selected) return null;
+  const selected = type ? series?.find((s) => s.entityType === type) : undefined;
 
   return (
-    <div className="grid gap-8 2xl:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)]">
-      <Register
+    <div className="grid gap-4">
+      <Card padded={false}>
+        <div className="flex items-start gap-3 px-5 py-4 text-sm text-fg-2">
+          <Info className="mt-0.5 size-4 shrink-0 text-info" aria-hidden />
+          <p>
+            Numbers never skip and restart every 1 April. Invoices and credit/debit notes get their
+            number only when posted, so a cancelled draft never uses one. Click a row to change its
+            format.
+          </p>
+        </div>
+      </Card>
+      <DataTable
         caption="Document number series"
-        data={series}
+        data={series ?? []}
+        loading={isLoading}
         columns={columns}
         getRowId={(r) => r.entityType}
-        selectedId={selected.entityType}
-        onSelect={(row) => void navigate({ search: { type: row.entityType }, replace: true })}
+        selectedId={selected?.entityType ?? null}
+        onRowClick={(row) => void navigate({ search: { type: row.entityType }, replace: true })}
+        searchPlaceholder="Search documents"
+        pageSize={false}
       />
-      <SeriesSheet
-        key={`${selected.entityType}:${selected.version}`}
-        series={selected}
-        editable={can(me, "settings.series.update")}
-      />
+      {selected ? (
+        <SeriesDrawer
+          key={`${selected.entityType}:${selected.version}`}
+          series={selected}
+          editable={can(me, "settings.series.update")}
+          onClose={() => void navigate({ search: {}, replace: true })}
+        />
+      ) : null}
     </div>
   );
 }
 
-function SeriesSheet({ series, editable }: { series: SeriesItem; editable: boolean }) {
+function SeriesDrawer({
+  series,
+  editable,
+  onClose,
+}: {
+  series: SeriesItem;
+  editable: boolean;
+  onClose: () => void;
+}) {
   const queryClient = useQueryClient();
   const toast = useToast();
   const onError = useApiErrorToast();
   const [prefixTemplate, setPrefix] = useState(series.prefixTemplate);
   const [padding, setPadding] = useState(String(series.padding));
   const [resetOnFy, setReset] = useState(series.resetOnFy);
-  const [reason, setReason] = useState(""); // resets per series: the parent keys this sheet by type + version
+  const [reason, setReason] = useState("");
 
   const today = istToday();
   const preview = useMemo(() => {
@@ -116,7 +148,7 @@ function SeriesSheet({ series, editable }: { series: SeriesItem; editable: boole
       ),
     onSuccess: async () => {
       toast({
-        tone: "positive",
+        tone: "success",
         title: `${series.label} series saved`,
         description: `Next number: ${preview.next}`,
       });
@@ -126,117 +158,88 @@ function SeriesSheet({ series, editable }: { series: SeriesItem; editable: boole
   });
 
   return (
-    <SheetLayout
-      sheet={
-        <Sheet
-          kicker={`${series.entityType} series`}
-          title={series.label}
-          number={<span data-testid="next-number">{preview.next}</span>}
-          status={
-            series.gst ? (
-              <StatusMark tone="info">GST document</StatusMark>
-            ) : (
-              <StatusMark>Internal</StatusMark>
-            )
-          }
-          footer={
-            editable ? (
-              <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
-                <ReasonField value={reason} onChange={setReason} />
-                <Button
-                  variant="primary"
-                  disabled={!dirty || preview.errors.length > 0}
-                  busy={save.isPending}
-                  onClick={() => save.mutate()}
-                >
-                  Save series
-                </Button>
-              </div>
-            ) : null
-          }
-        >
-          <div className="grid gap-5 sm:grid-cols-[minmax(0,1fr)_8rem]">
-            <Field
-              label="Prefix"
-              hint="{FY} → 2627 · {FY_FULL} → 2026-27"
-              error={preview.errors[0]}
+    <Drawer
+      open
+      onOpenChange={(open) => !open && onClose()}
+      title={`${series.label} series`}
+      description={`Last changed ${series.updatedByName ? `by ${series.updatedByName}, ` : ""}${dateTime(series.updatedAt)}`}
+      footer={
+        editable ? (
+          <>
+            <Button variant="secondary" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button
+              variant="primary"
+              disabled={!dirty || preview.errors.length > 0}
+              busy={save.isPending}
+              onClick={() => save.mutate()}
             >
-              {(p) => (
-                <TextInput
-                  {...p}
-                  disabled={!editable}
-                  className="font-mono"
-                  value={prefixTemplate}
-                  onChange={(e) => setPrefix(e.target.value)}
-                />
-              )}
-            </Field>
-            <Field label="Digits">
-              {(p) => (
-                <Select
-                  {...p}
-                  disabled={!editable}
-                  value={padding}
-                  onValueChange={setPadding}
-                  options={[3, 4, 5, 6, 7, 8].map((n) => ({
-                    value: String(n),
-                    label: `${n} digits`,
-                  }))}
-                />
-              )}
-            </Field>
-            <div className="sm:col-span-2">
-              <Switch
-                label="Restart numbering every 1 April"
-                checked={resetOnFy}
-                onCheckedChange={setReset}
-                disabled={!editable}
-              />
-            </div>
-          </div>
+              Save series
+            </Button>
+          </>
+        ) : null
+      }
+    >
+      <div className="grid gap-6">
+        <div className="rounded-lg border border-border bg-muted/60 p-4">
+          <p className="text-xs font-medium text-fg-3">Next number</p>
+          <p className="mt-1 font-mono text-2xl font-semibold text-fg" data-testid="next-number">
+            {preview.next}
+          </p>
+          <p className="mt-2 text-xs text-fg-3">
+            {resetOnFy ? (
+              <>
+                First number next April: <Mono className="text-fg-2">{preview.april}</Mono>
+              </>
+            ) : (
+              "Numbering continues across financial years"
+            )}
+          </p>
+        </div>
 
-          <dl className="mt-8 grid gap-4 border-t border-rule pt-6 sm:grid-cols-2">
-            <div>
-              <dt className="smallcaps mb-1">Next number</dt>
-              <dd>
-                <Mono className="text-lg text-ink">{preview.next}</Mono>
-              </dd>
-            </div>
-            <div>
-              <dt className="smallcaps mb-1">
-                {resetOnFy ? "First number next April" : "Numbering"}
-              </dt>
-              <dd>
-                {resetOnFy ? (
-                  <Mono className="text-lg text-ink-2">{preview.april}</Mono>
-                ) : (
-                  <span className="text-sm text-ink-2">Continues across years</span>
-                )}
-              </dd>
-            </div>
-          </dl>
-        </Sheet>
-      }
-      margin={
-        <>
-          <MarginNote title="How numbering works">
-            Numbers never skip.{" "}
-            {series.numberedOn === "post"
-              ? "This document gets its number only when it is posted, so a cancelled draft doesn't use one."
-              : "This document is numbered when it is created."}
-          </MarginNote>
-          {series.gst ? (
-            <MarginNote title="GST rule">
-              Tax invoice and note numbers must be unique for the year and at most 16 characters,
-              using letters, digits, “/” and “-”.
-            </MarginNote>
-          ) : null}
-          <MarginNote title="Last changed">
-            {series.updatedByName ? `${series.updatedByName}, ` : ""}
-            <span className="tnum">{dateTime(series.updatedAt)}</span>
-          </MarginNote>
-        </>
-      }
-    />
+        <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_9rem]">
+          <Field label="Prefix" hint="{FY} → 2627 · {FY_FULL} → 2026-27" error={preview.errors[0]}>
+            {(p) => (
+              <TextInput
+                {...p}
+                disabled={!editable}
+                className="font-mono"
+                value={prefixTemplate}
+                onChange={(e) => setPrefix(e.target.value)}
+              />
+            )}
+          </Field>
+          <Field label="Digits">
+            {(p) => (
+              <Select
+                {...p}
+                disabled={!editable}
+                value={padding}
+                onValueChange={setPadding}
+                options={[3, 4, 5, 6, 7, 8].map((n) => ({
+                  value: String(n),
+                  label: `${n} digits`,
+                }))}
+              />
+            )}
+          </Field>
+        </div>
+        <Switch
+          label="Restart numbering every 1 April"
+          description="Recommended — GST requires numbers to be unique within a financial year."
+          checked={resetOnFy}
+          onCheckedChange={setReset}
+          disabled={!editable}
+        />
+        {series.gst ? (
+          <p className="rounded-md bg-info-soft px-3 py-2 text-xs text-info">
+            GST rule: invoice and note numbers must be at most 16 characters, using letters, digits,
+            “/” and “-”.
+          </p>
+        ) : null}
+        {editable ? <ReasonField value={reason} onChange={setReason} /> : null}
+      </div>
+    </Drawer>
   );
 }

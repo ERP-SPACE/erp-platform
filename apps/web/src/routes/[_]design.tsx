@@ -1,37 +1,47 @@
 import {
+  ActivityFeed,
+  Badge,
   Button,
+  Card,
   Checkbox,
   ConfirmDialog,
+  DataTable,
   DefinitionList,
+  DropdownMenu,
   EmptyState,
   Field,
+  FormSection,
   Kbd,
-  MarginNote,
   Money,
   Mono,
   NumberInput,
-  PageTitle,
+  PageHeader,
   Qty,
-  Register,
-  Rule,
   Segmented,
   Select,
-  Sheet,
-  SheetLayout,
-  StatusMark,
+  StatCard,
   Stepper,
   Switch,
   Tabs,
   TextInput,
-  Timeline,
   useToast,
 } from "@erp/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
+import {
+  IndianRupee,
+  MoreHorizontal,
+  Package,
+  Pencil,
+  Plus,
+  ShieldAlert,
+  Trash2,
+  Users,
+} from "lucide-react";
 import { type ReactNode, useState } from "react";
 import { type Density, type Theme, setPrefs, usePrefs } from "../lib/prefs.js";
 
-/** Living reference for the Editorial Ledger design system (public; checked by axe in CI). */
+/** Living reference for the dashboard design system (public; checked by axe in CI). */
 export const Route = createFileRoute("/_design")({ component: DesignPage });
 
 interface SampleOrder {
@@ -68,15 +78,19 @@ const ORDERS: SampleOrder[] = [
 ];
 
 const TONE = {
-  Confirmed: "positive",
-  "On hold": "caution",
+  Confirmed: "success",
+  "On hold": "warning",
   Draft: "neutral",
   Closed: "info",
 } as const;
 
 const orderColumns: ColumnDef<SampleOrder, unknown>[] = [
-  { accessorKey: "no", header: "Order", cell: (c) => <Mono>{c.getValue() as string}</Mono> },
-  { accessorKey: "party", header: "Party" },
+  {
+    accessorKey: "no",
+    header: "Order",
+    cell: (c) => <Mono className="font-medium">{c.getValue() as string}</Mono>,
+  },
+  { accessorKey: "party", header: "Customer" },
   {
     accessorKey: "metres",
     header: "Metres",
@@ -93,17 +107,42 @@ const orderColumns: ColumnDef<SampleOrder, unknown>[] = [
     accessorKey: "status",
     header: "Status",
     cell: (c) => (
-      <StatusMark tone={TONE[c.getValue() as SampleOrder["status"]]}>
-        {c.getValue() as string}
-      </StatusMark>
+      <Badge tone={TONE[c.getValue() as SampleOrder["status"]]}>{c.getValue() as string}</Badge>
+    ),
+  },
+  {
+    id: "actions",
+    header: "",
+    enableSorting: false,
+    enableHiding: false,
+    meta: { width: "3rem" },
+    cell: () => (
+      <span onClick={(e) => e.stopPropagation()}>
+        <DropdownMenu
+          trigger={
+            <Button
+              variant="ghost"
+              size="sm"
+              iconOnly
+              icon={MoreHorizontal}
+              aria-label="Row actions"
+            />
+          }
+          items={[
+            { label: "Edit", icon: Pencil, onSelect: () => {} },
+            "separator",
+            { label: "Cancel order", icon: Trash2, tone: "danger", onSelect: () => {} },
+          ]}
+        />
+      </span>
     ),
   },
 ];
 
-function Specimen({ title, children }: { title: string; children: ReactNode }) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="grid gap-4 border-t border-rule pt-6" aria-label={title}>
-      <h2 className="text-lg">{title}</h2>
+    <section className="grid gap-4" aria-label={title}>
+      <h2 className="text-base font-semibold text-fg">{title}</h2>
       {children}
     </section>
   );
@@ -113,20 +152,20 @@ function DesignPage() {
   const prefs = usePrefs();
   const toast = useToast();
   const [selected, setSelected] = useState(ORDERS[0]!.no);
-  const [rate, setRate] = useState("1800.00");
+  const [rate, setRate] = useState("6.25");
   const [width, setWidth] = useState("44");
   const [checked, setChecked] = useState(true);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [tab, setTab] = useState("profile");
 
   return (
-    <main className="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-8 [&>*]:min-w-0">
-      <PageTitle
-        eyebrow="Design system"
-        title="Editorial Ledger"
-        dateline="Calm, typographic, exact — an interactive ledger book."
+    <main className="mx-auto grid max-w-6xl gap-10 bg-canvas px-4 py-10 sm:px-8 [&>*]:min-w-0">
+      <PageHeader
+        title="Design system"
+        description="Professional dashboard style — components used across the ERP."
+        breadcrumbs={[{ label: "Reference" }, { label: "Design system" }]}
         actions={
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2">
             <Segmented<Theme>
               label="Theme"
               value={prefs.theme}
@@ -150,194 +189,206 @@ function DesignPage() {
         }
       />
 
-      <Specimen title="Type & numbers">
-        <div className="grid gap-3">
-          <p className="font-serif text-2xl text-ink">Every roll, every rupee.</p>
-          <p className="max-w-prose text-sm text-ink-2">
-            Inter for the interface with tabular, lining figures; Newsreader for titles; JetBrains
-            Mono for numbers that are identifiers like <Mono>SI/2627/00001</Mono> and{" "}
-            <Mono>24AAACB1234C1Z5</Mono>.
-          </p>
-          <p className="flex flex-wrap gap-6 text-base">
-            <Money value="482300" />
-            <Money value="-1200.5" />
-            <Qty value={1000} unit="m" />
-            <Qty value={44} unit="in" />
-            <Qty value={12} unit="rolls" />
-          </p>
+      <Section title="KPI cards">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <StatCard
+            label="Sales this month"
+            value="₹ 48.2 L"
+            icon={IndianRupee}
+            delta={8.4}
+            deltaLabel="vs last month"
+            trend={[12, 18, 15, 22, 19, 26, 31]}
+          />
+          <StatCard
+            label="Receivables"
+            value="₹ 12.6 L"
+            icon={Users}
+            delta={-2.1}
+            deltaLabel="vs last month"
+            trend={[30, 28, 27, 29, 25, 24, 22]}
+          />
+          <StatCard label="Rolls in stock" value="1,204" icon={Package} hint="Across 46 SKUs" />
+          <StatCard label="Credit-blocked" value="3" icon={ShieldAlert} hint="₹ 2.4 L exposure" />
         </div>
-      </Specimen>
+      </Section>
 
-      <Specimen title="Status">
-        <div className="flex flex-wrap gap-5">
-          <StatusMark tone="positive">Confirmed</StatusMark>
-          <StatusMark tone="caution">On hold</StatusMark>
-          <StatusMark tone="critical">Overdue 12 days</StatusMark>
-          <StatusMark tone="info">GST document</StatusMark>
-          <StatusMark>Draft</StatusMark>
-        </div>
-      </Specimen>
-
-      <Specimen title="Buttons">
+      <Section title="Buttons & badges">
         <div className="flex flex-wrap items-center gap-3">
-          <Button variant="primary" shortcut="P">
-            Post invoice
+          <Button variant="primary" icon={Plus}>
+            New order
           </Button>
-          <Button>Save draft</Button>
+          <Button>Export</Button>
           <Button variant="ghost">Cancel</Button>
-          <Button variant="danger">Mark as scrap</Button>
+          <Button variant="danger" icon={Trash2}>
+            Delete
+          </Button>
           <Button variant="primary" busy>
-            Posting
+            Saving
           </Button>
           <Button size="sm">Small</Button>
-          <span className="text-sm text-ink-2">
-            Press <Kbd>Ctrl K</Kbd> anywhere
+          <span className="text-sm text-fg-2">
+            Press <Kbd>Ctrl K</Kbd> to search
           </span>
         </div>
-      </Specimen>
-
-      <Specimen title="Fields">
-        <div className="grid gap-5 sm:grid-cols-3">
-          <Field label="Party" hint="Search by name, GSTIN or code">
-            {(p) => <TextInput {...p} placeholder="Shree Prints" />}
-          </Field>
-          <Field
-            label="Rate at 44″"
-            error={Number(rate) > 5000 ? "Unusually high — check the rate" : undefined}
-          >
-            {(p) => <NumberInput {...p} value={rate} onValueChange={setRate} suffix="₹/m" />}
-          </Field>
-          <Field label="Width">
-            {(p) => (
-              <Select
-                {...p}
-                value={width}
-                onValueChange={setWidth}
-                options={[24, 36, 44, 63].map((w) => ({ value: String(w), label: `${w}″` }))}
-              />
-            )}
-          </Field>
-          <Checkbox label="Allow cutting rolls" checked={checked} onCheckedChange={setChecked} />
-          <Switch
-            label="Restart numbering every 1 April"
-            checked={checked}
-            onCheckedChange={setChecked}
-          />
+        <div className="flex flex-wrap gap-2">
+          <Badge tone="success">Confirmed</Badge>
+          <Badge tone="warning">On hold</Badge>
+          <Badge tone="danger">Overdue 12 days</Badge>
+          <Badge tone="info">GST document</Badge>
+          <Badge tone="primary">Wholesale</Badge>
+          <Badge>Draft</Badge>
         </div>
-      </Specimen>
+      </Section>
 
-      <Specimen title="Register">
-        <Register
+      <Section title="Data table">
+        <DataTable
           caption="Sample sales orders"
           data={ORDERS}
           columns={orderColumns}
           getRowId={(r) => r.no}
           selectedId={selected}
-          onSelect={(r) => setSelected(r.no)}
+          onRowClick={(r) => setSelected(r.no)}
+          searchPlaceholder="Search orders"
+          toolbar={
+            <Button variant="primary" size="sm" icon={Plus}>
+              New order
+            </Button>
+          }
         />
-      </Specimen>
+      </Section>
 
-      <Specimen title="Sheet with margin notes">
-        <SheetLayout
-          sheet={
-            <Sheet
-              kicker="Sales order"
-              title="Shree Prints"
-              number="SO/2627/00142"
-              status={<StatusMark tone="positive">Confirmed</StatusMark>}
-              meta={<span className="font-serif italic">Ring Road, Surat · 24AAACB1234C1Z5</span>}
-              footer={
-                <div className="flex justify-end gap-2">
-                  <Button>Print</Button>
-                  <Button variant="primary" shortcut="D">
-                    Create challan
-                  </Button>
-                </div>
-              }
+      <Section title="Form">
+        <Card title="New customer" description="Sections keep long forms scannable.">
+          <FormSection title="Business" description="Legal identity and GST.">
+            <Field label="Customer name" required>
+              {(p) => <TextInput {...p} placeholder="Shree Prints" />}
+            </Field>
+            <Field label="GSTIN" hint="State and PAN are filled in automatically">
+              {(p) => (
+                <TextInput {...p} className="font-mono uppercase" placeholder="24ABCDE1234F1Z5" />
+              )}
+            </Field>
+          </FormSection>
+          <FormSection
+            title="Pricing"
+            description="Per-metre rate at 44″; other widths are derived."
+          >
+            <Field
+              label="Rate at 44″"
+              error={Number(rate) > 50 ? "Unusually high — check the rate" : undefined}
             >
-              <DefinitionList
-                items={[
-                  { label: "Order date", value: "23 Oct 2026" },
-                  { label: "Salesman", value: "Ketan Shah" },
-                  { label: "Credit", value: <StatusMark tone="positive">Within limit</StatusMark> },
-                  { label: "Deal rate", value: <Money value="1800" /> },
-                ]}
-              />
-              <Rule className="my-6" />
-              <div className="flex justify-between text-sm">
-                <span className="text-ink-2">Total (incl. GST)</span>
-                <Money value="482300" className="text-lg" />
-              </div>
-              <Rule double className="mt-2" />
-            </Sheet>
-          }
-          margin={
-            <>
-              <MarginNote title="Progress">
-                <Stepper steps={["Order", "Challan", "Invoice"]} current={1} />
-              </MarginNote>
-              <MarginNote title="History">
-                <Timeline
-                  entries={[
-                    {
-                      id: "1",
-                      what: "Confirmed after credit check",
-                      when: "23 Oct, 11:02",
-                      who: "Ketan",
-                    },
-                    { id: "2", what: "Created", when: "23 Oct, 10:48", who: "Ketan" },
-                  ]}
+              {(p) => (
+                <NumberInput {...p} value={rate} onValueChange={setRate} prefix="₹" suffix="/m" />
+              )}
+            </Field>
+            <Field label="Width">
+              {(p) => (
+                <Select
+                  {...p}
+                  value={width}
+                  onValueChange={setWidth}
+                  options={[24, 36, 44, 63].map((w) => ({ value: String(w), label: `${w}″` }))}
                 />
-              </MarginNote>
-            </>
-          }
-        />
-      </Specimen>
+              )}
+            </Field>
+            <Checkbox label="Allow cut rolls" checked={checked} onCheckedChange={setChecked} />
+            <Switch
+              label="Auto-block on overdue"
+              description="Holds new orders past credit + grace days."
+              checked={checked}
+              onCheckedChange={setChecked}
+            />
+          </FormSection>
+        </Card>
+      </Section>
 
-      <Specimen title="Tabs, dialogs, toasts, empty states">
-        <Tabs
-          value={tab}
-          onValueChange={setTab}
-          tabs={[
-            {
-              value: "profile",
-              label: "Profile",
-              content: <p className="text-sm text-ink-2">Contacts, addresses, GST type.</p>,
-            },
-            {
-              value: "credit",
-              label: "Credit",
-              content: <p className="text-sm text-ink-2">Exposure, limit and grace window.</p>,
-            },
-          ]}
-        />
-        <div className="flex gap-3">
+      <Section title="Record page">
+        <Card padded>
+          <Tabs
+            value={tab}
+            onValueChange={setTab}
+            tabs={[
+              {
+                value: "profile",
+                label: "Profile",
+                content: (
+                  <DefinitionList
+                    columns={3}
+                    items={[
+                      { label: "Customer code", value: <Mono>CUST-0001</Mono> },
+                      { label: "GSTIN", value: <Mono>24AAACB1234C1Z5</Mono> },
+                      { label: "Credit limit", value: <Money value="100000" /> },
+                      { label: "Credit days", value: "30 + 15 grace" },
+                      { label: "Salesman", value: "Ketan Shah" },
+                      { label: "Status", value: <Badge tone="success">Active</Badge> },
+                    ]}
+                  />
+                ),
+              },
+              {
+                value: "rates",
+                label: "Rates",
+                count: 12,
+                content: <p className="text-sm text-fg-2">Rates and history.</p>,
+              },
+              {
+                value: "activity",
+                label: "Activity",
+                content: (
+                  <ActivityFeed
+                    entries={[
+                      {
+                        id: "1",
+                        who: "Ketan Shah",
+                        what: "confirmed SO/2627/00142",
+                        when: "23 Oct 2026, 11:02",
+                      },
+                      {
+                        id: "2",
+                        who: "Utsav J",
+                        what: "changed the credit limit to ₹ 1,00,000",
+                        when: "23 Oct 2026, 10:48",
+                      },
+                    ]}
+                  />
+                ),
+              },
+            ]}
+          />
+        </Card>
+      </Section>
+
+      <Section title="Feedback">
+        <div className="flex flex-wrap gap-3">
           <Button onClick={() => setConfirmOpen(true)}>Open confirm dialog</Button>
           <Button
             onClick={() =>
               toast({
-                tone: "positive",
-                title: "Invoice SI/2627/00001 posted",
-                description: "Voucher queued for the accounting stage.",
+                tone: "success",
+                title: "Customer saved",
+                description: "CUST-0042 · Shree Prints",
               })
             }
           >
             Show toast
           </Button>
         </div>
+        <Stepper steps={["Scope", "Change", "Preview", "Apply"]} current={1} />
         <ConfirmDialog
           open={confirmOpen}
           onOpenChange={setConfirmOpen}
           title="Post this invoice?"
           description="Posted invoices can only be corrected with a credit note."
-          confirmLabel="Post"
+          confirmLabel="Post invoice"
           onConfirm={() => setConfirmOpen(false)}
         />
-        <EmptyState
-          title="No unmapped rolls."
-          hint="Rolls received without a SKU appear here until someone maps them."
-        />
-      </Specimen>
+        <Card padded={false}>
+          <EmptyState
+            title="No unmapped rolls"
+            hint="Rolls received without a SKU appear here until someone maps them."
+          />
+        </Card>
+      </Section>
     </main>
   );
 }

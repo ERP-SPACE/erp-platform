@@ -1,5 +1,6 @@
 import { SETTINGS, type SettingItem, isSettingKey } from "@erp/contracts";
-import { Button, EmptyState, Rule, useToast } from "@erp/ui";
+import { Button, Card, Divider, EmptyState, useToast } from "@erp/ui";
+import { Pencil } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
@@ -27,12 +28,9 @@ function GeneralSettings() {
 
   const groups = [...new Set(settings.map((s) => s.group))];
   return (
-    <div className="grid gap-10">
+    <div className="grid gap-6">
       {groups.map((group) => (
-        <section key={group} aria-labelledby={`group-${group}`}>
-          <h2 id={`group-${group}`} className="border-b border-rule-strong pb-2 text-lg">
-            {group}
-          </h2>
+        <Card key={group} title={group} padded={false}>
           <ul>
             {settings
               .filter((s) => s.group === group)
@@ -47,7 +45,7 @@ function GeneralSettings() {
                 />
               ))}
           </ul>
-        </section>
+        </Card>
       ))}
     </div>
   );
@@ -84,7 +82,7 @@ function SettingRow({
         }),
       ),
     onSuccess: async () => {
-      toast({ tone: "positive", title: `${setting.label} saved` });
+      toast({ tone: "success", title: `${setting.label} saved` });
       setReason("");
       onClose();
       await queryClient.invalidateQueries({ queryKey: keys.settings });
@@ -112,16 +110,16 @@ function SettingRow({
   };
 
   return (
-    <li className="border-b border-rule py-4" data-setting={setting.key}>
+    <li className="border-b border-border px-5 py-4 last:border-b-0" data-setting={setting.key}>
       <div className="grid gap-x-6 gap-y-1 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-baseline">
         <div className="min-w-0">
-          <p className="font-medium text-ink">{setting.label}</p>
+          <p className="text-sm font-medium text-fg">{setting.label}</p>
           {!open ? (
-            <p className="tnum mt-0.5 truncate text-sm text-ink-2">{summarise(setting.value)}</p>
+            <p className="tnum mt-0.5 truncate text-sm text-fg-2">{summarise(setting.value)}</p>
           ) : null}
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-xs text-ink-3">
+          <span className="text-xs text-fg-3">
             {setting.updatedByName
               ? `${setting.updatedByName}, ${dateTime(setting.updatedAt)}`
               : "Default"}
@@ -129,7 +127,8 @@ function SettingRow({
           {editable && !open ? (
             <Button
               size="sm"
-              variant="ghost"
+              variant="secondary"
+              icon={Pencil}
               onClick={() => {
                 setDraft(schema ? toDraft(schema, setting.value) : "");
                 setErrors({});
@@ -143,7 +142,7 @@ function SettingRow({
       </div>
       {open && schema ? (
         <form
-          className="mt-4 grid gap-5 rounded-xs border border-rule bg-sheet p-5"
+          className="mt-4 grid gap-5 rounded-lg border border-border bg-muted/50 p-5"
           onSubmit={(e) => {
             e.preventDefault();
             submit();
@@ -156,10 +155,10 @@ function SettingRow({
             label={setting.label}
             errors={errors}
           />
-          <Rule />
+          <Divider />
           <ReasonField value={reason} onChange={setReason} />
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="ghost" onClick={onClose}>
+            <Button type="button" variant="secondary" onClick={onClose}>
               Cancel
             </Button>
             <Button type="submit" variant="primary" busy={save.isPending}>
