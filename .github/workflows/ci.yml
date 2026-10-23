@@ -1,0 +1,100 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TZ: Asia/Kolkata
+
+jobs:
+  checks:
+    name: Lint, typecheck, unit tests, build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm build
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - name: Generated API client is up to date
+        run: |
+          pnpm api:gen
+          git diff --exit-code packages/contracts/openapi.json packages/contracts/src/generated
+
+  integration:
+    name: Integration tests (Testcontainers)
+    runs-on: ubuntu-latest
+    needs: checks
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm test:int
+
+  e2e:
+    name: End-to-end + accessibility (Playwright)
+    runs-on: ubuntu-latest
+    needs: checks
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: erp
+        ports: ["5433:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres -d erp" --health-interval 3s --health-timeout 3s --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6380:6379"]
+    env:
+      NODE_ENV: test
+      DATABASE_SUPERUSER_URL: postgres://postgres:postgres@localhost:5433/erp
+      DATABASE_URL: postgres://erp_app:erp_app_dev@localhost:5433/erp
+      DATABASE_OWNER_URL: postgres://erp_owner:erp_owner_dev@localhost:5433/erp
+      REDIS_URL: redis://localhost:6380
+      API_PORT: "3000"
+      API_PUBLIC_URL: http://localhost:3000
+      WEB_ORIGIN: http://localhost:5173
+      AUTH_SECRET: ci-only-secret-at-least-thirty-two-characters
+      SEED_OWNER_EMAIL: owner@ci.local
+      SEED_OWNER_NAME: CI Owner
+      SEED_OWNER_PASSWORD: ci-Owner-Pass-123
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm --filter @erp/db bootstrap
+      - run: pnpm db:reset
+      - run: pnpm --filter @erp/web exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report
+          retention-days: 7

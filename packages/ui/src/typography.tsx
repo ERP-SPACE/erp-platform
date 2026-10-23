@@ -17,14 +17,17 @@ export function PageTitle({
 }) {
   return (
     <header
-      className={cn("flex items-end justify-between gap-6 border-b border-rule pb-4", className)}
+      className={cn(
+        "flex flex-wrap items-end justify-between gap-x-6 gap-y-3 border-b border-rule pb-4",
+        className,
+      )}
     >
-      <div className="min-w-0">
+      <div className="min-w-0 flex-[1_1_16rem]">
         {eyebrow ? <p className="smallcaps mb-1.5">{eyebrow}</p> : null}
         <h1 className="text-xl text-ink">{title}</h1>
         {dateline ? <p className="mt-1 font-serif text-sm italic text-ink-2">{dateline}</p> : null}
       </div>
-      {actions ? <div className="flex shrink-0 items-center gap-2">{actions}</div> : null}
+      {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
     </header>
   );
 }

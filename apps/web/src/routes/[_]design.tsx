@@ -120,7 +120,7 @@ function DesignPage() {
   const [tab, setTab] = useState("profile");
 
   return (
-    <main className="mx-auto grid max-w-6xl gap-10 px-8 py-10">
+    <main className="mx-auto grid max-w-6xl gap-10 px-4 py-10 sm:px-8 [&>*]:min-w-0">
       <PageTitle
         eyebrow="Design system"
         title="Editorial Ledger"

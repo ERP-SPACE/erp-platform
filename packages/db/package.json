@@ -18,9 +18,10 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint .",
     "generate": "drizzle-kit generate",
-    "migrate": "tsx --env-file=../../.env src/scripts/migrate.ts",
-    "seed": "tsx --env-file=../../.env src/scripts/seed.ts",
-    "reset": "tsx --env-file=../../.env src/scripts/reset.ts"
+    "migrate": "tsx --env-file-if-exists=../../.env src/scripts/migrate.ts",
+    "seed": "tsx --env-file-if-exists=../../.env src/scripts/seed.ts",
+    "reset": "tsx --env-file-if-exists=../../.env src/scripts/reset.ts",
+    "bootstrap": "tsx --env-file-if-exists=../../.env src/scripts/bootstrap.ts"
   },
   "dependencies": {
     "@erp/contracts": "workspace:*",

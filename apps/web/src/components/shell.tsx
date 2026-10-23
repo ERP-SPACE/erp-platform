@@ -226,7 +226,7 @@ export function Shell({ me, children }: { me: MeResponse; children: ReactNode })
                     </Link>
                   ) : (
                     <span
-                      className={cn(base, "cursor-default text-ink-3/70")}
+                      className={cn(base, "cursor-default text-ink-3")}
                       title={`${section.label} arrives in Stage ${section.stage}`}
                     >
                       {content}
@@ -246,7 +246,7 @@ export function Shell({ me, children }: { me: MeResponse; children: ReactNode })
           </button>
         </nav>
 
-        <main id="main" className="min-w-0 flex-1 px-8 py-8 xl:px-12">
+        <main id="main" className="min-w-0 flex-1 px-4 py-8 sm:px-8 xl:px-12">
           {children}
         </main>
       </div>
