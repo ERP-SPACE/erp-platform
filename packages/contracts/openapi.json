@@ -49,7 +49,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -73,7 +80,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StepUpResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -87,7 +101,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserItemDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -109,7 +133,14 @@
         },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -142,7 +173,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -156,7 +194,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RoleItemDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -170,7 +218,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermissionItemDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -203,7 +261,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -217,7 +282,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SettingItemDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -250,7 +325,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingSavedDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -264,7 +346,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -286,7 +375,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyResponseDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -300,7 +396,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SeriesItemDto"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -333,7 +439,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesPreviewDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -366,7 +479,14 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeriesItemDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -448,7 +568,14 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuditPageDto"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -474,6 +601,89 @@
       }
     },
     "schemas": {
+      "MeResponseDto": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "twoFactorEnabled": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "email",
+              "twoFactorEnabled"
+            ]
+          },
+          "company": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "legalName": {
+                "type": "string"
+              },
+              "tradeName": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "isPlaceholder": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "legalName",
+              "tradeName",
+              "isPlaceholder"
+            ]
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "totpEnrolmentRequired": {
+            "type": "boolean"
+          },
+          "freshUntil": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "user",
+          "company",
+          "roles",
+          "permissions",
+          "totpEnrolmentRequired",
+          "freshUntil"
+        ]
+      },
       "StepUpDto": {
         "type": "object",
         "properties": {
@@ -489,6 +699,58 @@
         },
         "required": [
           "password"
+        ]
+      },
+      "StepUpResponseDto": {
+        "type": "object",
+        "properties": {
+          "freshUntil": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "freshUntil"
+        ]
+      },
+      "UserItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "twoFactorEnabled": {
+            "type": "array",
+            "items": {
+              "type": "boolean"
+            }
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "roleCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "active",
+          "twoFactorEnabled",
+          "createdAt",
+          "roleCodes"
         ]
       },
       "CreateUserDto": {
@@ -524,6 +786,17 @@
           "roleCodes"
         ]
       },
+      "IdResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
       "UpdateUserDto": {
         "type": "object",
         "properties": {
@@ -543,6 +816,69 @@
             }
           }
         }
+      },
+      "RoleItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "isSystem": {
+            "type": "boolean"
+          },
+          "locked": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "permissionCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "name",
+          "isSystem",
+          "locked",
+          "version",
+          "permissionCodes"
+        ]
+      },
+      "PermissionItemDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "module": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "stepUp": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "code",
+          "module",
+          "description",
+          "stepUp"
+        ]
       },
       "UpdateRolePermissionsDto": {
         "type": "object",
@@ -576,6 +912,49 @@
           "version"
         ]
       },
+      "SettingItemDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "value": {},
+          "defaultValue": {},
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "updatedAt": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "updatedByName": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "group",
+          "value",
+          "defaultValue",
+          "version",
+          "updatedAt",
+          "updatedByName"
+        ]
+      },
       "UpdateSettingDto": {
         "type": "object",
         "properties": {
@@ -589,6 +968,166 @@
         "required": [
           "value",
           "version"
+        ]
+      },
+      "SettingSavedDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "value": {},
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "key",
+          "value",
+          "version"
+        ]
+      },
+      "CompanyResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "legalName": {
+            "type": "string"
+          },
+          "tradeName": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "gstin": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stateCode": {
+            "type": "string"
+          },
+          "pan": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "address": {
+            "type": "object",
+            "properties": {
+              "line1": {
+                "type": "string"
+              },
+              "line2": {
+                "type": "string"
+              },
+              "city": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "pincode": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "line1",
+              "city",
+              "state",
+              "pincode"
+            ]
+          },
+          "bank": {
+            "type": "object",
+            "properties": {
+              "bankName": {
+                "type": "string"
+              },
+              "accountName": {
+                "type": "string"
+              },
+              "accountNumber": {
+                "type": "string"
+              },
+              "ifsc": {
+                "type": "string"
+              },
+              "branch": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "bankName",
+              "accountName",
+              "accountNumber",
+              "ifsc"
+            ],
+            "nullable": true
+          },
+          "email": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "phone": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "logoKey": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "signatoryName": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isPlaceholder": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "legalName",
+          "tradeName",
+          "gstin",
+          "stateCode",
+          "pan",
+          "address",
+          "bank",
+          "email",
+          "phone",
+          "logoKey",
+          "signatoryName",
+          "isPlaceholder",
+          "version",
+          "updatedAt"
         ]
       },
       "UpdateCompanyDto": {
@@ -724,6 +1263,93 @@
           "version"
         ]
       },
+      "SeriesItemDto": {
+        "type": "object",
+        "properties": {
+          "entityType": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "gst": {
+            "type": "boolean"
+          },
+          "prefixTemplate": {
+            "type": "string"
+          },
+          "padding": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "resetOnFy": {
+            "type": "boolean"
+          },
+          "numberedOn": {
+            "type": "string",
+            "enum": [
+              "create",
+              "post"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "usedThisYear": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "nextNumber": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "updatedByName": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "entityType",
+          "label",
+          "gst",
+          "prefixTemplate",
+          "padding",
+          "resetOnFy",
+          "numberedOn",
+          "version",
+          "usedThisYear",
+          "nextNumber",
+          "updatedAt",
+          "updatedByName"
+        ]
+      },
+      "SeriesPreviewDto": {
+        "type": "object",
+        "properties": {
+          "entityType": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "nextNumber": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "entityType",
+          "date",
+          "nextNumber"
+        ]
+      },
       "UpdateSeriesDto": {
         "type": "object",
         "properties": {
@@ -752,6 +1378,115 @@
           "padding",
           "resetOnFy",
           "version"
+        ]
+      },
+      "AuditPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "at": {
+                  "type": "string"
+                },
+                "tableName": {
+                  "type": "string"
+                },
+                "rowId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "action": {
+                  "type": "string",
+                  "enum": [
+                    "INSERT",
+                    "UPDATE",
+                    "DELETE"
+                  ]
+                },
+                "before": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {},
+                  "nullable": true
+                },
+                "after": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {},
+                  "nullable": true
+                },
+                "changedKeys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "nullable": true
+                },
+                "reason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "requestId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "userId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "userName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "at",
+                "tableName",
+                "rowId",
+                "action",
+                "before",
+                "after",
+                "changedKeys",
+                "reason",
+                "requestId",
+                "userId",
+                "userName"
+              ]
+            }
+          },
+          "nextCursor": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor"
         ]
       }
     }

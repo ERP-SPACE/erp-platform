@@ -89,7 +89,7 @@ export class SeriesService {
       }
     }
 
-    return this.uow.run(async (tx) => {
+    await this.uow.run(async (tx) => {
       const series = await this.find(tx, entityType);
       const saved = await updateVersioned(
         tx,
@@ -100,8 +100,8 @@ export class SeriesService {
         `${entityType} series`,
       );
       this.bus.publishAfterCommit("series.changed", { entityType, version: saved.version });
-      return saved;
     });
+    return (await this.list(today)).find((item) => item.entityType === entityType)!;
   }
 
   /** Allocate the next number inside the caller's transaction (must be inside UnitOfWork.run). */

@@ -1,11 +1,12 @@
 import { auditLog, user } from "@erp/db";
 import { Controller, Get, Query } from "@nestjs/common";
-import { ApiTags } from "@nestjs/swagger";
+import { ApiOkResponse, ApiTags } from "@nestjs/swagger";
 import { and, desc, eq, gte, lt, lte, or, type SQL } from "drizzle-orm";
 import { createZodDto } from "nestjs-zod";
 import { z } from "zod";
 import { RequirePermission } from "../../auth/decorators.js";
 import { actor } from "../../common/context.js";
+import { AuditPageDto } from "../../common/responses.js";
 import { UnitOfWork } from "../../db/unit-of-work.js";
 
 class AuditQueryDto extends createZodDto(
@@ -28,6 +29,7 @@ export class AuditController {
 
   /** Newest first, keyset-paginated. Before/after JSON is returned as stored (secrets redacted). */
   @RequirePermission("audit.view")
+  @ApiOkResponse({ type: AuditPageDto })
   @Get()
   async list(@Query() q: AuditQueryDto) {
     const filters: (SQL | undefined)[] = [eq(auditLog.companyId, actor().companyId)];
