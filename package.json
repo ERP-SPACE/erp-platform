@@ -22,6 +22,7 @@
     "db:migrate": "pnpm --filter @erp/db migrate",
     "db:seed": "pnpm --filter @erp/db seed",
     "db:reset": "pnpm --filter @erp/db reset",
+    "db:seed:demo": "pnpm --filter @erp/db seed:demo",
     "api:gen": "pnpm --filter @erp/api openapi && pnpm --filter @erp/contracts generate"
   },
   "devDependencies": {
