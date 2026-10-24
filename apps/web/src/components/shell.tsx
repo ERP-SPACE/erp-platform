@@ -366,7 +366,7 @@ function Sidebar({
           to="/"
           onClick={onNavigate}
           className="rounded-md outline-none"
-          aria-label="Dashboard"
+          aria-label="PaperERP dashboard"
         >
           <BrandMark compact={collapsed} />
         </Link>
@@ -523,7 +523,7 @@ function UserMenu({
       trigger={
         <button
           type="button"
-          aria-label="Account and display"
+          aria-label={`${me.user.name} — account and display`}
           className="flex items-center gap-2 rounded-md p-1 pr-2 hover:bg-muted"
         >
           <Avatar name={me.user.name} size="sm" />

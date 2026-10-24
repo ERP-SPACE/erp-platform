@@ -160,7 +160,7 @@ function CataloguePage() {
                   )}
                 >
                   <span className="font-medium">All categories</span>
-                  <span className="tnum text-xs text-fg-3">{products.data?.length ?? 0}</span>
+                  <span className="tnum text-xs text-fg-2">{products.data?.length ?? 0}</span>
                 </button>
               </li>
               {(categories.data ?? []).map((c) => (

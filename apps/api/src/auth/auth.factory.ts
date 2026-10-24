@@ -12,6 +12,7 @@ import { twoFactor } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 import { uuidv7 } from "uuidv7";
 import type { Env } from "../config/env.js";
+import { webOrigins } from "../config/origins.js";
 
 export const AUTH = Symbol("AUTH");
 
@@ -23,7 +24,7 @@ export function createAuth(env: Env, handle: DbHandle) {
     baseURL: env.WEB_ORIGIN,
     basePath: "/api/auth",
     secret: env.AUTH_SECRET,
-    trustedOrigins: [env.WEB_ORIGIN],
+    trustedOrigins: webOrigins(env),
     database: drizzleAdapter(handle.db, {
       provider: "pg",
       schema: { user, session, account, verification, twoFactor: twoFactorTable },

@@ -14,15 +14,20 @@ if (existsSync(envFile)) process.loadEnvFile(envFile);
  * E2E_PUBLIC_ONLY=1 starts just the web server, for machines without Docker.
  */
 const publicOnly = process.env.E2E_PUBLIC_ONLY === "1";
+// Point at already-running servers (e.g. a separate e2e database) without touching the dev ones.
+const baseURL = process.env.E2E_BASE_URL ?? "http://localhost:5173";
+const apiURL = process.env.E2E_API_URL ?? "http://localhost:3000";
 
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: false,
+  // Gate specs share one database and build on each other (stage0 enrols the Owner first).
+  workers: 1,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? [["github"], ["html", { open: "never" }]] : [["list"]],
   use: {
-    baseURL: "http://localhost:5173",
+    baseURL,
     trace: "retain-on-failure",
     timezoneId: "Asia/Kolkata",
     locale: "en-IN",
@@ -31,7 +36,15 @@ export default defineConfig({
     { name: "public", testMatch: /.*\.public\.spec\.ts/, use: { ...devices["Desktop Chrome"] } },
     ...(publicOnly
       ? []
-      : [{ name: "gate", testMatch: /.*\.gate\.spec\.ts/, use: { ...devices["Desktop Chrome"] } }]),
+      : [
+          { name: "demo-auth", testMatch: /demo.setup.ts/ },
+          {
+            name: "gate",
+            testMatch: /.*.gate.spec.ts/,
+            dependencies: ["demo-auth"],
+            use: { ...devices["Desktop Chrome"] },
+          },
+        ]),
   ],
   webServer: [
     ...(publicOnly
@@ -39,7 +52,7 @@ export default defineConfig({
       : [
           {
             command: "pnpm --filter @erp/api start",
-            url: "http://localhost:3000/api/healthz",
+            url: `${apiURL}/api/healthz`,
             reuseExistingServer: !process.env.CI,
             env: { REQUIRE_OWNER_TOTP: "true" },
             timeout: 60_000,
@@ -48,7 +61,7 @@ export default defineConfig({
     {
       // The production build, not the dev server: no on-demand compilation during the first test.
       command: "pnpm --filter @erp/web build && pnpm --filter @erp/web preview",
-      url: "http://localhost:5173/login",
+      url: `${baseURL}/login`,
       reuseExistingServer: !process.env.CI,
       timeout: 180_000,
     },

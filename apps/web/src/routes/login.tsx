@@ -6,6 +6,7 @@ import { z } from "zod";
 import { AuthLayout } from "../components/auth-layout.js";
 import { authClient } from "../lib/auth.js";
 import { keys } from "../lib/queries.js";
+import { totpVerifyErrorMessage } from "../lib/totp-errors.js";
 
 export const Route = createFileRoute("/login")({
   validateSearch: z.object({ redirect: z.string().optional() }),
@@ -54,12 +55,7 @@ function LoginPage() {
     const result = await authClient.twoFactor.verifyTotp({ code });
     setBusy(false);
     if (result.error) {
-      const msg = result.error.message ?? "";
-      setError(
-        msg.includes("cookie") || msg.includes("Cookie")
-          ? "Your sign-in session expired. Go back, sign in again, and enter a fresh code."
-          : "That code didn't match. Codes change every 30 seconds.",
-      );
+      setError(totpVerifyErrorMessage(result.error));
       return;
     }
     await done();
