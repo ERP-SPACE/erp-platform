@@ -19,6 +19,9 @@ import { IdentityModule } from "./modules/identity/identity.module.js";
 import { RealtimeModule } from "./modules/realtime/realtime.module.js";
 import { SeriesModule } from "./modules/series/series.module.js";
 import { SettingsModule } from "./modules/settings/settings.module.js";
+import { CatalogueModule } from "./modules/catalogue/catalogue.module.js";
+import { SuppliersModule } from "./modules/suppliers/suppliers.module.js";
+import { StorageModule } from "./storage/storage.module.js";
 import { RedisModule } from "./redis/redis.module.js";
 
 @Module({})
@@ -64,6 +67,9 @@ export class AppModule implements NestModule {
         SettingsModule,
         SeriesModule,
         AuditModule,
+        StorageModule,
+        CatalogueModule,
+        SuppliersModule,
       ],
       controllers: [HealthController],
       providers: [

@@ -12,6 +12,7 @@ import { ZodValidationException } from "nestjs-zod";
 import { type ZodError } from "zod";
 import { requestContext } from "./context.js";
 import { AppError } from "./errors.js";
+import { fromPgError } from "./pg-errors.js";
 
 const STATUS_CODES: Record<number, ErrorCode> = {
   400: "VALIDATION_ERROR",
@@ -52,6 +53,8 @@ export class ProblemFilter implements ExceptionFilter {
     });
 
     if (e instanceof AppError) return make(e.status, e.code, e.message, e.extra);
+    const pg = fromPgError(e);
+    if (pg) return make(pg.status, pg.code, pg.message, pg.extra);
     if (e instanceof ZodValidationException) {
       const zodError = e.getZodError() as ZodError;
       return make(400, "VALIDATION_ERROR", "Some fields are invalid.", {

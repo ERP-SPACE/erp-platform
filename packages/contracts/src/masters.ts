@@ -75,6 +75,15 @@ export const categoryUpdate = z.object({
   version: z.number().int().positive(),
 });
 
+export const categoryCreate = z.object({
+  code: z
+    .string()
+    .trim()
+    .toUpperCase()
+    .regex(/^[A-Z0-9]{2,6}$/, "2–6 letters or digits, e.g. SUB"),
+  name: z.string().trim().min(2).max(60),
+});
+
 export const qualityItem = z.object({
   id: z.string(),
   name: z.string(),
@@ -85,6 +94,11 @@ export const qualityItem = z.object({
 export const qualityInput = z.object({
   name: z.string().trim().min(2).max(40),
   aliases: z.array(z.string().trim().min(1).max(40)).max(10).default([]),
+});
+
+export const qualityUpdate = qualityInput.extend({
+  active: z.boolean(),
+  version: z.number().int().positive(),
 });
 
 export const skuItem = z.object({

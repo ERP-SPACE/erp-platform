@@ -1,4 +1,11 @@
-import { SETTINGS, SETTING_KEYS, isSettingKey } from "@erp/contracts";
+import {
+  SETTINGS,
+  SETTING_KEYS,
+  type SettingKey,
+  type SettingValue,
+  isSettingKey,
+  parseSetting,
+} from "@erp/contracts";
 import { companies, settings, user } from "@erp/db";
 import { GST_STATES, validateGstin } from "@erp/domain";
 import { Injectable } from "@nestjs/common";
@@ -48,6 +55,15 @@ export class SettingsService {
         updatedByName: row?.updatedByName ?? null,
       };
     });
+  }
+
+  /** Current value of one setting (the default until someone saves it), parsed by its schema. */
+  async value<K extends SettingKey>(key: K): Promise<SettingValue<K>> {
+    const [row] = await this.uow.db
+      .select({ value: settings.value })
+      .from(settings)
+      .where(and(eq(settings.companyId, actor().companyId), eq(settings.key, key)));
+    return parseSetting(key, row?.value ?? SETTINGS[key].default);
   }
 
   async update(key: string, value: unknown, version: number) {
