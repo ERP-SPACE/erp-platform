@@ -72,12 +72,20 @@ export class SearchService {
     if (can("suppliers.view")) {
       tasks.push(
         db
-          .select({ id: suppliers.id, code: suppliers.code, name: suppliers.name, gstin: suppliers.gstin })
+          .select({
+            id: suppliers.id,
+            code: suppliers.code,
+            name: suppliers.name,
+            gstin: suppliers.gstin,
+          })
           .from(suppliers)
           .where(
             and(
               eq(suppliers.companyId, companyId),
-              searchFilter(sql`(${suppliers.name} || ' ' || ${suppliers.code} || ' ' || coalesce(${suppliers.gstin}, ''))`, term),
+              searchFilter(
+                sql`(${suppliers.name} || ' ' || ${suppliers.code} || ' ' || coalesce(${suppliers.gstin}, ''))`,
+                term,
+              ),
             ),
           )
           .orderBy(asc(suppliers.name))
@@ -106,19 +114,32 @@ export class SearchService {
           .orderBy(asc(transporters.name))
           .limit(PER_TYPE)
           .then((rows) =>
-            rows.map((r) => ({ type: "transporter" as const, id: r.id, title: r.name, subtitle: r.code })),
+            rows.map((r) => ({
+              type: "transporter" as const,
+              id: r.id,
+              title: r.name,
+              subtitle: r.code,
+            })),
           ),
       );
     }
     if (can("salesmen.view")) {
       tasks.push(
         db
-          .select({ id: salesmen.id, code: salesmen.code, name: salesmen.name, phone: salesmen.phone })
+          .select({
+            id: salesmen.id,
+            code: salesmen.code,
+            name: salesmen.name,
+            phone: salesmen.phone,
+          })
           .from(salesmen)
           .where(
             and(
               eq(salesmen.companyId, companyId),
-              searchFilter(sql`(${salesmen.name} || ' ' || ${salesmen.code} || ' ' || coalesce(${salesmen.phone}, ''))`, term),
+              searchFilter(
+                sql`(${salesmen.name} || ' ' || ${salesmen.code} || ' ' || coalesce(${salesmen.phone}, ''))`,
+                term,
+              ),
             ),
           )
           .orderBy(asc(salesmen.name))
@@ -150,7 +171,10 @@ export class SearchService {
             and(
               eq(products.companyId, companyId),
               or(
-                searchFilter(sql`(${categories.name} || ' ' || ${qualities.name} || ' ' || ${products.gsm} || ' gsm')`, term),
+                searchFilter(
+                  sql`(${categories.name} || ' ' || ${qualities.name} || ' ' || ${products.gsm} || ' gsm')`,
+                  term,
+                ),
                 searchFilter(sql`coalesce(${skus.code}, '')`, term),
               ),
             ),

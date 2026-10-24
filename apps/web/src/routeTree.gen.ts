@@ -14,13 +14,23 @@ import { Route as DesignRouteImport } from './routes/[_]design'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as Setup2faRouteImport } from './routes/setup-2fa'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
+import { Route as AppCatalogueRouteImport } from './routes/_app/catalogue'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
+import { Route as AppSuppliersRouteImport } from './routes/_app/suppliers'
+import { Route as AppTransportersRouteImport } from './routes/_app/transporters'
+import { Route as AppCustomersIndexRouteImport } from './routes/_app/customers/index'
+import { Route as AppCustomersCustomerIdRouteImport } from './routes/_app/customers/$customerId'
+import { Route as AppCustomersNewRouteImport } from './routes/_app/customers/new'
+import { Route as AppPricingBulkRevisionRouteImport } from './routes/_app/pricing/bulk-revision'
+import { Route as AppSalesmenIndexRouteImport } from './routes/_app/salesmen/index'
+import { Route as AppSalesmenSalesmanIdRouteImport } from './routes/_app/salesmen/$salesmanId'
 import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/index'
 import { Route as AppSettingsAuditRouteImport } from './routes/_app/settings/audit'
 import { Route as AppSettingsCompanyRouteImport } from './routes/_app/settings/company'
 import { Route as AppSettingsGeneralRouteImport } from './routes/_app/settings/general'
 import { Route as AppSettingsSeriesRouteImport } from './routes/_app/settings/series'
 import { Route as AppSettingsUsersRouteImport } from './routes/_app/settings/users'
+import { Route as AppCustomersEditCustomerIdRouteImport } from './routes/_app/customers/edit.$customerId'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -46,9 +56,54 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCatalogueRoute = AppCatalogueRouteImport.update({
+  id: '/catalogue',
+  path: '/catalogue',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSuppliersRoute = AppSuppliersRouteImport.update({
+  id: '/suppliers',
+  path: '/suppliers',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTransportersRoute = AppTransportersRouteImport.update({
+  id: '/transporters',
+  path: '/transporters',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCustomersIndexRoute = AppCustomersIndexRouteImport.update({
+  id: '/customers/',
+  path: '/customers/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCustomersCustomerIdRoute = AppCustomersCustomerIdRouteImport.update({
+  id: '/customers/$customerId',
+  path: '/customers/$customerId',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCustomersNewRoute = AppCustomersNewRouteImport.update({
+  id: '/customers/new',
+  path: '/customers/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPricingBulkRevisionRoute = AppPricingBulkRevisionRouteImport.update({
+  id: '/pricing/bulk-revision',
+  path: '/pricing/bulk-revision',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSalesmenIndexRoute = AppSalesmenIndexRouteImport.update({
+  id: '/salesmen/',
+  path: '/salesmen/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSalesmenSalesmanIdRoute = AppSalesmenSalesmanIdRouteImport.update({
+  id: '/salesmen/$salesmanId',
+  path: '/salesmen/$salesmanId',
   getParentRoute: () => AppRoute,
 } as any)
 const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
@@ -81,31 +136,57 @@ const AppSettingsUsersRoute = AppSettingsUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AppSettingsRoute,
 } as any)
+const AppCustomersEditCustomerIdRoute =
+  AppCustomersEditCustomerIdRouteImport.update({
+    id: '/customers/edit/$customerId',
+    path: '/customers/edit/$customerId',
+    getParentRoute: () => AppRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/_design': typeof DesignRoute
   '/login': typeof LoginRoute
   '/setup-2fa': typeof Setup2faRoute
+  '/catalogue': typeof AppCatalogueRoute
   '/settings': typeof AppSettingsRouteWithChildren
+  '/suppliers': typeof AppSuppliersRoute
+  '/transporters': typeof AppTransportersRoute
+  '/customers/$customerId': typeof AppCustomersCustomerIdRoute
+  '/customers/new': typeof AppCustomersNewRoute
+  '/pricing/bulk-revision': typeof AppPricingBulkRevisionRoute
+  '/salesmen/$salesmanId': typeof AppSalesmenSalesmanIdRoute
   '/settings/audit': typeof AppSettingsAuditRoute
   '/settings/company': typeof AppSettingsCompanyRoute
   '/settings/general': typeof AppSettingsGeneralRoute
   '/settings/series': typeof AppSettingsSeriesRoute
   '/settings/users': typeof AppSettingsUsersRoute
+  '/customers/': typeof AppCustomersIndexRoute
+  '/salesmen/': typeof AppSalesmenIndexRoute
   '/settings/': typeof AppSettingsIndexRoute
+  '/customers/edit/$customerId': typeof AppCustomersEditCustomerIdRoute
 }
 export interface FileRoutesByTo {
   '/_design': typeof DesignRoute
   '/login': typeof LoginRoute
   '/setup-2fa': typeof Setup2faRoute
+  '/catalogue': typeof AppCatalogueRoute
+  '/suppliers': typeof AppSuppliersRoute
+  '/transporters': typeof AppTransportersRoute
   '/': typeof AppIndexRoute
+  '/customers/$customerId': typeof AppCustomersCustomerIdRoute
+  '/customers/new': typeof AppCustomersNewRoute
+  '/pricing/bulk-revision': typeof AppPricingBulkRevisionRoute
+  '/salesmen/$salesmanId': typeof AppSalesmenSalesmanIdRoute
   '/settings/audit': typeof AppSettingsAuditRoute
   '/settings/company': typeof AppSettingsCompanyRoute
   '/settings/general': typeof AppSettingsGeneralRoute
   '/settings/series': typeof AppSettingsSeriesRoute
   '/settings/users': typeof AppSettingsUsersRoute
+  '/customers': typeof AppCustomersIndexRoute
+  '/salesmen': typeof AppSalesmenIndexRoute
   '/settings': typeof AppSettingsIndexRoute
+  '/customers/edit/$customerId': typeof AppCustomersEditCustomerIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -113,14 +194,24 @@ export interface FileRoutesById {
   '/_design': typeof DesignRoute
   '/login': typeof LoginRoute
   '/setup-2fa': typeof Setup2faRoute
+  '/_app/catalogue': typeof AppCatalogueRoute
   '/_app/settings': typeof AppSettingsRouteWithChildren
+  '/_app/suppliers': typeof AppSuppliersRoute
+  '/_app/transporters': typeof AppTransportersRoute
   '/_app/': typeof AppIndexRoute
+  '/_app/customers/$customerId': typeof AppCustomersCustomerIdRoute
+  '/_app/customers/new': typeof AppCustomersNewRoute
+  '/_app/pricing/bulk-revision': typeof AppPricingBulkRevisionRoute
+  '/_app/salesmen/$salesmanId': typeof AppSalesmenSalesmanIdRoute
   '/_app/settings/audit': typeof AppSettingsAuditRoute
   '/_app/settings/company': typeof AppSettingsCompanyRoute
   '/_app/settings/general': typeof AppSettingsGeneralRoute
   '/_app/settings/series': typeof AppSettingsSeriesRoute
   '/_app/settings/users': typeof AppSettingsUsersRoute
+  '/_app/customers/': typeof AppCustomersIndexRoute
+  '/_app/salesmen/': typeof AppSalesmenIndexRoute
   '/_app/settings/': typeof AppSettingsIndexRoute
+  '/_app/customers/edit/$customerId': typeof AppCustomersEditCustomerIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -129,39 +220,69 @@ export interface FileRouteTypes {
     | '/_design'
     | '/login'
     | '/setup-2fa'
+    | '/catalogue'
     | '/settings'
+    | '/suppliers'
+    | '/transporters'
+    | '/customers/$customerId'
+    | '/customers/new'
+    | '/pricing/bulk-revision'
+    | '/salesmen/$salesmanId'
     | '/settings/audit'
     | '/settings/company'
     | '/settings/general'
     | '/settings/series'
     | '/settings/users'
+    | '/customers/'
+    | '/salesmen/'
     | '/settings/'
+    | '/customers/edit/$customerId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/_design'
     | '/login'
     | '/setup-2fa'
+    | '/catalogue'
+    | '/suppliers'
+    | '/transporters'
     | '/'
+    | '/customers/$customerId'
+    | '/customers/new'
+    | '/pricing/bulk-revision'
+    | '/salesmen/$salesmanId'
     | '/settings/audit'
     | '/settings/company'
     | '/settings/general'
     | '/settings/series'
     | '/settings/users'
+    | '/customers'
+    | '/salesmen'
     | '/settings'
+    | '/customers/edit/$customerId'
   id:
     | '__root__'
     | '/_app'
     | '/_design'
     | '/login'
     | '/setup-2fa'
+    | '/_app/catalogue'
     | '/_app/settings'
+    | '/_app/suppliers'
+    | '/_app/transporters'
     | '/_app/'
+    | '/_app/customers/$customerId'
+    | '/_app/customers/new'
+    | '/_app/pricing/bulk-revision'
+    | '/_app/salesmen/$salesmanId'
     | '/_app/settings/audit'
     | '/_app/settings/company'
     | '/_app/settings/general'
     | '/_app/settings/series'
     | '/_app/settings/users'
+    | '/_app/customers/'
+    | '/_app/salesmen/'
     | '/_app/settings/'
+    | '/_app/customers/edit/$customerId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -208,11 +329,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/catalogue': {
+      id: '/_app/catalogue'
+      path: '/catalogue'
+      fullPath: '/catalogue'
+      preLoaderRoute: typeof AppCatalogueRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/settings': {
       id: '/_app/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/suppliers': {
+      id: '/_app/suppliers'
+      path: '/suppliers'
+      fullPath: '/suppliers'
+      preLoaderRoute: typeof AppSuppliersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/transporters': {
+      id: '/_app/transporters'
+      path: '/transporters'
+      fullPath: '/transporters'
+      preLoaderRoute: typeof AppTransportersRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/customers/': {
+      id: '/_app/customers/'
+      path: '/customers'
+      fullPath: '/customers/'
+      preLoaderRoute: typeof AppCustomersIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/customers/$customerId': {
+      id: '/_app/customers/$customerId'
+      path: '/customers/$customerId'
+      fullPath: '/customers/$customerId'
+      preLoaderRoute: typeof AppCustomersCustomerIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/customers/new': {
+      id: '/_app/customers/new'
+      path: '/customers/new'
+      fullPath: '/customers/new'
+      preLoaderRoute: typeof AppCustomersNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/pricing/bulk-revision': {
+      id: '/_app/pricing/bulk-revision'
+      path: '/pricing/bulk-revision'
+      fullPath: '/pricing/bulk-revision'
+      preLoaderRoute: typeof AppPricingBulkRevisionRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/salesmen/': {
+      id: '/_app/salesmen/'
+      path: '/salesmen'
+      fullPath: '/salesmen/'
+      preLoaderRoute: typeof AppSalesmenIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/salesmen/$salesmanId': {
+      id: '/_app/salesmen/$salesmanId'
+      path: '/salesmen/$salesmanId'
+      fullPath: '/salesmen/$salesmanId'
+      preLoaderRoute: typeof AppSalesmenSalesmanIdRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/settings/': {
@@ -257,6 +441,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsUsersRouteImport
       parentRoute: typeof AppSettingsRoute
     }
+    '/_app/customers/edit/$customerId': {
+      id: '/_app/customers/edit/$customerId'
+      path: '/customers/edit/$customerId'
+      fullPath: '/customers/edit/$customerId'
+      preLoaderRoute: typeof AppCustomersEditCustomerIdRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
@@ -283,13 +474,33 @@ const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
+  AppCatalogueRoute: typeof AppCatalogueRoute
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
+  AppSuppliersRoute: typeof AppSuppliersRoute
+  AppTransportersRoute: typeof AppTransportersRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppCustomersCustomerIdRoute: typeof AppCustomersCustomerIdRoute
+  AppCustomersNewRoute: typeof AppCustomersNewRoute
+  AppPricingBulkRevisionRoute: typeof AppPricingBulkRevisionRoute
+  AppSalesmenSalesmanIdRoute: typeof AppSalesmenSalesmanIdRoute
+  AppCustomersIndexRoute: typeof AppCustomersIndexRoute
+  AppSalesmenIndexRoute: typeof AppSalesmenIndexRoute
+  AppCustomersEditCustomerIdRoute: typeof AppCustomersEditCustomerIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppCatalogueRoute: AppCatalogueRoute,
   AppSettingsRoute: AppSettingsRouteWithChildren,
+  AppSuppliersRoute: AppSuppliersRoute,
+  AppTransportersRoute: AppTransportersRoute,
   AppIndexRoute: AppIndexRoute,
+  AppCustomersCustomerIdRoute: AppCustomersCustomerIdRoute,
+  AppCustomersNewRoute: AppCustomersNewRoute,
+  AppPricingBulkRevisionRoute: AppPricingBulkRevisionRoute,
+  AppSalesmenSalesmanIdRoute: AppSalesmenSalesmanIdRoute,
+  AppCustomersIndexRoute: AppCustomersIndexRoute,
+  AppSalesmenIndexRoute: AppSalesmenIndexRoute,
+  AppCustomersEditCustomerIdRoute: AppCustomersEditCustomerIdRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)

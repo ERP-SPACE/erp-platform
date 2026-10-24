@@ -16,7 +16,11 @@ const envSchema = z.object({
   /** ADR-0023: "local" writes under STORAGE_DIR; "s3" arrives with Stage 7. */
   STORAGE_DRIVER: z.enum(["local"]).default("local"),
   STORAGE_DIR: z.string().min(1).default("../../.storage"),
-  UPLOAD_MAX_BYTES: z.coerce.number().int().positive().default(5 * 1024 * 1024),
+  UPLOAD_MAX_BYTES: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(5 * 1024 * 1024),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),
 });
 

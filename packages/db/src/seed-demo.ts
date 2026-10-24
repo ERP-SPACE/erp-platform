@@ -1,7 +1,13 @@
 import { gstinCheckChar } from "@erp/domain";
-import { and, eq, sql } from "drizzle-orm";
+import { hashPassword } from "better-auth/crypto";
+import { and, eq, inArray, sql } from "drizzle-orm";
+import { uuidv7 } from "uuidv7";
 import type { Db } from "./client.js";
 import {
+  account,
+  roles,
+  user,
+  userRoles,
   categories,
   commissionRules,
   companies,
@@ -22,6 +28,46 @@ import {
   transporters,
 } from "./schema/index.js";
 import type { PostalAddress } from "./schema/tenancy.js";
+
+/**
+ * Development-only sign-in for trying the masters screens without the Owner's authenticator:
+ * Admin + Sales Manager roles (no TOTP requirement). Created once; the password comes from
+ * DEMO_USER_PASSWORD in the gitignored .env.
+ */
+export async function seedDemoUser(
+  db: Db,
+  options: { email: string; password: string },
+): Promise<{ created: boolean }> {
+  return db.transaction(async (tx) => {
+    await tx.execute(sql`SELECT set_config('app.reason', 'Demo user', true)`);
+    const email = options.email.toLowerCase();
+    const [existing] = await tx.select({ id: user.id }).from(user).where(eq(user.email, email));
+    if (existing) return { created: false };
+    const company = (await tx.select().from(companies).where(eq(companies.code, "MAIN")))[0];
+    if (!company) throw new Error("Run the base seed (pnpm db:reset) first.");
+    const userId = uuidv7();
+    await tx.insert(user).values({
+      id: userId,
+      name: "Demo Manager",
+      email,
+      emailVerified: true,
+      companyId: company.id,
+    });
+    await tx.insert(account).values({
+      id: uuidv7(),
+      accountId: userId,
+      providerId: "credential",
+      userId,
+      password: await hashPassword(options.password),
+    });
+    const roleRows = await tx
+      .select({ id: roles.id })
+      .from(roles)
+      .where(and(eq(roles.companyId, company.id), inArray(roles.code, ["admin", "sales_manager"])));
+    await tx.insert(userRoles).values(roleRows.map((r) => ({ userId, roleId: r.id })));
+    return { created: true };
+  });
+}
 
 /**
  * Development-only demo data so the Stage 1 screens are not empty: a product × width grid,
@@ -216,7 +262,13 @@ export async function seedDemo(db: Db): Promise<{ skipped: boolean; customers: n
         blockedAt: i % 11 === 7 ? new Date() : null,
       });
       await tx.insert(customerContacts).values([
-        { customerId, name: `${pick(FIRST)} ${pick(LAST)}`, phone: phone(rand), role: "Owner", isPrimary: true },
+        {
+          customerId,
+          name: `${pick(FIRST)} ${pick(LAST)}`,
+          phone: phone(rand),
+          role: "Owner",
+          isPrimary: true,
+        },
         { customerId, name: `${pick(FIRST)} ${pick(LAST)}`, phone: phone(rand), role: "Accounts" },
       ]);
       if (rand() > 0.3) {
@@ -258,10 +310,54 @@ export async function seedDemo(db: Db): Promise<{ skipped: boolean; customers: n
   });
 }
 
-const FIRST = ["Rakesh", "Priya", "Hitesh", "Neha", "Vipul", "Kiran", "Manish", "Dipti", "Arjun", "Sonal"];
-const LAST = ["Patel", "Shah", "Desai", "Mehta", "Joshi", "Modi", "Agarwal", "Iyer", "Gupta", "Kapadia"];
-const PREFIX = ["Shiv", "Laxmi", "Krishna", "Riddhi", "Siddhi", "Om", "Jay", "Navkar", "Param", "Sai", "Ganesh", "Vraj"];
-const SUFFIX = ["Prints", "Digital", "Fab Print", "Textiles", "Graphics", "Sublimation", "Creations", "Impex"];
+const FIRST = [
+  "Rakesh",
+  "Priya",
+  "Hitesh",
+  "Neha",
+  "Vipul",
+  "Kiran",
+  "Manish",
+  "Dipti",
+  "Arjun",
+  "Sonal",
+];
+const LAST = [
+  "Patel",
+  "Shah",
+  "Desai",
+  "Mehta",
+  "Joshi",
+  "Modi",
+  "Agarwal",
+  "Iyer",
+  "Gupta",
+  "Kapadia",
+];
+const PREFIX = [
+  "Shiv",
+  "Laxmi",
+  "Krishna",
+  "Riddhi",
+  "Siddhi",
+  "Om",
+  "Jay",
+  "Navkar",
+  "Param",
+  "Sai",
+  "Ganesh",
+  "Vraj",
+];
+const SUFFIX = [
+  "Prints",
+  "Digital",
+  "Fab Print",
+  "Textiles",
+  "Graphics",
+  "Sublimation",
+  "Creations",
+  "Impex",
+];
 const CITIES: Record<string, [string, string, string]> = {
   "24": ["Surat", "Gujarat", "3950"],
   "27": ["Bhiwandi", "Maharashtra", "4213"],

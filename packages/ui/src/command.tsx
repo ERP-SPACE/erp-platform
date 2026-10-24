@@ -20,11 +20,16 @@ export function CommandPalette({
   onOpenChange,
   items,
   placeholder = "Go to, create, or find…",
+  query,
+  onQueryChange,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   items: CommandItem[];
   placeholder?: string;
+  /** Controlled search text, e.g. to fetch matching records from the server as you type. */
+  query?: string;
+  onQueryChange?: (query: string) => void;
 }) {
   const groups = [...new Set(items.map((i) => i.group))];
   return (
@@ -37,6 +42,7 @@ export function CommandPalette({
           <Command loop label="Command palette">
             <Command.Input
               autoFocus
+              {...(onQueryChange ? { value: query ?? "", onValueChange: onQueryChange } : {})}
               placeholder={placeholder}
               className="h-12 w-full border-b border-border bg-transparent px-4 text-base text-fg outline-none placeholder:text-fg-3"
             />

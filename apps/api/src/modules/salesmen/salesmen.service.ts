@@ -180,7 +180,14 @@ export class SalesmenService {
   /** Block mode None / All / Selective (enforced on new DC/SI in Stage 3). */
   async setBlock(id: string, dto: SalesmanBlockDto): Promise<SalesmanDetail> {
     await this.uow.run(async (tx) => {
-      await updateVersioned(tx, salesmen, this.own(id), dto.version, { blockMode: dto.blockMode }, "Salesman");
+      await updateVersioned(
+        tx,
+        salesmen,
+        this.own(id),
+        dto.version,
+        { blockMode: dto.blockMode },
+        "Salesman",
+      );
       await tx.delete(salesmanBlockedCustomers).where(eq(salesmanBlockedCustomers.salesmanId, id));
       const customerIds = dto.blockMode === "Selective" ? [...new Set(dto.customerIds)] : [];
       if (dto.blockMode === "Selective" && customerIds.length === 0) {
@@ -192,7 +199,9 @@ export class SalesmenService {
         const found = await tx
           .select({ id: customers.id })
           .from(customers)
-          .where(and(eq(customers.companyId, actor().companyId), inArray(customers.id, customerIds)));
+          .where(
+            and(eq(customers.companyId, actor().companyId), inArray(customers.id, customerIds)),
+          );
         if (found.length !== customerIds.length) throw notFound("Customer");
         await tx
           .insert(salesmanBlockedCustomers)
@@ -321,7 +330,9 @@ export class SalesmenService {
     }
   }
 
-  async openKyc(docId: string): Promise<{ stream: Readable; size: number; fileName: string; contentType: string }> {
+  async openKyc(
+    docId: string,
+  ): Promise<{ stream: Readable; size: number; fileName: string; contentType: string }> {
     const doc = await this.findKyc(this.uow.db, docId);
     const file = await this.storage.open(doc.storageKey);
     return { ...file, fileName: doc.fileName, contentType: doc.contentType };

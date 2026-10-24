@@ -27,7 +27,10 @@ type RateRow = typeof partyRates.$inferSelect;
 
 /** Rate rows in effect on `date`: started on or before it and not closed before it. */
 const effectiveOn = (date: string) =>
-  and(lte(partyRates.validFrom, date), or(isNull(partyRates.validTo), gte(partyRates.validTo, date)))!;
+  and(
+    lte(partyRates.validFrom, date),
+    or(isNull(partyRates.validTo), gte(partyRates.validTo, date)),
+  )!;
 
 /**
  * Customer rates per metre at 44″ (ADR-0013) with validity ranges. Ranges never overlap —
@@ -115,7 +118,15 @@ export class PricingService {
               version: sql`${partyRates.version} + 1`,
             })
             .where(eq(partyRates.id, previous.id));
-          await this.writeHistory(tx, customerId, dto.productId, previous.baseRate44, dto.baseRate44, dto.validFrom, "manual");
+          await this.writeHistory(
+            tx,
+            customerId,
+            dto.productId,
+            previous.baseRate44,
+            dto.baseRate44,
+            dto.validFrom,
+            "manual",
+          );
           this.bus.publishAfterCommit("customers.changed", { id: customerId });
           return;
         }
@@ -142,7 +153,15 @@ export class PricingService {
         createdBy: actor().userId,
         updatedBy: actor().userId,
       });
-      await this.writeHistory(tx, customerId, dto.productId, previous?.baseRate44 ?? null, dto.baseRate44, dto.validFrom, "manual");
+      await this.writeHistory(
+        tx,
+        customerId,
+        dto.productId,
+        previous?.baseRate44 ?? null,
+        dto.baseRate44,
+        dto.validFrom,
+        "manual",
+      );
       this.bus.publishAfterCommit("customers.changed", { id: customerId });
     });
     return this.listRates(customerId);
@@ -179,7 +198,10 @@ export class PricingService {
 
   async previewBulk(dto: BulkRevisionDto) {
     const rows = await this.bulkRows(this.uow.db, dto, false);
-    return { rows: rows.map((r) => r.row), customers: new Set(rows.map((r) => r.row.customerId)).size };
+    return {
+      rows: rows.map((r) => r.row),
+      customers: new Set(rows.map((r) => r.row.customerId)).size,
+    };
   }
 
   /** One transaction: close running ranges, insert revised ones, write history; all or nothing. */
@@ -279,23 +301,25 @@ export class PricingService {
       db,
       rows.map((r) => r.rate.productId),
     );
-    return rows
-      .map(({ rate, customerName }) => {
-        const next = reviseRate(rate.baseRate44, { mode: dto.mode, value: dto.value }, decimals);
-        return {
-          rate,
-          row: {
-            customerId: rate.customerId,
-            customerName,
-            productId: rate.productId,
-            productName: names.get(rate.productId)?.name ?? "",
-            oldRate44: trimDecimal(rate.baseRate44),
-            newRate44: next.toFixed(decimals),
-          },
-        };
-      })
-      // A change that rounds to the same rate is not a revision.
-      .filter((r) => trimDecimal(r.row.newRate44) !== r.row.oldRate44);
+    return (
+      rows
+        .map(({ rate, customerName }) => {
+          const next = reviseRate(rate.baseRate44, { mode: dto.mode, value: dto.value }, decimals);
+          return {
+            rate,
+            row: {
+              customerId: rate.customerId,
+              customerName,
+              productId: rate.productId,
+              productName: names.get(rate.productId)?.name ?? "",
+              oldRate44: trimDecimal(rate.baseRate44),
+              newRate44: next.toFixed(decimals),
+            },
+          };
+        })
+        // A change that rounds to the same rate is not a revision.
+        .filter((r) => trimDecimal(r.row.newRate44) !== r.row.oldRate44)
+    );
   }
 
   private async writeHistory(

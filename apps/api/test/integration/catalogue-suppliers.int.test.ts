@@ -79,7 +79,13 @@ describe("catalogue (PRD §5.1)", () => {
     const res = await owner.request({
       method: "POST",
       url: "/api/catalogue/products",
-      payload: { categoryId: sub.id, qualityId: premiumId, gsm: 45, defaultLengthM: 1000, widthsIn: [44, 36] },
+      payload: {
+        categoryId: sub.id,
+        qualityId: premiumId,
+        gsm: 45,
+        defaultLengthM: 1000,
+        widthsIn: [44, 36],
+      },
     });
     expect(res.statusCode).toBe(201);
     product = json<Product>(res);
@@ -94,7 +100,13 @@ describe("catalogue (PRD §5.1)", () => {
     const res = await owner.request({
       method: "POST",
       url: "/api/catalogue/products",
-      payload: { categoryId: sub.id, qualityId: premiumId, gsm: 47, defaultLengthM: 1200, widthsIn: [50] },
+      payload: {
+        categoryId: sub.id,
+        qualityId: premiumId,
+        gsm: 47,
+        defaultLengthM: 1200,
+        widthsIn: [50],
+      },
     });
     expect(res.statusCode).toBe(400);
     const paths = json<{ issues: { path: string }[] }>(res).issues.map((i) => i.path);
@@ -151,7 +163,9 @@ describe("suppliers & transporters (PRD §5.4)", () => {
   });
 
   it("allocates SUP-0001…, derives PAN and a unique barcode short code", async () => {
-    const first = json(await owner.request({ method: "POST", url: "/api/suppliers", payload: supplier() }));
+    const first = json(
+      await owner.request({ method: "POST", url: "/api/suppliers", payload: supplier() }),
+    );
     expect(first).toMatchObject({ code: "SUP-0001", shortCode: "SAP", pan: "AAACS1234K" });
 
     const second = json(

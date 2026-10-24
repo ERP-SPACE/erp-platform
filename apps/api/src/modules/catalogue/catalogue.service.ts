@@ -308,7 +308,8 @@ export class CatalogueService {
         });
       }
     }
-    if (issues.length) throw validationError("Some values aren't in the catalogue settings.", issues);
+    if (issues.length)
+      throw validationError("Some values aren't in the catalogue settings.", issues);
   }
 
   private async loadProducts(db: UnitOfWork["db"], where: ReturnType<typeof and>) {
@@ -340,21 +341,19 @@ export class CatalogueService {
       list.push(toSkuItem(s));
       byProduct.set(s.productId, list);
     }
-    return rows.map(
-      (r): ProductItem => ({
-        id: r.product.id,
-        categoryId: r.product.categoryId,
-        categoryName: r.categoryName,
-        qualityId: r.product.qualityId,
-        qualityName: r.qualityName,
-        gsm: r.product.gsm,
-        name: productName(r.categoryName, r.qualityName, r.product.gsm),
-        defaultLengthM: r.product.defaultLengthM,
-        active: r.product.active,
-        version: r.product.version,
-        skus: byProduct.get(r.product.id) ?? [],
-      }),
-    );
+    return rows.map((r): ProductItem => ({
+      id: r.product.id,
+      categoryId: r.product.categoryId,
+      categoryName: r.categoryName,
+      qualityId: r.product.qualityId,
+      qualityName: r.qualityName,
+      gsm: r.product.gsm,
+      name: productName(r.categoryName, r.qualityName, r.product.gsm),
+      defaultLengthM: r.product.defaultLengthM,
+      active: r.product.active,
+      version: r.product.version,
+      skus: byProduct.get(r.product.id) ?? [],
+    }));
   }
 
   private ownCategory(id: string) {

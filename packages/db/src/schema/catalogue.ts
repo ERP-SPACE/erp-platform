@@ -35,7 +35,10 @@ export const categories = pgTable(
   },
   (t) => [
     uniqueIndex("categories_company_code_uq").on(t.companyId, t.code),
-    check("categories_hsn_ck", sql`${t.hsnCode} IS NULL OR ${t.hsnCode} ~ '^[0-9]{4}([0-9]{2}){0,2}$'`),
+    check(
+      "categories_hsn_ck",
+      sql`${t.hsnCode} IS NULL OR ${t.hsnCode} ~ '^[0-9]{4}([0-9]{2}){0,2}$'`,
+    ),
   ],
 );
 
@@ -47,7 +50,10 @@ export const qualities = pgTable(
       .notNull()
       .references(() => companies.id),
     name: text("name").notNull(),
-    aliases: text("aliases").array().notNull().default(sql`'{}'::text[]`),
+    aliases: text("aliases")
+      .array()
+      .notNull()
+      .default(sql`'{}'::text[]`),
     active: boolean("active").notNull().default(true),
     ...audited,
   },

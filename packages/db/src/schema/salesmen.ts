@@ -22,7 +22,10 @@ import { type PostalAddress, companies } from "./tenancy.js";
 
 export const salesmanBlockMode = pgEnum("salesman_block_mode", ["None", "All", "Selective"]);
 export const commissionMethod = pgEnum("commission_method", ["PER_METER", "PERCENT_SALES"]);
-export const commissionTrigger = pgEnum("commission_trigger", ["ON_SI_POSTED", "ON_PAYMENT_RECEIVED"]);
+export const commissionTrigger = pgEnum("commission_trigger", [
+  "ON_SI_POSTED",
+  "ON_PAYMENT_RECEIVED",
+]);
 
 /** Salesman / broker master (PRD §5.6). Records only — salesmen do not log in (Q10). */
 export const salesmen = pgTable(
@@ -63,7 +66,10 @@ export const salesmanDefaultRates = pgTable(
       .references(() => products.id),
     baseRate44: numeric("base_rate_44", { precision: 12, scale: 4 }).notNull(),
   },
-  (t) => [primaryKey({ columns: [t.salesmanId, t.productId] }), check("salesman_default_rates_ck", sql`${t.baseRate44} >= 0`)],
+  (t) => [
+    primaryKey({ columns: [t.salesmanId, t.productId] }),
+    check("salesman_default_rates_ck", sql`${t.baseRate44} >= 0`),
+  ],
 );
 
 export const salesmanBlockedCustomers = pgTable(

@@ -47,7 +47,9 @@ export const suppliers = pgTable(
   (t) => [
     uniqueIndex("suppliers_company_code_uq").on(t.companyId, t.code),
     uniqueIndex("suppliers_company_short_code_uq").on(t.companyId, t.shortCode),
-    uniqueIndex("suppliers_company_gstin_uq").on(t.companyId, t.gstin).where(sql`${t.gstin} IS NOT NULL`),
+    uniqueIndex("suppliers_company_gstin_uq")
+      .on(t.companyId, t.gstin)
+      .where(sql`${t.gstin} IS NOT NULL`),
   ],
 );
 
@@ -124,7 +126,9 @@ export const customers = pgTable(
   },
   (t) => [
     uniqueIndex("customers_company_code_uq").on(t.companyId, t.code),
-    uniqueIndex("customers_company_gstin_uq").on(t.companyId, t.gstin).where(sql`${t.gstin} IS NOT NULL`),
+    uniqueIndex("customers_company_gstin_uq")
+      .on(t.companyId, t.gstin)
+      .where(sql`${t.gstin} IS NOT NULL`),
     index("customers_salesman_idx").on(t.salesmanId),
     check(
       "customers_gstin_required_ck",
@@ -150,7 +154,9 @@ export const customerContacts = pgTable(
   (t) => [
     index("customer_contacts_customer_idx").on(t.customerId),
     // Exactly one primary per customer (ported from legacy sanitizeContactPersons).
-    uniqueIndex("customer_contacts_one_primary_uq").on(t.customerId).where(sql`${t.isPrimary}`),
+    uniqueIndex("customer_contacts_one_primary_uq")
+      .on(t.customerId)
+      .where(sql`${t.isPrimary}`),
   ],
 );
 
@@ -169,7 +175,9 @@ export const customerShippingAddresses = pgTable(
   },
   (t) => [
     index("customer_shipping_customer_idx").on(t.customerId),
-    uniqueIndex("customer_shipping_one_default_uq").on(t.customerId).where(sql`${t.isDefault}`),
+    uniqueIndex("customer_shipping_one_default_uq")
+      .on(t.customerId)
+      .where(sql`${t.isDefault}`),
   ],
 );
 

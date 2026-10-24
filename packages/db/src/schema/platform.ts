@@ -103,7 +103,7 @@ export const masterSequences = pgTable(
   (t) => [primaryKey({ columns: [t.companyId, t.entity] })],
 );
 
-export const notificationChannel =pgEnum("notification_channel", ["in_app", "email", "whatsapp"]);
+export const notificationChannel = pgEnum("notification_channel", ["in_app", "email", "whatsapp"]);
 export const notificationStatus = pgEnum("notification_status", [
   "pending",
   "sent",

@@ -285,7 +285,12 @@ export class CustomersService {
         eq(creditPolicies.customerId, id),
         dto.version,
         dto.blocked
-          ? { manualBlock: true, blockReason: reason, blockedAt: new Date(), blockedBy: actor().userId }
+          ? {
+              manualBlock: true,
+              blockReason: reason,
+              blockedAt: new Date(),
+              blockedBy: actor().userId,
+            }
           : { manualBlock: false, blockReason: null, blockedAt: null, blockedBy: null },
         "Credit policy",
       );
@@ -430,7 +435,10 @@ export class CustomersService {
         .select()
         .from(customerShippingAddresses)
         .where(eq(customerShippingAddresses.customerId, id))
-        .orderBy(sql`${customerShippingAddresses.isDefault} DESC`, asc(customerShippingAddresses.label)),
+        .orderBy(
+          sql`${customerShippingAddresses.isDefault} DESC`,
+          asc(customerShippingAddresses.label),
+        ),
       this.groupsFor(db, [id]),
     ]);
     const c = row.customer;

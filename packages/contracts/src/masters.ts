@@ -366,7 +366,9 @@ export const customerDefaults = z.object({
   creditPolicy: creditPolicyInput,
   /** Where each credit value came from: the salesman's defaults or the `credit.defaults` setting. */
   creditSource: z.enum(["salesman", "settings"]),
-  rates: z.array(z.object({ productId: z.string(), productName: z.string(), baseRate44: z.string() })),
+  rates: z.array(
+    z.object({ productId: z.string(), productName: z.string(), baseRate44: z.string() }),
+  ),
 });
 export type CustomerDefaults = z.infer<typeof customerDefaults>;
 

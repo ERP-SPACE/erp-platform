@@ -1,4 +1,4 @@
-import { fyLabel, istToday } from "@erp/domain";
+import { formatINRCompact, fyLabel, istToday } from "@erp/domain";
 import { ActivityFeed, Badge, Button, Card, EmptyState, Mono, PageHeader, StatCard } from "@erp/ui";
 import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
@@ -12,6 +12,7 @@ import {
   Warehouse,
 } from "lucide-react";
 import { dateTime, greeting, longDate } from "../../lib/format.js";
+import { dashboardQuery } from "../../lib/masters.js";
 import { auditQuery, can, meQuery, seriesQuery } from "../../lib/queries.js";
 
 export const Route = createFileRoute("/_app/")({ component: DashboardPage });
@@ -24,12 +25,22 @@ const TABLE_LABELS: Record<string, string> = {
   user_roles: "role assignments",
   role_permissions: "permissions",
   roles: "a role",
+  customers: "a customer",
+  credit_policies: "a credit policy",
+  party_rates: "customer rates",
+  suppliers: "a supplier",
+  transporters: "a transporter",
+  salesmen: "a salesman",
+  categories: "a catalogue category",
+  products: "a product",
+  skus: "a SKU",
 };
 
 function DashboardPage() {
   const { data: me } = useQuery(meQuery);
   const series = useQuery({ ...seriesQuery, enabled: can(me, "settings.series.view") });
   const audit = useQuery({ ...auditQuery({}), enabled: can(me, "audit.view") });
+  const summary = useQuery(dashboardQuery).data;
   if (!me) return null;
 
   const firstName = me.user.name.split(" ")[0];
@@ -55,8 +66,18 @@ function DashboardPage() {
       done: seriesReviewed,
       to: "/settings/series",
     },
-    { id: "hsn", label: "Add HSN codes to catalogue categories", done: false, to: undefined },
-    { id: "customer", label: "Add your first customer", done: false, to: undefined },
+    {
+      id: "hsn",
+      label: "Add HSN codes to catalogue categories",
+      done: summary ? summary.categoriesMissingTax === 0 : false,
+      to: "/catalogue",
+    },
+    {
+      id: "customer",
+      label: "Add your first customer",
+      done: (summary?.activeCustomers ?? 0) > 0,
+      to: "/customers/new",
+    },
   ];
   const doneCount = checklist.filter((c) => c.done).length;
 
@@ -85,13 +106,11 @@ function DashboardPage() {
         description={`${longDate()} · Financial year ${fyLabel(istToday())}`}
         actions={
           <>
-            <Button
-              variant="secondary"
-              disabled
-              title="Available once Customers are live (Stage 1)"
-            >
-              Add customer
-            </Button>
+            {can(me, "customers.manage") ? (
+              <Button asChild variant="secondary">
+                <Link to="/customers/new">Add customer</Link>
+              </Button>
+            ) : null}
             <Button variant="primary" disabled title="Available in Stage 3">
               New sales order
             </Button>
@@ -102,18 +121,34 @@ function DashboardPage() {
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard
           label="Active customers"
-          value="0"
+          value={fmt(summary?.activeCustomers)}
           icon={Users}
-          hint="Customers arrive with Masters"
+          hint={
+            summary ? `${formatINRCompact(summary.totalCreditLimit)} total credit limit` : undefined
+          }
         />
         <StatCard
           label="Suppliers"
-          value="0"
+          value={fmt(summary?.suppliers)}
           icon={Warehouse}
-          hint="Add suppliers to start purchasing"
+          hint="Active suppliers"
         />
-        <StatCard label="Catalogue SKUs" value="0" icon={Package} hint="GSM × quality × width" />
-        <StatCard label="Credit-blocked" value="0" icon={ShieldAlert} hint="Customers on hold" />
+        <StatCard
+          label="Catalogue SKUs"
+          value={fmt(summary?.skus)}
+          icon={Package}
+          hint={
+            summary?.categoriesMissingTax
+              ? `${summary.categoriesMissingTax} categories need HSN`
+              : "GSM × quality × width"
+          }
+        />
+        <StatCard
+          label="Credit-blocked"
+          value={fmt(summary?.blockedCustomers)}
+          icon={ShieldAlert}
+          hint="Customers on hold"
+        />
       </div>
 
       <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
@@ -159,7 +194,7 @@ function DashboardPage() {
                   </Button>
                 ) : !item.done ? (
                   <Badge tone="neutral" dot={false}>
-                    Coming in Stage 1
+                    Coming soon
                   </Badge>
                 ) : null}
               </li>
@@ -230,3 +265,5 @@ function DashboardPage() {
     </div>
   );
 }
+
+const fmt = (n: number | undefined) => (n === undefined ? "—" : n.toLocaleString("en-IN"));

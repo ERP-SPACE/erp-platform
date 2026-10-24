@@ -14,7 +14,8 @@ import {
   cn,
   useHotkeys,
 } from "@erp/ui";
-import { useQueryClient } from "@tanstack/react-query";
+import type { SearchResult } from "@erp/contracts";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   BarChart3,
@@ -38,7 +39,8 @@ import {
   Warehouse,
   X,
 } from "lucide-react";
-import { type ReactNode, useMemo, useState } from "react";
+import { type ReactNode, useDeferredValue, useMemo, useState } from "react";
+import { api, call } from "../lib/api.js";
 import { authClient } from "../lib/auth.js";
 import { type Density, type Theme, setPrefs, usePrefs } from "../lib/prefs.js";
 import { can } from "../lib/queries.js";
@@ -59,11 +61,11 @@ const NAV: { heading?: string; items: NavItem[] }[] = [
   {
     heading: "Masters",
     items: [
-      { label: "Catalogue", icon: Package, stage: 1 },
-      { label: "Customers", icon: Users, stage: 1 },
-      { label: "Suppliers", icon: Warehouse, stage: 1 },
-      { label: "Transporters", icon: Truck, stage: 1 },
-      { label: "Salesmen", icon: UserCog, stage: 1 },
+      { label: "Catalogue", icon: Package, to: "/catalogue", permission: "catalogue.view" },
+      { label: "Customers", icon: Users, to: "/customers", permission: "customers.view" },
+      { label: "Suppliers", icon: Warehouse, to: "/suppliers", permission: "suppliers.view" },
+      { label: "Transporters", icon: Truck, to: "/transporters", permission: "transporters.view" },
+      { label: "Salesmen", icon: UserCog, to: "/salesmen", permission: "salesmen.view" },
     ],
   },
   {
@@ -97,6 +99,30 @@ export function Shell({ me, children }: { me: MeResponse; children: ReactNode })
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const sync = useRealtime(true);
+  const [query, setQuery] = useState("");
+  const deferredQuery = useDeferredValue(query.trim());
+  const search = useQuery({
+    queryKey: ["search", deferredQuery],
+    queryFn: () =>
+      call<{ results: SearchResult[] }>(() =>
+        api.GET("/api/search", { params: { query: { q: deferredQuery } } }),
+      ),
+    enabled: paletteOpen && deferredQuery.length >= 2,
+    staleTime: 30_000,
+  });
+  const records = useMemo<CommandItem[]>(
+    () =>
+      (search.data?.results ?? []).map((r) => ({
+        id: `:`,
+        group: RECORD_GROUPS[r.type],
+        label: r.title,
+        hint: r.subtitle ?? undefined,
+        // The server already matched; include the query so the palette keeps the row.
+        keywords: [deferredQuery, r.subtitle ?? ""],
+        onRun: () => void navigate(recordLink(r)),
+      })),
+    [search.data, deferredQuery, navigate],
+  );
 
   const signOut = async () => {
     await authClient.signOut();
@@ -109,6 +135,34 @@ export function Shell({ me, children }: { me: MeResponse; children: ReactNode })
     const items: CommandItem[] = [
       { id: "dashboard", group: "Go to", label: "Dashboard", onRun: go("/") },
     ];
+    for (const page of MASTER_PAGES) {
+      if (can(me, page.permission))
+        items.push({
+          id: page.to,
+          group: "Go to",
+          label: page.label,
+          keywords: page.keywords,
+          onRun: go(page.to),
+        });
+    }
+    if (can(me, "customers.manage")) {
+      items.push({
+        id: "new-customer",
+        group: "Create",
+        label: "New customer",
+        shortcut: "Alt N",
+        onRun: go("/customers/new"),
+      });
+    }
+    if (can(me, "rates.bulk_revise")) {
+      items.push({
+        id: "bulk-revision",
+        group: "Create",
+        label: "Bulk rate revision",
+        keywords: ["price", "increase"],
+        onRun: go("/pricing/bulk-revision"),
+      });
+    }
     if (can(me, "settings.view")) {
       items.push(
         {
@@ -261,7 +315,16 @@ export function Shell({ me, children }: { me: MeResponse; children: ReactNode })
         </main>
       </div>
 
-      <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} items={commands} />
+      <CommandPalette
+        open={paletteOpen}
+        onOpenChange={(open) => {
+          setPaletteOpen(open);
+          if (!open) setQuery("");
+        }}
+        items={[...commands, ...records]}
+        query={query}
+        onQueryChange={setQuery}
+      />
       <ShortcutOverlay open={shortcutsOpen} onOpenChange={setShortcutsOpen} shortcuts={SHORTCUTS} />
     </div>
   );
@@ -506,4 +569,60 @@ function UserMenu({
       items={["separator", { label: "Sign out", icon: LogOut, onSelect: onSignOut }]}
     />
   );
+}
+
+const MASTER_PAGES = [
+  {
+    to: "/customers",
+    label: "Customers",
+    permission: "customers.view",
+    keywords: ["party", "buyer"],
+  },
+  {
+    to: "/catalogue",
+    label: "Catalogue",
+    permission: "catalogue.view",
+    keywords: ["products", "sku", "gsm", "hsn"],
+  },
+  {
+    to: "/suppliers",
+    label: "Suppliers",
+    permission: "suppliers.view",
+    keywords: ["mill", "vendor"],
+  },
+  {
+    to: "/transporters",
+    label: "Transporters",
+    permission: "transporters.view",
+    keywords: ["carrier", "courier"],
+  },
+  {
+    to: "/salesmen",
+    label: "Salesmen",
+    permission: "salesmen.view",
+    keywords: ["broker", "agent", "commission"],
+  },
+];
+
+const RECORD_GROUPS: Record<SearchResult["type"], string> = {
+  customer: "Customers",
+  supplier: "Suppliers",
+  transporter: "Transporters",
+  salesman: "Salesmen",
+  product: "Products",
+};
+
+function recordLink(r: SearchResult) {
+  switch (r.type) {
+    case "customer":
+      return { to: "/customers/$customerId", params: { customerId: r.id } } as const;
+    case "salesman":
+      return { to: "/salesmen/$salesmanId", params: { salesmanId: r.id } } as const;
+    case "supplier":
+      return { to: "/suppliers", search: { id: r.id } } as const;
+    case "transporter":
+      return { to: "/transporters", search: { id: r.id } } as const;
+    case "product":
+      return { to: "/catalogue", search: { product: r.id } } as const;
+  }
 }

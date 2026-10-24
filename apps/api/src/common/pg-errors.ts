@@ -9,13 +9,19 @@ interface PgError {
 
 /** Friendly messages for the constraints users can actually hit (field path → message). */
 const CONSTRAINTS: Record<string, { path: string; message: string }> = {
-  categories_company_code_uq: { path: "code", message: "A category with this code already exists." },
+  categories_company_code_uq: {
+    path: "code",
+    message: "A category with this code already exists.",
+  },
   qualities_company_name_uq: { path: "name", message: "A quality with this name already exists." },
   products_unique_triple_uq: {
     path: "gsm",
     message: "This category already has a product with this quality and GSM.",
   },
-  skus_product_width_uq: { path: "widthsIn", message: "This product already has a SKU at that width." },
+  skus_product_width_uq: {
+    path: "widthsIn",
+    message: "This product already has a SKU at that width.",
+  },
   skus_company_code_uq: { path: "code", message: "A SKU with this code already exists." },
   suppliers_company_short_code_uq: {
     path: "shortCode",
@@ -23,7 +29,10 @@ const CONSTRAINTS: Record<string, { path: string; message: string }> = {
   },
   suppliers_company_gstin_uq: { path: "gstin", message: "Another supplier has this GSTIN." },
   customers_company_gstin_uq: { path: "gstin", message: "Another customer has this GSTIN." },
-  customer_contacts_one_primary_uq: { path: "contacts", message: "Only one contact can be primary." },
+  customer_contacts_one_primary_uq: {
+    path: "contacts",
+    message: "Only one contact can be primary.",
+  },
   customer_shipping_one_default_uq: {
     path: "shippingAddresses",
     message: "Only one shipping address can be the default.",

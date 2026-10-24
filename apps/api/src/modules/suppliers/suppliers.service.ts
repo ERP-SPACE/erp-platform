@@ -41,7 +41,12 @@ export function shortCodeCandidates(name: string): string[] {
   const push = (c: string) => {
     if (/^[A-Z0-9]{3}$/.test(c) && !out.includes(c)) out.push(c);
   };
-  push(words.map((w) => w[0]).join("").slice(0, 3));
+  push(
+    words
+      .map((w) => w[0])
+      .join("")
+      .slice(0, 3),
+  );
   if (words.length >= 2) push(`${words[0]!.slice(0, 2)}${words[1]![0]}`);
   push(letters.slice(0, 3));
   const consonants = letters.replace(/[AEIOU]/g, "");
