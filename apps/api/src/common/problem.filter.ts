@@ -1,4 +1,9 @@
-import { InvalidAmountError, InvalidSeriesError, InvalidTransitionError } from "@erp/domain";
+import {
+  InvalidAmountError,
+  InvalidPricingError,
+  InvalidSeriesError,
+  InvalidTransitionError,
+} from "@erp/domain";
 import type { ErrorCode, Problem } from "@erp/contracts";
 import {
   type ArgumentsHost,
@@ -64,6 +69,7 @@ export class ProblemFilter implements ExceptionFilter {
     if (e instanceof InvalidTransitionError) return make(422, e.code, e.message);
     if (e instanceof InvalidSeriesError) return make(400, e.code, e.message);
     if (e instanceof InvalidAmountError) return make(400, e.code, e.message);
+    if (e instanceof InvalidPricingError) return make(400, e.code, e.message);
     if (e instanceof HttpException) {
       const status = e.getStatus();
       return make(status, STATUS_CODES[status] ?? "INTERNAL_ERROR", e.message);

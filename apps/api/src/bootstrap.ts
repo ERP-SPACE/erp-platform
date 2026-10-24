@@ -2,6 +2,7 @@ import "reflect-metadata";
 import type { IncomingMessage } from "node:http";
 import cookie from "@fastify/cookie";
 import helmet from "@fastify/helmet";
+import multipart from "@fastify/multipart";
 import rateLimit from "@fastify/rate-limit";
 import { NestFactory } from "@nestjs/core";
 import { FastifyAdapter, type NestFastifyApplication } from "@nestjs/platform-fastify";
@@ -45,6 +46,10 @@ export async function createApp(
   await app.register(helmet, { contentSecurityPolicy: false }); // API serves JSON only
   await app.register(cookie);
   await app.register(rateLimit, { global: false });
+  // File uploads (ADR-0023): one file per request, size capped; type is checked by magic bytes.
+  await app.register(multipart, {
+    limits: { fileSize: env.UPLOAD_MAX_BYTES, files: 1, fields: 5, fieldSize: 1000 },
+  });
   registerAuthRoutes(app.getHttpAdapter().getInstance(), app.get<Auth>(AUTH), env.WEB_ORIGIN);
   return app;
 }

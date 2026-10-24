@@ -361,6 +361,19 @@ export const customerListQuery = listQuery.extend({
   blocked: z.enum(["true", "false"]).optional(),
 });
 
+/** What a new customer gets when created now (gate: salesman defaults pre-fill the form). */
+export const customerDefaults = z.object({
+  creditPolicy: creditPolicyInput,
+  /** Where each credit value came from: the salesman's defaults or the `credit.defaults` setting. */
+  creditSource: z.enum(["salesman", "settings"]),
+  rates: z.array(z.object({ productId: z.string(), productName: z.string(), baseRate44: z.string() })),
+});
+export type CustomerDefaults = z.infer<typeof customerDefaults>;
+
+export const creditPolicyUpdate = creditPolicyInput.extend({
+  version: z.number().int().positive(),
+});
+
 export const blockCustomerInput = z.object({
   blocked: z.boolean(),
   version: z.number().int().positive(),

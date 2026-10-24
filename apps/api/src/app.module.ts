@@ -21,6 +21,10 @@ import { SeriesModule } from "./modules/series/series.module.js";
 import { SettingsModule } from "./modules/settings/settings.module.js";
 import { CatalogueModule } from "./modules/catalogue/catalogue.module.js";
 import { SuppliersModule } from "./modules/suppliers/suppliers.module.js";
+import { CustomersModule } from "./modules/customers/customers.module.js";
+import { PricingModule } from "./modules/pricing/pricing.module.js";
+import { SalesmenModule } from "./modules/salesmen/salesmen.module.js";
+import { SearchModule } from "./modules/search/search.module.js";
 import { StorageModule } from "./storage/storage.module.js";
 import { RedisModule } from "./redis/redis.module.js";
 
@@ -70,6 +74,10 @@ export class AppModule implements NestModule {
         StorageModule,
         CatalogueModule,
         SuppliersModule,
+        CustomersModule,
+        PricingModule,
+        SalesmenModule,
+        SearchModule,
       ],
       controllers: [HealthController],
       providers: [

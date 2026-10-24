@@ -3,6 +3,7 @@ import { type Tx, categories, products, qualities, skus } from "@erp/db";
 import { Injectable } from "@nestjs/common";
 import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { actor } from "../../common/context.js";
+import { trimDecimal } from "../../common/decimal.js";
 import { notFound, validationError } from "../../common/errors.js";
 import { UnitOfWork } from "../../db/unit-of-work.js";
 import { updateVersioned } from "../../db/versioning.js";
@@ -22,11 +23,36 @@ import type {
 
 /** "44.00" → "44", "44.50" → "44.5" — widths print without trailing zeros. */
 export function formatWidth(width: string | number): string {
-  return String(Number(width));
+  return typeof width === "number" ? String(width) : trimDecimal(width);
 }
 
 export function productName(category: string, quality: string, gsm: number): string {
   return `${category} ${quality} ${gsm} GSM`;
+}
+
+/** Display names (and category names) for a set of product ids. */
+export async function loadProductNames(
+  db: UnitOfWork["db"] | Tx,
+  ids: string[],
+): Promise<Map<string, { name: string; categoryName: string }>> {
+  if (ids.length === 0) return new Map();
+  const rows = await db
+    .select({
+      id: products.id,
+      gsm: products.gsm,
+      categoryName: categories.name,
+      qualityName: qualities.name,
+    })
+    .from(products)
+    .innerJoin(categories, eq(categories.id, products.categoryId))
+    .innerJoin(qualities, eq(qualities.id, products.qualityId))
+    .where(inArray(products.id, [...new Set(ids)]));
+  return new Map(
+    rows.map((r) => [
+      r.id,
+      { name: productName(r.categoryName, r.qualityName, r.gsm), categoryName: r.categoryName },
+    ]),
+  );
 }
 
 /**
@@ -350,7 +376,7 @@ function toCategoryItem(
     code: c.code,
     name: c.name,
     hsnCode: c.hsnCode,
-    gstRate: c.gstRate === null ? null : String(Number(c.gstRate)),
+    gstRate: trimDecimal(c.gstRate),
     taxReady: c.hsnCode !== null && c.gstRate !== null,
     active: c.active,
     version: c.version,
@@ -369,7 +395,7 @@ function toSkuItem(s: typeof skus.$inferSelect): SkuItem {
     productId: s.productId,
     code: s.code,
     widthIn: formatWidth(s.widthIn),
-    taxRateOverride: s.taxRateOverride === null ? null : String(Number(s.taxRateOverride)),
+    taxRateOverride: trimDecimal(s.taxRateOverride),
     active: s.active,
     version: s.version,
   };
