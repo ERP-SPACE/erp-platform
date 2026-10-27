@@ -22,7 +22,10 @@ export class MapRollsDto extends zodDto("MapRollsDto", mapRollsInput) {}
 export class MapRollsResultDto extends zodDto("MapRollsResultDto", mapRollsResult) {}
 export class ScrapRollsDto extends zodDto("ScrapRollsDto", scrapRollsInput) {}
 export class ScrapRollsResultDto extends zodDto("ScrapRollsResultDto", scrapRollsResult) {}
-export class RollLengthCorrectionDto extends zodDto("RollLengthCorrectionDto", rollLengthCorrection) {}
+export class RollLengthCorrectionDto extends zodDto(
+  "RollLengthCorrectionDto",
+  rollLengthCorrection,
+) {}
 export class LabelRequestDto extends zodDto("LabelRequestDto", labelRequest) {}
 export class StockGroupByDto extends zodDto("StockGroupByDto", stockGroupBy) {}
 export class StockSummaryDto extends zodDto("StockSummaryDto", stockSummary) {}

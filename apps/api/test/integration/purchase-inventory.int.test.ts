@@ -8,7 +8,12 @@ const gstin = (state: string, pan: string) => {
   const first14 = `${state}${pan}1Z`;
   return first14 + gstinCheckChar(first14);
 };
-const address = { line1: "B/4 Laxminarayan Estate", city: "Surat", state: "Gujarat", pincode: "394210" };
+const address = {
+  line1: "B/4 Laxminarayan Estate",
+  city: "Surat",
+  state: "Gujarat",
+  pincode: "394210",
+};
 
 interface Product {
   id: string;
@@ -66,8 +71,8 @@ describe("purchase & inventory (Stage 2 gate)", () => {
     }
   };
   const rollsOf = async (grnId: string) =>
-    json<{ items: Roll[] }>(await owner.get(`/api/rolls?grnId=${grnId}&limit=100`)).items.sort((a, b) =>
-      a.barcode.localeCompare(b.barcode),
+    json<{ items: Roll[] }>(await owner.get(`/api/rolls?grnId=${grnId}&limit=100`)).items.sort(
+      (a, b) => a.barcode.localeCompare(b.barcode),
     );
 
   beforeAll(async () => {
@@ -124,7 +129,11 @@ describe("purchase & inventory (Stage 2 gate)", () => {
       payload: {
         supplierId,
         date: today,
-        lines: [line(sku44, 44, 10000, "4.90"), line(sku60, 60, 5000, "6.68"), line(sku48, 48, 2000, "5.35")],
+        lines: [
+          line(sku44, 44, 10000, "4.90"),
+          line(sku60, 60, 5000, "6.68"),
+          line(sku48, 48, 2000, "5.35"),
+        ],
       },
     });
     expect(created.statusCode, created.body).toBe(201);
@@ -151,26 +160,50 @@ describe("purchase & inventory (Stage 2 gate)", () => {
         supplierInvoiceNo: "2455",
         supplierBatchRef: "CONT-13",
         lines: [
-          { poLineId: po.lines[0]!.id, skuId: sku44, description: "Eco Papers 44* 29 GSM", gsm: 29, widthIn: 44, rolls: "10 X 1000 MTRS" },
+          {
+            poLineId: po.lines[0]!.id,
+            skuId: sku44,
+            description: "Eco Papers 44* 29 GSM",
+            gsm: 29,
+            widthIn: 44,
+            rolls: "10 X 1000 MTRS",
+          },
           // Raw attributes only — the rolls arrive Unmapped and are mapped below.
-          { poLineId: po.lines[1]!.id, description: "Eco Paper 60* 29 GSM", gsm: 29, widthIn: 60, rolls: "4 X 1000, 500+450 MTRS" },
+          {
+            poLineId: po.lines[1]!.id,
+            description: "Eco Paper 60* 29 GSM",
+            gsm: 29,
+            widthIn: 60,
+            rolls: "4 X 1000, 500+450 MTRS",
+          },
         ],
       },
     });
     expect(created.statusCode, created.body).toBe(201);
     grn = json<Grn>(created);
-    const posted = await owner.request({ method: "POST", url: `/api/goods-receipts/${grn.id}/post`, payload: { version: grn.version } });
+    const posted = await owner.request({
+      method: "POST",
+      url: `/api/goods-receipts/${grn.id}/post`,
+      payload: { version: grn.version },
+    });
     expect(posted.statusCode, posted.body).toBe(200);
     grn = json<Grn>(posted);
     expect(grn).toMatchObject({ status: "Posted", rollCount: 16, unmappedRolls: 6 });
 
     const rolls = await rollsOf(grn.id);
     expect(rolls).toHaveLength(16);
-    expect(rolls.filter((r) => r.status === "Unmapped").map((r) => r.originalLengthM).sort()).toEqual([1000, 1000, 1000, 1000, 450, 500].sort());
+    expect(
+      rolls
+        .filter((r) => r.status === "Unmapped")
+        .map((r) => r.originalLengthM)
+        .sort(),
+    ).toEqual([1000, 1000, 1000, 1000, 450, 500].sort());
     // Barcodes: valid check characters and consecutive roll sequences in one batch.
     const parsed = rolls.map((r) => parseRollBarcode(r.barcode));
     expect(parsed.every((p) => p.valid)).toBe(true);
-    expect(parsed.map((p) => (p.valid ? p.rollSeq : 0)).sort((a, b) => a - b)).toEqual(Array.from({ length: 16 }, (_, i) => i + 1));
+    expect(parsed.map((p) => (p.valid ? p.rollSeq : 0)).sort((a, b) => a - b)).toEqual(
+      Array.from({ length: 16 }, (_, i) => i + 1),
+    );
     expect(rolls[0]!.barcode).toMatch(/^\d{4}-SBC-0001-/);
 
     po = json<Po>(await owner.get(`/api/purchase-orders/${po.id}`));
@@ -180,9 +213,17 @@ describe("purchase & inventory (Stage 2 gate)", () => {
 
   it("UAT 11.1 — bulk-map the Unmapped rolls to a SKU", async () => {
     const unmapped = (await rollsOf(grn.id)).filter((r) => r.status === "Unmapped");
-    const wrong = await owner.request({ method: "POST", url: "/api/rolls/map", payload: { rollIds: unmapped.map((r) => r.id), skuId: sku44 } });
+    const wrong = await owner.request({
+      method: "POST",
+      url: "/api/rolls/map",
+      payload: { rollIds: unmapped.map((r) => r.id), skuId: sku44 },
+    });
     expect(wrong.statusCode).toBe(400); // 60″ rolls can't become a 44″ SKU
-    const res = await owner.request({ method: "POST", url: "/api/rolls/map", payload: { rollIds: unmapped.map((r) => r.id), skuId: sku60 } });
+    const res = await owner.request({
+      method: "POST",
+      url: "/api/rolls/map",
+      payload: { rollIds: unmapped.map((r) => r.id), skuId: sku60 },
+    });
     expect(res.statusCode, res.body).toBe(200);
     expect(json(res)).toEqual({ mapped: 6, skuId: sku60 });
     expect((await rollsOf(grn.id)).every((r) => r.status === "Mapped")).toBe(true);
@@ -200,21 +241,51 @@ describe("purchase & inventory (Stage 2 gate)", () => {
         grnIds: [grn.id],
         roundOff: "0.12",
         lines: [
-          { poLineId: po.lines[0]!.id, skuId: sku44, description: "Eco Papers 44* 29 GSM", gsm: 29, widthIn: 44, hsnCode: "48099000", quantityM: 10000, ratePerM: "4.90", gstRate: "18" },
-          { poLineId: po.lines[1]!.id, skuId: sku60, description: "Eco Paper 60* 29 GSM", gsm: 29, widthIn: 60, hsnCode: "48099000", quantityM: 4950, ratePerM: "6.68", gstRate: "18" },
+          {
+            poLineId: po.lines[0]!.id,
+            skuId: sku44,
+            description: "Eco Papers 44* 29 GSM",
+            gsm: 29,
+            widthIn: 44,
+            hsnCode: "48099000",
+            quantityM: 10000,
+            ratePerM: "4.90",
+            gstRate: "18",
+          },
+          {
+            poLineId: po.lines[1]!.id,
+            skuId: sku60,
+            description: "Eco Paper 60* 29 GSM",
+            gsm: 29,
+            widthIn: 60,
+            hsnCode: "48099000",
+            quantityM: 4950,
+            ratePerM: "6.68",
+            gstRate: "18",
+          },
         ],
       },
     });
     expect(created.statusCode, created.body).toBe(201);
     const draft = json<{ id: string; version: number }>(created);
     piId = draft.id;
-    const posted = await owner.request({ method: "POST", url: `/api/purchase-invoices/${piId}/post`, payload: { version: draft.version } });
+    const posted = await owner.request({
+      method: "POST",
+      url: `/api/purchase-invoices/${piId}/post`,
+      payload: { version: draft.version },
+    });
     expect(posted.statusCode, posted.body).toBe(200);
     expect(json(posted)).toMatchObject({
       status: "Posted",
       piNo: expect.stringMatching(/^PI\/\d{4}\/00001$/),
       rollCount: 16,
-      totals: { taxable: "82066.00", cgst: "7385.94", sgst: "7385.94", roundOff: "0.12", total: "96838.00" },
+      totals: {
+        taxable: "82066.00",
+        cgst: "7385.94",
+        sgst: "7385.94",
+        roundOff: "0.12",
+        total: "96838.00",
+      },
     });
     const rolls = await rollsOf(grn.id);
     expect(rolls.find((r) => r.widthIn === "44")!.baseCostPerM).toBe("4.9");
@@ -223,28 +294,55 @@ describe("purchase & inventory (Stage 2 gate)", () => {
   });
 
   it("UAT 11.1 — landed cost by METER: per-roll shares sum to the charge to the paisa", async () => {
-    const charges = { charges: [{ code: "FREIGHT", amount: "1495.00", basis: "METER", vendorName: "Patel Roadways" }] };
-    const preview = json<{ charges: { amount: string; allocated: string }[]; rows: { lengthM: number; shares: Record<string, string> }[] }>(
-      await owner.request({ method: "POST", url: `/api/purchase-invoices/${piId}/landed-cost/preview`, payload: charges }),
+    const charges = {
+      charges: [
+        { code: "FREIGHT", amount: "1495.00", basis: "METER", vendorName: "Patel Roadways" },
+      ],
+    };
+    const preview = json<{
+      charges: { amount: string; allocated: string }[];
+      rows: { lengthM: number; shares: Record<string, string> }[];
+    }>(
+      await owner.request({
+        method: "POST",
+        url: `/api/purchase-invoices/${piId}/landed-cost/preview`,
+        payload: charges,
+      }),
     );
     expect(preview.charges[0]).toMatchObject({ amount: "1495.00", allocated: "1495.00" });
     // 14,950 m in all → ₹0.10 per metre.
     expect(preview.rows.find((r) => r.lengthM === 450)!.shares.FREIGHT).toBe("45.00");
 
-    const applied = await owner.request({ method: "POST", url: `/api/purchase-invoices/${piId}/landed-cost`, payload: charges });
+    const applied = await owner.request({
+      method: "POST",
+      url: `/api/purchase-invoices/${piId}/landed-cost`,
+      payload: charges,
+    });
     expect(applied.statusCode, applied.body).toBe(200);
     const rolls = await rollsOf(grn.id);
     // 44″ roll: (₹4,900 base + ₹100 freight) ÷ 1000 m.
     expect(rolls.find((r) => r.widthIn === "44")!.landedCostPerM).toBe("5");
-    expect(json<{ landedCostAllocated: boolean }>(await owner.get(`/api/purchase-invoices/${piId}`)).landedCostAllocated).toBe(true);
+    expect(
+      json<{ landedCostAllocated: boolean }>(await owner.get(`/api/purchase-invoices/${piId}`))
+        .landedCostAllocated,
+    ).toBe(true);
     expect((await events("LANDED_COST_ALLOCATED")).length).toBe(1);
   });
 
   it("landed cost can be reversed with a reason; rolls give their share back", async () => {
-    const [charge] = json<{ id: string }[]>(await owner.get(`/api/purchase-invoices/${piId}/landed-cost`));
-    const noReason = await owner.request({ method: "POST", url: `/api/landed-cost-charges/${charge!.id}/reverse` });
+    const [charge] = json<{ id: string }[]>(
+      await owner.get(`/api/purchase-invoices/${piId}/landed-cost`),
+    );
+    const noReason = await owner.request({
+      method: "POST",
+      url: `/api/landed-cost-charges/${charge!.id}/reverse`,
+    });
     expect(noReason.statusCode).toBe(422);
-    const res = await owner.request({ method: "POST", url: `/api/landed-cost-charges/${charge!.id}/reverse`, reason: "Freight bill was for another lot" });
+    const res = await owner.request({
+      method: "POST",
+      url: `/api/landed-cost-charges/${charge!.id}/reverse`,
+      reason: "Freight bill was for another lot",
+    });
     expect(res.statusCode, res.body).toBe(200);
     expect((await rollsOf(grn.id)).find((r) => r.widthIn === "44")!.landedCostPerM).toBe("4.9");
     // Re-apply for the inventory checks below.
@@ -264,15 +362,35 @@ describe("purchase & inventory (Stage 2 gate)", () => {
           supplierId,
           poId: po.id,
           date: today,
-          lines: [{ poLineId: po.lines[2]!.id, skuId: sku48, description: "Eco 48* 29 GSM", gsm: 29, widthIn: 48, rolls: "3 x 1000" }],
+          lines: [
+            {
+              poLineId: po.lines[2]!.id,
+              skuId: sku48,
+              description: "Eco 48* 29 GSM",
+              gsm: 29,
+              widthIn: 48,
+              rolls: "3 x 1000",
+            },
+          ],
         },
       }),
     );
-    const blocked = await owner.request({ method: "POST", url: `/api/goods-receipts/${draft.id}/post`, payload: { version: draft.version } });
+    const blocked = await owner.request({
+      method: "POST",
+      url: `/api/goods-receipts/${draft.id}/post`,
+      payload: { version: draft.version },
+    });
     expect(blocked.statusCode).toBe(422);
-    expect(json(blocked)).toMatchObject({ code: "APPROVAL_REQUIRED", issues: [{ message: expect.stringMatching(/3,000 m against 2,000 m/) }] });
+    expect(json(blocked)).toMatchObject({
+      code: "APPROVAL_REQUIRED",
+      issues: [{ message: expect.stringMatching(/3,000 m against 2,000 m/) }],
+    });
 
-    const noReason = await owner.request({ method: "POST", url: `/api/goods-receipts/${draft.id}/post-over-receipt`, payload: { version: draft.version } });
+    const noReason = await owner.request({
+      method: "POST",
+      url: `/api/goods-receipts/${draft.id}/post-over-receipt`,
+      payload: { version: draft.version },
+    });
     expect(noReason.statusCode).toBe(422);
     const approved = await owner.request({
       method: "POST",
@@ -281,10 +399,21 @@ describe("purchase & inventory (Stage 2 gate)", () => {
       reason: "Supplier sent one extra roll; accepted at the same rate",
     });
     expect(approved.statusCode, approved.body).toBe(200);
-    expect(json(approved)).toMatchObject({ status: "Posted", overReceiptApprovedByName: "Test Owner" });
-    const audit = json<{ items: { reason: string | null }[] }>(await owner.get(`/api/audit?table=goods_receipts&rowId=${draft.id}`));
-    expect(audit.items.some((i) => i.reason === "Supplier sent one extra roll; accepted at the same rate")).toBe(true);
-    expect(json<Po>(await owner.get(`/api/purchase-orders/${po.id}`)).status).toBe("PartiallyReceived");
+    expect(json(approved)).toMatchObject({
+      status: "Posted",
+      overReceiptApprovedByName: "Test Owner",
+    });
+    const audit = json<{ items: { reason: string | null }[] }>(
+      await owner.get(`/api/audit?table=goods_receipts&rowId=${draft.id}`),
+    );
+    expect(
+      audit.items.some(
+        (i) => i.reason === "Supplier sent one extra roll; accepted at the same rate",
+      ),
+    ).toBe(true);
+    expect(json<Po>(await owner.get(`/api/purchase-orders/${po.id}`)).status).toBe(
+      "PartiallyReceived",
+    );
   });
 
   it("UAT 11.1 — a PI line without a PO line warns and needs a reason", async () => {
@@ -296,12 +425,26 @@ describe("purchase & inventory (Stage 2 gate)", () => {
           supplierId,
           supplierInvoiceNo: "2460",
           supplierInvoiceDate: today,
-          lines: [{ description: "Eco 44* 29 GSM (spot buy)", gsm: 29, widthIn: 44, hsnCode: "48099000", quantityM: 1000, ratePerM: "4.95", gstRate: "18" }],
+          lines: [
+            {
+              description: "Eco 44* 29 GSM (spot buy)",
+              gsm: 29,
+              widthIn: 44,
+              hsnCode: "48099000",
+              quantityM: 1000,
+              ratePerM: "4.95",
+              gstRate: "18",
+            },
+          ],
         },
       }),
     );
     expect(draft.linesWithoutPo).toBe(1);
-    const noReason = await owner.request({ method: "POST", url: `/api/purchase-invoices/${draft.id}/post`, payload: { version: draft.version } });
+    const noReason = await owner.request({
+      method: "POST",
+      url: `/api/purchase-invoices/${draft.id}/post`,
+      payload: { version: draft.version },
+    });
     expect(noReason.statusCode).toBe(422);
     expect(json(noReason)).toMatchObject({ code: "REASON_REQUIRED" });
     const ok = await owner.request({
@@ -314,7 +457,22 @@ describe("purchase & inventory (Stage 2 gate)", () => {
     const dup = await owner.request({
       method: "POST",
       url: "/api/purchase-invoices",
-      payload: { supplierId, supplierInvoiceNo: "2460", supplierInvoiceDate: today, lines: [{ description: "Spot buy", gsm: 29, widthIn: 44, hsnCode: "48099000", quantityM: 1, ratePerM: "1", gstRate: "18" }] },
+      payload: {
+        supplierId,
+        supplierInvoiceNo: "2460",
+        supplierInvoiceDate: today,
+        lines: [
+          {
+            description: "Spot buy",
+            gsm: 29,
+            widthIn: 44,
+            hsnCode: "48099000",
+            quantityM: 1,
+            ratePerM: "1",
+            gstRate: "18",
+          },
+        ],
+      },
     });
     expect(dup.statusCode).toBe(409); // the same supplier invoice can't be entered twice
   });
@@ -323,21 +481,43 @@ describe("purchase & inventory (Stage 2 gate)", () => {
     const roll = (await rollsOf(grn.id)).find((r) => r.widthIn === "44")!;
     const res = await owner.get(`/api/rolls/${encodeURIComponent(roll.barcode.toLowerCase())}`);
     expect(res.statusCode, res.body).toBe(200);
-    const inspector = json<{ supplierName: string; supplierBatchRef: string; grnNo: string; piNo: string; landedCost: string; events: { kind: string; title: string }[] }>(res);
-    expect(inspector).toMatchObject({ supplierName: "Shree Balajee & Co", supplierBatchRef: "CONT-13", grnNo: grn.grnNo, landedCost: "100.00" });
+    const inspector = json<{
+      supplierName: string;
+      supplierBatchRef: string;
+      grnNo: string;
+      piNo: string;
+      landedCost: string;
+      events: { kind: string; title: string }[];
+    }>(res);
+    expect(inspector).toMatchObject({
+      supplierName: "Shree Balajee & Co",
+      supplierBatchRef: "CONT-13",
+      grnNo: grn.grnNo,
+      landedCost: "100.00",
+    });
     expect(inspector.piNo).toMatch(/^PI\//);
-    expect(inspector.events.map((e) => e.kind)).toEqual(expect.arrayContaining(["DOCUMENT", "STATUS", "COST"]));
+    expect(inspector.events.map((e) => e.kind)).toEqual(
+      expect.arrayContaining(["DOCUMENT", "STATUS", "COST"]),
+    );
     const tampered = roll.barcode.slice(0, -1) + (roll.barcode.endsWith("0") ? "1" : "0");
     const bad = await owner.get(`/api/rolls/${tampered}`);
     expect(bad.statusCode).toBe(400);
   });
 
   it("labels: PDF without cost, logged; a reprint needs a reason", async () => {
-    const res = await owner.request({ method: "POST", url: "/api/labels", payload: { grnId: grn.id } });
+    const res = await owner.request({
+      method: "POST",
+      url: "/api/labels",
+      payload: { grnId: grn.id },
+    });
     expect(res.statusCode, res.body.slice(0, 200)).toBe(200);
     expect(res.headers["content-type"]).toContain("application/pdf");
     expect(res.rawPayload.subarray(0, 5).toString()).toBe("%PDF-");
-    const reprint = await owner.request({ method: "POST", url: "/api/labels", payload: { rollIds: [(await rollsOf(grn.id))[0]!.id], reprint: true } });
+    const reprint = await owner.request({
+      method: "POST",
+      url: "/api/labels",
+      payload: { rollIds: [(await rollsOf(grn.id))[0]!.id], reprint: true },
+    });
     expect(reprint.statusCode).toBe(422);
     const roll = (await rollsOf(grn.id))[0]!;
     const inspector = json<{ labelPrints: number }>(await owner.get(`/api/rolls/${roll.id}`));
@@ -345,23 +525,39 @@ describe("purchase & inventory (Stage 2 gate)", () => {
   });
 
   it("stock summary from the views: rolls, metres, value; unmapped and dead-stock counts", async () => {
-    expect((await owner.request({ method: "POST", url: "/api/inventory/stock/refresh" })).statusCode).toBe(204);
-    const stock = json<{ totals: { rolls: number; metres: number; value: string | null; unmappedRolls: number } }>(await owner.get("/api/inventory/stock?by=sku"));
+    expect(
+      (await owner.request({ method: "POST", url: "/api/inventory/stock/refresh" })).statusCode,
+    ).toBe(204);
+    const stock = json<{
+      totals: { rolls: number; metres: number; value: string | null; unmappedRolls: number };
+    }>(await owner.get("/api/inventory/stock?by=sku"));
     expect(stock.totals).toMatchObject({ rolls: 19, metres: 17950, unmappedRolls: 0 });
     expect(stock.totals.value).not.toBeNull();
   });
 
   it("purchase return + debit note: rolls go back at the invoiced rate", async () => {
-    const roll = (await rollsOf(grn.id)).find((r) => r.widthIn === "60" && r.originalLengthM === 450)!;
+    const roll = (await rollsOf(grn.id)).find(
+      (r) => r.widthIn === "60" && r.originalLengthM === 450,
+    )!;
     const draft = json<{ id: string; version: number; totals: { taxable: string } }>(
       await owner.request({
         method: "POST",
         url: "/api/purchase-returns",
-        payload: { supplierId, piId, date: today, reason: "Coating defect on the outer layers", rollIds: [roll.id] },
+        payload: {
+          supplierId,
+          piId,
+          date: today,
+          reason: "Coating defect on the outer layers",
+          rollIds: [roll.id],
+        },
       }),
     );
     expect(draft.totals.taxable).toBe("3006.00"); // 450 m × ₹6.68
-    const posted = await owner.request({ method: "POST", url: `/api/purchase-returns/${draft.id}/post`, payload: { version: draft.version } });
+    const posted = await owner.request({
+      method: "POST",
+      url: `/api/purchase-returns/${draft.id}/post`,
+      payload: { version: draft.version },
+    });
     expect(posted.statusCode, posted.body).toBe(200);
     expect(json(posted)).toMatchObject({
       status: "Posted",
@@ -369,7 +565,9 @@ describe("purchase & inventory (Stage 2 gate)", () => {
       dnNo: expect.stringMatching(/^DN\//),
       totals: { taxable: "3006.00", cgst: "270.54", total: "3547.00" },
     });
-    expect(json<{ status: string }>(await owner.get(`/api/rolls/${roll.id}`)).status).toBe("ReturnedToSupplier");
+    expect(json<{ status: string }>(await owner.get(`/api/rolls/${roll.id}`)).status).toBe(
+      "ReturnedToSupplier",
+    );
     const again = await owner.request({
       method: "POST",
       url: "/api/purchase-returns",
@@ -380,26 +578,54 @@ describe("purchase & inventory (Stage 2 gate)", () => {
 
   it("UAT 11.2 — scrap needs a reason and writes ROLL_SCRAPPED at landed cost", async () => {
     const roll = (await rollsOf(grn.id)).find((r) => r.widthIn === "44")!;
-    const noReason = await owner.request({ method: "POST", url: "/api/rolls/scrap", payload: { rollIds: [roll.id] } });
+    const noReason = await owner.request({
+      method: "POST",
+      url: "/api/rolls/scrap",
+      payload: { rollIds: [roll.id] },
+    });
     expect(noReason.statusCode).toBe(422);
-    const res = await owner.request({ method: "POST", url: "/api/rolls/scrap", payload: { rollIds: [roll.id] }, reason: "Water damage in godown" });
+    const res = await owner.request({
+      method: "POST",
+      url: "/api/rolls/scrap",
+      payload: { rollIds: [roll.id] },
+      reason: "Water damage in godown",
+    });
     expect(res.statusCode, res.body).toBe(200);
     expect(json(res)).toEqual({ scrapped: 1, value: "5000.00" }); // 1000 m × ₹5.00 landed
     const scrapped = await events("ROLL_SCRAPPED");
-    expect(scrapped.at(-1)!.payload).toMatchObject({ reason: "Water damage in godown", total: "5000.00" });
+    expect(scrapped.at(-1)!.payload).toMatchObject({
+      reason: "Water damage in godown",
+      total: "5000.00",
+    });
   });
 
   it("warehouse staff receive and map but never see cost", async () => {
     await owner.request({
       method: "POST",
       url: "/api/users",
-      payload: { name: "Godown", email: "godown2@test.local", password: "Warehouse-12345", roleCodes: ["warehouse"] },
+      payload: {
+        name: "Godown",
+        email: "godown2@test.local",
+        password: "Warehouse-12345",
+        roleCodes: ["warehouse"],
+      },
     });
     const staff = await Client.signIn(t.fastify, "godown2@test.local", "Warehouse-12345");
     const page = json<{ items: Roll[] }>(await staff.get(`/api/rolls?grnId=${grn.id}`));
     expect(page.items.length).toBeGreaterThan(0);
-    expect(page.items.every((r) => r.baseCostPerM === null && r.landedCostPerM === null)).toBe(true);
+    expect(page.items.every((r) => r.baseCostPerM === null && r.landedCostPerM === null)).toBe(
+      true,
+    );
     expect((await staff.get(`/api/purchase-invoices/${piId}/landed-cost`)).statusCode).toBe(200);
-    expect((await staff.request({ method: "POST", url: "/api/rolls/scrap", payload: { rollIds: [page.items[0]!.id] }, reason: "x" })).statusCode).toBe(403);
+    expect(
+      (
+        await staff.request({
+          method: "POST",
+          url: "/api/rolls/scrap",
+          payload: { rollIds: [page.items[0]!.id] },
+          reason: "x",
+        })
+      ).statusCode,
+    ).toBe(403);
   });
 });

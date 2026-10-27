@@ -102,7 +102,10 @@ export class PurchaseInvoicesService {
         .from(purchaseInvoiceLines)
         .where(eq(purchaseInvoiceLines.piId, id))
         .orderBy(asc(purchaseInvoiceLines.lineNo)),
-      db.select({ grnId: purchaseInvoiceGrns.grnId }).from(purchaseInvoiceGrns).where(eq(purchaseInvoiceGrns.piId, id)),
+      db
+        .select({ grnId: purchaseInvoiceGrns.grnId })
+        .from(purchaseInvoiceGrns)
+        .where(eq(purchaseInvoiceGrns.piId, id)),
       db
         .select({
           rolls: sql<number>`(SELECT count(*) FROM rolls r WHERE r.pi_id = ${id})::int`,
@@ -204,7 +207,8 @@ export class PurchaseInvoicesService {
   async update(id: string, dto: PiUpdateDto): Promise<PiDetail> {
     await this.uow.run(async (tx) => {
       const current = await this.lock(tx, id);
-      if (current.status !== "Draft") throw validationError("A posted purchase invoice can't be edited.");
+      if (current.status !== "Draft")
+        throw validationError("A posted purchase invoice can't be edited.");
       const { supplier, regime } = await supplierWithRegime(tx, dto.supplierId);
       assertActiveSupplier(supplier);
       await this.assertRefs(tx, dto, id);
@@ -238,7 +242,14 @@ export class PurchaseInvoicesService {
     await this.uow.run(async (tx) => {
       const current = await this.lock(tx, id);
       purchaseInvoiceMachine.assert(current.status, "Cancelled");
-      await updateVersioned(tx, purchaseInvoices, eq(purchaseInvoices.id, id), version, { status: "Cancelled" }, "Purchase invoice");
+      await updateVersioned(
+        tx,
+        purchaseInvoices,
+        eq(purchaseInvoices.id, id),
+        version,
+        { status: "Cancelled" },
+        "Purchase invoice",
+      );
       await recordTransition(tx, "PurchaseInvoice", id, current.status, "Cancelled");
       this.changed(id);
     });
@@ -249,7 +260,10 @@ export class PurchaseInvoicesService {
     await this.uow.run(async (tx) => {
       const pi = await this.lock(tx, id);
       purchaseInvoiceMachine.assert(pi.status, "Posted");
-      const lines = await tx.select().from(purchaseInvoiceLines).where(eq(purchaseInvoiceLines.piId, id));
+      const lines = await tx
+        .select()
+        .from(purchaseInvoiceLines)
+        .where(eq(purchaseInvoiceLines.piId, id));
       if (lines.length === 0) throw validationError("Add at least one line before posting.");
       // PRD §6.2: lines without a PO line are allowed, but only with a reason.
       if (lines.some((l) => !l.poLineId) && !ctx().reason?.trim()) throw reasonRequired();
@@ -264,7 +278,10 @@ export class PurchaseInvoicesService {
           .where(eq(purchaseOrderLines.id, l.poLineId));
       }
       const grnIds = (
-        await tx.select({ grnId: purchaseInvoiceGrns.grnId }).from(purchaseInvoiceGrns).where(eq(purchaseInvoiceGrns.piId, id))
+        await tx
+          .select({ grnId: purchaseInvoiceGrns.grnId })
+          .from(purchaseInvoiceGrns)
+          .where(eq(purchaseInvoiceGrns.piId, id))
       ).map((g) => g.grnId);
       const rollCount = await this.applyBaseCost(tx, id, lines, grnIds);
 
@@ -297,7 +314,12 @@ export class PurchaseInvoicesService {
         partyType: "SUPPLIER",
         partyId: pi.supplierId,
         payload: {
-          supplier: { id: supplier!.id, name: supplier!.name, gstin: supplier!.gstin, stateCode: supplier!.stateCode },
+          supplier: {
+            id: supplier!.id,
+            name: supplier!.name,
+            gstin: supplier!.gstin,
+            stateCode: supplier!.stateCode,
+          },
           supplierInvoiceNo: pi.supplierInvoiceNo,
           supplierInvoiceDate: pi.supplierInvoiceDate,
           irn: pi.irn,
@@ -332,10 +354,17 @@ export class PurchaseInvoicesService {
   async linkGrns(id: string, grnIds: string[]): Promise<PiDetail> {
     await this.uow.run(async (tx) => {
       const pi = await this.lock(tx, id);
-      if (pi.status !== "Posted") throw validationError("Link goods receipts to a posted invoice, or edit the draft.");
+      if (pi.status !== "Posted")
+        throw validationError("Link goods receipts to a posted invoice, or edit the draft.");
       await this.assertGrns(tx, pi.supplierId, grnIds, id);
-      await tx.insert(purchaseInvoiceGrns).values(grnIds.map((grnId) => ({ piId: id, grnId }))).onConflictDoNothing();
-      const lines = await tx.select().from(purchaseInvoiceLines).where(eq(purchaseInvoiceLines.piId, id));
+      await tx
+        .insert(purchaseInvoiceGrns)
+        .values(grnIds.map((grnId) => ({ piId: id, grnId })))
+        .onConflictDoNothing();
+      const lines = await tx
+        .select()
+        .from(purchaseInvoiceLines)
+        .where(eq(purchaseInvoiceLines.piId, id));
       await this.applyBaseCost(tx, id, lines, grnIds);
       this.changed(id);
     });
@@ -383,7 +412,10 @@ export class PurchaseInvoicesService {
           piId,
           baseCostPerM: rate.toFixed(4),
           baseValue: baseValue.toFixed(2),
-          costPerM: round(baseValue.plus(roll.landedCost).dividedBy(roll.originalLengthM), 4).toFixed(4),
+          costPerM: round(
+            baseValue.plus(roll.landedCost).dividedBy(roll.originalLengthM),
+            4,
+          ).toFixed(4),
           updatedAt: new Date(),
           updatedBy: actor().userId,
           version: sql`${rolls.version} + 1`,
@@ -392,15 +424,29 @@ export class PurchaseInvoicesService {
     }
     if (unmatched.length) {
       throw validationError(`${unmatched.length} received rolls have no matching invoice line.`, [
-        { path: "lines", message: `No line for ${unmatched.slice(0, 3).join(", ")}${unmatched.length > 3 ? "…" : ""}` },
+        {
+          path: "lines",
+          message: `No line for ${unmatched.slice(0, 3).join(", ")}${unmatched.length > 3 ? "…" : ""}`,
+        },
       ]);
     }
     return grnRolls.length;
   }
 
-  private totals(lines: (typeof purchaseInvoiceLines.$inferSelect)[], regime: "CGST_SGST" | "IGST", roundOff: string) {
+  private totals(
+    lines: (typeof purchaseInvoiceLines.$inferSelect)[],
+    regime: "CGST_SGST" | "IGST",
+    roundOff: string,
+  ) {
     const t = invoiceTotals(
-      lines.map((l) => taxLine({ quantity: l.quantityM, rate: l.ratePerM, discountPct: l.discountPct, gstRate: l.gstRate })),
+      lines.map((l) =>
+        taxLine({
+          quantity: l.quantityM,
+          rate: l.ratePerM,
+          discountPct: l.discountPct,
+          gstRate: l.gstRate,
+        }),
+      ),
       regime,
       0,
     );
@@ -421,17 +467,23 @@ export class PurchaseInvoicesService {
 
   private async assertRefs(tx: Tx, dto: PiCreateDto, selfId: string | null) {
     if (D(dto.roundOff).abs().greaterThan(1)) {
-      throw validationError("Round-off can't be more than ₹1.", [{ path: "roundOff", message: "At most ±1.00" }]);
+      throw validationError("Round-off can't be more than ₹1.", [
+        { path: "roundOff", message: "At most ±1.00" },
+      ]);
     }
     const lineIds = dto.lines.flatMap((l) => (l.poLineId ? [l.poLineId] : []));
     if (dto.poId) {
       const [po] = await tx
         .select()
         .from(purchaseOrders)
-        .where(and(eq(purchaseOrders.id, dto.poId), eq(purchaseOrders.companyId, actor().companyId)));
+        .where(
+          and(eq(purchaseOrders.id, dto.poId), eq(purchaseOrders.companyId, actor().companyId)),
+        );
       if (!po) throw notFound("Purchase order");
       if (po.supplierId !== dto.supplierId) {
-        throw validationError("The purchase order is for another supplier.", [{ path: "poId", message: "Different supplier" }]);
+        throw validationError("The purchase order is for another supplier.", [
+          { path: "poId", message: "Different supplier" },
+        ]);
       }
       if (lineIds.length) {
         const owned = await tx
@@ -452,7 +504,9 @@ export class PurchaseInvoicesService {
     const found = await tx
       .select()
       .from(goodsReceipts)
-      .where(and(eq(goodsReceipts.companyId, actor().companyId), inArray(goodsReceipts.id, grnIds)));
+      .where(
+        and(eq(goodsReceipts.companyId, actor().companyId), inArray(goodsReceipts.id, grnIds)),
+      );
     if (found.length !== new Set(grnIds).size) throw notFound("Goods receipt");
     const bad = found.find((g) => g.supplierId !== supplierId || g.status !== "Posted");
     if (bad) {
@@ -494,12 +548,19 @@ export class PurchaseInvoicesService {
         ratePerM: l.ratePerM,
         discountPct: l.discountPct,
         gstRate: l.gstRate,
-        taxable: taxLine({ quantity: l.quantityM, rate: l.ratePerM, discountPct: l.discountPct, gstRate: l.gstRate }).taxable.toFixed(2),
+        taxable: taxLine({
+          quantity: l.quantityM,
+          rate: l.ratePerM,
+          discountPct: l.discountPct,
+          gstRate: l.gstRate,
+        }).taxable.toFixed(2),
         createdBy: actor().userId,
       })),
     );
     if (dto.grnIds.length) {
-      await tx.insert(purchaseInvoiceGrns).values([...new Set(dto.grnIds)].map((grnId) => ({ piId, grnId })));
+      await tx
+        .insert(purchaseInvoiceGrns)
+        .values([...new Set(dto.grnIds)].map((grnId) => ({ piId, grnId })));
     }
   }
 

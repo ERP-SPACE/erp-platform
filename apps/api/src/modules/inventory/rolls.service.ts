@@ -72,7 +72,8 @@ export class RollsService {
     if (query.supplierId) filters.push(eq(rolls.supplierId, query.supplierId));
     if (query.grnId) filters.push(eq(rolls.grnId, query.grnId));
     if (query.inStock === "true") filters.push(inArray(rolls.status, IN_STOCK));
-    if (query.inStock === "false") filters.push(sql`${rolls.status} NOT IN ('Unmapped','Mapped','Allocated')`);
+    if (query.inStock === "false")
+      filters.push(sql`${rolls.status} NOT IN ('Unmapped','Mapped','Allocated')`);
     if (query.cursor) filters.push(lt(rolls.id, query.cursor));
     filters.push(searchFilter(sql`(${rolls.barcode} || ' ' || ${rolls.description})`, query.q));
     const rows = await this.uow.db
@@ -103,7 +104,12 @@ export class RollsService {
         : undefined;
     if (!where) throw validationError(scanned.valid ? "Roll not found." : scanned.error);
     const [row] = await db
-      .select({ ...rollSelect, piNo: purchaseInvoices.piNo, supplierInvoiceNo: purchaseInvoices.supplierInvoiceNo, grnDate: goodsReceipts.date })
+      .select({
+        ...rollSelect,
+        piNo: purchaseInvoices.piNo,
+        supplierInvoiceNo: purchaseInvoices.supplierInvoiceNo,
+        grnDate: goodsReceipts.date,
+      })
       .from(rolls)
       .innerJoin(suppliers, eq(suppliers.id, rolls.supplierId))
       .innerJoin(batches, eq(batches.id, rolls.batchId))
@@ -222,7 +228,8 @@ export class RollsService {
       const found = await this.lockRolls(tx, dto.rollIds);
       const issues: { path: string; message: string }[] = [];
       for (const r of found) {
-        if (r.status !== "Unmapped") issues.push({ path: "rollIds", message: `${r.barcode} is already ${r.status}` });
+        if (r.status !== "Unmapped")
+          issues.push({ path: "rollIds", message: `${r.barcode} is already ${r.status}` });
         else if (r.gsm !== sku.gsm || D(r.widthIn).comparedTo(D(sku.sku.widthIn)) !== 0) {
           issues.push({
             path: "skuId",
@@ -245,8 +252,20 @@ export class RollsService {
           updatedBy: actor().userId,
           version: sql`${rolls.version} + 1`,
         })
-        .where(inArray(rolls.id, found.map((r) => r.id)));
-      await recordTransition(tx, "Roll", found.map((r) => r.id), "Unmapped", "Mapped", `Mapped to ${sku.sku.code}`);
+        .where(
+          inArray(
+            rolls.id,
+            found.map((r) => r.id),
+          ),
+        );
+      await recordTransition(
+        tx,
+        "Roll",
+        found.map((r) => r.id),
+        "Unmapped",
+        "Mapped",
+        `Mapped to ${sku.sku.code}`,
+      );
       this.changed();
       return found.length;
     });
@@ -275,7 +294,12 @@ export class RollsService {
         rollMachine.assert(status, "Scrap");
         await tx
           .update(rolls)
-          .set({ status: "Scrap", updatedAt: new Date(), updatedBy: actor().userId, version: sql`${rolls.version} + 1` })
+          .set({
+            status: "Scrap",
+            updatedAt: new Date(),
+            updatedBy: actor().userId,
+            version: sql`${rolls.version} + 1`,
+          })
           .where(inArray(rolls.id, ids));
         await recordTransition(tx, "Roll", ids, status, "Scrap", reason);
       }
@@ -305,9 +329,15 @@ export class RollsService {
       if (r!.currentLengthM !== r!.originalLengthM || r!.parentRollId) {
         throw validationError("This roll has been cut; correct the cut instead.");
       }
-      const children = await tx.select({ id: rolls.id }).from(rolls).where(eq(rolls.parentRollId, id));
-      if (children.length) throw validationError("This roll has been cut; correct the cut instead.");
-      const baseValue = r!.baseCostPerM ? round(D(r!.baseCostPerM).times(lengthM), 2) : D(r!.baseValue);
+      const children = await tx
+        .select({ id: rolls.id })
+        .from(rolls)
+        .where(eq(rolls.parentRollId, id));
+      if (children.length)
+        throw validationError("This roll has been cut; correct the cut instead.");
+      const baseValue = r!.baseCostPerM
+        ? round(D(r!.baseCostPerM).times(lengthM), 2)
+        : D(r!.baseValue);
       await updateVersioned(
         tx,
         rolls,
@@ -373,7 +403,8 @@ export class RollsService {
           widthsIn: [spec.widthIn],
         });
     const at = (p: typeof product) => p.skus.find((s) => Number(s.widthIn) === spec.widthIn);
-    const sku = at(product) ?? at(await this.catalogue.addSkus(product.id, { widthsIn: [spec.widthIn] }));
+    const sku =
+      at(product) ?? at(await this.catalogue.addSkus(product.id, { widthsIn: [spec.widthIn] }));
     return sku!.id;
   }
 

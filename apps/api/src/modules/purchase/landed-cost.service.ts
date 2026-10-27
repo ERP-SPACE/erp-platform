@@ -109,7 +109,8 @@ export class LandedCostService {
           })),
         );
         for (const r of piRolls) {
-          if (inStock(r)) perRoll.set(r.id, (perRoll.get(r.id) ?? D(0)).plus(charge.shares.get(r.id)!));
+          if (inStock(r))
+            perRoll.set(r.id, (perRoll.get(r.id) ?? D(0)).plus(charge.shares.get(r.id)!));
         }
       }
       await this.addToRolls(tx, piRolls, perRoll);
@@ -144,7 +145,8 @@ export class LandedCostService {
         .where(eq(landedCostCharges.id, chargeId))
         .for("update", { of: landedCostCharges });
       if (!charge || charge.companyId !== actor().companyId) throw notFound("Landed-cost charge");
-      if (!charge.c.allocatedAt || charge.c.reversedAt) throw validationError("This charge is not currently allocated.");
+      if (!charge.c.allocatedAt || charge.c.reversedAt)
+        throw validationError("This charge is not currently allocated.");
       const pi = await this.pi(tx, charge.c.piId);
       const shares = await tx
         .select({ a: landedCostAllocations, roll: rolls })
@@ -168,7 +170,11 @@ export class LandedCostService {
           };
         }),
       );
-      await this.addToRolls(tx, shares.map((s) => s.roll), perRoll);
+      await this.addToRolls(
+        tx,
+        shares.map((s) => s.roll),
+        perRoll,
+      );
       await tx
         .update(landedCostCharges)
         .set({
@@ -197,11 +203,21 @@ export class LandedCostService {
 
   // ── helpers ────────────────────────────────────────────────────────────
 
-  private async plan(db: UnitOfWork["db"] | Tx, piId: string, dto: LandedCostRequestDto, lock = false) {
+  private async plan(
+    db: UnitOfWork["db"] | Tx,
+    piId: string,
+    dto: LandedCostRequestDto,
+    lock = false,
+  ) {
     const pi = await this.pi(db, piId);
-    if (pi.status !== "Posted") throw validationError("Post the purchase invoice before adding landed cost.");
+    if (pi.status !== "Posted")
+      throw validationError("Post the purchase invoice before adding landed cost.");
     // The read-only db and a transaction share the query API; only a transaction locks.
-    const query = (db as Tx).select().from(rolls).where(eq(rolls.piId, piId)).orderBy(asc(rolls.barcode));
+    const query = (db as Tx)
+      .select()
+      .from(rolls)
+      .where(eq(rolls.piId, piId))
+      .orderBy(asc(rolls.barcode));
     const piRolls: RollRow[] = lock ? await query.for("update") : await query;
     if (piRolls.length === 0) {
       throw validationError("This invoice has no rolls yet — link its goods receipt first.");
@@ -210,7 +226,11 @@ export class LandedCostService {
     const issues: { path: string; message: string }[] = [];
     const plan: PlannedCharge[] = dto.charges.map((c, i) => {
       const setting = configured.find((s) => s.code === c.code && s.active);
-      if (!setting) issues.push({ path: `charges.${i}.code`, message: `Unknown or inactive charge "${c.code}"` });
+      if (!setting)
+        issues.push({
+          path: `charges.${i}.code`,
+          message: `Unknown or inactive charge "${c.code}"`,
+        });
       const basis = c.basis ?? setting?.basis ?? "VALUE";
       const amount = D(c.amount);
       return {

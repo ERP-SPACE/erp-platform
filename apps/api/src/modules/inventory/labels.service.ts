@@ -46,14 +46,19 @@ export class LabelsService {
     private readonly settings: SettingsService,
   ) {}
 
-  async render(dto: LabelRequestDto): Promise<{ body: Buffer; contentType: string; fileName: string }> {
+  async render(
+    dto: LabelRequestDto,
+  ): Promise<{ body: Buffer; contentType: string; fileName: string }> {
     const reason = ctx().reason?.trim() ?? null;
     if (dto.reprint && !reason) throw reasonRequired();
     const labels = await this.load(dto);
     const setting = await this.settings.value("labels.roll");
     const body =
       setting.output === "ZPL"
-        ? Buffer.from(labels.map((l) => zpl(l, setting.widthMm, setting.heightMm)).join("\n"), "utf8")
+        ? Buffer.from(
+            labels.map((l) => zpl(l, setting.widthMm, setting.heightMm)).join("\n"),
+            "utf8",
+          )
         : Buffer.from(await this.pdf(labels, setting.widthMm, setting.heightMm, setting.layout));
     await this.uow.run(async (tx) => {
       await tx.insert(labelPrints).values(
@@ -77,7 +82,12 @@ export class LabelsService {
     if (dto.grnId) filters.push(eq(rolls.grnId, dto.grnId));
     if (dto.rollIds.length) filters.push(inArray(rolls.id, dto.rollIds));
     const rows = await this.uow.db
-      .select({ roll: rolls, batchSeq: batches.batchSeq, ref: batches.supplierBatchRef, grnDate: goodsReceipts.date })
+      .select({
+        roll: rolls,
+        batchSeq: batches.batchSeq,
+        ref: batches.supplierBatchRef,
+        grnDate: goodsReceipts.date,
+      })
       .from(rolls)
       .innerJoin(batches, eq(batches.id, rolls.batchId))
       .innerJoin(goodsReceipts, eq(goodsReceipts.id, rolls.grnId))
@@ -85,7 +95,8 @@ export class LabelsService {
       .orderBy(asc(rolls.barcode));
     if (rows.length === 0) throw notFound("Rolls");
     if (dto.rollIds.length && rows.length !== new Set(dto.rollIds).size) throw notFound("Roll");
-    if (rows.length > MAX_LABELS) throw validationError(`Print at most ${MAX_LABELS} labels at a time.`);
+    if (rows.length > MAX_LABELS)
+      throw validationError(`Print at most ${MAX_LABELS} labels at a time.`);
     return rows.map(({ roll, batchSeq, ref, grnDate }) => ({
       id: roll.id,
       barcode: roll.barcode,
@@ -105,13 +116,18 @@ export class LabelsService {
     const bold = await doc.embedFont(StandardFonts.HelveticaBold);
     const perSheet = layout === "A4_2x5" ? 10 : 1;
     if (layout === "A4_2x5" && (wMm * 2 > A4.w || hMm * 5 > A4.h)) {
-      throw validationError(`A ${wMm} × ${hMm} mm label does not fit 2 × 5 on A4; choose one per page.`);
+      throw validationError(
+        `A ${wMm} × ${hMm} mm label does not fit 2 × 5 on A4; choose one per page.`,
+      );
     }
     let page: PDFPage | null = null;
     for (let i = 0; i < labels.length; i++) {
       const slot = i % perSheet;
       if (slot === 0) {
-        page = layout === "A4_2x5" ? doc.addPage([A4.w * MM, A4.h * MM]) : doc.addPage([wMm * MM, hMm * MM]);
+        page =
+          layout === "A4_2x5"
+            ? doc.addPage([A4.w * MM, A4.h * MM])
+            : doc.addPage([wMm * MM, hMm * MM]);
       }
       const origin =
         layout === "A4_2x5"
@@ -124,6 +140,14 @@ export class LabelsService {
     }
     return doc.save();
   }
+}
+
+/** Standard PDF fonts are WinAnsi: map the inch mark and drop anything they can't encode. */
+function pdfSafe(s: string): string {
+  return s
+    .replace(/[″”“]/g, '"')
+    .replace(/[’‘]/g, "'")
+    .replace(/[^ -~�-�•·–—…]/g, "?");
 }
 
 async function drawLabel(
@@ -139,15 +163,27 @@ async function drawLabel(
   const w = wMm * MM;
   const h = hMm * MM;
   const pad = 3 * MM;
-  const text = lines(label);
+  const raw = lines(label);
+  const text = { title: pdfSafe(raw.title), spec: pdfSafe(raw.spec), lot: pdfSafe(raw.lot) };
   const qrSize = Math.min(h - 2 * pad, w * 0.32);
   const [code128, qr] = await Promise.all([
-    bwipjs.toBuffer({ bcid: "code128", text: label.barcode, scale: 3, height: 10, includetext: false }),
+    bwipjs.toBuffer({
+      bcid: "code128",
+      text: label.barcode,
+      scale: 3,
+      height: 10,
+      includetext: false,
+    }),
     bwipjs.toBuffer({ bcid: "qrcode", text: label.barcode, scale: 4 }),
   ]);
   const [barImg, qrImg] = await Promise.all([doc.embedPng(code128), doc.embedPng(qr)]);
   // QR on the right, full height.
-  page.drawImage(qrImg, { x: origin.x + w - pad - qrSize, y: origin.y + (h - qrSize) / 2, width: qrSize, height: qrSize });
+  page.drawImage(qrImg, {
+    x: origin.x + w - pad - qrSize,
+    y: origin.y + (h - qrSize) / 2,
+    width: qrSize,
+    height: qrSize,
+  });
   const textW = w - 3 * pad - qrSize;
   const fit = (s: string, f: PDFFont, size: number) => {
     let out = s;
@@ -161,9 +197,20 @@ async function drawLabel(
   y -= 11;
   page.drawText(fit(text.spec, bold, 9), { x: origin.x + pad, y, size: 9, font: bold });
   y -= 11;
-  page.drawText(fit(text.lot, font, 7), { x: origin.x + pad, y, size: 7, font, color: rgb(0.25, 0.25, 0.25) });
+  page.drawText(fit(text.lot, font, 7), {
+    x: origin.x + pad,
+    y,
+    size: 7,
+    font,
+    color: rgb(0.25, 0.25, 0.25),
+  });
   const barH = Math.max(8 * MM, y - origin.y - pad - 2);
-  page.drawImage(barImg, { x: origin.x + pad, y: origin.y + pad, width: textW, height: Math.min(barH, 14 * MM) });
+  page.drawImage(barImg, {
+    x: origin.x + pad,
+    y: origin.y + pad,
+    width: textW,
+    height: Math.min(barH, 14 * MM),
+  });
 }
 
 /** ZPL II for 203 dpi thermal printers (8 dots/mm). */

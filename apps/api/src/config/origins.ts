@@ -8,5 +8,7 @@ export function webOrigins(env: Env): string[] {
   if (primary.hostname === "localhost") alternate.hostname = "127.0.0.1";
   else if (primary.hostname === "127.0.0.1") alternate.hostname = "localhost";
   else return [env.WEB_ORIGIN];
-  return alternate.origin === env.WEB_ORIGIN ? [env.WEB_ORIGIN] : [env.WEB_ORIGIN, alternate.origin];
+  return alternate.origin === env.WEB_ORIGIN
+    ? [env.WEB_ORIGIN]
+    : [env.WEB_ORIGIN, alternate.origin];
 }

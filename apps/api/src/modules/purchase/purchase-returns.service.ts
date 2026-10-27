@@ -74,7 +74,10 @@ export class PurchaseReturnsService {
       .innerJoin(rolls, eq(rolls.id, purchaseReturnRolls.rollId))
       .where(eq(purchaseReturnRolls.returnId, id))
       .orderBy(asc(rolls.barcode));
-    const totals = this.totals(lines.map((l) => l.line), row.pr.regime);
+    const totals = this.totals(
+      lines.map((l) => l.line),
+      row.pr.regime,
+    );
     const count = {
       n: lines.length,
       m: lines.reduce((s, l) => s + l.line.lengthM, 0),
@@ -141,7 +144,14 @@ export class PurchaseReturnsService {
         purchaseReturns,
         eq(purchaseReturns.id, id),
         dto.version,
-        { supplierId: dto.supplierId, piId: dto.piId ?? null, date: dto.date, regime, reason: dto.reason, notes: dto.notes ?? null },
+        {
+          supplierId: dto.supplierId,
+          piId: dto.piId ?? null,
+          date: dto.date,
+          regime,
+          reason: dto.reason,
+          notes: dto.notes ?? null,
+        },
         "Purchase return",
       );
       await tx.delete(purchaseReturnRolls).where(eq(purchaseReturnRolls.returnId, id));
@@ -157,7 +167,14 @@ export class PurchaseReturnsService {
       purchaseReturnMachine.assert(pr.status, "Cancelled");
       // Free the rolls for another return (port matrix 2.10: one open return per roll).
       await tx.delete(purchaseReturnRolls).where(eq(purchaseReturnRolls.returnId, id));
-      await updateVersioned(tx, purchaseReturns, eq(purchaseReturns.id, id), version, { status: "Cancelled" }, "Purchase return");
+      await updateVersioned(
+        tx,
+        purchaseReturns,
+        eq(purchaseReturns.id, id),
+        version,
+        { status: "Cancelled" },
+        "Purchase return",
+      );
       await recordTransition(tx, "PurchaseReturn", id, pr.status, "Cancelled");
       this.changed(id);
     });
@@ -177,10 +194,15 @@ export class PurchaseReturnsService {
       if (lines.length === 0) throw validationError("Add at least one roll before posting.");
       const moved = lines.filter((l) => !RETURNABLE.has(l.roll.status));
       if (moved.length) {
-        throw validationError(`${moved[0]!.roll.barcode} is ${moved[0]!.roll.status} and can't be returned now.`);
+        throw validationError(
+          `${moved[0]!.roll.barcode} is ${moved[0]!.roll.status} and can't be returned now.`,
+        );
       }
       for (const { roll } of lines) rollMachine.assert(roll.status, "ReturnedToSupplier");
-      const totals = this.totals(lines.map((l) => l.line), pr.regime);
+      const totals = this.totals(
+        lines.map((l) => l.line),
+        pr.regime,
+      );
       const prNo = await this.series.allocate(tx, "PR", pr.date);
       const dnNo = await this.series.allocate(tx, "DN", pr.date);
       for (const status of ["Unmapped", "Mapped"] as const) {
@@ -188,9 +210,21 @@ export class PurchaseReturnsService {
         if (!ids.length) continue;
         await tx
           .update(rolls)
-          .set({ status: "ReturnedToSupplier", updatedAt: new Date(), updatedBy: actor().userId, version: sql`${rolls.version} + 1` })
+          .set({
+            status: "ReturnedToSupplier",
+            updatedAt: new Date(),
+            updatedBy: actor().userId,
+            version: sql`${rolls.version} + 1`,
+          })
           .where(inArray(rolls.id, ids));
-        await recordTransition(tx, "Roll", ids, status, "ReturnedToSupplier", `Purchase return ${prNo}: ${pr.reason}`);
+        await recordTransition(
+          tx,
+          "Roll",
+          ids,
+          status,
+          "ReturnedToSupplier",
+          `Purchase return ${prNo}: ${pr.reason}`,
+        );
       }
       await updateVersioned(
         tx,
@@ -225,7 +259,12 @@ export class PurchaseReturnsService {
         payload: {
           prNo,
           dnNo,
-          supplier: { id: supplier!.id, name: supplier!.name, gstin: supplier!.gstin, stateCode: supplier!.stateCode },
+          supplier: {
+            id: supplier!.id,
+            name: supplier!.name,
+            gstin: supplier!.gstin,
+            stateCode: supplier!.stateCode,
+          },
           regime: pr.regime,
           reason: pr.reason,
           piId: pr.piId,
@@ -237,7 +276,10 @@ export class PurchaseReturnsService {
             gstRate: line.gstRate,
             amount: line.amount,
             // Inventory leaves at its carrying cost; any gap to the debit value is a variance.
-            carryingValue: round(D(roll.costPerM ?? roll.baseCostPerM ?? 0).times(line.lengthM), 2).toFixed(2),
+            carryingValue: round(
+              D(roll.costPerM ?? roll.baseCostPerM ?? 0).times(line.lengthM),
+              2,
+            ).toFixed(2),
           })),
           totals: {
             taxable: totals.taxable.toFixed(2),
@@ -266,10 +308,17 @@ export class PurchaseReturnsService {
     if (found.length !== ids.length) throw notFound("Roll");
     const issues: { path: string; message: string }[] = [];
     for (const r of found) {
-      if (r.supplierId !== dto.supplierId) issues.push({ path: "rollIds", message: `${r.barcode} is from another supplier` });
-      else if (!RETURNABLE.has(r.status)) issues.push({ path: "rollIds", message: `${r.barcode} is ${r.status}` });
-      else if (!r.piId || !r.baseCostPerM) issues.push({ path: "rollIds", message: `${r.barcode} has no posted purchase invoice yet` });
-      else if (dto.piId && r.piId !== dto.piId) issues.push({ path: "rollIds", message: `${r.barcode} is on another invoice` });
+      if (r.supplierId !== dto.supplierId)
+        issues.push({ path: "rollIds", message: `${r.barcode} is from another supplier` });
+      else if (!RETURNABLE.has(r.status))
+        issues.push({ path: "rollIds", message: `${r.barcode} is ${r.status}` });
+      else if (!r.piId || !r.baseCostPerM)
+        issues.push({
+          path: "rollIds",
+          message: `${r.barcode} has no posted purchase invoice yet`,
+        });
+      else if (dto.piId && r.piId !== dto.piId)
+        issues.push({ path: "rollIds", message: `${r.barcode} is on another invoice` });
     }
     if (issues.length) throw validationError("Some rolls can't be returned.", issues);
     const piIds = [...new Set(found.map((r) => r.piId!))];
@@ -279,12 +328,17 @@ export class PurchaseReturnsService {
       .innerJoin(purchaseInvoices, eq(purchaseInvoices.id, purchaseInvoiceLines.piId))
       .where(inArray(purchaseInvoiceLines.piId, piIds));
     const lineFor = (r: (typeof found)[number]) =>
-      piLines.find((p) => p.line.piId === r.piId && sameItem({ skuId: p.line.skuId, gsm: p.line.gsm, widthIn: p.line.widthIn }, r))?.line;
+      piLines.find(
+        (p) =>
+          p.line.piId === r.piId &&
+          sameItem({ skuId: p.line.skuId, gsm: p.line.gsm, widthIn: p.line.widthIn }, r),
+      )?.line;
     const unpriced = found.filter((r) => !lineFor(r));
     if (unpriced.length) {
-      throw validationError(`${unpriced[0]!.barcode} has no matching line on its purchase invoice.`, [
-        { path: "rollIds", message: "Can't find its GST rate" },
-      ]);
+      throw validationError(
+        `${unpriced[0]!.barcode} has no matching line on its purchase invoice.`,
+        [{ path: "rollIds", message: "Can't find its GST rate" }],
+      );
     }
     await tx.insert(purchaseReturnRolls).values(
       found.map((r) => {
@@ -302,7 +356,10 @@ export class PurchaseReturnsService {
     );
   }
 
-  private totals(lines: { lengthM: number; ratePerM: string; gstRate: string }[], regime: "CGST_SGST" | "IGST") {
+  private totals(
+    lines: { lengthM: number; ratePerM: string; gstRate: string }[],
+    regime: "CGST_SGST" | "IGST",
+  ) {
     return invoiceTotals(
       lines.map((l) => taxLine({ quantity: l.lengthM, rate: l.ratePerM, gstRate: l.gstRate })),
       regime,

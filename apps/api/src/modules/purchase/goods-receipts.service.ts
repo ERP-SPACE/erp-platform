@@ -207,7 +207,8 @@ export class GoodsReceiptsService {
     const parsed = parseLines(dto.lines);
     await this.uow.run(async (tx) => {
       const current = await this.lock(tx, id);
-      if (current.status !== "Created") throw validationError("A posted goods receipt can't be edited.");
+      if (current.status !== "Created")
+        throw validationError("A posted goods receipt can't be edited.");
       const { supplier } = await supplierWithRegime(tx, dto.supplierId);
       assertActiveSupplier(supplier);
       await this.assertPo(tx, dto);
@@ -238,7 +239,14 @@ export class GoodsReceiptsService {
     await this.uow.run(async (tx) => {
       const current = await this.lock(tx, id);
       grnMachine.assert(current.status, "Cancelled");
-      await updateVersioned(tx, goodsReceipts, eq(goodsReceipts.id, id), version, { status: "Cancelled" }, "Goods receipt");
+      await updateVersioned(
+        tx,
+        goodsReceipts,
+        eq(goodsReceipts.id, id),
+        version,
+        { status: "Cancelled" },
+        "Goods receipt",
+      );
       await recordTransition(tx, "GoodsReceipt", id, current.status, "Cancelled");
       this.changed(id);
     });
@@ -272,12 +280,17 @@ export class GoodsReceiptsService {
         : [];
       const tolerance = D(await this.settings.value("purchase.overReceiptTolerancePct"));
       const incoming = new Map<string, number>();
-      for (const l of lines) if (l.poLineId) incoming.set(l.poLineId, (incoming.get(l.poLineId) ?? 0) + l.acceptedM);
+      for (const l of lines)
+        if (l.poLineId) incoming.set(l.poLineId, (incoming.get(l.poLineId) ?? 0) + l.acceptedM);
       const overByLine = new Map<string, number>();
       const issues: { path: string; message: string }[] = [];
       for (const pl of poLines) {
         const after = pl.receivedM + (incoming.get(pl.id) ?? 0);
-        const allowed = D(pl.quantityM).times(D(100).plus(tolerance)).dividedBy(100).floor().toNumber();
+        const allowed = D(pl.quantityM)
+          .times(D(100).plus(tolerance))
+          .dividedBy(100)
+          .floor()
+          .toNumber();
         const over = Math.max(0, after - pl.quantityM);
         if (over > 0) overByLine.set(pl.id, over);
         if (after > allowed) {
@@ -289,7 +302,11 @@ export class GoodsReceiptsService {
       }
       if (grn.poId) {
         lines.forEach((l, i) => {
-          if (!l.poLineId) issues.push({ path: `lines.${i}.poLineId`, message: `${l.description}: not on the purchase order` });
+          if (!l.poLineId)
+            issues.push({
+              path: `lines.${i}.poLineId`,
+              message: `${l.description}: not on the purchase order`,
+            });
         });
       }
       if (issues.length && !approveOverReceipt) {
@@ -302,9 +319,15 @@ export class GoodsReceiptsService {
       // 2. Batch: per-supplier sequence under the supplier row lock (ADR-0007).
       const totalRolls = lines.reduce((s, l) => s + l.rollCount, 0);
       if (totalRolls > MAX_ROLLS_PER_BATCH) {
-        throw validationError(`A receipt can create at most ${MAX_ROLLS_PER_BATCH} rolls; split it.`);
+        throw validationError(
+          `A receipt can create at most ${MAX_ROLLS_PER_BATCH} rolls; split it.`,
+        );
       }
-      const [supplier] = await tx.select().from(suppliers).where(eq(suppliers.id, grn.supplierId)).for("update");
+      const [supplier] = await tx
+        .select()
+        .from(suppliers)
+        .where(eq(suppliers.id, grn.supplierId))
+        .for("update");
       const [last] = await tx
         .select({ seq: max(batches.batchSeq) })
         .from(batches)
@@ -330,7 +353,7 @@ export class GoodsReceiptsService {
       let seq = 0;
       const rows: (typeof rolls.$inferInsert)[] = [];
       for (const l of lines) {
-        const rate = l.poLineId ? rateByPoLine.get(l.poLineId) ?? null : null;
+        const rate = l.poLineId ? (rateByPoLine.get(l.poLineId) ?? null) : null;
         for (const length of parseRollList(l.rollList)) {
           seq += 1;
           rows.push({
@@ -368,7 +391,10 @@ export class GoodsReceiptsService {
       const created: { id: string; status: string }[] = [];
       for (let i = 0; i < rows.length; i += 500) {
         created.push(
-          ...(await tx.insert(rolls).values(rows.slice(i, i + 500)).returning({ id: rolls.id, status: rolls.status })),
+          ...(await tx
+            .insert(rolls)
+            .values(rows.slice(i, i + 500))
+            .returning({ id: rolls.id, status: rolls.status })),
         );
       }
       for (const status of ["Mapped", "Unmapped"] as const) {
@@ -390,8 +416,12 @@ export class GoodsReceiptsService {
           .where(eq(purchaseOrderLines.id, pl.id));
       }
       for (const l of lines) {
-        const over = l.poLineId ? overByLine.get(l.poLineId) ?? 0 : grn.poId ? l.acceptedM : 0;
-        if (over) await tx.update(goodsReceiptLines).set({ overReceiptM: over }).where(eq(goodsReceiptLines.id, l.id));
+        const over = l.poLineId ? (overByLine.get(l.poLineId) ?? 0) : grn.poId ? l.acceptedM : 0;
+        if (over)
+          await tx
+            .update(goodsReceiptLines)
+            .set({ overReceiptM: over })
+            .where(eq(goodsReceiptLines.id, l.id));
       }
       if (grn.poId) await this.orders.afterReceipt(tx, grn.poId);
       await updateVersioned(
@@ -410,7 +440,10 @@ export class GoodsReceiptsService {
       );
       await recordTransition(tx, "GoodsReceipt", id, "Created", "Posted");
       this.changed(id);
-      this.bus.publishAfterCommit("inventory.changed", { grnId: id, rolls: String(created.length) });
+      this.bus.publishAfterCommit("inventory.changed", {
+        grnId: id,
+        rolls: String(created.length),
+      });
     });
     return this.get(id);
   }
@@ -438,12 +471,15 @@ export class GoodsReceiptsService {
       .where(and(eq(purchaseOrders.id, dto.poId), eq(purchaseOrders.companyId, actor().companyId)));
     if (!po) throw notFound("Purchase order");
     if (po.supplierId !== dto.supplierId) {
-      throw validationError("The purchase order is for another supplier.", [{ path: "poId", message: "Different supplier" }]);
+      throw validationError("The purchase order is for another supplier.", [
+        { path: "poId", message: "Different supplier" },
+      ]);
     }
     if (po.status !== "Approved" && po.status !== "PartiallyReceived") {
-      throw validationError(`Purchase order ${po.poNo} is ${po.status}; only approved orders can be received.`, [
-        { path: "poId", message: `Order is ${po.status}` },
-      ]);
+      throw validationError(
+        `Purchase order ${po.poNo} is ${po.status}; only approved orders can be received.`,
+        [{ path: "poId", message: `Order is ${po.status}` }],
+      );
     }
     if (lineIds.length) {
       const owned = await tx
@@ -502,7 +538,10 @@ function parseLines(lines: GrnCreateDto["lines"]): ParsedLine[] {
         issues.push({ path: `lines.${i}.rejectedRolls`, message: e.message });
       }
       if (!input.rejectReason?.trim()) {
-        issues.push({ path: `lines.${i}.rejectReason`, message: "Say why the rolls were rejected" });
+        issues.push({
+          path: `lines.${i}.rejectReason`,
+          message: "Say why the rolls were rejected",
+        });
       }
     }
     return { input, lengths, rejected };

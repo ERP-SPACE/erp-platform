@@ -49,12 +49,24 @@ export class PiDetailDto extends zodDto("PiDetailDto", piDetail) {}
 
 export class LandedCostRequestDto extends zodDto("LandedCostRequestDto", landedCostRequest) {}
 export class LandedCostPreviewDto extends zodDto("LandedCostPreviewDto", landedCostPreview) {}
-export class LandedCostChargeItemDto extends zodDto("LandedCostChargeItemDto", landedCostChargeItem) {}
+export class LandedCostChargeItemDto extends zodDto(
+  "LandedCostChargeItemDto",
+  landedCostChargeItem,
+) {}
 
-export class PurchaseReturnCreateDto extends zodDto("PurchaseReturnCreateDto", purchaseReturnCreate) {}
-export class PurchaseReturnUpdateDto extends zodDto("PurchaseReturnUpdateDto", purchaseReturnUpdate) {}
+export class PurchaseReturnCreateDto extends zodDto(
+  "PurchaseReturnCreateDto",
+  purchaseReturnCreate,
+) {}
+export class PurchaseReturnUpdateDto extends zodDto(
+  "PurchaseReturnUpdateDto",
+  purchaseReturnUpdate,
+) {}
 export class PurchaseReturnPostDto extends zodDto("PurchaseReturnPostDto", purchaseReturnPost) {}
 export class PurchaseReturnItemDto extends zodDto("PurchaseReturnItemDto", purchaseReturnItem) {}
-export class PurchaseReturnDetailDto extends zodDto("PurchaseReturnDetailDto", purchaseReturnDetail) {}
+export class PurchaseReturnDetailDto extends zodDto(
+  "PurchaseReturnDetailDto",
+  purchaseReturnDetail,
+) {}
 
 export class OkDto extends zodDto("OkDto", z.object({ ok: z.literal(true) })) {}

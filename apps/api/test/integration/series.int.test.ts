@@ -40,9 +40,10 @@ describe("document numbering (ADR-0003)", () => {
   });
 
   it("50 concurrent allocations produce exactly 1..50 — no gaps, no duplicates", async () => {
+    // JV: a series no other integration file uses (files share one database).
     const numbers = await Promise.all(
       Array.from({ length: 50 }, () =>
-        asOwner(() => uow.run((tx) => series.allocate(tx, "PO", "2026-10-23"))),
+        asOwner(() => uow.run((tx) => series.allocate(tx, "JV", "2026-10-23"))),
       ),
     );
     const seqs = numbers.map((n) => Number(n.split("/").at(-1))).sort((a, b) => a - b);

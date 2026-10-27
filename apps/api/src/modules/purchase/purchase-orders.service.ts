@@ -215,9 +215,16 @@ export class PurchaseOrdersService {
 
   /** Called by GRN posting: PartiallyReceived on the first receipt, Closed when fully received. */
   async afterReceipt(tx: Tx, poId: string) {
-    const [po] = await tx.select().from(purchaseOrders).where(eq(purchaseOrders.id, poId)).for("update");
+    const [po] = await tx
+      .select()
+      .from(purchaseOrders)
+      .where(eq(purchaseOrders.id, poId))
+      .for("update");
     if (!po) return;
-    const lines = await tx.select().from(purchaseOrderLines).where(eq(purchaseOrderLines.poId, poId));
+    const lines = await tx
+      .select()
+      .from(purchaseOrderLines)
+      .where(eq(purchaseOrderLines.poId, poId));
     const complete = lines.every((l) => l.receivedM >= l.quantityM);
     const next: PoStatus | null =
       complete && po.status !== "Closed"
@@ -230,7 +237,14 @@ export class PurchaseOrdersService {
       // Approved → PartiallyReceived → Closed keeps the log faithful to the machine.
       purchaseOrderMachine.assert("Approved", "PartiallyReceived");
       await recordTransition(tx, "PurchaseOrder", poId, "Approved", "PartiallyReceived");
-      await recordTransition(tx, "PurchaseOrder", poId, "PartiallyReceived", "Closed", "Fully received");
+      await recordTransition(
+        tx,
+        "PurchaseOrder",
+        poId,
+        "PartiallyReceived",
+        "Closed",
+        "Fully received",
+      );
     } else {
       purchaseOrderMachine.assert(po.status, next);
       await recordTransition(tx, "PurchaseOrder", poId, po.status, next);
