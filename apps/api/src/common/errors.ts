@@ -31,3 +31,6 @@ export const versionConflict = (current: NonNullable<Problem["current"]>) =>
     "This record was changed by someone else. Reload to see the latest version.",
     { current },
   );
+/** A business rule needs someone with authority to approve it (e.g. GRN over-receipt). */
+export const approvalRequired = (message: string, issues?: Problem["issues"]) =>
+  new AppError(422, "APPROVAL_REQUIRED", message, issues ? { issues } : {});
