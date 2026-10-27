@@ -60,7 +60,9 @@ test("GATE: a customer is created with the keyboard only in under 60 seconds", a
   await expect(page.getByRole("heading", { level: 1, name })).toBeVisible();
   await expect(page.getByText(gstin).first()).toBeVisible();
   const seconds = (Date.now() - started) / 1000;
-  test.info().annotations.push({ type: "keyboard-create-seconds", description: seconds.toFixed(1) });
+  test
+    .info()
+    .annotations.push({ type: "keyboard-create-seconds", description: seconds.toFixed(1) });
   expect(seconds).toBeLessThan(60);
 });
 
@@ -72,7 +74,8 @@ test("GATE: choosing a salesman pre-fills credit terms and starting rates", asyn
   await page.getByLabel("Address line 1").fill("4 Textile Market");
   await page.getByRole("textbox", { name: "City", exact: true }).fill("Surat");
   await page.getByLabel("PIN code").fill("395003");
-  await page.getByLabel("State", { exact: true }).fill("Gujarat");
+  // The address "State" text box (the GST state is a combobox).
+  await page.getByRole("textbox", { name: /^State/ }).fill("Gujarat");
 
   // Company defaults before a salesman is chosen (Q7: ₹1,00,000 / 30 / 15).
   await expect(page.getByLabel("Credit limit")).toHaveValue("100000");
@@ -83,7 +86,10 @@ test("GATE: choosing a salesman pre-fills credit terms and starting rates", asyn
   await page.keyboard.press("Enter");
   const firstSalesman = page.getByRole("option").nth(1);
   const salesmanName = (await firstSalesman.textContent())!.split(" · ")[0]!;
+  // The open list focuses the current choice; arrow keys only work once it has.
+  await expect(page.getByRole("option", { name: "No salesman" })).toBeFocused();
   await page.keyboard.press("ArrowDown");
+  await expect(firstSalesman).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(salesman).toContainText(salesmanName);
 
@@ -148,6 +154,6 @@ test("bulk rate revision: scope → change → preview → reason → applied", 
   await apply.click();
   await page.waitForTimeout(500);
   await confirmIfAsked(page);
-  await expect(page.getByText(/rates revised/)).toBeVisible();
+  await expect(page.getByText(/^\d+ rates revised$/)).toBeVisible();
   await expect(page).toHaveURL(/\/customers$/);
 });

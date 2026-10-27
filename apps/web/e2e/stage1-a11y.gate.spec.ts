@@ -33,7 +33,9 @@ for (const theme of themes) {
           .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
           .analyze();
         expect(
-          results.violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`),
+          results.violations.map(
+            (v) => `${v.id}: ${v.nodes.map((n) => n.target.join(" ")).join(", ")}`,
+          ),
         ).toEqual([]);
       });
     }
@@ -45,7 +47,9 @@ for (const theme of themes) {
       for (const tab of ["Overview", "Credit", "Rates"]) {
         await page.getByRole("tab", { name: new RegExp(`^${tab}`) }).click();
         await page.waitForLoadState("networkidle");
-        const r = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+        const r = await new AxeBuilder({ page })
+          .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+          .analyze();
         expect(r.violations.map((v) => `${tab} · ${v.id}`)).toEqual([]);
       }
       await page.goto("/salesmen");
@@ -54,7 +58,9 @@ for (const theme of themes) {
       for (const tab of ["Profile", "Defaults", "KYC documents"]) {
         await page.getByRole("tab", { name: new RegExp(`^${tab}`) }).click();
         await page.waitForLoadState("networkidle");
-        const r = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa"]).analyze();
+        const r = await new AxeBuilder({ page })
+          .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+          .analyze();
         expect(r.violations.map((v) => `${tab} · ${v.id}`)).toEqual([]);
       }
     });

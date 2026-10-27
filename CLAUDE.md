@@ -30,7 +30,7 @@ ERP for a sublimation & speciality paper trading company in Surat, Gujarat. It r
 - **Infrastructure:** PostgreSQL 17, Redis. Auth via Better Auth (session cookies, argon2id, TOTP for Owner, step-up re-auth).
 - **Testing:** Vitest + fast-check, Testcontainers Postgres, Playwright.
 - **Repo (ADR-0019):** a single private monorepo, `ERP-SPACE/erp-platform`.
-- **Local-first:** Docker Compose runs Postgres 17, Redis 7 and Mailpit. MinIO is opt-in (`--profile storage`): its public image was withdrawn, so pick a replacement S3-compatible image when Stage 1 needs file storage. S3, email and e-invoice sit behind adapters. Config is env vars validated by Zod.
+- **Local-first:** Docker Compose runs Postgres 17, Redis 7 and Mailpit. MinIO is opt-in (`--profile storage`); files use the local filesystem adapter under `.storage/` (ADR-0023). S3, email and e-invoice sit behind adapters. Config is env vars validated by Zod.
 - **AWS (Stage 7 — Cloud deployment, after local UAT sign-off):** ap-south-1 — ECS Fargate, RDS, ElastiCache, S3, CloudFront; Terraform; GitHub Actions → ECR. No AWS work before Stage 7.
 
 ## Non-negotiable rules
@@ -135,12 +135,14 @@ The owner rejected the "Editorial Ledger" look as childish (2026-10-23). Build e
 |---|---|
 | `pnpm install` | Install everything |
 | `pnpm setup:local` | Create `.env` with generated secrets and the seed Owner password |
-| `pnpm db:up` / `pnpm db:down` | Start/stop Postgres 17, Redis 7, MinIO, Mailpit (Docker Compose) |
+| `pnpm db:up` / `pnpm db:down` | Start/stop Postgres 17, Redis 7, Mailpit (Docker Compose) |
 | `pnpm db:reset` | Drop, migrate and seed the local database |
+| `pnpm db:seed:demo` | Dev-only demo masters (40 customers, 5 salesmen, 8 suppliers, catalogue grid) and, when `DEMO_USER_*` is set in `.env`, a demo sign-in |
 | `pnpm dev` | API :3000, worker, web :5173 (proxy `/api` → API) |
 | `pnpm build` · `pnpm lint` · `pnpm typecheck` · `pnpm test` | Repo-wide checks |
 | `pnpm test:int` | API integration tests (Testcontainers; needs Docker) |
 | `pnpm test:e2e` | Playwright gate + accessibility (`E2E_PUBLIC_ONLY=1` for no-API pages only) |
+| `pnpm test:e2e:isolated` | Full Playwright run against a throwaway `erp_e2e` database (API :3100, web :5174) — never touches the dev database |
 | `pnpm api:gen` | Export OpenAPI and regenerate the typed client (after API changes) |
 | `pnpm --filter @erp/db generate` | New Drizzle migration after schema changes |
 

@@ -2,7 +2,7 @@ import { Button, Divider, Field, Mono, TextInput } from "@erp/ui";
 import { useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import QRCode from "qrcode";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AuthLayout } from "../components/auth-layout.js";
 import { ApiError } from "../lib/api.js";
 import { authClient } from "../lib/auth.js";
@@ -58,16 +58,15 @@ function SetupTwoFactor() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [password, setPassword] = useState("");
-  const [enrolment, setEnrolment] = useState<Enrolment>();
+  // Resume a pending enrolment from this tab (lazy initial state, not an effect).
+  const [enrolment, setEnrolment] = useState<Enrolment | undefined>(() => {
+    const stored = readStoredEnrolment();
+    return stored?.qr && stored.secret ? stored : undefined;
+  });
   const [code, setCode] = useState("");
   const [error, setError] = useState<string>();
   const [busy, setBusy] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
-
-  useEffect(() => {
-    const stored = readStoredEnrolment();
-    if (stored?.qr && stored.secret) setEnrolment(stored);
-  }, []);
 
   const applyEnrolment = (next: Enrolment) => {
     setEnrolment(next);
@@ -86,8 +85,7 @@ function SetupTwoFactor() {
     }
     const resumeMsg = resume.error?.message ?? "";
     const pendingOnly =
-      resume.error &&
-      (resume.error.code === "TOTP_NOT_ENABLED" || /not enabled/i.test(resumeMsg));
+      resume.error && (resume.error.code === "TOTP_NOT_ENABLED" || /not enabled/i.test(resumeMsg));
     if (resume.error && !pendingOnly) {
       setBusy(false);
       setError("Password is incorrect.");
@@ -159,8 +157,8 @@ function SetupTwoFactor() {
           </ol>
         ) : (
           <p className="text-sm text-fg-2">
-            Backup codes were shown when you first opened the QR. If you did not save them, ask an admin to reset your
-            two-step setup later.
+            Backup codes were shown when you first opened the QR. If you did not save them, ask an
+            admin to reset your two-step setup later.
           </p>
         )}
         <Button
@@ -227,7 +225,9 @@ function SetupTwoFactor() {
             />
             <div className="min-w-0 text-sm text-fg-2">
               <p>Scan once with Google Authenticator, Microsoft Authenticator or 1Password.</p>
-              <p className="mt-2 text-fg-3">Do not refresh this page — it can invalidate the QR your phone scanned.</p>
+              <p className="mt-2 text-fg-3">
+                Do not refresh this page — it can invalidate the QR your phone scanned.
+              </p>
               <p className="label-caps mt-3">Or enter this key</p>
               <Mono className="break-all text-fg" data-testid="totp-secret">
                 {enrolment.secret}

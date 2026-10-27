@@ -15,6 +15,7 @@
     "test": "turbo run test",
     "test:int": "turbo run test:int --concurrency=1",
     "test:e2e": "pnpm --filter @erp/web test:e2e",
+    "test:e2e:isolated": "node scripts/e2e-isolated.mjs",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "db:up": "docker compose -f infra/docker/docker-compose.yml up -d --wait",

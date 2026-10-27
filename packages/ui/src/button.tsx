@@ -81,7 +81,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
           {shortcut ? (
             <Kbd
               className={
-                variant === "primary" ? "border-primary-fg/40 text-primary-fg" : undefined
+                variant === "primary"
+                  ? "border-primary-fg/40 bg-transparent text-primary-fg"
+                  : undefined
               }
             >
               {shortcut}

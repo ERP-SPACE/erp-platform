@@ -523,10 +523,13 @@ function UserMenu({
       trigger={
         <button
           type="button"
-          aria-label={`${me.user.name} — account and display`}
           className="flex items-center gap-2 rounded-md p-1 pr-2 hover:bg-muted"
         >
-          <Avatar name={me.user.name} size="sm" />
+          {/* No aria-label: the accessible name must contain the visible text (WCAG 2.5.3). */}
+          <span aria-hidden>
+            <Avatar name={me.user.name} size="sm" />
+          </span>
+          <span className="sr-only sm:hidden">{me.user.name} — account and display</span>
           <span className="hidden text-left sm:block">
             <span className="block text-sm font-medium leading-tight text-fg">{me.user.name}</span>
             <span className="block text-xs capitalize leading-tight text-fg-3">
