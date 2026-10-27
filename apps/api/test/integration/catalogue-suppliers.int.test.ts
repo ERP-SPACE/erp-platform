@@ -41,11 +41,18 @@ describe("catalogue (PRD §5.1)", () => {
   });
   afterAll(() => t.close());
 
-  it("seeded categories start without HSN/GST and are flagged not tax-ready (Q9)", () => {
-    expect(sub).toMatchObject({ hsnCode: null, gstRate: null, taxReady: false });
+  it("seeded categories carry the owner's HSN/GST (Q9) and are tax-ready", () => {
+    expect(sub).toMatchObject({ hsnCode: "48099000", gstRate: "18", taxReady: true });
   });
 
-  it("entering HSN + GST makes a category tax-ready; a stale version → 409", async () => {
+  it("HSN and GST stay editable; clearing them flags the category; a stale version → 409", async () => {
+    const cleared = await owner.request({
+      method: "PATCH",
+      url: `/api/catalogue/categories/${sub.id}`,
+      payload: { name: sub.name, hsnCode: null, gstRate: null, active: true, version: sub.version },
+    });
+    expect(json(cleared)).toMatchObject({ hsnCode: null, taxReady: false });
+    sub = json<Category>(cleared);
     const payload = { name: sub.name, hsnCode: "48099000", gstRate: "18", active: true };
     const res = await owner.request({
       method: "PATCH",
@@ -68,7 +75,7 @@ describe("catalogue (PRD §5.1)", () => {
     const res = await owner.request({
       method: "PATCH",
       url: `/api/catalogue/categories/${sub.id}`,
-      payload: { name: sub.name, hsnCode: "48099", gstRate: "18", active: true, version: 2 },
+      payload: { name: sub.name, hsnCode: "48099", gstRate: "18", active: true, version: 3 },
     });
     expect(res.statusCode).toBe(400);
   });
@@ -104,8 +111,8 @@ describe("catalogue (PRD §5.1)", () => {
         categoryId: sub.id,
         qualityId: premiumId,
         gsm: 47,
-        defaultLengthM: 1200,
-        widthsIn: [50],
+        defaultLengthM: 1250,
+        widthsIn: [55],
       },
     });
     expect(res.statusCode).toBe(400);

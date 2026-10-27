@@ -13,10 +13,16 @@ Owner: business owner, unless marked **CA**. Each question is tagged with the st
 | Q17 | Are rolls ever cut? | **Sometimes** | Cut operation, child rolls, cut-aware allocation — ADR-0018 |
 | Q6 | Rate rounding, override tolerance, approver | **2 decimals; > 5 % needs Sales Manager or Owner** | Settings `pricing.rateDecimals` / `pricing.overrideTolerancePct`; permission `pricing.override.approve` (used from Stage 3) |
 | Q7 | Default credit policy | **₹1,00,000, 30 days, 15 grace days, block on BOTH** | Setting `credit.defaults`; a salesman's own defaults override it |
-| Q8 | Master lists | **GSM 30/35/45/55/65/80/100; widths 24/36/44/63; lengths 1000/1500/2000 m; Premium/Standard/Economy** | Seeded into Settings and the catalogue |
+| Q8 | Master lists | **GSM 30/35/45/55/65/80/100; widths 24/36/44/63; lengths 1000/1500/2000 m; Premium/Standard/Economy**, extended 2026-10-27 from real invoices: GSM 29, widths 40/46/48/50/60, lengths 720–1300 m, quality Eco | Seeded into Settings and the catalogue |
 | Q9 | HSN / GST per category | **Entered later in the app** | Categories start "HSN not set"; Stage 3 refuses to invoice them |
 | Q10 | Do salesmen log in? | **No — office staff enter everything** | Salesmen are records only, no user accounts |
 | Q11 | Commission base | **Taxable value** (after discounts, before GST) | `PERCENT_SALES` rules; accrual in Stage 4 |
+| Q1 | Company GST profile | **Gulmohar Creation**, GSTIN 24AAOFG2101Q1ZB, Hojiwala Industrial Estate, Surat 394230 (from invoice R/649, 2026-10-27) | Seeded as the company profile; bank and signatory to be added in Settings |
+| Q9 (update) | HSN / GST per category | **Sublimation 48099000 @ 18 %** (seen on all invoices); **Butter (greaseproof) 48062000 @ 12 %** (owner, 2026-10-27). Must stay editable | Seeded; editable in Catalogue |
+| Q3 (update) | Invoice series | **Start with the ERP's own series** (`SI/2627/00001`), not the old R/ series (2026-10-27) | ADR-0003 unchanged |
+| Q13 | Measure each roll at inward? | **No — trust the supplier's lengths** (suppliers list them, e.g. "4 X 1000, 500+450 MTRS") | GRN takes the supplier's per-roll lengths; no re-measure step |
+| Q15 | Godown locations? | **Not tracked today** | No location fields in Stage 2; can be added later |
+| Q16 | Landed-cost split | **Delegated to engineering**: follow the common trade structure; must stay editable | Default basis per charge type in Settings (Stage 2) |
 
 ## Deferred by owner
 
@@ -28,18 +34,14 @@ Owner: business owner, unless marked **CA**. Each question is tagged with the st
 
 | # | Question | Why it matters | Linked |
 |---|---|---|---|
-| Q1 | Company GST profile: legal & trade name, GSTIN, registered address, state, PAN, bank details, logo, authorised signatory. **Still needed — not blocking:** Stage 0 seeds placeholders that are editable in Settings. | Invoice letterhead, intra- vs inter-state GST, e-invoice seller details. | — |
 | Q4a | Install on this machine: **GitHub CLI** (`gh auth login` with access to `ERP-SPACE`) and **Docker Desktop**. Alternatively, create the empty private repo `ERP-SPACE/erp-platform` yourself. | Repo creation and local Postgres/Redis. | ADR-0019 |
 
 ## Before Stage 2 (purchase & inventory)
 
 | # | Question | Why it matters | Linked |
 |---|---|---|---|
-| Q12 | Hardware: thermal label printer (TSC/Zebra 4″) + USB scanner? Label size (default 100×50 mm)? Android phones in the godown? | Label templates (ZPL vs PDF), PWA testing. | ADR-0006/7 |
-| Q13 | At inward, do you measure each roll's actual length, or accept the supplier's nominal length? | GRN capture per roll vs per line. | Port matrix 3.3 |
+| Q12 | Hardware: thermal label printer (TSC/Zebra 4″) + USB scanner? Label size (default 100×50 mm)? Android phones in the godown? | Labels carry each roll's barcode/QR and are stuck on at GRN. Owner unsure of hardware (2026-10-27): **default PDF labels 100×50 mm, printable on any printer; a thermal printer (ZPL) can be switched on later in Settings** | ADR-0006/7 |
 | Q14 | Does the supplier invoice ever arrive before the goods (PI before GRN)? | PI/GRN ordering rules. | ADR-0017 |
-| Q15 | Track godown location (zone/rack/bin) per roll? | Pick lists, `/floor` UI. | Port matrix 3.4 |
-| Q16 | Typical landed-cost components and how you split them today (per roll, per metre, by value)? | Default basis per component. | PRD §8.3 |
 
 ## Before Stage 3 (sales)
 

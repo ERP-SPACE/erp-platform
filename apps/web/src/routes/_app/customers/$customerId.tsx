@@ -652,7 +652,11 @@ function RatesTab({ c, editable }: { c: CustomerDetail; editable: boolean }) {
 /** 44″ calculator: derived ₹/m for every allowed width (ADR-0013, Q6: 2 decimals). */
 function WidthCalculator({ rates }: { rates: PartyRateItem[] }) {
   const { data: settings } = useQuery(settingsQuery);
-  const widths = settingValue<number[]>(settings, "catalogue.allowedWidthsIn", [24, 36, 44, 63]);
+  const widths = settingValue<number[]>(
+    settings,
+    "catalogue.allowedWidthsIn",
+    [24, 36, 40, 44, 46, 48, 50, 60, 63],
+  );
   const decimals = settingValue<number>(settings, "pricing.rateDecimals", 2);
   const current = rates.filter((r) => r.current);
   const [productId, setProductId] = useState<string>("manual");
