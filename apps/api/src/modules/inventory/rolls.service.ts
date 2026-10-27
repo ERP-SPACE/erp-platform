@@ -144,27 +144,32 @@ export class RollsService {
       db.select({ id: rolls.id }).from(rolls).where(eq(rolls.parentRollId, r.id)),
     ]);
     const showCost = canSeeCost();
+    const received = `${row.supplierName} · lot ${String(row.batchSeq).padStart(4, "0")}${row.supplierBatchRef ? ` (${row.supplierBatchRef})` : ""} · ${r.originalLengthM} m`;
     const events: RollEvent[] = [
-      {
-        at: r.receivedAt.toISOString(),
-        kind: "DOCUMENT" as const,
-        title: `Received on ${row.grnNo}`,
-        detail: `${row.supplierName} · lot ${String(row.batchSeq).padStart(4, "0")}${row.supplierBatchRef ? ` (${row.supplierBatchRef})` : ""} · ${r.originalLengthM} m`,
-        byName: null,
-        docType: "GRN",
-        docId: r.grnId,
-        docNo: row.grnNo,
-      },
-      ...transitions.map(({ t, byName }) => ({
-        at: t.at.toISOString(),
-        kind: "STATUS" as const,
-        title: t.fromStatus ? `${t.fromStatus} → ${t.toStatus}` : `Created as ${t.toStatus}`,
-        detail: t.reason,
-        byName,
-        docType: null,
-        docId: null,
-        docNo: null,
-      })),
+      // The creating transition is the receipt itself: one entry with who posted it and from where.
+      ...transitions.map(({ t, byName }) =>
+        t.fromStatus
+          ? {
+              at: t.at.toISOString(),
+              kind: "STATUS" as const,
+              title: `${t.fromStatus} → ${t.toStatus}`,
+              detail: t.reason,
+              byName,
+              docType: null,
+              docId: null,
+              docNo: null,
+            }
+          : {
+              at: t.at.toISOString(),
+              kind: "DOCUMENT" as const,
+              title: `Received on ${row.grnNo} as ${t.toStatus}`,
+              detail: received,
+              byName,
+              docType: "GRN",
+              docId: r.grnId,
+              docNo: row.grnNo,
+            },
+      ),
       ...prints.map(({ p, byName }) => ({
         at: p.createdAt.toISOString(),
         kind: "LABEL" as const,

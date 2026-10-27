@@ -496,9 +496,11 @@ describe("purchase & inventory (Stage 2 gate)", () => {
       landedCost: "100.00",
     });
     expect(inspector.piNo).toMatch(/^PI\//);
+    // One "received" entry (who posted it, supplier, lot, length), then cost entries.
     expect(inspector.events.map((e) => e.kind)).toEqual(
-      expect.arrayContaining(["DOCUMENT", "STATUS", "COST"]),
+      expect.arrayContaining(["DOCUMENT", "COST"]),
     );
+    expect(inspector.events.filter((e) => e.title.startsWith("Received on"))).toHaveLength(1);
     const tampered = roll.barcode.slice(0, -1) + (roll.barcode.endsWith("0") ? "1" : "0");
     const bad = await owner.get(`/api/rolls/${tampered}`);
     expect(bad.statusCode).toBe(400);
