@@ -83,6 +83,8 @@ export const rolls = pgTable(
     /** Set when this roll was cut from another (ADR-0018). */
     parentRollId: uuid("parent_roll_id").references((): AnyPgColumn => rolls.id),
     receivedAt: timestamp("received_at", { withTimezone: true }).notNull(),
+    /** Its length changed (cut, return) since the label was printed (ADR-0018). */
+    labelReprintDue: boolean("label_reprint_due").notNull().default(false),
     mappedAt: timestamp("mapped_at", { withTimezone: true }),
     ...audited,
   },
