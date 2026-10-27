@@ -1,4 +1,9 @@
-import { InvalidAmountError, InvalidSeriesError, InvalidTransitionError } from "@erp/domain";
+import {
+  InvalidAmountError,
+  InvalidPricingError,
+  InvalidSeriesError,
+  InvalidTransitionError,
+} from "@erp/domain";
 import type { ErrorCode, Problem } from "@erp/contracts";
 import {
   type ArgumentsHost,
@@ -12,6 +17,7 @@ import { ZodValidationException } from "nestjs-zod";
 import { type ZodError } from "zod";
 import { requestContext } from "./context.js";
 import { AppError } from "./errors.js";
+import { fromPgError } from "./pg-errors.js";
 
 const STATUS_CODES: Record<number, ErrorCode> = {
   400: "VALIDATION_ERROR",
@@ -52,6 +58,8 @@ export class ProblemFilter implements ExceptionFilter {
     });
 
     if (e instanceof AppError) return make(e.status, e.code, e.message, e.extra);
+    const pg = fromPgError(e);
+    if (pg) return make(pg.status, pg.code, pg.message, pg.extra);
     if (e instanceof ZodValidationException) {
       const zodError = e.getZodError() as ZodError;
       return make(400, "VALIDATION_ERROR", "Some fields are invalid.", {
@@ -61,6 +69,7 @@ export class ProblemFilter implements ExceptionFilter {
     if (e instanceof InvalidTransitionError) return make(422, e.code, e.message);
     if (e instanceof InvalidSeriesError) return make(400, e.code, e.message);
     if (e instanceof InvalidAmountError) return make(400, e.code, e.message);
+    if (e instanceof InvalidPricingError) return make(400, e.code, e.message);
     if (e instanceof HttpException) {
       const status = e.getStatus();
       return make(status, STATUS_CODES[status] ?? "INTERNAL_ERROR", e.message);

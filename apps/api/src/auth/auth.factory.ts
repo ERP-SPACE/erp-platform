@@ -12,6 +12,7 @@ import { twoFactor } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 import { uuidv7 } from "uuidv7";
 import type { Env } from "../config/env.js";
+import { webOrigins } from "../config/origins.js";
 
 export const AUTH = Symbol("AUTH");
 
@@ -19,10 +20,11 @@ export const AUTH = Symbol("AUTH");
 export function createAuth(env: Env, handle: DbHandle) {
   return betterAuth({
     appName: "Paper Trading ERP",
-    baseURL: env.API_PUBLIC_URL,
+    // Browser hits /api via WEB_ORIGIN (Vite proxy in dev); cookies and 2FA must match that origin.
+    baseURL: env.WEB_ORIGIN,
     basePath: "/api/auth",
     secret: env.AUTH_SECRET,
-    trustedOrigins: [env.WEB_ORIGIN],
+    trustedOrigins: webOrigins(env),
     database: drizzleAdapter(handle.db, {
       provider: "pg",
       schema: { user, session, account, verification, twoFactor: twoFactorTable },

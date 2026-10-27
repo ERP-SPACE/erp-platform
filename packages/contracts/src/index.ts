@@ -4,4 +4,5 @@ export * from "./series.js";
 export * from "./errors.js";
 export * from "./realtime.js";
 export * from "./api.js";
+export * from "./masters.js";
 export type { paths as ApiPaths, components as ApiComponents } from "./generated/api.js";

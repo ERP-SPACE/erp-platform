@@ -85,6 +85,24 @@ export const postingEvents = pgTable(
   (t) => [index("posting_events_doc_idx").on(t.docType, t.docId)],
 );
 
+/**
+ * Master record codes (CUST-0001, SUP-0001, SLS-0001, TRN-001). Unlike document series these
+ * never reset by FY and need not be gapless; the row is locked FOR UPDATE while allocating.
+ */
+export const masterSequences = pgTable(
+  "master_sequences",
+  {
+    companyId: uuid("company_id")
+      .notNull()
+      .references(() => companies.id),
+    entity: text("entity").notNull(),
+    prefix: text("prefix").notNull(),
+    padding: integer("padding").notNull(),
+    nextValue: integer("next_value").notNull().default(1),
+  },
+  (t) => [primaryKey({ columns: [t.companyId, t.entity] })],
+);
+
 export const notificationChannel = pgEnum("notification_channel", ["in_app", "email", "whatsapp"]);
 export const notificationStatus = pgEnum("notification_status", [
   "pending",

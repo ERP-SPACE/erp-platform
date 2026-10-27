@@ -276,6 +276,534 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/catalogue/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CatalogueController_categories"];
+        put?: never;
+        post: operations["CatalogueController_createCategory"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/catalogue/categories/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["CatalogueController_updateCategory"];
+        trace?: never;
+    };
+    "/api/catalogue/qualities": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CatalogueController_qualities"];
+        put?: never;
+        post: operations["CatalogueController_createQuality"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/catalogue/qualities/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["CatalogueController_updateQuality"];
+        trace?: never;
+    };
+    "/api/catalogue/products": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CatalogueController_products"];
+        put?: never;
+        post: operations["CatalogueController_createProduct"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/catalogue/products/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CatalogueController_product"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["CatalogueController_updateProduct"];
+        trace?: never;
+    };
+    "/api/catalogue/products/{id}/skus": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["CatalogueController_addSkus"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/catalogue/skus/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["CatalogueController_updateSku"];
+        trace?: never;
+    };
+    "/api/suppliers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SuppliersController_list"];
+        put?: never;
+        post: operations["SuppliersController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/suppliers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SuppliersController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["SuppliersController_update"];
+        trace?: never;
+    };
+    "/api/transporters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["TransportersController_list"];
+        put?: never;
+        post: operations["TransportersController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/transporters/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["TransportersController_update"];
+        trace?: never;
+    };
+    "/api/customer-groups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CustomersController_groups"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CustomersController_list"];
+        put?: never;
+        post: operations["CustomersController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/defaults": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CustomersController_defaults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CustomersController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["CustomersController_update"];
+        trace?: never;
+    };
+    "/api/customers/{id}/credit-policy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["CustomersController_updateCredit"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/{id}/block": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["CustomersController_block"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/{id}/rates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PricingController_rates"];
+        put?: never;
+        post: operations["PricingController_setRate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/{id}/rate-history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PricingController_history"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/pricing/bulk-revision/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PricingController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/pricing/bulk-revision": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PricingController_apply"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/salesmen": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesmenController_list"];
+        put?: never;
+        post: operations["SalesmenController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/salesmen/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesmenController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["SalesmenController_update"];
+        trace?: never;
+    };
+    "/api/salesmen/{id}/default-rates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["SalesmenController_defaultRates"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/salesmen/{id}/block": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["SalesmenController_block"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/salesmen/{id}/commission-rules": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesmenController_commissionRules"];
+        put?: never;
+        post: operations["SalesmenController_addCommissionRule"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/commission-rules/{ruleId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["SalesmenController_closeCommissionRule"];
+        trace?: never;
+    };
+    "/api/salesmen/{id}/kyc": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesmenController_uploadKyc"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/kyc-documents/{docId}/file": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesmenController_downloadKyc"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/kyc-documents/{docId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["SalesmenController_removeKyc"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SearchController_search"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/dashboard/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SearchController_dashboard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -345,7 +873,7 @@ export interface components {
             stepUp: boolean;
         };
         UpdateRolePermissionsDto: {
-            permissionCodes: ("settings.view" | "settings.update" | "settings.company.update" | "settings.series.view" | "settings.series.update" | "users.view" | "users.manage" | "roles.manage" | "audit.view")[];
+            permissionCodes: ("settings.view" | "settings.update" | "settings.company.update" | "settings.series.view" | "settings.series.update" | "users.view" | "users.manage" | "roles.manage" | "audit.view" | "catalogue.view" | "catalogue.manage" | "suppliers.view" | "suppliers.manage" | "transporters.view" | "transporters.manage" | "customers.view" | "customers.manage" | "customers.credit.manage" | "customers.rates.manage" | "rates.bulk_revise" | "salesmen.view" | "salesmen.manage" | "commission.manage" | "pricing.override.approve")[];
             version: number;
         };
         SettingItemDto: {
@@ -469,6 +997,721 @@ export interface components {
                 userName: string | null;
             }[];
             nextCursor: string | null;
+        };
+        CategoryItemDto: {
+            id: string;
+            code: string;
+            name: string;
+            hsnCode: string | null;
+            gstRate: string | null;
+            taxReady: boolean;
+            active: boolean;
+            version: number;
+            productCount: number;
+            skuCount: number;
+        };
+        CreateCategoryDto: {
+            code: string;
+            name: string;
+        };
+        UpdateCategoryDto: {
+            name: string;
+            hsnCode: string | null;
+            gstRate: ("0" | "5" | "12" | "18" | "28") | null;
+            active: boolean;
+            version: number;
+        };
+        QualityItemDto: {
+            id: string;
+            name: string;
+            aliases: string[];
+            active: boolean;
+            version: number;
+        };
+        CreateQualityDto: {
+            name: string;
+            /** @default [] */
+            aliases: string[];
+        };
+        UpdateQualityDto: {
+            name: string;
+            /** @default [] */
+            aliases: string[];
+            active: boolean;
+            version: number;
+        };
+        ProductItemDto: {
+            id: string;
+            categoryId: string;
+            categoryName: string;
+            qualityId: string;
+            qualityName: string;
+            gsm: number;
+            name: string;
+            defaultLengthM: number;
+            active: boolean;
+            version: number;
+            skus: {
+                id: string;
+                productId: string;
+                code: string;
+                widthIn: string;
+                taxRateOverride: string | null;
+                active: boolean;
+                version: number;
+            }[];
+        };
+        CreateProductDto: {
+            categoryId: string;
+            qualityId: string;
+            gsm: number;
+            defaultLengthM: number;
+            /** @default [] */
+            widthsIn: number[];
+        };
+        UpdateProductDto: {
+            defaultLengthM: number;
+            active: boolean;
+            version: number;
+        };
+        AddSkusDto: {
+            widthsIn: number[];
+        };
+        UpdateSkuDto: {
+            taxRateOverride: ("0" | "5" | "12" | "18" | "28") | null;
+            active: boolean;
+            version: number;
+        };
+        SkuItemDto: {
+            id: string;
+            productId: string;
+            code: string;
+            widthIn: string;
+            taxRateOverride: string | null;
+            active: boolean;
+            version: number;
+        };
+        SupplierItemDto: {
+            id: string;
+            code: string;
+            shortCode: string;
+            name: string;
+            gstin: string | null;
+            stateCode: string;
+            pan: string | null;
+            address: {
+                line1: string;
+                line2?: string;
+                city: string;
+                state: string;
+                pincode: string;
+            };
+            contactName: string | null;
+            contactPhone: string | null;
+            contactEmail: string | null;
+            paymentDays: number;
+            notes: string | null;
+            active: boolean;
+            version: number;
+            createdAt: string;
+        };
+        CreateSupplierDto: {
+            name: string;
+            shortCode?: string;
+            gstin?: string | null;
+            stateCode: string;
+            pan?: string | null;
+            address: {
+                line1: string;
+                line2?: string;
+                city: string;
+                state: string;
+                pincode: string;
+            };
+            contactName?: string | null;
+            contactPhone?: string | null;
+            contactEmail?: string | null;
+            /** @default 30 */
+            paymentDays: number;
+            notes?: string | null;
+        };
+        UpdateSupplierDto: {
+            name: string;
+            shortCode?: string;
+            gstin?: string | null;
+            stateCode: string;
+            pan?: string | null;
+            address: {
+                line1: string;
+                line2?: string;
+                city: string;
+                state: string;
+                pincode: string;
+            };
+            contactName?: string | null;
+            contactPhone?: string | null;
+            contactEmail?: string | null;
+            /** @default 30 */
+            paymentDays: number;
+            notes?: string | null;
+            active: boolean;
+            version: number;
+        };
+        TransporterItemDto: {
+            id: string;
+            code: string;
+            name: string;
+            gstin: string | null;
+            transporterId: string | null;
+            stateCode: string;
+            phone: string | null;
+            contactName: string | null;
+            active: boolean;
+            version: number;
+        };
+        CreateTransporterDto: {
+            name: string;
+            gstin?: string | null;
+            transporterId?: string | null;
+            stateCode: string;
+            phone?: string | null;
+            contactName?: string | null;
+        };
+        UpdateTransporterDto: {
+            name: string;
+            gstin?: string | null;
+            transporterId?: string | null;
+            stateCode: string;
+            phone?: string | null;
+            contactName?: string | null;
+            active: boolean;
+            version: number;
+        };
+        CustomerGroupItemDto: {
+            id: string;
+            code: string;
+            name: string;
+        };
+        CustomerListItemDto: {
+            id: string;
+            code: string;
+            legalName: string;
+            tradeName: string | null;
+            gstin: string | null;
+            /** @enum {string} */
+            gstType: "Regular" | "Composition" | "Unregistered" | "SEZ";
+            stateCode: string;
+            city: string;
+            groups: {
+                id: string;
+                code: string;
+                name: string;
+            }[];
+            salesmanId: string | null;
+            salesmanName: string | null;
+            creditLimit: string;
+            creditDays: number;
+            blocked: boolean;
+            active: boolean;
+            createdAt: string;
+        };
+        CustomerDefaultsDto: {
+            creditPolicy: {
+                creditLimit: string;
+                creditDays: number;
+                graceDays: number;
+                autoBlock: boolean;
+                /** @enum {string} */
+                blockRule: "OVER_LIMIT" | "OVER_DUE" | "BOTH";
+            };
+            /** @enum {string} */
+            creditSource: "salesman" | "settings";
+            rates: {
+                productId: string;
+                productName: string;
+                baseRate44: string;
+            }[];
+        };
+        CustomerDetailDto: {
+            id: string;
+            code: string;
+            legalName: string;
+            tradeName: string | null;
+            gstin: string | null;
+            /** @enum {string} */
+            gstType: "Regular" | "Composition" | "Unregistered" | "SEZ";
+            stateCode: string;
+            city: string;
+            groups: {
+                id: string;
+                code: string;
+                name: string;
+            }[];
+            salesmanId: string | null;
+            salesmanName: string | null;
+            creditLimit: string;
+            creditDays: number;
+            blocked: boolean;
+            active: boolean;
+            createdAt: string;
+            pan: string | null;
+            billingAddress: {
+                line1: string;
+                line2?: string;
+                city: string;
+                state: string;
+                pincode: string;
+            };
+            phone: string | null;
+            email: string | null;
+            businessType: string | null;
+            monthlyCapacityM: number | null;
+            targetSalesM: number | null;
+            referral: {
+                source?: string | null;
+                name?: string | null;
+                contact?: string | null;
+                company?: string | null;
+                remarks?: string | null;
+            } | null;
+            tcsApplicable: boolean;
+            whatsappNumber: string | null;
+            /** @enum {string} */
+            whatsappLanguage: "English" | "Hindi" | "Gujarati";
+            whatsappConsent: boolean;
+            whatsappConsentAt: string | null;
+            allowCut: boolean;
+            accountManagerUserId: string | null;
+            accountManagerName: string | null;
+            contacts: {
+                name: string;
+                phone?: string | null;
+                email?: string | null;
+                role?: string | null;
+                isPrimary: boolean;
+                id: string;
+            }[];
+            shippingAddresses: {
+                label: string;
+                address: {
+                    line1: string;
+                    line2?: string;
+                    city: string;
+                    state: string;
+                    pincode: string;
+                };
+                stateCode: string;
+                isDefault: boolean;
+                id: string;
+            }[];
+            creditPolicy: {
+                creditLimit: string;
+                creditDays: number;
+                graceDays: number;
+                autoBlock: boolean;
+                /** @enum {string} */
+                blockRule: "OVER_LIMIT" | "OVER_DUE" | "BOTH";
+                manualBlock: boolean;
+                blockReason: string | null;
+                blockedAt: string | null;
+                blockedByName: string | null;
+                version: number;
+            };
+            version: number;
+            updatedAt: string;
+        };
+        CreateCustomerDto: {
+            legalName: string;
+            tradeName?: string | null;
+            /** @enum {string} */
+            gstType: "Regular" | "Composition" | "Unregistered" | "SEZ";
+            gstin?: string | null;
+            stateCode: string;
+            pan?: string | null;
+            billingAddress: {
+                line1: string;
+                line2?: string;
+                city: string;
+                state: string;
+                pincode: string;
+            };
+            phone?: string | null;
+            email?: string | null;
+            businessType?: string | null;
+            monthlyCapacityM?: number | null;
+            targetSalesM?: number | null;
+            referral?: {
+                source?: string | null;
+                name?: string | null;
+                contact?: string | null;
+                company?: string | null;
+                remarks?: string | null;
+            } | null;
+            /** @default false */
+            tcsApplicable: boolean;
+            whatsappNumber?: string | null;
+            /**
+             * @default English
+             * @enum {string}
+             */
+            whatsappLanguage: "English" | "Hindi" | "Gujarati";
+            /** @default false */
+            whatsappConsent: boolean;
+            /** @default true */
+            allowCut: boolean;
+            salesmanId?: string | null;
+            accountManagerUserId?: string | null;
+            /** @default [] */
+            groupIds: string[];
+            /** @default [] */
+            contacts: {
+                name: string;
+                phone?: string | null;
+                email?: string | null;
+                role?: string | null;
+                /** @default false */
+                isPrimary: boolean;
+            }[];
+            /** @default [] */
+            shippingAddresses: {
+                label: string;
+                address: {
+                    line1: string;
+                    line2?: string;
+                    city: string;
+                    state: string;
+                    pincode: string;
+                };
+                stateCode: string;
+                /** @default false */
+                isDefault: boolean;
+            }[];
+            creditPolicy?: {
+                creditLimit: string;
+                creditDays: number;
+                graceDays: number;
+                autoBlock: boolean;
+                /** @enum {string} */
+                blockRule: "OVER_LIMIT" | "OVER_DUE" | "BOTH";
+            };
+            /** @default true */
+            applySalesmanRates: boolean;
+        };
+        UpdateCustomerDto: {
+            legalName: string;
+            tradeName?: string | null;
+            /** @enum {string} */
+            gstType: "Regular" | "Composition" | "Unregistered" | "SEZ";
+            gstin?: string | null;
+            stateCode: string;
+            pan?: string | null;
+            billingAddress: {
+                line1: string;
+                line2?: string;
+                city: string;
+                state: string;
+                pincode: string;
+            };
+            phone?: string | null;
+            email?: string | null;
+            businessType?: string | null;
+            monthlyCapacityM?: number | null;
+            targetSalesM?: number | null;
+            referral?: {
+                source?: string | null;
+                name?: string | null;
+                contact?: string | null;
+                company?: string | null;
+                remarks?: string | null;
+            } | null;
+            /** @default false */
+            tcsApplicable: boolean;
+            whatsappNumber?: string | null;
+            /**
+             * @default English
+             * @enum {string}
+             */
+            whatsappLanguage: "English" | "Hindi" | "Gujarati";
+            /** @default false */
+            whatsappConsent: boolean;
+            /** @default true */
+            allowCut: boolean;
+            salesmanId?: string | null;
+            accountManagerUserId?: string | null;
+            /** @default [] */
+            groupIds: string[];
+            /** @default [] */
+            contacts: {
+                name: string;
+                phone?: string | null;
+                email?: string | null;
+                role?: string | null;
+                /** @default false */
+                isPrimary: boolean;
+            }[];
+            /** @default [] */
+            shippingAddresses: {
+                label: string;
+                address: {
+                    line1: string;
+                    line2?: string;
+                    city: string;
+                    state: string;
+                    pincode: string;
+                };
+                stateCode: string;
+                /** @default false */
+                isDefault: boolean;
+            }[];
+            active: boolean;
+            version: number;
+        };
+        UpdateCreditPolicyDto: {
+            creditLimit: string;
+            creditDays: number;
+            graceDays: number;
+            autoBlock: boolean;
+            /** @enum {string} */
+            blockRule: "OVER_LIMIT" | "OVER_DUE" | "BOTH";
+            version: number;
+        };
+        BlockCustomerDto: {
+            blocked: boolean;
+            version: number;
+        };
+        PartyRateItemDto: {
+            id: string;
+            productId: string;
+            productName: string;
+            categoryName: string;
+            baseRate44: string;
+            validFrom: string;
+            validTo: string | null;
+            /** @enum {string} */
+            source: "manual" | "bulk_revision" | "salesman_default";
+            current: boolean;
+        };
+        SetPartyRateDto: {
+            productId: string;
+            baseRate44: string;
+            /** Format: date */
+            validFrom: string;
+            validTo?: string | null;
+            /**
+             * @default revise
+             * @enum {string}
+             */
+            mode: "revise" | "add";
+        };
+        RateHistoryItemDto: {
+            id: string;
+            productName: string;
+            previousRate44: string | null;
+            newRate44: string;
+            validFrom: string;
+            /** @enum {string} */
+            source: "manual" | "bulk_revision" | "salesman_default";
+            reason: string | null;
+            byName: string | null;
+            at: string;
+        };
+        BulkRevisionDto: {
+            /** @default [] */
+            customerIds: string[];
+            /** @default [] */
+            groupIds: string[];
+            /** @default [] */
+            categoryIds: string[];
+            /** @default [] */
+            qualityIds: string[];
+            /** @default [] */
+            gsms: number[];
+            /** @enum {string} */
+            mode: "PERCENT" | "FLAT";
+            value: string;
+            /** Format: date */
+            effectiveFrom: string;
+        };
+        BulkRevisionPreviewDto: {
+            rows: {
+                customerId: string;
+                customerName: string;
+                productId: string;
+                productName: string;
+                oldRate44: string;
+                newRate44: string;
+            }[];
+            customers: number;
+        };
+        BulkRevisionResultDto: {
+            revised: number;
+            customers: number;
+        };
+        SalesmanItemDto: {
+            id: string;
+            code: string;
+            name: string;
+            phone: string | null;
+            whatsapp: string | null;
+            email: string | null;
+            stateCode: string | null;
+            targetSalesM: number | null;
+            /** @enum {string} */
+            blockMode: "None" | "All" | "Selective";
+            customerCount: number;
+            active: boolean;
+            version: number;
+        };
+        SalesmanDetailDto: {
+            id: string;
+            code: string;
+            name: string;
+            phone: string | null;
+            whatsapp: string | null;
+            email: string | null;
+            stateCode: string | null;
+            targetSalesM: number | null;
+            /** @enum {string} */
+            blockMode: "None" | "All" | "Selective";
+            customerCount: number;
+            active: boolean;
+            version: number;
+            address: {
+                line1: string;
+                line2?: string;
+                city: string;
+                state: string;
+                pincode: string;
+            } | null;
+            defaultCreditLimit: string | null;
+            defaultCreditDays: number | null;
+            defaultGraceDays: number | null;
+            defaultRates: {
+                productId: string;
+                productName: string;
+                baseRate44: string;
+            }[];
+            blockedCustomerIds: string[];
+            kycDocuments: {
+                id: string;
+                /** @enum {string} */
+                docType: "PAN" | "Aadhaar" | "GST certificate" | "Bank proof" | "Agreement" | "Other";
+                fileName: string;
+                contentType: string;
+                sizeBytes: number;
+                notes: string | null;
+                uploadedAt: string;
+                uploadedByName: string | null;
+            }[];
+        };
+        CreateSalesmanDto: {
+            name: string;
+            phone?: string | null;
+            whatsapp?: string | null;
+            email?: string | null;
+            address?: {
+                line1: string;
+                line2?: string;
+                city: string;
+                state: string;
+                pincode: string;
+            } | null;
+            stateCode?: string | null;
+            targetSalesM?: number | null;
+            defaultCreditLimit?: string | null;
+            defaultCreditDays?: number | null;
+            defaultGraceDays?: number | null;
+        };
+        UpdateSalesmanDto: {
+            name: string;
+            phone?: string | null;
+            whatsapp?: string | null;
+            email?: string | null;
+            address?: {
+                line1: string;
+                line2?: string;
+                city: string;
+                state: string;
+                pincode: string;
+            } | null;
+            stateCode?: string | null;
+            targetSalesM?: number | null;
+            defaultCreditLimit?: string | null;
+            defaultCreditDays?: number | null;
+            defaultGraceDays?: number | null;
+            active: boolean;
+            version: number;
+        };
+        SalesmanDefaultRatesDto: {
+            rates: {
+                productId: string;
+                baseRate44: string;
+            }[];
+        };
+        SalesmanBlockDto: {
+            /** @enum {string} */
+            blockMode: "None" | "All" | "Selective";
+            /** @default [] */
+            customerIds: string[];
+            version: number;
+        };
+        CommissionRuleItemDto: {
+            customerId: string;
+            /** @enum {string} */
+            method: "PER_METER" | "PERCENT_SALES";
+            rate: string;
+            /** @enum {string} */
+            triggerEvent: "ON_SI_POSTED" | "ON_PAYMENT_RECEIVED";
+            /** Format: date */
+            validFrom: string;
+            validTo: string | null;
+            id: string;
+            salesmanId: string;
+            customerName: string;
+            current: boolean;
+        };
+        CreateCommissionRuleDto: {
+            customerId: string;
+            /** @enum {string} */
+            method: "PER_METER" | "PERCENT_SALES";
+            rate: string;
+            /** @enum {string} */
+            triggerEvent: "ON_SI_POSTED" | "ON_PAYMENT_RECEIVED";
+            /** Format: date */
+            validFrom: string;
+            validTo?: string | null;
+        };
+        CloseCommissionRuleDto: {
+            /** Format: date */
+            validTo: string;
+        };
+        KycDocumentItemDto: {
+            id: string;
+            /** @enum {string} */
+            docType: "PAN" | "Aadhaar" | "GST certificate" | "Bank proof" | "Agreement" | "Other";
+            fileName: string;
+            contentType: string;
+            sizeBytes: number;
+            notes: string | null;
+            uploadedAt: string;
+            uploadedByName: string | null;
+        };
+        SearchResponseDto: {
+            results: {
+                /** @enum {string} */
+                type: "customer" | "supplier" | "transporter" | "salesman" | "product";
+                id: string;
+                title: string;
+                subtitle: string | null;
+            }[];
+        };
+        DashboardSummaryDto: {
+            activeCustomers: number;
+            suppliers: number;
+            skus: number;
+            blockedCustomers: number;
+            categoriesMissingTax: number;
+            totalCreditLimit: string;
         };
     };
     responses: never;
@@ -877,6 +2120,1052 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["AuditPageDto"];
+                };
+            };
+        };
+    };
+    CatalogueController_categories: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryItemDto"][];
+                };
+            };
+        };
+    };
+    CatalogueController_createCategory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCategoryDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryItemDto"];
+                };
+            };
+        };
+    };
+    CatalogueController_updateCategory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCategoryDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CategoryItemDto"];
+                };
+            };
+        };
+    };
+    CatalogueController_qualities: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QualityItemDto"][];
+                };
+            };
+        };
+    };
+    CatalogueController_createQuality: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateQualityDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QualityItemDto"];
+                };
+            };
+        };
+    };
+    CatalogueController_updateQuality: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateQualityDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QualityItemDto"];
+                };
+            };
+        };
+    };
+    CatalogueController_products: {
+        parameters: {
+            query?: {
+                categoryId?: string;
+                qualityId?: string;
+                active?: "true" | "false" | "all";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductItemDto"][];
+                };
+            };
+        };
+    };
+    CatalogueController_createProduct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProductDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductItemDto"];
+                };
+            };
+        };
+    };
+    CatalogueController_product: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductItemDto"];
+                };
+            };
+        };
+    };
+    CatalogueController_updateProduct: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProductDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductItemDto"];
+                };
+            };
+        };
+    };
+    CatalogueController_addSkus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddSkusDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductItemDto"];
+                };
+            };
+        };
+    };
+    CatalogueController_updateSku: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSkuDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SkuItemDto"];
+                };
+            };
+        };
+    };
+    SuppliersController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                active?: "true" | "false" | "all";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SupplierItemDto"][];
+                };
+            };
+        };
+    };
+    SuppliersController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSupplierDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SupplierItemDto"];
+                };
+            };
+        };
+    };
+    SuppliersController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SupplierItemDto"];
+                };
+            };
+        };
+    };
+    SuppliersController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSupplierDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SupplierItemDto"];
+                };
+            };
+        };
+    };
+    TransportersController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                active?: "true" | "false" | "all";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TransporterItemDto"][];
+                };
+            };
+        };
+    };
+    TransportersController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTransporterDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TransporterItemDto"];
+                };
+            };
+        };
+    };
+    TransportersController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTransporterDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TransporterItemDto"];
+                };
+            };
+        };
+    };
+    CustomersController_groups: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerGroupItemDto"][];
+                };
+            };
+        };
+    };
+    CustomersController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                active?: "true" | "false" | "all";
+                groupId?: string;
+                salesmanId?: string;
+                stateCode?: string;
+                blocked?: "true" | "false";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerListItemDto"][];
+                };
+            };
+        };
+    };
+    CustomersController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCustomerDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerDetailDto"];
+                };
+            };
+        };
+    };
+    CustomersController_defaults: {
+        parameters: {
+            query?: {
+                salesmanId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerDefaultsDto"];
+                };
+            };
+        };
+    };
+    CustomersController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerDetailDto"];
+                };
+            };
+        };
+    };
+    CustomersController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCustomerDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerDetailDto"];
+                };
+            };
+        };
+    };
+    CustomersController_updateCredit: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCreditPolicyDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerDetailDto"];
+                };
+            };
+        };
+    };
+    CustomersController_block: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlockCustomerDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerDetailDto"];
+                };
+            };
+        };
+    };
+    PricingController_rates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PartyRateItemDto"][];
+                };
+            };
+        };
+    };
+    PricingController_setRate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetPartyRateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PartyRateItemDto"][];
+                };
+            };
+        };
+    };
+    PricingController_history: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RateHistoryItemDto"][];
+                };
+            };
+        };
+    };
+    PricingController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BulkRevisionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BulkRevisionPreviewDto"];
+                };
+            };
+        };
+    };
+    PricingController_apply: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BulkRevisionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BulkRevisionResultDto"];
+                };
+            };
+        };
+    };
+    SalesmenController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                active?: "true" | "false" | "all";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesmanItemDto"][];
+                };
+            };
+        };
+    };
+    SalesmenController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSalesmanDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesmanDetailDto"];
+                };
+            };
+        };
+    };
+    SalesmenController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesmanDetailDto"];
+                };
+            };
+        };
+    };
+    SalesmenController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSalesmanDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesmanDetailDto"];
+                };
+            };
+        };
+    };
+    SalesmenController_defaultRates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesmanDefaultRatesDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesmanDetailDto"];
+                };
+            };
+        };
+    };
+    SalesmenController_block: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesmanBlockDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesmanDetailDto"];
+                };
+            };
+        };
+    };
+    SalesmenController_commissionRules: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommissionRuleItemDto"][];
+                };
+            };
+        };
+    };
+    SalesmenController_addCommissionRule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCommissionRuleDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommissionRuleItemDto"][];
+                };
+            };
+        };
+    };
+    SalesmenController_closeCommissionRule: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                ruleId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CloseCommissionRuleDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommissionRuleItemDto"][];
+                };
+            };
+        };
+    };
+    SalesmenController_uploadKyc: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["KycDocumentItemDto"];
+                };
+            };
+        };
+    };
+    SalesmenController_downloadKyc: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                docId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SalesmenController_removeKyc: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                docId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SearchController_search: {
+        parameters: {
+            query?: {
+                q?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SearchResponseDto"];
+                };
+            };
+        };
+    };
+    SearchController_dashboard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DashboardSummaryDto"];
                 };
             };
         };

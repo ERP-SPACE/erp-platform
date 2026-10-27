@@ -31,6 +31,12 @@ export const keys = {
   roles: ["roles"] as const,
   permissions: ["permissions"] as const,
   audit: (filters: Record<string, string | undefined>) => ["audit", filters] as const,
+  catalogue: ["catalogue"] as const,
+  customers: ["customers"] as const,
+  suppliers: ["suppliers"] as const,
+  transporters: ["transporters"] as const,
+  salesmen: ["salesmen"] as const,
+  dashboard: ["dashboard"] as const,
 };
 
 export const meQuery = queryOptions({

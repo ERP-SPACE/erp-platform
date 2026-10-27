@@ -1,16 +1,6 @@
 import type { CompanyResponse } from "@erp/contracts";
 import { GST_STATES, validateGstin } from "@erp/domain";
-import {
-  Button,
-  Field,
-  MarginNote,
-  Select,
-  Sheet,
-  SheetLayout,
-  StatusMark,
-  TextInput,
-  useToast,
-} from "@erp/ui";
+import { Badge, Button, Card, Field, FormSection, Select, TextInput, useToast } from "@erp/ui";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
@@ -124,7 +114,7 @@ function CompanyForm({ company }: { company: CompanyResponse }) {
     onSuccess: async () => {
       setErrors({});
       setReason("");
-      toast({ tone: "positive", title: "Company profile saved" });
+      toast({ tone: "success", title: "Company profile saved" });
       await queryClient.invalidateQueries({ queryKey: keys.company });
       await queryClient.invalidateQueries({ queryKey: keys.me });
     },
@@ -147,133 +137,123 @@ function CompanyForm({ company }: { company: CompanyResponse }) {
   );
 
   return (
-    <SheetLayout
-      sheet={
-        <Sheet
-          kicker="Company GST profile"
-          title={form.legalName || "Company"}
-          meta={
-            form.tradeName ? (
-              <span className="font-serif italic">trading as {form.tradeName}</span>
-            ) : null
-          }
-          status={
-            company.isPlaceholder ? (
-              <StatusMark tone="caution">Placeholder</StatusMark>
-            ) : (
-              <StatusMark tone="positive">On file</StatusMark>
-            )
-          }
-          footer={
-            editable ? (
-              <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
-                <ReasonField value={reason} onChange={setReason} />
-                <Button variant="primary" busy={save.isPending} onClick={() => save.mutate(form)}>
-                  Save profile
-                </Button>
-              </div>
-            ) : null
-          }
-        >
-          <form className="grid gap-8" onSubmit={(e) => e.preventDefault()}>
-            <fieldset className="grid gap-4 sm:grid-cols-2">
-              <legend className="smallcaps mb-3">Identity</legend>
-              {text("legalName", "Legal name", { required: true })}
-              {text("tradeName", "Trade name")}
-              <Field
-                label="GSTIN"
-                error={errors.gstin ?? (gst && !gst.valid ? gst.error : undefined)}
-                hint={
-                  gst?.valid
-                    ? `${GST_STATES[gst.stateCode!]} · PAN ${gst.pan}`
-                    : "15 characters, e.g. 24ABCDE1234F1Z5"
-                }
-              >
-                {(p) => (
-                  <TextInput
-                    {...p}
-                    disabled={!editable}
-                    maxLength={15}
-                    className="font-mono uppercase tracking-wide"
-                    value={form.gstin}
-                    onChange={(e) => {
-                      const value = e.target.value.toUpperCase();
-                      const check = validateGstin(value);
-                      setForm({
-                        ...form,
-                        gstin: value,
-                        ...(check.valid && { stateCode: check.stateCode!, pan: check.pan! }),
-                      });
-                    }}
-                  />
-                )}
-              </Field>
-              <Field label="GST state" error={errors.stateCode}>
-                {(p) => (
-                  <Select
-                    {...p}
-                    disabled={!editable}
-                    value={form.stateCode}
-                    onValueChange={(v) => setForm({ ...form, stateCode: v })}
-                    options={STATE_OPTIONS}
-                  />
-                )}
-              </Field>
-              {text("pan", "PAN", { maxLength: 10, className: "font-mono uppercase" })}
-              {text("signatoryName", "Authorised signatory")}
-            </fieldset>
-
-            <fieldset className="grid gap-4 sm:grid-cols-2">
-              <legend className="smallcaps mb-3">Registered address</legend>
-              <div className="sm:col-span-2">
-                {text("line1", "Address line 1", { required: true })}
-              </div>
-              <div className="sm:col-span-2">{text("line2", "Address line 2")}</div>
-              {text("city", "City")}
-              {text("state", "State")}
-              {text("pincode", "PIN code", {
-                inputMode: "numeric",
-                maxLength: 6,
-                className: "tnum",
-              })}
-              {text("phone", "Phone", { inputMode: "tel" })}
-              <div className="sm:col-span-2">
-                {text("email", "Email for invoices", { type: "email" })}
-              </div>
-            </fieldset>
-
-            <fieldset className="grid gap-4 sm:grid-cols-2">
-              <legend className="smallcaps mb-3">Bank details printed on invoices</legend>
-              {text("bankName", "Bank")}
-              {text("branch", "Branch")}
-              {text("accountName", "Account name")}
-              {text("accountNumber", "Account number", { inputMode: "numeric", className: "tnum" })}
-              {text("ifsc", "IFSC", { maxLength: 11, className: "font-mono uppercase" })}
-            </fieldset>
-          </form>
-        </Sheet>
-      }
-      margin={
-        <>
-          <MarginNote title="Why it matters">
-            The GSTIN's state code decides whether an invoice charges CGST + SGST (same state) or
-            IGST. Every document prints these details.
-          </MarginNote>
-          <MarginNote title="Last changed">
-            <span className="tnum">{dateTime(company.updatedAt)}</span>
+    <form
+      className="grid gap-6"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (editable) save.mutate(form);
+      }}
+    >
+      <Card
+        title="Company profile"
+        description="Printed on every invoice. The GSTIN's state decides CGST + SGST (same state) or IGST."
+        actions={
+          company.isPlaceholder ? (
+            <Badge tone="warning">Placeholder details</Badge>
+          ) : (
+            <Badge tone="success">Complete</Badge>
+          )
+        }
+        footer={
+          <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-fg-3">
+            <span>
+              Last changed <span className="tnum">{dateTime(company.updatedAt)}</span>
+            </span>
             {can(me, "audit.view") ? (
               <Link
                 to="/settings/audit"
                 search={{ table: "companies" }}
-                className="mt-1 block text-accent hover:underline"
+                className="font-medium text-primary hover:underline"
               >
-                See history →
+                View change history
               </Link>
             ) : null}
-          </MarginNote>
-        </>
-      }
-    />
+          </div>
+        }
+      >
+        <FormSection title="Business identity" description="Legal name and GST registration.">
+          {text("legalName", "Legal name", { required: true })}
+          {text("tradeName", "Trade name")}
+          <Field
+            label="GSTIN"
+            error={errors.gstin ?? (gst && !gst.valid ? gst.error : undefined)}
+            hint={
+              gst?.valid
+                ? `${GST_STATES[gst.stateCode!]} · PAN ${gst.pan}`
+                : "15 characters, e.g. 24ABCDE1234F1Z5"
+            }
+          >
+            {(p) => (
+              <TextInput
+                {...p}
+                disabled={!editable}
+                maxLength={15}
+                className="font-mono uppercase tracking-wide"
+                value={form.gstin}
+                onChange={(e) => {
+                  const value = e.target.value.toUpperCase();
+                  const check = validateGstin(value);
+                  setForm({
+                    ...form,
+                    gstin: value,
+                    ...(check.valid && { stateCode: check.stateCode!, pan: check.pan! }),
+                  });
+                }}
+              />
+            )}
+          </Field>
+          <Field label="GST state" error={errors.stateCode}>
+            {(p) => (
+              <Select
+                {...p}
+                disabled={!editable}
+                value={form.stateCode}
+                onValueChange={(v) => setForm({ ...form, stateCode: v })}
+                options={STATE_OPTIONS}
+              />
+            )}
+          </Field>
+          {text("pan", "PAN", { maxLength: 10, className: "font-mono uppercase" })}
+          {text("signatoryName", "Authorised signatory")}
+        </FormSection>
+
+        <FormSection title="Registered address" description="Used as the place of supply origin.">
+          <div className="sm:col-span-2">{text("line1", "Address line 1", { required: true })}</div>
+          <div className="sm:col-span-2">{text("line2", "Address line 2")}</div>
+          {text("city", "City")}
+          {text("state", "State")}
+          {text("pincode", "PIN code", { inputMode: "numeric", maxLength: 6, className: "tnum" })}
+          {text("phone", "Phone", { inputMode: "tel" })}
+          <div className="sm:col-span-2">
+            {text("email", "Email for invoices", { type: "email" })}
+          </div>
+        </FormSection>
+
+        <FormSection title="Bank details" description="Printed on invoices for customer payments.">
+          {text("bankName", "Bank")}
+          {text("branch", "Branch")}
+          {text("accountName", "Account name")}
+          {text("accountNumber", "Account number", { inputMode: "numeric", className: "tnum" })}
+          {text("ifsc", "IFSC", { maxLength: 11, className: "font-mono uppercase" })}
+        </FormSection>
+
+        {editable ? (
+          <FormSection title="Save changes" description="The reason is stored in the audit log.">
+            <div className="sm:col-span-2">
+              <ReasonField value={reason} onChange={setReason} />
+            </div>
+            <div className="flex justify-end gap-2 sm:col-span-2">
+              <Button type="button" variant="secondary" onClick={() => setForm(toForm(company))}>
+                Discard
+              </Button>
+              <Button type="submit" variant="primary" busy={save.isPending}>
+                Save profile
+              </Button>
+            </div>
+          </FormSection>
+        ) : null}
+      </Card>
+    </form>
   );
 }
 

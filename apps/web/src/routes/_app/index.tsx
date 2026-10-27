@@ -1,150 +1,269 @@
-import { fyLabel, istToday } from "@erp/domain";
-import { EmptyState, Mono, PageTitle, Rule, StatusMark } from "@erp/ui";
+import { formatINRCompact, fyLabel, istToday } from "@erp/domain";
+import { ActivityFeed, Badge, Button, Card, EmptyState, Mono, PageHeader, StatCard } from "@erp/ui";
 import { useQuery } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { clock, greeting, longDate } from "../../lib/format.js";
-import { can, meQuery, seriesQuery } from "../../lib/queries.js";
+import {
+  CheckCircle2,
+  Circle,
+  History,
+  Package,
+  ShieldAlert,
+  Users,
+  Warehouse,
+} from "lucide-react";
+import { dateTime, greeting, longDate } from "../../lib/format.js";
+import { dashboardQuery } from "../../lib/masters.js";
+import { auditQuery, can, meQuery, seriesQuery } from "../../lib/queries.js";
 
-export const Route = createFileRoute("/_app/")({ component: TodayPage });
+export const Route = createFileRoute("/_app/")({ component: DashboardPage });
 
-interface NeedsYou {
-  id: string;
-  title: string;
-  why: string;
-  to: string;
-  cta: string;
-}
+const TABLE_LABELS: Record<string, string> = {
+  settings: "a setting",
+  companies: "the company profile",
+  document_series: "a document series",
+  user: "a user",
+  user_roles: "role assignments",
+  role_permissions: "permissions",
+  roles: "a role",
+  customers: "a customer",
+  credit_policies: "a credit policy",
+  party_rates: "customer rates",
+  suppliers: "a supplier",
+  transporters: "a transporter",
+  salesmen: "a salesman",
+  categories: "a catalogue category",
+  products: "a product",
+  skus: "a SKU",
+};
 
-/** "Today" — a written morning brief and a worklist, instead of a dashboard of tiles (brief B4.1). */
-function TodayPage() {
+function DashboardPage() {
   const { data: me } = useQuery(meQuery);
   const series = useQuery({ ...seriesQuery, enabled: can(me, "settings.series.view") });
+  const audit = useQuery({ ...auditQuery({}), enabled: can(me, "audit.view") });
+  const summary = useQuery(dashboardQuery).data;
   if (!me) return null;
 
   const firstName = me.user.name.split(" ")[0];
-  const company = me.company.tradeName || me.company.legalName;
   const nextInvoice = series.data?.find((s) => s.entityType === "SI")?.nextNumber;
+  const seriesReviewed = Boolean(series.data?.some((s) => s.updatedByName));
 
-  const needs: NeedsYou[] = [];
-  if (me.company.isPlaceholder && can(me, "settings.company.update")) {
-    needs.push({
+  const checklist = [
+    {
       id: "company",
-      title: "Complete the company GST profile",
-      why: "Legal name, GSTIN, address and bank details print on every invoice and decide CGST/SGST vs IGST.",
+      label: "Complete the company GST profile",
+      done: !me.company.isPlaceholder,
       to: "/settings/company",
-      cta: "Open profile",
-    });
-  }
-  if (!me.user.twoFactorEnabled) {
-    needs.push({
+    },
+    {
       id: "2fa",
-      title: "Turn on two-step verification",
-      why: "A code from your phone at sign-in keeps your account safe even if your password leaks.",
+      label: "Turn on two-step verification",
+      done: me.user.twoFactorEnabled,
       to: "/setup-2fa",
-      cta: "Set up",
-    });
-  }
-  if (can(me, "settings.series.update")) {
-    needs.push({
+    },
+    {
       id: "series",
-      title: "Review document numbering before the first invoice",
-      why: "Invoice numbers must run without gaps for the whole financial year; formats are easiest to change before anything is posted.",
+      label: "Review document numbering",
+      done: seriesReviewed,
       to: "/settings/series",
-      cta: "Review series",
-    });
-  }
+    },
+    {
+      id: "hsn",
+      label: "Add HSN codes to catalogue categories",
+      done: summary ? summary.categoriesMissingTax === 0 : false,
+      to: "/catalogue",
+    },
+    {
+      id: "customer",
+      label: "Add your first customer",
+      done: (summary?.activeCustomers ?? 0) > 0,
+      to: "/customers/new",
+    },
+  ];
+  const doneCount = checklist.filter((c) => c.done).length;
+
+  const activity = (audit.data?.items ?? []).slice(0, 6).map((item) => ({
+    id: String(item.id),
+    who: item.userName ?? "System",
+    what: (
+      <>
+        {item.action === "INSERT" ? "created" : item.action === "DELETE" ? "removed" : "updated"}{" "}
+        {TABLE_LABELS[item.tableName] ?? item.tableName}
+        {item.rowId && item.tableName === "settings" ? (
+          <>
+            {" "}
+            <Mono className="text-fg-2">{item.rowId}</Mono>
+          </>
+        ) : null}
+      </>
+    ),
+    when: dateTime(item.at),
+  }));
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-10">
-      <PageTitle
-        eyebrow={`${greeting()}, ${firstName}`}
-        title="Today"
-        dateline={`${longDate()} · as of ${clock()}`}
+    <div className="grid gap-6">
+      <PageHeader
+        title={`${greeting()}, ${firstName}`}
+        description={`${longDate()} · Financial year ${fyLabel(istToday())}`}
+        actions={
+          <>
+            {can(me, "customers.manage") ? (
+              <Button asChild variant="secondary">
+                <Link to="/customers/new">Add customer</Link>
+              </Button>
+            ) : null}
+            <Button variant="primary" disabled title="Available in Stage 3">
+              New sales order
+            </Button>
+          </>
+        }
       />
 
-      <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_300px]">
-        <div className="grid content-start gap-10">
-          <p className="max-w-[62ch] font-serif text-[1.35rem] leading-relaxed text-ink">
-            The ledger for <span className="italic">{company}</span> is open for financial year{" "}
-            {fyLabel(istToday())}. Its foundations are in place: gapless numbering, settings and a
-            complete audit trail. Parties and the catalogue come next, then purchasing, stock and
-            sales.
-          </p>
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard
+          label="Active customers"
+          value={fmt(summary?.activeCustomers)}
+          icon={Users}
+          hint={
+            summary ? `${formatINRCompact(summary.totalCreditLimit)} total credit limit` : undefined
+          }
+        />
+        <StatCard
+          label="Suppliers"
+          value={fmt(summary?.suppliers)}
+          icon={Warehouse}
+          hint="Active suppliers"
+        />
+        <StatCard
+          label="Catalogue SKUs"
+          value={fmt(summary?.skus)}
+          icon={Package}
+          hint={
+            summary?.categoriesMissingTax
+              ? `${summary.categoriesMissingTax} categories need HSN`
+              : "GSM × quality × width"
+          }
+        />
+        <StatCard
+          label="Credit-blocked"
+          value={fmt(summary?.blockedCustomers)}
+          icon={ShieldAlert}
+          hint="Customers on hold"
+        />
+      </div>
 
-          <section aria-labelledby="needs-you">
-            <div className="flex items-baseline justify-between border-b border-rule-strong pb-2">
-              <h2 id="needs-you" className="text-lg">
-                Needs you
-              </h2>
-              <span className="tnum text-xs text-ink-3">
-                {needs.length ? `${needs.length} open` : "clear"}
-              </span>
-            </div>
-            {needs.length ? (
-              <ol>
-                {needs.map((item, index) => (
-                  <li
-                    key={item.id}
-                    className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-baseline gap-4 border-b border-rule py-4"
-                  >
-                    <span className="tnum font-serif text-sm italic text-ink-3">{index + 1}.</span>
-                    <div className="min-w-0">
-                      <p className="font-medium text-ink">{item.title}</p>
-                      <p className="mt-0.5 text-sm text-ink-2">{item.why}</p>
-                    </div>
-                    <Link
-                      to={item.to}
-                      className="whitespace-nowrap text-sm font-medium text-accent underline-offset-4 hover:underline"
-                    >
-                      {item.cta} →
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-            ) : (
-              <EmptyState
-                title="Nothing needs you right now."
-                hint="Approvals, credit blocks and unmapped rolls will collect here once trading begins."
-              />
-            )}
-          </section>
-        </div>
+      <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+        <Card
+          title="Setup checklist"
+          description={`${doneCount} of ${checklist.length} complete`}
+          actions={
+            <Badge tone={doneCount === checklist.length ? "success" : "warning"}>
+              {Math.round((doneCount / checklist.length) * 100)}%
+            </Badge>
+          }
+          padded={false}
+        >
+          <div className="h-1.5 bg-muted" aria-hidden>
+            <div
+              className="h-full bg-primary transition-all"
+              style={{ width: `${(doneCount / checklist.length) * 100}%` }}
+            />
+          </div>
+          <ul>
+            {checklist.map((item) => (
+              <li
+                key={item.id}
+                className="flex items-center gap-3 border-b border-border px-5 py-3.5 last:border-b-0"
+              >
+                {item.done ? (
+                  <CheckCircle2 className="size-5 shrink-0 text-success" aria-label="Done" />
+                ) : (
+                  <Circle className="size-5 shrink-0 text-border-strong" aria-label="To do" />
+                )}
+                <span
+                  className={
+                    item.done
+                      ? "flex-1 text-sm text-fg-3 line-through"
+                      : "flex-1 text-sm font-medium text-fg"
+                  }
+                >
+                  {item.label}
+                </span>
+                {!item.done && item.to ? (
+                  <Button asChild size="sm" variant="secondary">
+                    <Link to={item.to}>Open</Link>
+                  </Button>
+                ) : !item.done ? (
+                  <Badge tone="neutral" dot={false}>
+                    Coming soon
+                  </Badge>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </Card>
 
-        <aside className="grid content-start gap-6">
-          <section className="border-l border-rule-strong pl-4">
-            <h3 className="smallcaps mb-3 font-sans">In this ledger</h3>
-            <dl className="grid gap-3 text-sm">
-              <div>
-                <dt className="text-ink-3">Financial year</dt>
-                <dd className="tnum text-ink">{fyLabel(istToday())}</dd>
+        <div className="grid content-start gap-6">
+          <Card title="At a glance" padded>
+            <dl className="grid gap-4 text-sm">
+              <div className="flex items-center justify-between gap-4">
+                <dt className="text-fg-2">Financial year</dt>
+                <dd className="font-medium text-fg">{fyLabel(istToday())}</dd>
               </div>
               {nextInvoice ? (
-                <div>
-                  <dt className="text-ink-3">Next sales invoice</dt>
+                <div className="flex items-center justify-between gap-4">
+                  <dt className="text-fg-2">Next sales invoice</dt>
                   <dd>
-                    <Mono className="text-ink">{nextInvoice}</Mono>
+                    <Mono className="font-medium text-fg">{nextInvoice}</Mono>
                   </dd>
                 </div>
               ) : null}
-              <div>
-                <dt className="text-ink-3">Company profile</dt>
+              <div className="flex items-center justify-between gap-4">
+                <dt className="text-fg-2">Company profile</dt>
                 <dd>
                   {me.company.isPlaceholder ? (
-                    <StatusMark tone="caution">Placeholder details</StatusMark>
+                    <Badge tone="warning">Incomplete</Badge>
                   ) : (
-                    <StatusMark tone="positive">Complete</StatusMark>
+                    <Badge tone="success">Complete</Badge>
+                  )}
+                </dd>
+              </div>
+              <div className="flex items-center justify-between gap-4">
+                <dt className="text-fg-2">Two-step verification</dt>
+                <dd>
+                  {me.user.twoFactorEnabled ? (
+                    <Badge tone="success">On</Badge>
+                  ) : (
+                    <Badge tone="warning">Off</Badge>
                   )}
                 </dd>
               </div>
             </dl>
-          </section>
-          <Rule />
-          <p className="font-serif text-sm italic leading-relaxed text-ink-3">
-            Press <kbd className="font-mono not-italic">Ctrl K</kbd> to jump anywhere, or{" "}
-            <kbd className="font-mono not-italic">?</kbd> for shortcuts.
-          </p>
-        </aside>
+          </Card>
+
+          {can(me, "audit.view") ? (
+            <Card
+              title="Recent activity"
+              actions={
+                <Button asChild size="sm" variant="ghost">
+                  <Link to="/settings/audit">View all</Link>
+                </Button>
+              }
+            >
+              {activity.length ? (
+                <ActivityFeed entries={activity} />
+              ) : (
+                <EmptyState
+                  icon={History}
+                  title="No activity yet"
+                  hint="Changes made by your team will show up here."
+                />
+              )}
+            </Card>
+          ) : null}
+        </div>
       </div>
     </div>
   );
 }
+
+const fmt = (n: number | undefined) => (n === undefined ? "—" : n.toLocaleString("en-IN"));

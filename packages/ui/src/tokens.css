@@ -1,142 +1,169 @@
 /*
- * Editorial Ledger — design tokens (brief Part B, CLAUDE.md).
- * Light ("Ledger") is primary; dark is "Night Ledger". Theme comes from
- * <html data-theme="light|dark|system">; density from <html data-density="comfortable|compact">.
+ * Design tokens — professional dashboard (ADR-0022).
+ * Theme from <html data-theme="light|dark|system">; density from <html data-density="comfortable|compact">.
+ * Every text/background pair below is checked at ≥ 4.5:1 (WCAG AA).
  * Import after `@import "tailwindcss";` in the app stylesheet.
  */
-@import "@fontsource-variable/newsreader/index.css";
-@import "@fontsource-variable/newsreader/wght-italic.css";
 @import "@fontsource-variable/inter/index.css";
 @import "@fontsource-variable/jetbrains-mono/index.css";
 
 :root {
-  --paper: #fbf8f2;
-  --sheet: #ffffff;
-  --ink: #1b2433;
-  --ink-2: #4f5866;
-  --ink-3: #646a75;
-  --rule: #e6dfd2;
-  --rule-strong: #cfc5b3;
-  --wash: #f4efe5;
-  --accent: #7a2e2e;
-  --accent-ink: #ffffff;
-  --accent-wash: #f3e7e4;
-  --positive: #2f6b4f;
-  --caution: #8a5f0e;
-  --critical: #a23b2a;
-  --info: #2b5c8a;
-  --shadow-sheet: 0 1px 2px rgb(27 36 51 / 0.04), 0 8px 24px -12px rgb(27 36 51 / 0.08);
-  --focus: 0 0 0 2px var(--paper), 0 0 0 4px color-mix(in oklab, var(--accent) 70%, transparent);
+  --canvas: #f5f6f8;
+  --surface: #ffffff;
+  --muted: #f2f4f7;
+  --border: #e4e7ec;
+  --border-strong: #d0d5dd;
+  --fg: #101828;
+  --fg-2: #475467;
+  --fg-3: #667085;
+  --primary: #1f4fd8;
+  --primary-hover: #1a43b8;
+  --primary-fg: #ffffff;
+  --primary-soft: #e9edfb;
+  --success: #067647;
+  --success-soft: #e6f1ed;
+  --warning: #b54708;
+  --warning-soft: #f8ede6;
+  --danger: #b42318;
+  --danger-soft: #f8e9e8;
+  --info: #175cd3;
+  --info-soft: #e8effb;
+  --sidebar: #ffffff;
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.05);
+  --shadow-pop: 0 12px 24px -6px rgb(16 24 40 / 0.12), 0 4px 8px -4px rgb(16 24 40 / 0.06);
+  --focus: 0 0 0 3px color-mix(in oklab, var(--primary) 28%, transparent);
 
-  --row-h: 2.5rem;
+  --row-h: 2.75rem;
   --pad-x: 1rem;
-  --field-h: 2.25rem;
+  --field-h: 2.375rem;
   color-scheme: light;
 }
 
 :root[data-density="compact"] {
-  --row-h: 2rem;
+  --row-h: 2.25rem;
   --pad-x: 0.75rem;
-  --field-h: 1.875rem;
+  --field-h: 2rem;
 }
 
 :root[data-theme="dark"] {
-  --paper: #14171c;
-  --sheet: #1a1e24;
-  --ink: #e8e4da;
-  --ink-2: #a3a9b3;
-  --ink-3: #868d98;
-  --rule: #2a2f37;
-  --rule-strong: #3a414b;
-  --wash: #1f242b;
-  --accent: #d08a7a;
-  --accent-ink: #14171c;
-  --accent-wash: #2b2224;
-  --positive: #7fc4a0;
-  --caution: #e0b35a;
-  --critical: #e5806e;
-  --info: #86b3dd;
-  --shadow-sheet: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -16px rgb(0 0 0 / 0.5);
+  --canvas: #0b0f17;
+  --surface: #121826;
+  --muted: #1a2232;
+  --border: #232b3a;
+  --border-strong: #344054;
+  --fg: #f2f4f7;
+  --fg-2: #b4bcc8;
+  --fg-3: #8a94a6;
+  --primary: #7c9cff;
+  --primary-hover: #97b0ff;
+  --primary-fg: #0b0f17;
+  --primary-soft: #212a44;
+  --success: #47cd89;
+  --success-soft: #193134;
+  --warning: #fdb022;
+  --warning-soft: #332d25;
+  --danger: #f97066;
+  --danger-soft: #32242f;
+  --info: #53b1fd;
+  --info-soft: #1b2d44;
+  --sidebar: #0f1420;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-pop: 0 16px 32px -8px rgb(0 0 0 / 0.6);
   color-scheme: dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root[data-theme="system"] {
-    --paper: #14171c;
-    --sheet: #1a1e24;
-    --ink: #e8e4da;
-    --ink-2: #a3a9b3;
-    --ink-3: #868d98;
-    --rule: #2a2f37;
-    --rule-strong: #3a414b;
-    --wash: #1f242b;
-    --accent: #d08a7a;
-    --accent-ink: #14171c;
-    --accent-wash: #2b2224;
-    --positive: #7fc4a0;
-    --caution: #e0b35a;
-    --critical: #e5806e;
-    --info: #86b3dd;
-    --shadow-sheet: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -16px rgb(0 0 0 / 0.5);
+    --canvas: #0b0f17;
+    --surface: #121826;
+    --muted: #1a2232;
+    --border: #232b3a;
+    --border-strong: #344054;
+    --fg: #f2f4f7;
+    --fg-2: #b4bcc8;
+    --fg-3: #8a94a6;
+    --primary: #7c9cff;
+    --primary-hover: #97b0ff;
+    --primary-fg: #0b0f17;
+    --primary-soft: #212a44;
+    --success: #47cd89;
+    --success-soft: #193134;
+    --warning: #fdb022;
+    --warning-soft: #332d25;
+    --danger: #f97066;
+    --danger-soft: #32242f;
+    --info: #53b1fd;
+    --info-soft: #1b2d44;
+    --sidebar: #0f1420;
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-pop: 0 16px 32px -8px rgb(0 0 0 / 0.6);
     color-scheme: dark;
   }
 }
 
 @theme inline {
-  --color-paper: var(--paper);
-  --color-sheet: var(--sheet);
-  --color-ink: var(--ink);
-  --color-ink-2: var(--ink-2);
-  --color-ink-3: var(--ink-3);
-  --color-rule: var(--rule);
-  --color-rule-strong: var(--rule-strong);
-  --color-wash: var(--wash);
-  --color-accent: var(--accent);
-  --color-accent-ink: var(--accent-ink);
-  --color-accent-wash: var(--accent-wash);
-  --color-positive: var(--positive);
-  --color-caution: var(--caution);
-  --color-critical: var(--critical);
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg-2);
+  --color-fg-3: var(--fg-3);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-soft: var(--primary-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
   --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-sidebar: var(--sidebar);
 
-  --font-serif: "Newsreader Variable", "Iowan Old Style", Georgia, serif;
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Mono", monospace;
 
-  --text-2xs: 0.75rem;
-  --text-xs: 0.8125rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.25rem;
-  --text-xl: 1.75rem;
-  --text-2xl: 2.5rem;
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;
+  --text-lg: 1rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.625rem;
 
-  --radius-xs: 2px;
-  --radius-sm: 3px;
-  --radius-md: 4px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
 
-  --shadow-sheet: var(--shadow-sheet);
+  --shadow-card: var(--shadow-card);
+  --shadow-pop: var(--shadow-pop);
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 @layer base {
   html {
-    background: var(--paper);
-    color: var(--ink);
+    background: var(--canvas);
+    color: var(--fg);
     font-family: var(--font-sans);
-    font-size: 14px;
-    line-height: 1.45;
+    font-size: 16px;
+    line-height: 1.5;
     font-feature-settings: "cv11", "ss01";
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
   body {
     min-height: 100dvh;
-    background: var(--paper);
+    background: var(--canvas);
+    font-size: var(--text-base);
   }
   ::selection {
-    background: var(--accent-wash);
-    color: var(--ink);
+    background: var(--primary-soft);
+    color: var(--fg);
   }
   :focus-visible {
     outline: none;
@@ -145,10 +172,9 @@
   h1,
   h2,
   h3 {
-    font-family: var(--font-serif);
-    font-weight: 500;
-    line-height: 1.2;
+    font-weight: 600;
     letter-spacing: -0.01em;
+    line-height: 1.3;
   }
   @media (prefers-reduced-motion: reduce) {
     *,
@@ -173,18 +199,27 @@
   }
 }
 
+@keyframes slide-in-right {
+  from {
+    transform: translateX(16px);
+    opacity: 0;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
 @utility tnum {
   font-variant-numeric: tabular-nums lining-nums;
 }
 
-@utility smallcaps {
+@utility label-caps {
   font-size: var(--text-2xs);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 600;
-  color: var(--ink-2);
-}
-
-@utility hairline {
-  border-color: var(--rule);
+  color: var(--fg-3);
 }

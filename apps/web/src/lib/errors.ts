@@ -16,7 +16,7 @@ export function useApiErrorToast() {
       if (error instanceof ApiError && error.code === "VERSION_CONFLICT") {
         const when = error.problem.current?.updatedAt;
         toast({
-          tone: "caution",
+          tone: "warning",
           title: "Someone else changed this first",
           description: when
             ? `Saved at ${dateTime(when)}. Reload to see their version, then re-apply yours.`
@@ -36,14 +36,14 @@ export function useApiErrorToast() {
         error.problem.issues?.length
       ) {
         toast({
-          tone: "critical",
+          tone: "danger",
           title: error.problem.title,
           description: error.problem.issues.map((i) => i.message).join(" · "),
         });
         return;
       }
       toast({
-        tone: "critical",
+        tone: "danger",
         title: error instanceof ApiError ? error.problem.title : "Something went wrong",
       });
     },

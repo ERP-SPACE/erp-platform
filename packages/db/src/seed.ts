@@ -14,15 +14,27 @@ import type { Db } from "./client.js";
 import {
   account,
   branches,
+  categories,
   companies,
+  customerGroups,
   documentSeries,
+  masterSequences,
   permissions,
+  qualities,
   rolePermissions,
   roles,
   settings,
   user,
   userRoles,
 } from "./schema/index.js";
+
+/** Master record codes: CUST-0001, SUP-0001, SLS-0001, TRN-001. */
+export const MASTER_SEQUENCES = [
+  { entity: "customer", prefix: "CUST-", padding: 4 },
+  { entity: "supplier", prefix: "SUP-", padding: 4 },
+  { entity: "salesman", prefix: "SLS-", padding: 4 },
+  { entity: "transporter", prefix: "TRN-", padding: 3 },
+] as const;
 
 export interface SeedOptions {
   owner: { email: string; name: string; password: string };
@@ -117,6 +129,36 @@ export async function seed(db: Db, options: SeedOptions): Promise<SeedResult> {
       await tx
         .insert(documentSeries)
         .values({ companyId: company.id, ...defaultSeries(type) })
+        .onConflictDoNothing();
+    }
+
+    // Stage 1 masters: categories start without HSN/GST (Q9) and are flagged until entered.
+    for (const category of [
+      { code: "SUB", name: "Sublimation Paper" },
+      { code: "BTR", name: "Butter Paper" },
+    ]) {
+      await tx
+        .insert(categories)
+        .values({ companyId: company.id, ...category })
+        .onConflictDoNothing();
+    }
+    for (const name of ["Premium", "Standard", "Economy"]) {
+      await tx.insert(qualities).values({ companyId: company.id, name }).onConflictDoNothing();
+    }
+    for (const group of [
+      { code: "CASH", name: "Cash" },
+      { code: "WHOLESALE", name: "Wholesale" },
+      { code: "BIG", name: "Big accounts" },
+    ]) {
+      await tx
+        .insert(customerGroups)
+        .values({ companyId: company.id, ...group })
+        .onConflictDoNothing();
+    }
+    for (const sequence of MASTER_SEQUENCES) {
+      await tx
+        .insert(masterSequences)
+        .values({ companyId: company.id, ...sequence })
         .onConflictDoNothing();
     }
 

@@ -1,50 +1,93 @@
 import type { MeResponse } from "@erp/contracts";
 import {
+  Avatar,
   Button,
   CommandPalette,
   type CommandItem,
+  DropdownMenu,
   Kbd,
   Popover,
   Segmented,
   ShortcutOverlay,
   type Shortcut,
+  Tooltip,
   cn,
   useHotkeys,
 } from "@erp/ui";
-import { useQueryClient } from "@tanstack/react-query";
+import type { SearchResult } from "@erp/contracts";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
-import { type ReactNode, useMemo, useState } from "react";
+import {
+  BarChart3,
+  Bell,
+  Boxes,
+  ChevronsLeft,
+  ChevronsRight,
+  FileText,
+  LayoutDashboard,
+  type LucideIcon,
+  LogOut,
+  Menu,
+  Package,
+  Search,
+  Settings,
+  ShoppingCart,
+  Truck,
+  UserCog,
+  Users,
+  Wallet,
+  Warehouse,
+  X,
+} from "lucide-react";
+import { type ReactNode, useDeferredValue, useMemo, useState } from "react";
+import { api, call } from "../lib/api.js";
 import { authClient } from "../lib/auth.js";
 import { type Density, type Theme, setPrefs, usePrefs } from "../lib/prefs.js";
 import { can } from "../lib/queries.js";
 import { type SyncState, useRealtime } from "../lib/realtime.js";
+import { BrandMark } from "./brand.js";
 
-interface Section {
+interface NavItem {
   label: string;
+  icon: LucideIcon;
   to?: string;
+  /** Stage that delivers this section; shown as "Soon" until then. */
   stage?: number;
   permission?: string;
 }
 
-/** Left rail sections (brief B3). Sections without a route show the stage that builds them. */
-const SECTIONS: Section[] = [
-  { label: "Today", to: "/" },
-  { label: "Sales", stage: 3 },
-  { label: "Purchase", stage: 2 },
-  { label: "Stock", stage: 2 },
-  { label: "Parties", stage: 1 },
-  { label: "Collections", stage: 4 },
-  { label: "Reports", stage: 5 },
-  { label: "Settings", to: "/settings", permission: "settings.view" },
+const NAV: { heading?: string; items: NavItem[] }[] = [
+  { items: [{ label: "Dashboard", icon: LayoutDashboard, to: "/" }] },
+  {
+    heading: "Masters",
+    items: [
+      { label: "Catalogue", icon: Package, to: "/catalogue", permission: "catalogue.view" },
+      { label: "Customers", icon: Users, to: "/customers", permission: "customers.view" },
+      { label: "Suppliers", icon: Warehouse, to: "/suppliers", permission: "suppliers.view" },
+      { label: "Transporters", icon: Truck, to: "/transporters", permission: "transporters.view" },
+      { label: "Salesmen", icon: UserCog, to: "/salesmen", permission: "salesmen.view" },
+    ],
+  },
+  {
+    heading: "Operations",
+    items: [
+      { label: "Sales", icon: FileText, stage: 3 },
+      { label: "Purchase", icon: ShoppingCart, stage: 2 },
+      { label: "Inventory", icon: Boxes, stage: 2 },
+      { label: "Collections", icon: Wallet, stage: 4 },
+      { label: "Reports", icon: BarChart3, stage: 5 },
+    ],
+  },
+  { items: [{ label: "Settings", icon: Settings, to: "/settings", permission: "settings.view" }] },
 ];
 
 const SHORTCUTS: Shortcut[] = [
-  { keys: "Ctrl K", label: "Command palette — go to, create, find", group: "Everywhere" },
-  { keys: "?", label: "Show these shortcuts", group: "Everywhere" },
+  { keys: "Ctrl K", label: "Search and jump anywhere", group: "Everywhere" },
+  { keys: "?", label: "Show keyboard shortcuts", group: "Everywhere" },
   { keys: "Ctrl .", label: "Toggle compact density", group: "Everywhere" },
-  { keys: "↑ ↓", label: "Move through a register", group: "Registers" },
-  { keys: "Enter", label: "Open the selected row", group: "Registers" },
-  { keys: "Esc", label: "Close a dialog or go back", group: "Sheets" },
+  { keys: "↑ ↓", label: "Move through a table", group: "Tables" },
+  { keys: "Enter", label: "Open the selected row", group: "Tables" },
+  { keys: "Esc", label: "Close a dialog or panel", group: "Dialogs" },
 ];
 
 export function Shell({ me, children }: { me: MeResponse; children: ReactNode }) {
@@ -54,8 +97,32 @@ export function Shell({ me, children }: { me: MeResponse; children: ReactNode })
   const [paletteOpen, setPaletteOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const sync = useRealtime(true);
-  const path = useRouterState({ select: (s) => s.location.pathname });
+  const [query, setQuery] = useState("");
+  const deferredQuery = useDeferredValue(query.trim());
+  const search = useQuery({
+    queryKey: ["search", deferredQuery],
+    queryFn: () =>
+      call<{ results: SearchResult[] }>(() =>
+        api.GET("/api/search", { params: { query: { q: deferredQuery } } }),
+      ),
+    enabled: paletteOpen && deferredQuery.length >= 2,
+    staleTime: 30_000,
+  });
+  const records = useMemo<CommandItem[]>(
+    () =>
+      (search.data?.results ?? []).map((r) => ({
+        id: `:`,
+        group: RECORD_GROUPS[r.type],
+        label: r.title,
+        hint: r.subtitle ?? undefined,
+        // The server already matched; include the query so the palette keeps the row.
+        keywords: [deferredQuery, r.subtitle ?? ""],
+        onRun: () => void navigate(recordLink(r)),
+      })),
+    [search.data, deferredQuery, navigate],
+  );
 
   const signOut = async () => {
     await authClient.signOut();
@@ -65,13 +132,43 @@ export function Shell({ me, children }: { me: MeResponse; children: ReactNode })
 
   const commands = useMemo<CommandItem[]>(() => {
     const go = (to: string) => () => void navigate({ to });
-    const items: CommandItem[] = [{ id: "today", group: "Go to", label: "Today", onRun: go("/") }];
+    const items: CommandItem[] = [
+      { id: "dashboard", group: "Go to", label: "Dashboard", onRun: go("/") },
+    ];
+    for (const page of MASTER_PAGES) {
+      if (can(me, page.permission))
+        items.push({
+          id: page.to,
+          group: "Go to",
+          label: page.label,
+          keywords: page.keywords,
+          onRun: go(page.to),
+        });
+    }
+    if (can(me, "customers.manage")) {
+      items.push({
+        id: "new-customer",
+        group: "Create",
+        label: "New customer",
+        shortcut: "Alt N",
+        onRun: go("/customers/new"),
+      });
+    }
+    if (can(me, "rates.bulk_revise")) {
+      items.push({
+        id: "bulk-revision",
+        group: "Create",
+        label: "Bulk rate revision",
+        keywords: ["price", "increase"],
+        onRun: go("/pricing/bulk-revision"),
+      });
+    }
     if (can(me, "settings.view")) {
       items.push(
         {
           id: "company",
           group: "Settings",
-          label: "Company GST profile",
+          label: "Company profile",
           keywords: ["gstin", "bank", "address"],
           onRun: go("/settings/company"),
         },
@@ -121,7 +218,7 @@ export function Shell({ me, children }: { me: MeResponse; children: ReactNode })
       {
         id: "theme-dark",
         group: "Display",
-        label: "Use dark theme (Night Ledger)",
+        label: "Use dark theme",
         onRun: () => setPrefs({ theme: "dark" }),
       },
       {
@@ -150,127 +247,258 @@ export function Shell({ me, children }: { me: MeResponse; children: ReactNode })
     "mod+.": () => setPrefs({ density: prefs.density === "compact" ? "comfortable" : "compact" }),
   });
 
-  const name = me.company.tradeName || me.company.legalName;
+  const company = me.company.tradeName || me.company.legalName;
 
   return (
-    <div className="flex min-h-dvh flex-col">
+    <div className="flex min-h-dvh bg-canvas">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:bg-sheet focus:px-3 focus:py-1.5"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded-md focus:bg-surface focus:px-3 focus:py-1.5"
       >
         Skip to content
       </a>
-      <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b border-rule bg-paper/95 px-5 backdrop-blur-sm">
-        <Link to="/" className="flex items-baseline gap-2.5 outline-none">
-          <span className="font-serif text-[1.35rem] font-medium tracking-tight text-ink">
-            Ledger<span className="text-accent">·</span>
-          </span>
-          <span className="hidden max-w-[22ch] truncate font-serif text-sm italic text-ink-2 sm:inline">
-            {name}
-          </span>
-        </Link>
-        <button
-          type="button"
-          onClick={() => setPaletteOpen(true)}
-          className="mx-auto flex h-8 w-full max-w-md items-center justify-between rounded-sm border border-rule bg-sheet px-3 text-sm text-ink-3 transition-colors hover:border-rule-strong"
-        >
-          <span className="font-serif italic">Search or jump to…</span>
-          <Kbd>Ctrl K</Kbd>
-        </button>
-        <SyncDot state={sync} />
-        <UserMenu me={me} theme={prefs.theme} density={prefs.density} onSignOut={signOut} />
-      </header>
 
-      <div className="flex flex-1">
-        <nav
-          aria-label="Sections"
-          className={cn(
-            "shrink-0 border-r border-rule py-6 transition-[width] duration-200",
-            collapsed ? "w-14" : "w-52",
-          )}
-        >
-          <ul className="flex flex-col gap-0.5">
-            {SECTIONS.filter((s) => !s.permission || can(me, s.permission)).map((section) => {
-              const active = section.to
-                ? section.to === "/"
-                  ? path === "/"
-                  : path.startsWith(section.to)
-                : false;
-              const content = (
-                <>
-                  <span className="smallcaps text-inherit" style={{ color: "inherit" }}>
-                    {collapsed ? section.label.slice(0, 2) : section.label}
-                  </span>
-                  {!collapsed && section.stage ? (
-                    <span className="font-serif text-xs italic text-ink-3">
-                      stage {section.stage}
-                    </span>
-                  ) : null}
-                </>
-              );
-              const base = "flex h-8 items-center justify-between gap-2 px-5";
-              return (
-                <li key={section.label}>
-                  {section.to ? (
-                    <Link
-                      to={section.to}
-                      title={collapsed ? section.label : undefined}
-                      aria-current={active ? "page" : undefined}
-                      className={cn(
-                        base,
-                        "text-ink-2 transition-colors hover:text-ink",
-                        active && "text-ink shadow-[inset_2px_0_0_var(--accent)]",
-                      )}
-                    >
-                      {content}
-                    </Link>
-                  ) : (
-                    <span
-                      className={cn(base, "cursor-default text-ink-3")}
-                      title={`${section.label} arrives in Stage ${section.stage}`}
-                    >
-                      {content}
-                    </span>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+      {mobileOpen ? (
+        <div
+          className="fixed inset-0 z-40 bg-[rgb(16_24_40/0.45)] lg:hidden"
+          onClick={() => setMobileOpen(false)}
+          aria-hidden
+        />
+      ) : null}
+      <Sidebar
+        me={me}
+        company={company}
+        collapsed={collapsed}
+        mobileOpen={mobileOpen}
+        onCollapse={() => setCollapsed((c) => !c)}
+        onNavigate={() => setMobileOpen(false)}
+      />
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-border bg-surface/90 px-4 backdrop-blur sm:px-6">
+          <Button
+            variant="ghost"
+            iconOnly
+            icon={Menu}
+            aria-label="Open navigation"
+            className="lg:hidden"
+            onClick={() => setMobileOpen(true)}
+          />
           <button
             type="button"
-            onClick={() => setCollapsed((c) => !c)}
-            className="smallcaps mt-8 px-5 text-ink-3 hover:text-ink"
-            aria-label={collapsed ? "Expand navigation" : "Collapse navigation"}
+            onClick={() => setPaletteOpen(true)}
+            className="flex h-9 w-full max-w-md items-center gap-2 rounded-md border border-border bg-muted px-3 text-sm text-fg-3 transition-colors hover:border-border-strong"
           >
-            {collapsed ? "»" : "« Collapse"}
+            <Search className="size-4" aria-hidden />
+            <span className="flex-1 text-left">Search customers, pages, actions…</span>
+            <Kbd>Ctrl K</Kbd>
           </button>
-        </nav>
+          <div className="ml-auto flex items-center gap-1 sm:gap-2">
+            <SyncStatus state={sync} />
+            <Popover
+              align="end"
+              trigger={<Button variant="ghost" iconOnly icon={Bell} aria-label="Notifications" />}
+            >
+              <div className="w-72">
+                <p className="text-sm font-semibold text-fg">Notifications</p>
+                <p className="mt-2 text-sm text-fg-3">
+                  You're all caught up. Approvals and credit blocks will appear here.
+                </p>
+              </div>
+            </Popover>
+            <UserMenu me={me} theme={prefs.theme} density={prefs.density} onSignOut={signOut} />
+          </div>
+        </header>
 
-        <main id="main" className="min-w-0 flex-1 px-4 py-8 sm:px-8 xl:px-12">
-          {children}
+        <main id="main" className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+          <div className="mx-auto w-full max-w-[1400px]">{children}</div>
         </main>
       </div>
 
-      <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} items={commands} />
+      <CommandPalette
+        open={paletteOpen}
+        onOpenChange={(open) => {
+          setPaletteOpen(open);
+          if (!open) setQuery("");
+        }}
+        items={[...commands, ...records]}
+        query={query}
+        onQueryChange={setQuery}
+      />
       <ShortcutOverlay open={shortcutsOpen} onOpenChange={setShortcutsOpen} shortcuts={SHORTCUTS} />
     </div>
   );
 }
 
-function SyncDot({ state }: { state: SyncState }) {
+function Sidebar({
+  me,
+  company,
+  collapsed,
+  mobileOpen,
+  onCollapse,
+  onNavigate,
+}: {
+  me: MeResponse;
+  company: string;
+  collapsed: boolean;
+  mobileOpen: boolean;
+  onCollapse: () => void;
+  onNavigate: () => void;
+}) {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  return (
+    <aside
+      aria-label="Main navigation"
+      className={cn(
+        "fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-border bg-sidebar transition-[width,transform] duration-200",
+        "lg:sticky lg:top-0 lg:h-dvh lg:translate-x-0",
+        mobileOpen ? "translate-x-0" : "-translate-x-full",
+        collapsed ? "lg:w-16" : "lg:w-64",
+      )}
+    >
+      <div
+        className={cn(
+          "flex h-16 shrink-0 items-center border-b border-border px-4",
+          collapsed && "lg:justify-center lg:px-0",
+        )}
+      >
+        <Link
+          to="/"
+          onClick={onNavigate}
+          className="rounded-md outline-none"
+          aria-label="PaperERP dashboard"
+        >
+          <BrandMark compact={collapsed} />
+        </Link>
+        <Button
+          variant="ghost"
+          size="sm"
+          iconOnly
+          icon={X}
+          aria-label="Close navigation"
+          className="ml-auto lg:hidden"
+          onClick={onNavigate}
+        />
+      </div>
+
+      {!collapsed ? (
+        <div className="mx-3 mt-3 rounded-md bg-muted px-3 py-2">
+          <p className="text-xs text-fg-3">Company</p>
+          <p className="truncate text-sm font-medium text-fg">{company}</p>
+        </div>
+      ) : null}
+
+      <nav className="flex-1 overflow-y-auto px-3 py-3">
+        {NAV.map((group, gi) => (
+          <div key={gi} className="mb-3">
+            {group.heading && !collapsed ? (
+              <p className="label-caps px-3 pb-1.5 pt-2">{group.heading}</p>
+            ) : null}
+            {group.heading && collapsed ? (
+              <div className="mx-auto my-2 h-px w-6 bg-border" aria-hidden />
+            ) : null}
+            <ul className="flex flex-col gap-0.5">
+              {group.items
+                .filter((item) => !item.permission || can(me, item.permission))
+                .map((item) => {
+                  const active = item.to
+                    ? item.to === "/"
+                      ? path === "/"
+                      : path.startsWith(item.to)
+                    : false;
+                  const Icon = item.icon;
+                  const body = (
+                    <>
+                      <Icon
+                        className={cn(
+                          "size-[18px] shrink-0",
+                          active ? "text-primary" : "text-fg-3",
+                        )}
+                        aria-hidden
+                      />
+                      {collapsed ? null : <span className="flex-1 truncate">{item.label}</span>}
+                      {!collapsed && item.stage ? (
+                        <span className="rounded-full bg-muted px-2 py-0.5 text-[0.6875rem] font-medium text-fg-3">
+                          Soon
+                        </span>
+                      ) : null}
+                    </>
+                  );
+                  const base = cn(
+                    "flex h-9 items-center gap-3 rounded-md px-3 text-sm font-medium",
+                    collapsed && "lg:justify-center lg:px-0",
+                  );
+                  const link = item.to ? (
+                    <Link
+                      to={item.to}
+                      onClick={onNavigate}
+                      aria-current={active ? "page" : undefined}
+                      className={cn(
+                        base,
+                        active
+                          ? "bg-primary-soft text-primary"
+                          : "text-fg-2 hover:bg-muted hover:text-fg",
+                      )}
+                    >
+                      {body}
+                    </Link>
+                  ) : (
+                    <span
+                      className={cn(base, "cursor-not-allowed text-fg-3")}
+                      aria-disabled="true"
+                      title={`${item.label} arrives in Stage ${item.stage}`}
+                    >
+                      {body}
+                    </span>
+                  );
+                  return (
+                    <li key={item.label}>
+                      {collapsed ? (
+                        <Tooltip content={item.stage ? `${item.label} · coming soon` : item.label}>
+                          {link}
+                        </Tooltip>
+                      ) : (
+                        link
+                      )}
+                    </li>
+                  );
+                })}
+            </ul>
+          </div>
+        ))}
+      </nav>
+
+      <div className="hidden border-t border-border p-3 lg:block">
+        <Button
+          variant="ghost"
+          size="sm"
+          icon={collapsed ? ChevronsRight : ChevronsLeft}
+          iconOnly={collapsed}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className={cn("w-full", !collapsed && "justify-start")}
+          onClick={onCollapse}
+        >
+          Collapse
+        </Button>
+      </div>
+    </aside>
+  );
+}
+
+function SyncStatus({ state }: { state: SyncState }) {
   const label = state === "live" ? "Live" : state === "connecting" ? "Connecting" : "Offline";
   return (
     <span
-      className="hidden items-center gap-1.5 text-xs text-ink-3 md:inline-flex"
+      className="hidden items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-xs font-medium text-fg-2 md:inline-flex"
       title={`Live updates: ${label}`}
       data-sync={state}
     >
       <span
         className={cn(
-          "size-1.5 rounded-full",
-          state === "live" && "animate-pulse bg-positive [animation-duration:2.4s]",
-          state === "connecting" && "bg-caution",
-          state === "offline" && "bg-ink-3",
+          "size-2 rounded-full",
+          state === "live" && "bg-success",
+          state === "connecting" && "bg-warning",
+          state === "offline" && "bg-fg-3",
         )}
         aria-hidden
       />
@@ -290,58 +518,114 @@ function UserMenu({
   density: Density;
   onSignOut: () => void;
 }) {
-  const initials = me.user.name
-    .split(/\s+/)
-    .map((p) => p[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
   return (
-    <Popover
-      align="end"
+    <DropdownMenu
       trigger={
         <button
           type="button"
-          aria-label="Account and display"
-          className="flex size-8 items-center justify-center rounded-full border border-rule-strong font-serif text-sm text-ink hover:bg-wash"
+          className="flex items-center gap-2 rounded-md p-1 pr-2 hover:bg-muted"
         >
-          {initials}
+          {/* No aria-label: the accessible name must contain the visible text (WCAG 2.5.3). */}
+          <span aria-hidden>
+            <Avatar name={me.user.name} size="sm" />
+          </span>
+          <span className="sr-only sm:hidden">{me.user.name} — account and display</span>
+          <span className="hidden text-left sm:block">
+            <span className="block text-sm font-medium leading-tight text-fg">{me.user.name}</span>
+            <span className="block text-xs capitalize leading-tight text-fg-3">
+              {me.roles[0]?.replace(/_/g, " ")}
+            </span>
+          </span>
         </button>
       }
-    >
-      <div className="grid w-64 gap-4">
-        <div>
-          <p className="text-sm font-medium text-ink">{me.user.name}</p>
-          <p className="text-xs text-ink-2">{me.user.email}</p>
-          <p className="smallcaps mt-1.5">{me.roles.join(" · ")}</p>
+      header={
+        <div className="grid gap-3">
+          <div>
+            <p className="text-sm font-semibold text-fg">{me.user.name}</p>
+            <p className="text-xs text-fg-3">{me.user.email}</p>
+          </div>
+          <div className="grid gap-1.5">
+            <span className="text-xs font-medium text-fg-3">Theme</span>
+            <Segmented<Theme>
+              label="Theme"
+              value={theme}
+              onValueChange={(t) => setPrefs({ theme: t })}
+              options={[
+                { value: "light", label: "Light" },
+                { value: "dark", label: "Dark" },
+                { value: "system", label: "System" },
+              ]}
+            />
+            <span className="mt-1 text-xs font-medium text-fg-3">Density</span>
+            <Segmented<Density>
+              label="Density"
+              value={density}
+              onValueChange={(d) => setPrefs({ density: d })}
+              options={[
+                { value: "comfortable", label: "Comfortable" },
+                { value: "compact", label: "Compact" },
+              ]}
+            />
+          </div>
         </div>
-        <div className="grid gap-2">
-          <p className="smallcaps">Theme</p>
-          <Segmented<Theme>
-            label="Theme"
-            value={theme}
-            onValueChange={(t) => setPrefs({ theme: t })}
-            options={[
-              { value: "system", label: "System" },
-              { value: "light", label: "Light" },
-              { value: "dark", label: "Dark" },
-            ]}
-          />
-          <p className="smallcaps mt-1">Density</p>
-          <Segmented<Density>
-            label="Density"
-            value={density}
-            onValueChange={(d) => setPrefs({ density: d })}
-            options={[
-              { value: "comfortable", label: "Comfortable" },
-              { value: "compact", label: "Compact" },
-            ]}
-          />
-        </div>
-        <Button variant="secondary" size="sm" onClick={onSignOut}>
-          Sign out
-        </Button>
-      </div>
-    </Popover>
+      }
+      items={["separator", { label: "Sign out", icon: LogOut, onSelect: onSignOut }]}
+    />
   );
+}
+
+const MASTER_PAGES = [
+  {
+    to: "/customers",
+    label: "Customers",
+    permission: "customers.view",
+    keywords: ["party", "buyer"],
+  },
+  {
+    to: "/catalogue",
+    label: "Catalogue",
+    permission: "catalogue.view",
+    keywords: ["products", "sku", "gsm", "hsn"],
+  },
+  {
+    to: "/suppliers",
+    label: "Suppliers",
+    permission: "suppliers.view",
+    keywords: ["mill", "vendor"],
+  },
+  {
+    to: "/transporters",
+    label: "Transporters",
+    permission: "transporters.view",
+    keywords: ["carrier", "courier"],
+  },
+  {
+    to: "/salesmen",
+    label: "Salesmen",
+    permission: "salesmen.view",
+    keywords: ["broker", "agent", "commission"],
+  },
+];
+
+const RECORD_GROUPS: Record<SearchResult["type"], string> = {
+  customer: "Customers",
+  supplier: "Suppliers",
+  transporter: "Transporters",
+  salesman: "Salesmen",
+  product: "Products",
+};
+
+function recordLink(r: SearchResult) {
+  switch (r.type) {
+    case "customer":
+      return { to: "/customers/$customerId", params: { customerId: r.id } } as const;
+    case "salesman":
+      return { to: "/salesmen/$salesmanId", params: { salesmanId: r.id } } as const;
+    case "supplier":
+      return { to: "/suppliers", search: { id: r.id } } as const;
+    case "transporter":
+      return { to: "/transporters", search: { id: r.id } } as const;
+    case "product":
+      return { to: "/catalogue", search: { product: r.id } } as const;
+  }
 }

@@ -14,7 +14,7 @@ for (const theme of ["light", "dark"] as const) {
 
     test("/_design has no WCAG A/AA violations (stage gate)", async ({ page }) => {
       await page.goto("/_design");
-      await expect(page.getByRole("heading", { name: "Editorial Ledger" })).toBeVisible();
+      await expect(page.getByRole("heading", { level: 1, name: "Design system" })).toBeVisible();
       await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
       const results = await audit(page);
       expect(results.violations.map((v) => `${v.id}: ${v.nodes.length} node(s)`)).toEqual([]);

@@ -7,6 +7,11 @@ const INVALIDATES: Record<RealtimeTopic, readonly (readonly unknown[])[]> = {
   "settings.changed": [keys.settings, keys.company, keys.me],
   "series.changed": [keys.series],
   "users.changed": [keys.users, keys.roles, keys.me],
+  "catalogue.changed": [keys.catalogue, keys.dashboard],
+  "customers.changed": [keys.customers, keys.dashboard],
+  "suppliers.changed": [keys.suppliers, keys.dashboard],
+  "transporters.changed": [keys.transporters],
+  "salesmen.changed": [keys.salesmen, keys.customers],
 };
 
 export type SyncState = "connecting" | "live" | "offline";

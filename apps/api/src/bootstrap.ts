@@ -2,6 +2,7 @@ import "reflect-metadata";
 import type { IncomingMessage } from "node:http";
 import cookie from "@fastify/cookie";
 import helmet from "@fastify/helmet";
+import multipart from "@fastify/multipart";
 import rateLimit from "@fastify/rate-limit";
 import { NestFactory } from "@nestjs/core";
 import { FastifyAdapter, type NestFastifyApplication } from "@nestjs/platform-fastify";
@@ -14,6 +15,7 @@ import { AUTH, type Auth } from "./auth/auth.factory.js";
 import { registerAuthRoutes } from "./auth/auth.routes.js";
 import { applyZodSchemas } from "./common/dto.js";
 import type { Env } from "./config/env.js";
+import { webOrigins } from "./config/origins.js";
 
 /** Builds the Nest application (used by main.ts, the OpenAPI exporter and integration tests). */
 export async function createApp(
@@ -36,7 +38,7 @@ export async function createApp(
 
   app.setGlobalPrefix("api");
   app.enableCors({
-    origin: env.WEB_ORIGIN,
+    origin: webOrigins(env),
     credentials: true,
     exposedHeaders: ["x-request-id", "idempotent-replay"],
   });
@@ -45,7 +47,11 @@ export async function createApp(
   await app.register(helmet, { contentSecurityPolicy: false }); // API serves JSON only
   await app.register(cookie);
   await app.register(rateLimit, { global: false });
-  registerAuthRoutes(app.getHttpAdapter().getInstance(), app.get<Auth>(AUTH), env.API_PUBLIC_URL);
+  // File uploads (ADR-0023): one file per request, size capped; type is checked by magic bytes.
+  await app.register(multipart, {
+    limits: { fileSize: env.UPLOAD_MAX_BYTES, files: 1, fields: 5, fieldSize: 1000 },
+  });
+  registerAuthRoutes(app.getHttpAdapter().getInstance(), app.get<Auth>(AUTH), env.WEB_ORIGIN);
   return app;
 }
 

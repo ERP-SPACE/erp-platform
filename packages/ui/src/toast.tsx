@@ -1,5 +1,7 @@
+import { AlertTriangle, CheckCircle2, Info, X, XCircle } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Toast as RToast } from "radix-ui";
-import { type ReactNode, createContext, useCallback, useContext, useMemo, useState } from "react";
+import { type ReactNode, createContext, useCallback, useContext, useState } from "react";
 import { cn } from "./cn.js";
 import type { Tone } from "./status.js";
 
@@ -15,16 +17,16 @@ type Notify = (toast: Omit<ToastItem, "id" | "tone"> & { tone?: Tone }) => void;
 
 const ToastContext = createContext<Notify | null>(null);
 
-const rule: Record<Tone, string> = {
-  neutral: "border-l-ink-3",
-  positive: "border-l-positive",
-  caution: "border-l-caution",
-  critical: "border-l-critical",
-  info: "border-l-info",
-  accent: "border-l-accent",
+const icons: Record<Tone, { icon: LucideIcon; className: string }> = {
+  neutral: { icon: Info, className: "text-fg-3" },
+  primary: { icon: Info, className: "text-primary" },
+  info: { icon: Info, className: "text-info" },
+  success: { icon: CheckCircle2, className: "text-success" },
+  warning: { icon: AlertTriangle, className: "text-warning" },
+  danger: { icon: XCircle, className: "text-danger" },
 };
 
-/** Quiet notices in the bottom-right corner; a coloured left rule carries the tone. */
+/** Notifications in the bottom-right corner. */
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<ToastItem[]>([]);
   const notify = useCallback<Notify>((toast) => {
@@ -33,46 +35,45 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       { id: Date.now() + Math.random(), tone: "neutral", ...toast },
     ]);
   }, []);
-  const value = useMemo(() => notify, [notify]);
 
   return (
-    <ToastContext.Provider value={value}>
+    <ToastContext.Provider value={notify}>
       <RToast.Provider swipeDirection="right" duration={5000}>
         {children}
-        {items.map((item) => (
-          <RToast.Root
-            key={item.id}
-            onOpenChange={(open) => {
-              if (!open) setItems((current) => current.filter((t) => t.id !== item.id));
-            }}
-            className={cn(
-              "flex items-start gap-4 rounded-sm border border-l-2 border-rule bg-sheet px-4 py-3 shadow-sheet",
-              "data-[state=open]:animate-[rise-in_180ms_var(--ease-out)]",
-              rule[item.tone],
-            )}
-          >
-            <div className="min-w-0 flex-1">
-              <RToast.Title className="text-sm font-medium text-ink">{item.title}</RToast.Title>
-              {item.description ? (
-                <RToast.Description className="mt-0.5 text-xs text-ink-2">
-                  {item.description}
-                </RToast.Description>
-              ) : null}
-            </div>
-            {item.action ? (
-              <RToast.Action
-                altText={item.action.label}
-                onClick={item.action.onClick}
-                className="text-xs font-medium text-accent hover:underline"
-              >
-                {item.action.label}
-              </RToast.Action>
-            ) : null}
-            <RToast.Close aria-label="Dismiss" className="text-ink-3 hover:text-ink">
-              ×
-            </RToast.Close>
-          </RToast.Root>
-        ))}
+        {items.map((item) => {
+          const { icon: Icon, className } = icons[item.tone];
+          return (
+            <RToast.Root
+              key={item.id}
+              onOpenChange={(open) => {
+                if (!open) setItems((current) => current.filter((t) => t.id !== item.id));
+              }}
+              className="flex items-start gap-3 rounded-lg border border-border bg-surface p-4 shadow-pop data-[state=open]:animate-[rise-in_180ms_var(--ease-out)]"
+            >
+              <Icon className={cn("mt-0.5 size-5 shrink-0", className)} aria-hidden />
+              <div className="min-w-0 flex-1">
+                <RToast.Title className="text-sm font-semibold text-fg">{item.title}</RToast.Title>
+                {item.description ? (
+                  <RToast.Description className="mt-0.5 text-sm text-fg-2">
+                    {item.description}
+                  </RToast.Description>
+                ) : null}
+                {item.action ? (
+                  <RToast.Action
+                    altText={item.action.label}
+                    onClick={item.action.onClick}
+                    className="mt-2 text-sm font-semibold text-primary hover:underline"
+                  >
+                    {item.action.label}
+                  </RToast.Action>
+                ) : null}
+              </div>
+              <RToast.Close aria-label="Dismiss" className="rounded-sm text-fg-3 hover:text-fg">
+                <X className="size-4" />
+              </RToast.Close>
+            </RToast.Root>
+          );
+        })}
         <RToast.Viewport className="fixed bottom-4 right-4 z-[60] flex w-[380px] max-w-[calc(100vw-2rem)] flex-col gap-2 outline-none" />
       </RToast.Provider>
     </ToastContext.Provider>

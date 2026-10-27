@@ -13,3 +13,9 @@ test-results/
 # Playwright
 apps/web/playwright-report/
 apps/web/test-results/
+.vite/
+
+# Local file storage (ADR-0023)
+.storage/
+apps/web/e2e/.auth/
+.storage-e2e/

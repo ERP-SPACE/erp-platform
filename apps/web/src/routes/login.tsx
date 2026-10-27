@@ -6,6 +6,7 @@ import { z } from "zod";
 import { AuthLayout } from "../components/auth-layout.js";
 import { authClient } from "../lib/auth.js";
 import { keys } from "../lib/queries.js";
+import { totpVerifyErrorMessage } from "../lib/totp-errors.js";
 
 export const Route = createFileRoute("/login")({
   validateSearch: z.object({ redirect: z.string().optional() }),
@@ -54,7 +55,7 @@ function LoginPage() {
     const result = await authClient.twoFactor.verifyTotp({ code });
     setBusy(false);
     if (result.error) {
-      setError("That code didn't match. Codes change every 30 seconds.");
+      setError(totpVerifyErrorMessage(result.error));
       return;
     }
     await done();
@@ -121,6 +122,7 @@ function LoginPage() {
           </Field>
         )}
         <Button
+          className="w-full"
           type="submit"
           variant="primary"
           busy={busy}
@@ -131,7 +133,7 @@ function LoginPage() {
         {step === "totp" ? (
           <button
             type="button"
-            className="text-left text-xs text-ink-2 hover:text-ink"
+            className="text-left text-sm font-medium text-primary hover:underline"
             onClick={() => setStep("password")}
           >
             ← Use a different account

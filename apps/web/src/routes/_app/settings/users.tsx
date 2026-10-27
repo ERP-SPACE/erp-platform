@@ -1,16 +1,19 @@
 import type { PermissionCode, PermissionItem, RoleItem, UserItem } from "@erp/contracts";
 import {
+  Avatar,
+  Badge,
   Button,
+  Card,
   Checkbox,
+  DataTable,
   Dialog,
   Field,
-  Register,
-  StatusMark,
   Switch,
   Tabs,
   TextInput,
   useToast,
 } from "@erp/ui";
+import { Lock, UserPlus } from "lucide-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -54,12 +57,17 @@ function UsersTab() {
       {
         accessorKey: "name",
         header: "Name",
-        cell: (c) => <span className="font-medium">{c.getValue() as string}</span>,
+        cell: (c) => (
+          <span className="flex items-center gap-3">
+            <Avatar name={c.getValue() as string} size="sm" />
+            <span className="font-medium">{c.getValue() as string}</span>
+          </span>
+        ),
       },
       {
         accessorKey: "email",
         header: "Email",
-        cell: (c) => <span className="text-ink-2">{c.getValue() as string}</span>,
+        cell: (c) => <span className="text-fg-2">{c.getValue() as string}</span>,
       },
       {
         id: "roles",
@@ -71,9 +79,9 @@ function UsersTab() {
         header: "Two-step",
         accessorFn: (u) => (u.twoFactorEnabled ? "On" : "Off"),
         cell: (c) => (
-          <StatusMark tone={c.getValue() === "On" ? "positive" : "neutral"}>
+          <Badge tone={c.getValue() === "On" ? "success" : "neutral"}>
             {c.getValue() as string}
-          </StatusMark>
+          </Badge>
         ),
       },
       {
@@ -81,9 +89,9 @@ function UsersTab() {
         header: "Status",
         cell: (c) =>
           c.getValue() ? (
-            <StatusMark tone="positive">Active</StatusMark>
+            <Badge tone="success">Active</Badge>
           ) : (
-            <StatusMark tone="critical">Deactivated</StatusMark>
+            <Badge tone="danger">Deactivated</Badge>
           ),
       },
     ],
@@ -95,19 +103,20 @@ function UsersTab() {
 
   return (
     <div className="grid gap-4">
-      {manage ? (
-        <div className="flex justify-end">
-          <Button variant="primary" onClick={() => setEditing("new")}>
-            Add user
-          </Button>
-        </div>
-      ) : null}
-      <Register
+      <DataTable
         caption="Users"
         data={users}
         columns={columns}
         getRowId={(u) => u.id}
-        onSelect={manage ? (u) => setEditing(u) : undefined}
+        onRowClick={manage ? (u) => setEditing(u) : undefined}
+        searchPlaceholder="Search users"
+        toolbar={
+          manage ? (
+            <Button variant="primary" size="sm" icon={UserPlus} onClick={() => setEditing("new")}>
+              Add user
+            </Button>
+          ) : null
+        }
       />
       {editing ? (
         <UserDialog
@@ -151,7 +160,7 @@ function UserDialog({
         : call(() => api.POST("/api/users", { body: { name, email, password, roleCodes } })),
     onSuccess: async () => {
       toast({
-        tone: "positive",
+        tone: "success",
         title: user ? "User updated" : "User added",
         description: user ? undefined : "Share the temporary password with them in person.",
       });
@@ -179,7 +188,7 @@ function UserDialog({
       }
       footer={
         <>
-          <Button variant="ghost" onClick={onClose}>
+          <Button variant="secondary" onClick={onClose}>
             Cancel
           </Button>
           <Button
@@ -232,7 +241,7 @@ function UserDialog({
           </>
         ) : null}
         <fieldset>
-          <legend className="smallcaps mb-2">Roles</legend>
+          <legend className="mb-2 text-sm font-medium text-fg">Roles</legend>
           <div className="grid grid-cols-2 gap-2">
             {roles.map((role) => (
               <Checkbox
@@ -243,9 +252,7 @@ function UserDialog({
               />
             ))}
           </div>
-          {errors.roleCodes ? (
-            <p className="mt-1 text-xs text-critical">{errors.roleCodes}</p>
-          ) : null}
+          {errors.roleCodes ? <p className="mt-1 text-xs text-danger">{errors.roleCodes}</p> : null}
         </fieldset>
         {user ? (
           <Switch label="Account active" checked={active} onCheckedChange={setActive} />
@@ -278,7 +285,7 @@ function RolesTab() {
       }
     },
     onSuccess: async () => {
-      toast({ tone: "positive", title: "Permissions saved" });
+      toast({ tone: "success", title: "Permissions saved" });
       setChanges({});
       await queryClient.invalidateQueries({ queryKey: keys.roles });
     },
@@ -297,45 +304,55 @@ function RolesTab() {
 
   return (
     <div className="grid gap-4">
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-sm">
-          <caption className="sr-only">Permission matrix</caption>
-          <thead>
-            <tr className="border-b border-rule-strong">
-              <th scope="col" className="smallcaps h-10 px-3 text-left">
-                Permission
-              </th>
-              {roles.map((role) => (
-                <th key={role.id} scope="col" className="smallcaps h-10 px-2 text-center">
-                  {role.name}
+      <Card
+        padded={false}
+        title="Permission matrix"
+        description="Owner always has every permission. Ticked items marked with a lock ask for the password again."
+      >
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <caption className="sr-only">Permission matrix</caption>
+            <thead>
+              <tr className="border-b border-border bg-muted">
+                <th scope="col" className="h-10 px-5 text-left text-xs font-medium text-fg-3">
+                  Permission
                 </th>
+                {roles.map((role) => (
+                  <th
+                    key={role.id}
+                    scope="col"
+                    className="h-10 px-2 text-center text-xs font-medium text-fg-3"
+                  >
+                    {role.name}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {modules.map((module) => (
+                <PermissionGroup
+                  key={module}
+                  module={module}
+                  permissions={permissions.filter((p) => p.module === module)}
+                  roles={roles}
+                  granted={granted}
+                  flip={flip}
+                  editable={editable}
+                />
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {modules.map((module) => (
-              <PermissionGroup
-                key={module}
-                module={module}
-                permissions={permissions.filter((p) => p.module === module)}
-                roles={roles}
-                granted={granted}
-                flip={flip}
-                editable={editable}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </tbody>
+          </table>
+        </div>
+      </Card>
       {editable ? (
         <div className="flex items-center justify-end gap-3">
           {Object.keys(changes).length ? (
-            <span className="text-xs text-ink-2">
+            <span className="text-xs text-fg-2">
               Unsaved changes to {Object.keys(changes).length} role(s)
             </span>
           ) : null}
           <Button
-            variant="ghost"
+            variant="secondary"
             disabled={!Object.keys(changes).length}
             onClick={() => setChanges({})}
           >
@@ -376,17 +393,20 @@ function PermissionGroup({
         <th
           colSpan={roles.length + 1}
           scope="colgroup"
-          className="smallcaps bg-wash/60 px-3 pb-1.5 pt-3 text-left"
+          className="label-caps border-b border-border px-5 pb-2 pt-4 text-left"
         >
           {module}
         </th>
       </tr>
       {permissions.map((permission) => (
-        <tr key={permission.code} className="border-b border-rule">
-          <th scope="row" className="px-3 py-2 text-left font-normal">
-            <span className="text-ink">{permission.description}</span>
+        <tr
+          key={permission.code}
+          className="border-b border-border last:border-b-0 hover:bg-muted/50"
+        >
+          <th scope="row" className="px-5 py-2.5 text-left font-normal">
+            <span className="text-fg">{permission.description}</span>
             {permission.stepUp ? (
-              <span className="ml-2 font-serif text-xs italic text-ink-3">asks for password</span>
+              <Lock className="ml-2 inline size-3.5 text-fg-3" aria-label="Asks for password" />
             ) : null}
           </th>
           {roles.map((role) => (

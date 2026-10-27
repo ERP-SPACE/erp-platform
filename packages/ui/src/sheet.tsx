@@ -1,103 +1,171 @@
+import type { LucideIcon } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "./cn.js";
 
-/**
- * The document "sheet" (brief B1): a paper-proportioned surface with a letterhead-like header.
- * What the user sees here matches the printed PDF.
- */
-export function Sheet({
-  kicker,
+/** White card on the grey canvas — the basic container for dashboard content. */
+export function Card({
   title,
-  number,
-  status,
-  meta,
+  description,
+  actions,
   children,
   footer,
+  padded = true,
   className,
 }: {
-  kicker?: ReactNode;
-  title: ReactNode;
-  number?: ReactNode;
-  status?: ReactNode;
-  meta?: ReactNode;
+  title?: ReactNode;
+  description?: ReactNode;
+  actions?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
+  padded?: boolean;
   className?: string;
 }) {
   return (
-    <article
-      className={cn(
-        "mx-auto w-full max-w-[840px] rounded-xs border border-rule bg-sheet shadow-sheet",
-        className,
-      )}
-    >
-      <header className="flex items-start justify-between gap-6 border-b border-rule px-8 pb-5 pt-7">
-        <div className="min-w-0">
-          {kicker ? <p className="smallcaps mb-2">{kicker}</p> : null}
-          <h2 className="text-xl text-ink">{title}</h2>
-          {meta ? <div className="mt-2 text-sm text-ink-2">{meta}</div> : null}
-        </div>
-        <div className="flex shrink-0 flex-col items-end gap-2 text-right">
-          {number ? <span className="font-mono text-sm text-ink">{number}</span> : null}
-          {status}
-        </div>
-      </header>
-      <div className="px-8 py-6">{children}</div>
-      {footer ? <footer className="border-t border-rule px-8 py-4">{footer}</footer> : null}
-    </article>
-  );
-}
-
-/** Sheet + margin column side by side; the margin holds status, timeline, audit and actions. */
-export function SheetLayout({ sheet, margin }: { sheet: ReactNode; margin: ReactNode }) {
-  return (
-    <div className="grid grid-cols-1 items-start gap-8 xl:grid-cols-[minmax(0,1fr)_280px]">
-      <div className="min-w-0">{sheet}</div>
-      <aside className="flex flex-col gap-6 xl:sticky xl:top-6">{margin}</aside>
-    </div>
-  );
-}
-
-export function MarginNote({ title, children }: { title: ReactNode; children: ReactNode }) {
-  return (
-    <section className="border-l border-rule-strong pl-4">
-      <h3 className="smallcaps mb-2 font-sans">{title}</h3>
-      <div className="text-sm text-ink-2">{children}</div>
+    <section className={cn("rounded-lg border border-border bg-surface shadow-card", className)}>
+      {title || actions ? (
+        <header className="flex items-start justify-between gap-4 border-b border-border px-5 py-4">
+          <div className="min-w-0">
+            {title ? <h2 className="text-base font-semibold text-fg">{title}</h2> : null}
+            {description ? <p className="mt-0.5 text-sm text-fg-3">{description}</p> : null}
+          </div>
+          {actions ? <div className="flex shrink-0 items-center gap-2">{actions}</div> : null}
+        </header>
+      ) : null}
+      <div className={cn(padded && "p-5")}>{children}</div>
+      {footer ? (
+        <footer className="rounded-b-lg border-t border-border bg-muted/40 px-5 py-3">
+          {footer}
+        </footer>
+      ) : null}
     </section>
   );
 }
 
-export interface TimelineEntry {
-  id: string;
-  when: ReactNode;
-  what: ReactNode;
-  who?: ReactNode;
-  detail?: ReactNode;
-}
-
-/** A vertical thread of dated lines (status history, Roll Inspector lineage). */
-export function Timeline({ entries }: { entries: TimelineEntry[] }) {
+/** KPI card: label, value, optional change vs. previous period and a sparkline. */
+export function StatCard({
+  label,
+  value,
+  icon: Icon,
+  delta,
+  deltaLabel,
+  trend,
+  hint,
+  onClick,
+}: {
+  label: string;
+  value: ReactNode;
+  icon?: LucideIcon;
+  /** Signed percentage, e.g. 8.4 or -2.1. */
+  delta?: number;
+  deltaLabel?: string;
+  /** Recent values, oldest first, for the sparkline. */
+  trend?: number[];
+  hint?: ReactNode;
+  onClick?: () => void;
+}) {
+  const up = delta !== undefined && delta >= 0;
+  const Wrapper = onClick ? "button" : "div";
   return (
-    <ol className="relative ml-1 border-l border-rule">
-      {entries.map((entry) => (
-        <li key={entry.id} className="relative pb-4 pl-4 last:pb-0">
-          <span
-            className="absolute -left-[3.5px] top-1.5 size-1.5 rounded-full bg-rule-strong"
-            aria-hidden
-          />
-          <p className="text-sm text-ink">{entry.what}</p>
-          <p className="tnum text-xs text-ink-3">
-            {entry.when}
-            {entry.who ? <> · {entry.who}</> : null}
-          </p>
-          {entry.detail ? <div className="mt-1 text-xs text-ink-2">{entry.detail}</div> : null}
-        </li>
-      ))}
-    </ol>
+    <Wrapper
+      {...(onClick ? { type: "button" as const, onClick } : {})}
+      className={cn(
+        "flex flex-col gap-3 rounded-lg border border-border bg-surface p-5 text-left shadow-card",
+        onClick && "transition-colors hover:border-border-strong",
+      )}
+    >
+      <div className="flex items-center justify-between gap-3">
+        <span className="text-sm font-medium text-fg-2">{label}</span>
+        {Icon ? (
+          <span className="flex size-8 items-center justify-center rounded-md bg-primary-soft text-primary">
+            <Icon className="size-4" aria-hidden />
+          </span>
+        ) : null}
+      </div>
+      <div className="flex items-end justify-between gap-3">
+        <div className="min-w-0">
+          <div className="tnum text-2xl font-semibold tracking-tight text-fg">{value}</div>
+          {delta !== undefined ? (
+            <div className="mt-1 flex items-center gap-1 text-xs">
+              <span
+                className={cn(
+                  "inline-flex items-center gap-0.5 font-semibold",
+                  up ? "text-success" : "text-danger",
+                )}
+              >
+                {up ? (
+                  <ArrowUpRight className="size-3.5" />
+                ) : (
+                  <ArrowDownRight className="size-3.5" />
+                )}
+                {Math.abs(delta).toFixed(1)}%
+              </span>
+              {deltaLabel ? <span className="text-fg-3">{deltaLabel}</span> : null}
+            </div>
+          ) : hint ? (
+            <div className="mt-1 text-xs text-fg-3">{hint}</div>
+          ) : null}
+        </div>
+        {trend && trend.length > 1 ? (
+          <Sparkline values={trend} tone={up || delta === undefined ? "primary" : "danger"} />
+        ) : null}
+      </div>
+    </Wrapper>
   );
 }
 
-/** Label/value pairs laid out like an invoice header block. */
+export function Sparkline({
+  values,
+  tone = "primary",
+}: {
+  values: number[];
+  tone?: "primary" | "danger";
+}) {
+  const w = 88;
+  const h = 32;
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || 1;
+  const points = values.map(
+    (v, i) => `${(i / (values.length - 1)) * w},${h - 2 - ((v - min) / span) * (h - 4)}`,
+  );
+  const stroke = tone === "primary" ? "var(--primary)" : "var(--danger)";
+  return (
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} aria-hidden className="shrink-0">
+      <polyline
+        points={points.join(" ")}
+        fill="none"
+        stroke={stroke}
+        strokeWidth="1.75"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/** Two-column form block: title and help on the left, fields on the right. */
+export function FormSection({
+  title,
+  description,
+  children,
+}: {
+  title: ReactNode;
+  description?: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <section className="grid gap-4 border-b border-border py-6 first:pt-0 last:border-b-0 last:pb-0 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-8">
+      <div>
+        <h3 className="text-sm font-semibold text-fg">{title}</h3>
+        {description ? <p className="mt-1 text-sm text-fg-3">{description}</p> : null}
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">{children}</div>
+    </section>
+  );
+}
+
+/** Label/value pairs for record summaries. */
 export function DefinitionList({
   items,
   columns = 2,
@@ -108,26 +176,86 @@ export function DefinitionList({
   return (
     <dl
       className={cn(
-        "grid gap-x-8 gap-y-3",
-        columns === 1 && "grid-cols-1",
-        columns === 2 && "grid-cols-1 sm:grid-cols-2",
-        columns === 3 && "grid-cols-1 sm:grid-cols-3",
+        "grid gap-x-8 gap-y-4",
+        columns === 2 && "sm:grid-cols-2",
+        columns === 3 && "sm:grid-cols-3",
       )}
     >
       {items.map((item, index) => (
         <div key={index} className="min-w-0">
-          <dt className="smallcaps mb-0.5">{item.label}</dt>
-          <dd className="text-sm text-ink">{item.value}</dd>
+          <dt className="text-xs font-medium text-fg-3">{item.label}</dt>
+          <dd className="mt-0.5 text-sm text-fg">{item.value}</dd>
         </div>
       ))}
     </dl>
   );
 }
 
-/** The thin "chapter line" stepper for multi-step documents (PO → GRN → PI). */
+export interface ActivityEntry {
+  id: string;
+  who: string;
+  what: ReactNode;
+  when: string;
+}
+
+/** Recent-activity feed with initials avatars. */
+export function ActivityFeed({ entries }: { entries: ActivityEntry[] }) {
+  return (
+    <ol className="flex flex-col">
+      {entries.map((entry) => (
+        <li
+          key={entry.id}
+          className="flex gap-3 border-b border-border py-3 first:pt-0 last:border-b-0 last:pb-0"
+        >
+          <Avatar name={entry.who} size="sm" />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm text-fg">
+              <span className="font-medium">{entry.who}</span> {entry.what}
+            </p>
+            <p className="tnum text-xs text-fg-3">{entry.when}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
+const avatarTones = [
+  "bg-primary-soft text-primary",
+  "bg-success-soft text-success",
+  "bg-warning-soft text-warning",
+  "bg-info-soft text-info",
+  "bg-danger-soft text-danger",
+];
+
+export function Avatar({ name, size = "md" }: { name: string; size?: "sm" | "md" }) {
+  const initials = name
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((p) => p[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+  const tone =
+    avatarTones[[...name].reduce((sum, c) => sum + c.charCodeAt(0), 0) % avatarTones.length];
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "flex shrink-0 items-center justify-center rounded-full font-semibold",
+        size === "sm" ? "size-8 text-xs" : "size-9 text-sm",
+        tone,
+      )}
+    >
+      {initials || "?"}
+    </span>
+  );
+}
+
+/** Horizontal step indicator for wizards (bulk revision, PO → GRN → PI). */
 export function Stepper({ steps, current }: { steps: string[]; current: number }) {
   return (
-    <ol className="flex items-center gap-3" aria-label="Progress">
+    <ol className="flex flex-wrap items-center gap-3" aria-label="Progress">
       {steps.map((step, index) => {
         const state = index < current ? "done" : index === current ? "current" : "todo";
         return (
@@ -136,22 +264,22 @@ export function Stepper({ steps, current }: { steps: string[]; current: number }
             className="flex items-center gap-3"
             aria-current={state === "current" ? "step" : undefined}
           >
-            <span
-              className={cn(
-                "smallcaps",
-                state === "current" && "text-ink",
-                state === "done" && "text-ink-2",
-                state === "todo" && "text-ink-3",
-              )}
-            >
-              <span className="tnum mr-1.5 font-serif text-sm normal-case italic tracking-normal">
-                {["i", "ii", "iii", "iv", "v", "vi"][index] ?? index + 1}.
+            <span className="flex items-center gap-2 text-sm font-medium">
+              <span
+                className={cn(
+                  "flex size-6 items-center justify-center rounded-full text-xs",
+                  state === "done" && "bg-primary text-primary-fg",
+                  state === "current" && "border-2 border-primary text-primary",
+                  state === "todo" && "border border-border-strong text-fg-3",
+                )}
+              >
+                {index + 1}
               </span>
-              {step}
+              <span className={state === "todo" ? "text-fg-3" : "text-fg"}>{step}</span>
             </span>
             {index < steps.length - 1 ? (
               <span
-                className={cn("h-px w-10", index < current ? "bg-accent" : "bg-rule")}
+                className={cn("h-px w-8", index < current ? "bg-primary" : "bg-border-strong")}
                 aria-hidden
               />
             ) : null}

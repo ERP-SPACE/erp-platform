@@ -11,6 +11,12 @@ Owner: business owner, unless marked **CA**. Each question is tagged with the st
 | Q4 | Infrastructure | Local first, AWS later; new repo in `ERP-SPACE`, name delegated | Monorepo `ERP-SPACE/erp-platform`; Docker Compose locally; AWS becomes Stage 7 — ADR-0019 |
 | Q5 | Per metre or per roll? | **Per metre** | ADR-0013 accepted |
 | Q17 | Are rolls ever cut? | **Sometimes** | Cut operation, child rolls, cut-aware allocation — ADR-0018 |
+| Q6 | Rate rounding, override tolerance, approver | **2 decimals; > 5 % needs Sales Manager or Owner** | Settings `pricing.rateDecimals` / `pricing.overrideTolerancePct`; permission `pricing.override.approve` (used from Stage 3) |
+| Q7 | Default credit policy | **₹1,00,000, 30 days, 15 grace days, block on BOTH** | Setting `credit.defaults`; a salesman's own defaults override it |
+| Q8 | Master lists | **GSM 30/35/45/55/65/80/100; widths 24/36/44/63; lengths 1000/1500/2000 m; Premium/Standard/Economy** | Seeded into Settings and the catalogue |
+| Q9 | HSN / GST per category | **Entered later in the app** | Categories start "HSN not set"; Stage 3 refuses to invoice them |
+| Q10 | Do salesmen log in? | **No — office staff enter everything** | Salesmen are records only, no user accounts |
+| Q11 | Commission base | **Taxable value** (after discounts, before GST) | `PERCENT_SALES` rules; accrual in Stage 4 |
 
 ## Deferred by owner
 
@@ -24,17 +30,6 @@ Owner: business owner, unless marked **CA**. Each question is tagged with the st
 |---|---|---|---|
 | Q1 | Company GST profile: legal & trade name, GSTIN, registered address, state, PAN, bank details, logo, authorised signatory. **Still needed — not blocking:** Stage 0 seeds placeholders that are editable in Settings. | Invoice letterhead, intra- vs inter-state GST, e-invoice seller details. | — |
 | Q4a | Install on this machine: **GitHub CLI** (`gh auth login` with access to `ERP-SPACE`) and **Docker Desktop**. Alternatively, create the empty private repo `ERP-SPACE/erp-platform` yourself. | Repo creation and local Postgres/Redis. | ADR-0019 |
-
-## Before Stage 1 (masters)
-
-| # | Question | Why it matters | Linked |
-|---|---|---|---|
-| Q6 | Rounding of derived per-metre rates (2 decimals, or 10/50 paise)? Override tolerance (PRD says 5%)? Who approves over-tolerance overrides: Sales Manager, or only Owner? | Pricing + approval flow. | PRD §8.1 |
-| Q7 | Default credit policy for new customers (limit, credit days, grace days, block rule)? | Onboarding defaults. | PRD §6.7 |
-| Q8 | Confirm the master lists: GSMs (30, 35, 45, 55, 65, 80, 100), qualities + trade aliases, widths (24/36/44/63 + others?), lengths, categories beyond Sublimation & Butter. | Seed data and validation. | — |
-| Q9 | HSN code and GST rate per category. **CA** | Printed on every invoice line and in the e-invoice JSON. | PRD §8.6 |
-| Q10 | Do salesmen/brokers log in themselves, or does office staff enter everything for them? | Roles, scoping. | PRD §4 |
-| Q11 | Is commission % calculated on the taxable value (before GST, after discounts)? | Commission engine. | PRD §5.6 |
 
 ## Before Stage 2 (purchase & inventory)
 
