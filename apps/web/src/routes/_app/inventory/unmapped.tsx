@@ -91,8 +91,12 @@ function MapDialog({ rolls, onClose }: { rolls: RollItem[]; onClose: () => void 
   const { data: qualities } = useQuery(qualitiesQuery);
   const { data: settings } = useQuery(settingsQuery);
   const lengths = settingValue<number[]>(settings, "catalogue.allowedLengthsM", [1000]);
-  const [mode, setMode] = useState<"existing" | "create">(skus.length ? "existing" : "create");
-  const [skuId, setSkuId] = useState(skus[0]?.id ?? "");
+  // The catalogue may still be loading when the dialog opens: default from the latest data until
+  // the user chooses.
+  const [modeChoice, setMode] = useState<"existing" | "create" | null>(null);
+  const mode = modeChoice ?? (skus.length ? "existing" : "create");
+  const [skuChoice, setSkuId] = useState("");
+  const skuId = skuChoice || (skus[0]?.id ?? "");
   const [categoryId, setCategoryId] = useState("");
   const [qualityId, setQualityId] = useState(
     () =>

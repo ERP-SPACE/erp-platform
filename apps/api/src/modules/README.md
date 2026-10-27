@@ -16,6 +16,8 @@ Each module is a NestJS module: controller (routes, permissions), service (busin
 | `pricing` | `/customers/:id/rates`, `/customers/:id/rate-history`, `/pricing/bulk-revision[/preview]` | Rates per metre at 44″ (ADR-0013). Overlaps are rejected by the `party_rates_no_overlap` EXCLUDE constraint → 409 `OVERLAP` |
 | `salesmen` | `/salesmen`, `/salesmen/:id/default-rates`, `/block`, `/commission-rules`, `/kyc`, `/kyc-documents/:id/file` | Records only — no login (Q10). KYC via `StorageService` (ADR-0023), PDF/PNG/JPEG checked by magic bytes |
 | `search` | `/search?q=`, `/dashboard/summary` | Permission- and scope-aware |
+| `purchase` | `/purchase-orders`, `/goods-receipts` (`/post`, `/post-over-receipt`), `/purchase-invoices` (`/post`, `/link-grns`, `/landed-cost[/preview]`), `/landed-cost-charges/:id/reverse`, `/purchase-returns` | Rolls are created only when a GRN posts (ADR-0017); over-receipt beyond `purchase.overReceiptTolerancePct` → 422 `APPROVAL_REQUIRED`, then `post-over-receipt` with a reason. Landed cost uses `allocateLandedCost` (largest remainder, ADR-0002); GST never included (ADR-0008). PI lines without a PO line need a reason |
+| `inventory` | `/rolls`, `/rolls/:idOrBarcode`, `/rolls/map`, `/rolls/scrap`, `/rolls/:id/length`, `/labels`, `/labels/jobs[/:jobId[/file]]`, `/inventory/stock[/refresh]` | Lookup by id or barcode (scan). Cost fields are hidden without `inventory.view_cost`. Labels render via `@erp/labels` (no cost, ADR-0006); more than 300 go to the worker queue. Stock reads the `mv_stock_*` views, refreshed through `public.refresh_stock_views()` |
 
 ## Conventions
 

@@ -6,8 +6,8 @@ Development happens **locally first** (Docker Compose). AWS comes after local UA
 |---|---|---|
 | Part A | CLAUDE.md, legacy port matrix, ADRs, open questions | Done (2026-10-23) |
 | 0 | Foundation: monorepo, Docker Compose, CI (no deploy), auth/RBAC, audit, settings, document series, design system, app shell | Done — merged to `main` (2026-10-23) |
-| 1 | Masters: catalogue, suppliers, transporters, customers (`allow_cut`, GST profile), credit policy, per-metre party rates, salesmen, commission rules, bulk rate revision, KYC, Ctrl K search + professional dashboard UI (ADR-0022) | Built on `stage-1-masters` (2026-10-27) — awaiting owner sign-off and merge |
-| 2 | Purchase & inventory: PO, GRN + barcodes, unmapped staging, PI, landed cost, purchase returns, Roll Inspector, roll cutting primitives, `/floor` | Not started |
+| 1 | Masters: catalogue, suppliers, transporters, customers (`allow_cut`, GST profile), credit policy, per-metre party rates, salesmen, commission rules, bulk rate revision, KYC, Ctrl K search + professional dashboard UI (ADR-0022) | Done — merged to `main` (2026-10-27), with the invoice corrections |
+| 2 | Purchase & inventory: PO, GRN + barcodes, unmapped staging, PI, landed cost, purchase returns + debit notes, Roll Inspector, roll labels (PDF/ZPL, bulk via the worker), stock views, `/floor` godown phone app | Built on `stage-2-purchase-inventory` (2026-10-27) — awaiting owner sign-off and merge. Roll cutting moves to Stage 3 with DC picking (ADR-0018) |
 | 3 | Sales + **e-invoicing**: pricing engine, SO + credit check, Sales Board, DC picking with cuts, SI + IRN (NIC sandbox), e-way bill, proforma, direct invoice, sales returns, CN/DN with IRN | Needs Q19–Q22, Q27, Q28; CA defaults (Q18) re-raised |
 | 4 | Collections, credit, commission | Not started |
 | 5 | Reports, analytics, Today brief, pivot builder (adds cut frequency/waste) | Not started |

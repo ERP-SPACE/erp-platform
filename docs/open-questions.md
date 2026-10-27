@@ -22,7 +22,7 @@ Owner: business owner, unless marked **CA**. Each question is tagged with the st
 | Q3 (update) | Invoice series | **Start with the ERP's own series** (`SI/2627/00001`), not the old R/ series (2026-10-27) | ADR-0003 unchanged |
 | Q13 | Measure each roll at inward? | **No — trust the supplier's lengths** (suppliers list them, e.g. "4 X 1000, 500+450 MTRS") | GRN takes the supplier's per-roll lengths; no re-measure step |
 | Q15 | Godown locations? | **Not tracked today** | No location fields in Stage 2; can be added later |
-| Q16 | Landed-cost split | **Delegated to engineering**: follow the common trade structure; must stay editable | Default basis per charge type in Settings (Stage 2) |
+| Q16 | Landed-cost split | **Delegated to engineering**: follow the common trade structure; must stay editable | Built: setting `purchase.landedCostCharges` — freight and loading by weight (GSM × width × length), insurance, duty, clearing, brokerage and other by value; the split can be changed per charge on each invoice |
 
 ## Deferred by owner
 
@@ -40,8 +40,8 @@ Owner: business owner, unless marked **CA**. Each question is tagged with the st
 
 | # | Question | Why it matters | Linked |
 |---|---|---|---|
-| Q12 | Hardware: thermal label printer (TSC/Zebra 4″) + USB scanner? Label size (default 100×50 mm)? Android phones in the godown? | Labels carry each roll's barcode/QR and are stuck on at GRN. Owner unsure of hardware (2026-10-27): **default PDF labels 100×50 mm, printable on any printer; a thermal printer (ZPL) can be switched on later in Settings** | ADR-0006/7 |
-| Q14 | Does the supplier invoice ever arrive before the goods (PI before GRN)? | PI/GRN ordering rules. | ADR-0017 |
+| Q12 | *(Default built; confirm when hardware is bought.)* Hardware: thermal label printer (TSC/Zebra 4″) + USB scanner? Label size (default 100×50 mm)? Android phones in the godown? | Labels carry each roll's barcode/QR and are stuck on at GRN. Owner unsure of hardware (2026-10-27): **default PDF labels 100×50 mm, printable on any printer; a thermal printer (ZPL) can be switched on later in Settings** | ADR-0006/7 |
+| Q14 | Does the supplier invoice ever arrive before the goods (PI before GRN)? | *Built both ways:* a PI can be posted first and its GRNs linked later; rolls take the PI rate when linked. Confirm this matches practice. | ADR-0017 |
 
 ## Before Stage 3 (sales)
 
