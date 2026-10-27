@@ -1,0 +1,11 @@
+{
+  "name": "PaperERP Godown",
+  "short_name": "Godown",
+  "start_url": "/floor",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F6F8",
+  "theme_color": "#1F4FD8",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

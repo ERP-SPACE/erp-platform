@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AppRouteImport } from './routes/_app'
 import { Route as DesignRouteImport } from './routes/[_]design'
+import { Route as FloorRouteImport } from './routes/floor'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as Setup2faRouteImport } from './routes/setup-2fa'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
@@ -20,6 +21,9 @@ import { Route as AppPurchaseRouteImport } from './routes/_app/purchase'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppSuppliersRouteImport } from './routes/_app/suppliers'
 import { Route as AppTransportersRouteImport } from './routes/_app/transporters'
+import { Route as FloorIndexRouteImport } from './routes/floor/index'
+import { Route as FloorMapRouteImport } from './routes/floor/map'
+import { Route as FloorReceiveRouteImport } from './routes/floor/receive'
 import { Route as AppCustomersIndexRouteImport } from './routes/_app/customers/index'
 import { Route as AppCustomersCustomerIdRouteImport } from './routes/_app/customers/$customerId'
 import { Route as AppCustomersNewRouteImport } from './routes/_app/customers/new'
@@ -57,6 +61,11 @@ const AppRoute = AppRouteImport.update({
 const DesignRoute = DesignRouteImport.update({
   id: '/_design',
   path: '/_design',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FloorRoute = FloorRouteImport.update({
+  id: '/floor',
+  path: '/floor',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -103,6 +112,21 @@ const AppTransportersRoute = AppTransportersRouteImport.update({
   id: '/transporters',
   path: '/transporters',
   getParentRoute: () => AppRoute,
+} as any)
+const FloorIndexRoute = FloorIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => FloorRoute,
+} as any)
+const FloorMapRoute = FloorMapRouteImport.update({
+  id: '/map',
+  path: '/map',
+  getParentRoute: () => FloorRoute,
+} as any)
+const FloorReceiveRoute = FloorReceiveRouteImport.update({
+  id: '/receive',
+  path: '/receive',
+  getParentRoute: () => FloorRoute,
 } as any)
 const AppCustomersIndexRoute = AppCustomersIndexRouteImport.update({
   id: '/customers/',
@@ -257,6 +281,7 @@ const AppPurchaseReturnsNewRoute = AppPurchaseReturnsNewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
   '/_design': typeof DesignRoute
+  '/floor': typeof FloorRouteWithChildren
   '/login': typeof LoginRoute
   '/setup-2fa': typeof Setup2faRoute
   '/catalogue': typeof AppCatalogueRoute
@@ -265,6 +290,9 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRouteWithChildren
   '/suppliers': typeof AppSuppliersRoute
   '/transporters': typeof AppTransportersRoute
+  '/floor/map': typeof FloorMapRoute
+  '/floor/receive': typeof FloorReceiveRoute
+  '/floor/': typeof FloorIndexRoute
   '/customers/$customerId': typeof AppCustomersCustomerIdRoute
   '/customers/new': typeof AppCustomersNewRoute
   '/inventory/rolls': typeof AppInventoryRollsRoute
@@ -303,7 +331,10 @@ export interface FileRoutesByTo {
   '/purchase': typeof AppPurchaseRouteWithChildren
   '/suppliers': typeof AppSuppliersRoute
   '/transporters': typeof AppTransportersRoute
+  '/floor/map': typeof FloorMapRoute
+  '/floor/receive': typeof FloorReceiveRoute
   '/': typeof AppIndexRoute
+  '/floor': typeof FloorIndexRoute
   '/customers/$customerId': typeof AppCustomersCustomerIdRoute
   '/customers/new': typeof AppCustomersNewRoute
   '/inventory/rolls': typeof AppInventoryRollsRoute
@@ -338,6 +369,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/_design': typeof DesignRoute
+  '/floor': typeof FloorRouteWithChildren
   '/login': typeof LoginRoute
   '/setup-2fa': typeof Setup2faRoute
   '/_app/catalogue': typeof AppCatalogueRoute
@@ -346,7 +378,10 @@ export interface FileRoutesById {
   '/_app/settings': typeof AppSettingsRouteWithChildren
   '/_app/suppliers': typeof AppSuppliersRoute
   '/_app/transporters': typeof AppTransportersRoute
+  '/floor/map': typeof FloorMapRoute
+  '/floor/receive': typeof FloorReceiveRoute
   '/_app/': typeof AppIndexRoute
+  '/floor/': typeof FloorIndexRoute
   '/_app/customers/$customerId': typeof AppCustomersCustomerIdRoute
   '/_app/customers/new': typeof AppCustomersNewRoute
   '/_app/inventory/rolls': typeof AppInventoryRollsRoute
@@ -382,6 +417,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/_design'
+    | '/floor'
     | '/login'
     | '/setup-2fa'
     | '/catalogue'
@@ -390,6 +426,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/suppliers'
     | '/transporters'
+    | '/floor/map'
+    | '/floor/receive'
+    | '/floor/'
     | '/customers/$customerId'
     | '/customers/new'
     | '/inventory/rolls'
@@ -428,7 +467,10 @@ export interface FileRouteTypes {
     | '/purchase'
     | '/suppliers'
     | '/transporters'
+    | '/floor/map'
+    | '/floor/receive'
     | '/'
+    | '/floor'
     | '/customers/$customerId'
     | '/customers/new'
     | '/inventory/rolls'
@@ -462,6 +504,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_app'
     | '/_design'
+    | '/floor'
     | '/login'
     | '/setup-2fa'
     | '/_app/catalogue'
@@ -470,7 +513,10 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/_app/suppliers'
     | '/_app/transporters'
+    | '/floor/map'
+    | '/floor/receive'
     | '/_app/'
+    | '/floor/'
     | '/_app/customers/$customerId'
     | '/_app/customers/new'
     | '/_app/inventory/rolls'
@@ -505,6 +551,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   DesignRoute: typeof DesignRoute
+  FloorRoute: typeof FloorRouteWithChildren
   LoginRoute: typeof LoginRoute
   Setup2faRoute: typeof Setup2faRoute
 }
@@ -523,6 +570,13 @@ declare module '@tanstack/react-router' {
       path: '/_design'
       fullPath: '/_design'
       preLoaderRoute: typeof DesignRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/floor': {
+      id: '/floor'
+      path: '/floor'
+      fullPath: '/floor'
+      preLoaderRoute: typeof FloorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -587,6 +641,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/transporters'
       preLoaderRoute: typeof AppTransportersRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/floor/': {
+      id: '/floor/'
+      path: '/'
+      fullPath: '/floor/'
+      preLoaderRoute: typeof FloorIndexRouteImport
+      parentRoute: typeof FloorRoute
+    }
+    '/floor/map': {
+      id: '/floor/map'
+      path: '/map'
+      fullPath: '/floor/map'
+      preLoaderRoute: typeof FloorMapRouteImport
+      parentRoute: typeof FloorRoute
+    }
+    '/floor/receive': {
+      id: '/floor/receive'
+      path: '/receive'
+      fullPath: '/floor/receive'
+      preLoaderRoute: typeof FloorReceiveRouteImport
+      parentRoute: typeof FloorRoute
     }
     '/_app/customers/': {
       id: '/_app/customers/'
@@ -904,9 +979,24 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface FloorRouteChildren {
+  FloorMapRoute: typeof FloorMapRoute
+  FloorReceiveRoute: typeof FloorReceiveRoute
+  FloorIndexRoute: typeof FloorIndexRoute
+}
+
+const FloorRouteChildren: FloorRouteChildren = {
+  FloorMapRoute: FloorMapRoute,
+  FloorReceiveRoute: FloorReceiveRoute,
+  FloorIndexRoute: FloorIndexRoute,
+}
+
+const FloorRouteWithChildren = FloorRoute._addFileChildren(FloorRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   DesignRoute: DesignRoute,
+  FloorRoute: FloorRouteWithChildren,
   LoginRoute: LoginRoute,
   Setup2faRoute: Setup2faRoute,
 }
