@@ -4158,7 +4158,17 @@
                 "inventory.view_cost",
                 "inventory.map",
                 "inventory.adjust",
-                "labels.print"
+                "labels.print",
+                "inventory.roll.cut",
+                "sales.view",
+                "sales.order.manage",
+                "sales.credit.release",
+                "sales.dispatch.manage",
+                "sales.invoice.manage",
+                "sales.invoice.cancel",
+                "sales.return.manage",
+                "sales.note.manage",
+                "compliance.einvoice.manage"
               ]
             }
           },
