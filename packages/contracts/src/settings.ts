@@ -13,19 +13,19 @@ export const SETTINGS = {
     label: "Allowed roll widths (inches)",
     group: "Catalogue",
     schema: z.array(z.number().positive().max(200)).min(1),
-    default: [24, 36, 44, 63],
+    default: [24, 36, 40, 44, 46, 48, 50, 60, 63],
   },
   "catalogue.allowedLengthsM": {
     label: "Standard roll lengths (metres)",
     group: "Catalogue",
     schema: positiveInts,
-    default: [1000, 1500, 2000],
+    default: [720, 800, 960, 1000, 1100, 1200, 1300, 1500, 2000],
   },
   "catalogue.gsmList": {
     label: "GSM values",
     group: "Catalogue",
     schema: positiveInts,
-    default: [30, 35, 45, 55, 65, 80, 100],
+    default: [29, 30, 35, 45, 55, 65, 80, 100],
   },
   "pricing.rateDecimals": {
     label: "Decimals for derived per-metre rates",

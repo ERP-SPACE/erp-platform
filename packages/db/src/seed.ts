@@ -59,16 +59,21 @@ export async function seed(db: Db, options: SeedOptions): Promise<SeedResult> {
       .insert(companies)
       .values({
         code: "MAIN",
-        legalName: "Company Legal Name (placeholder)",
-        tradeName: "Company Trade Name",
+        // From the owner's own tax invoice (Q1). Bank and signatory are added in Settings.
+        legalName: "Gulmohar Creation",
+        tradeName: "Gulmohar Creation",
+        gstin: "24AAOFG2101Q1ZB",
+        pan: "AAOFG2101Q",
         stateCode: "24",
         address: {
-          line1: "Address line 1 (placeholder)",
+          line1: "Plot No. A-1/4, Road No. 9, Hojiwala Industrial Estate",
+          line2: "Sachin-Palsana Road, Sachin",
           city: "Surat",
           state: "Gujarat",
-          pincode: "395001",
+          pincode: "394230",
         },
-        isPlaceholder: true,
+        phone: "7572910657",
+        isPlaceholder: false,
       })
       .onConflictDoNothing({ target: companies.code });
     const company = (await tx.select().from(companies).where(eq(companies.code, "MAIN")))[0]!;
@@ -132,17 +137,17 @@ export async function seed(db: Db, options: SeedOptions): Promise<SeedResult> {
         .onConflictDoNothing();
     }
 
-    // Stage 1 masters: categories start without HSN/GST (Q9) and are flagged until entered.
+    // Stage 1 masters. HSN/GST from the owner (Q9); editable later in Catalogue.
     for (const category of [
-      { code: "SUB", name: "Sublimation Paper" },
-      { code: "BTR", name: "Butter Paper" },
+      { code: "SUB", name: "Sublimation Paper", hsnCode: "48099000", gstRate: "18" },
+      { code: "BTR", name: "Butter Paper", hsnCode: "48062000", gstRate: "12" },
     ]) {
       await tx
         .insert(categories)
         .values({ companyId: company.id, ...category })
         .onConflictDoNothing();
     }
-    for (const name of ["Premium", "Standard", "Economy"]) {
+    for (const name of ["Premium", "Standard", "Economy", "Eco"]) {
       await tx.insert(qualities).values({ companyId: company.id, name }).onConflictDoNothing();
     }
     for (const group of [
