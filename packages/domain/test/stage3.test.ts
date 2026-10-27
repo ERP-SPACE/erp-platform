@@ -36,6 +36,7 @@ describe("sales state machines (PRD §7, ADR-0014)", () => {
   it("DC, SI, proforma, return, notes and IRN", () => {
     expect(deliveryChallanMachine.next("Draft")).toEqual(["Open", "Cancelled"]);
     expect(deliveryChallanMachine.can("Open", "Cancelled")).toBe(false);
+    expect(deliveryChallanMachine.can("Closed", "Open")).toBe(true); // invoice cancelled in 24 h
     expect(salesInvoiceMachine.can("Posted", "Cancelled")).toBe(true);
     expect(salesInvoiceMachine.can("Posted", "Draft")).toBe(false);
     expect(proformaMachine.can("Sent", "Converted")).toBe(true);

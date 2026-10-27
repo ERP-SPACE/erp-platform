@@ -548,11 +548,17 @@ describe("purchase & inventory (Stage 2 gate)", () => {
     expect(
       (await owner.request({ method: "POST", url: "/api/inventory/stock/refresh" })).statusCode,
     ).toBe(204);
+    // This file's supplier only: other files add stock to the shared database.
     const stock = json<{
-      totals: { rolls: number; metres: number; value: string | null; unmappedRolls: number };
-    }>(await owner.get("/api/inventory/stock?by=sku"));
-    expect(stock.totals).toMatchObject({ rolls: 19, metres: 17950, unmappedRolls: 0 });
-    expect(stock.totals.value).not.toBeNull();
+      rows: { description: string; rolls: number; metres: number; value: string | null }[];
+    }>(await owner.get("/api/inventory/stock?by=supplier"));
+    const mine = stock.rows.find((r) => r.description === "Shree Balajee & Co")!;
+    expect(mine).toMatchObject({ rolls: 19, metres: 17950 });
+    expect(mine.value).not.toBeNull();
+    const bySku = json<{ totals: { unmappedRolls: number } }>(
+      await owner.get("/api/inventory/stock?by=sku"),
+    );
+    expect(bySku.totals.unmappedRolls).toBe(0);
   });
 
   it("purchase return + debit note: rolls go back at the invoiced rate", async () => {

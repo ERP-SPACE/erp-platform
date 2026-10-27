@@ -306,21 +306,23 @@ const rollPick = z.object({ lineId: z.string(), rollId: z.string() });
  * Where the invoice comes from: open DCs of one customer (Q29), a direct sale from an SO
  * without a DC (Q22, rolls scanned on the invoice), or a proforma.
  */
-export const siCreate = z.discriminatedUnion("source", [
-  z.object({ source: z.literal("DC"), dcIds: z.array(z.string()).min(1).max(20), date: isoDate }),
-  z.object({
-    source: z.literal("DIRECT"),
-    soId: z.string(),
+export const siCreate = z
+  .object({
+    source: z.enum(["DC", "DIRECT", "PROFORMA"]),
     date: isoDate,
-    rolls: z.array(rollPick).min(1).max(2000),
-  }),
-  z.object({
-    source: z.literal("PROFORMA"),
-    proformaId: z.string(),
-    date: isoDate,
-    rolls: z.array(rollPick).min(1).max(2000),
-  }),
-]);
+    dcIds: z.array(z.string()).min(1).max(20).optional(),
+    soId: z.string().optional(),
+    proformaId: z.string().optional(),
+    rolls: z.array(rollPick).min(1).max(2000).optional(),
+  })
+  .superRefine((v, c) => {
+    const need = (ok: boolean, path: string, message: string) =>
+      ok || c.addIssue({ code: "custom", path: [path], message });
+    if (v.source === "DC") need(Boolean(v.dcIds?.length), "dcIds", "Choose at least one challan");
+    if (v.source === "DIRECT") need(Boolean(v.soId), "soId", "Choose the order");
+    if (v.source === "PROFORMA") need(Boolean(v.proformaId), "proformaId", "Choose the proforma");
+    if (v.source !== "DC") need(Boolean(v.rolls?.length), "rolls", "Scan at least one roll");
+  });
 export const siUpdate = z.object({
   date: isoDate,
   billDiscount: money,
@@ -463,10 +465,12 @@ export const salesReturnCreate = z.object({
 });
 export const salesReturnUpdate = salesReturnCreate.extend(versioned);
 /** Inspection of a returned roll (ADR-0015): back to stock (possibly re-mapped) or scrap. */
-export const returnInspection = z.discriminatedUnion("outcome", [
-  z.object({ outcome: z.literal("RESTOCK"), rollId: z.string(), skuId: z.string().optional() }),
-  z.object({ outcome: z.literal("SCRAP"), rollId: z.string() }),
-]);
+export const returnInspection = z.object({
+  outcome: z.enum(["RESTOCK", "SCRAP"]),
+  rollId: z.string(),
+  /** RESTOCK only: map it to another product of the same GSM and width. */
+  skuId: z.string().optional(),
+});
 export const salesReturnItem = z.object({
   id: z.string(),
   srNo: z.string().nullable(),

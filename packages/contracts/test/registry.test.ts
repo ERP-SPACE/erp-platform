@@ -176,6 +176,11 @@ describe("Stage 3 additions", () => {
     expect(
       siCreate.safeParse({ source: "DIRECT", soId: "s", date: "2026-10-27", rolls: [] }).success,
     ).toBe(false);
+    // Each source needs its own fields.
+    expect(siCreate.safeParse({ source: "DIRECT", soId: "s", date: "2026-10-27" }).success).toBe(
+      false,
+    );
+    expect(siCreate.safeParse({ source: "DC", date: "2026-10-27" }).success).toBe(false);
   });
 
   it("vehicle numbers are normalised and checked; e-way bills have 12 digits", () => {

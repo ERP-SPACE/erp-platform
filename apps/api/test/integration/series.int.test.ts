@@ -32,11 +32,12 @@ describe("document numbering (ADR-0003)", () => {
   });
   afterAll(() => t.close());
 
-  it("previews SI/2627/00001 for a fresh FY (stage gate)", async () => {
+  it("previews SI/{FY}/00001 for a fresh FY (stage gate)", async () => {
     const owner = await Client.signIn(t.fastify);
-    const res = await owner.get("/api/document-series/preview?type=SI&date=2026-10-23");
+    // A year no other file posts in (files share one database; sales tests post SIs in 2026-27).
+    const res = await owner.get("/api/document-series/preview?type=SI&date=2029-10-23");
     expect(res.statusCode).toBe(200);
-    expect(json(res)).toMatchObject({ nextNumber: "SI/2627/00001" });
+    expect(json(res)).toMatchObject({ nextNumber: "SI/2930/00001" });
   });
 
   it("50 concurrent allocations produce exactly 1..50 — no gaps, no duplicates", async () => {
@@ -62,7 +63,9 @@ describe("document numbering (ADR-0003)", () => {
       ),
     ).rejects.toThrow("simulated failure");
     const next = await asOwner(() => uow.run((tx) => series.allocate(tx, "SO", "2026-10-23")));
-    expect([first, next]).toEqual(["SO/2627/00001", "SO/2627/00002"]);
+    // Consecutive: the rolled-back number was handed out again (other files also create SOs).
+    const seq = (n: string) => Number(n.split("/").at(-1));
+    expect(seq(next)).toBe(seq(first) + 1);
   });
 
   it("restarts at 1 in a new financial year", async () => {

@@ -39,6 +39,7 @@ export const keys = {
   dashboard: ["dashboard"] as const,
   purchase: ["purchase"] as const,
   inventory: ["inventory"] as const,
+  sales: ["sales"] as const,
 };
 
 export const meQuery = queryOptions({

@@ -39,11 +39,14 @@ export const EXPOSURE_SO_STATUSES: readonly SoStatus[] = ["Confirmed", "Partiall
 export const DC_STATUSES = ["Draft", "Open", "Closed", "Cancelled"] as const;
 export type DcStatus = (typeof DC_STATUSES)[number];
 
-/** Delivery challan: Draft is picking (rolls Allocated); Open = dispatched; Closed = fully invoiced. */
+/**
+ * Delivery challan: Draft is picking (rolls Allocated); Open = dispatched; Closed = invoiced.
+ * Closed → Open only when its invoice is cancelled within the IRN window, to be billed again.
+ */
 export const deliveryChallanMachine = defineMachine<DcStatus>("DeliveryChallan", {
   Draft: ["Open", "Cancelled"],
   Open: ["Closed"],
-  Closed: [],
+  Closed: ["Open"],
   Cancelled: [],
 });
 

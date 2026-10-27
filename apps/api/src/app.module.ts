@@ -27,6 +27,7 @@ import { SalesmenModule } from "./modules/salesmen/salesmen.module.js";
 import { SearchModule } from "./modules/search/search.module.js";
 import { PurchaseModule } from "./modules/purchase/purchase.module.js";
 import { InventoryModule } from "./modules/inventory/inventory.module.js";
+import { SalesModule } from "./modules/sales/sales.module.js";
 import { StorageModule } from "./storage/storage.module.js";
 import { RedisModule } from "./redis/redis.module.js";
 
@@ -82,6 +83,7 @@ export class AppModule implements NestModule {
         SearchModule,
         PurchaseModule,
         InventoryModule,
+        SalesModule,
       ],
       controllers: [HealthController],
       providers: [
