@@ -72,8 +72,8 @@ const NAV: { heading?: string; items: NavItem[] }[] = [
     heading: "Operations",
     items: [
       { label: "Sales", icon: FileText, stage: 3 },
-      { label: "Purchase", icon: ShoppingCart, stage: 2 },
-      { label: "Inventory", icon: Boxes, stage: 2 },
+      { label: "Purchase", icon: ShoppingCart, to: "/purchase", permission: "purchase.view" },
+      { label: "Inventory", icon: Boxes, to: "/inventory", permission: "inventory.view" },
       { label: "Collections", icon: Wallet, stage: 4 },
       { label: "Reports", icon: BarChart3, stage: 5 },
     ],

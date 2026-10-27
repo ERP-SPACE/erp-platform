@@ -1,0 +1,33 @@
+{
+  "name": "@erp/labels",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Roll label rendering (PDF and ZPL), shared by the API and the worker. No I/O.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "bwip-js": "4.11.4",
+    "pdf-lib": "1.17.1"
+  },
+  "devDependencies": {
+    "@erp/config": "workspace:*",
+    "@types/node": "24.10.1",
+    "eslint": "9.39.5",
+    "typescript": "6.0.3",
+    "vitest": "4.1.12"
+  }
+}

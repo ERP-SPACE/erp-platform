@@ -804,6 +804,534 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/purchase-orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PurchaseOrdersController_list"];
+        put?: never;
+        post: operations["PurchaseOrdersController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/purchase-orders/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PurchaseOrdersController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["PurchaseOrdersController_update"];
+        trace?: never;
+    };
+    "/api/purchase-orders/{id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PurchaseOrdersController_approve"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/purchase-orders/{id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PurchaseOrdersController_close"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/purchase-orders/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PurchaseOrdersController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goods-receipts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GoodsReceiptsController_list"];
+        put?: never;
+        post: operations["GoodsReceiptsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goods-receipts/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GoodsReceiptsController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["GoodsReceiptsController_update"];
+        trace?: never;
+    };
+    "/api/goods-receipts/{id}/post": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["GoodsReceiptsController_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goods-receipts/{id}/post-over-receipt": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["GoodsReceiptsController_postOverReceipt"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/goods-receipts/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["GoodsReceiptsController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/purchase-invoices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PurchaseInvoicesController_list"];
+        put?: never;
+        post: operations["PurchaseInvoicesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/purchase-invoices/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PurchaseInvoicesController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["PurchaseInvoicesController_update"];
+        trace?: never;
+    };
+    "/api/purchase-invoices/{id}/post": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PurchaseInvoicesController_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/purchase-invoices/{id}/link-grns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PurchaseInvoicesController_linkGrns"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/purchase-invoices/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PurchaseInvoicesController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/purchase-invoices/{id}/landed-cost": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PurchaseInvoicesController_charges"];
+        put?: never;
+        post: operations["PurchaseInvoicesController_apply"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/purchase-invoices/{id}/landed-cost/preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PurchaseInvoicesController_preview"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/landed-cost-charges/{id}/reverse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PurchaseInvoicesController_reverse"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/purchase-returns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PurchaseReturnsController_list"];
+        put?: never;
+        post: operations["PurchaseReturnsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/purchase-returns/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PurchaseReturnsController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["PurchaseReturnsController_update"];
+        trace?: never;
+    };
+    "/api/purchase-returns/{id}/post": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PurchaseReturnsController_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/purchase-returns/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PurchaseReturnsController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/rolls": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InventoryController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/rolls/{idOrBarcode}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InventoryController_inspect"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/rolls/map": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InventoryController_map"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/rolls/scrap": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InventoryController_scrap"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/rolls/{id}/length": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["InventoryController_correctLength"];
+        trace?: never;
+    };
+    "/api/labels": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InventoryController_printLabels"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/labels/jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InventoryController_enqueueLabels"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/labels/jobs/{jobId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InventoryController_labelJob"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/labels/jobs/{jobId}/file": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InventoryController_labelJobFile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/inventory/stock": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InventoryController_stockSummary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/inventory/stock/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InventoryController_refresh"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -873,7 +1401,7 @@ export interface components {
             stepUp: boolean;
         };
         UpdateRolePermissionsDto: {
-            permissionCodes: ("settings.view" | "settings.update" | "settings.company.update" | "settings.series.view" | "settings.series.update" | "users.view" | "users.manage" | "roles.manage" | "audit.view" | "catalogue.view" | "catalogue.manage" | "suppliers.view" | "suppliers.manage" | "transporters.view" | "transporters.manage" | "customers.view" | "customers.manage" | "customers.credit.manage" | "customers.rates.manage" | "rates.bulk_revise" | "salesmen.view" | "salesmen.manage" | "commission.manage" | "pricing.override.approve")[];
+            permissionCodes: ("settings.view" | "settings.update" | "settings.company.update" | "settings.series.view" | "settings.series.update" | "users.view" | "users.manage" | "roles.manage" | "audit.view" | "catalogue.view" | "catalogue.manage" | "suppliers.view" | "suppliers.manage" | "transporters.view" | "transporters.manage" | "customers.view" | "customers.manage" | "customers.credit.manage" | "customers.rates.manage" | "rates.bulk_revise" | "salesmen.view" | "salesmen.manage" | "commission.manage" | "pricing.override.approve" | "purchase.view" | "purchase.order.manage" | "purchase.order.approve" | "purchase.receipt.manage" | "purchase.over_receipt.approve" | "purchase.invoice.manage" | "purchase.landed_cost.manage" | "purchase.return.manage" | "inventory.view" | "inventory.view_cost" | "inventory.map" | "inventory.adjust" | "labels.print")[];
             version: number;
         };
         SettingItemDto: {
@@ -1712,6 +2240,624 @@ export interface components {
             blockedCustomers: number;
             categoriesMissingTax: number;
             totalCreditLimit: string;
+        };
+        PoListItemDto: {
+            id: string;
+            poNo: string;
+            date: string;
+            supplierId: string;
+            supplierName: string;
+            /** @enum {string} */
+            status: "Draft" | "Approved" | "PartiallyReceived" | "Closed" | "Cancelled";
+            orderedM: number;
+            receivedM: number;
+            taxable: string;
+            version: number;
+        };
+        PoDetailDto: {
+            id: string;
+            poNo: string;
+            date: string;
+            supplierId: string;
+            supplierName: string;
+            /** @enum {string} */
+            status: "Draft" | "Approved" | "PartiallyReceived" | "Closed" | "Cancelled";
+            orderedM: number;
+            receivedM: number;
+            taxable: string;
+            version: number;
+            expectedDate: string | null;
+            notes: string | null;
+            /** @enum {string} */
+            regime: "CGST_SGST" | "IGST";
+            lines: {
+                skuId: string | null;
+                description: string;
+                gsm: number;
+                widthIn: number;
+                qualityName?: string | null;
+                quantityM: number;
+                ratePerM: string;
+                /** @enum {string} */
+                gstRate: "0" | "5" | "12" | "18" | "28";
+                notes?: string | null;
+                id: string;
+                skuCode: string | null;
+                amount: string;
+                receivedM: number;
+                invoicedM: number;
+                balanceM: number;
+            }[];
+            totals: {
+                taxable: string;
+                tax: string;
+                total: string;
+            };
+            approvedAt: string | null;
+            approvedByName: string | null;
+        };
+        PoCreateDto: {
+            supplierId: string;
+            /** Format: date */
+            date: string;
+            expectedDate?: string | null;
+            notes?: string | null;
+            lines: {
+                skuId?: string | null;
+                description: string;
+                gsm: number;
+                widthIn: number;
+                qualityName?: string | null;
+                quantityM: number;
+                ratePerM: string;
+                /** @enum {string} */
+                gstRate: "0" | "5" | "12" | "18" | "28";
+                notes?: string | null;
+            }[];
+        };
+        PoUpdateDto: {
+            supplierId: string;
+            /** Format: date */
+            date: string;
+            expectedDate?: string | null;
+            notes?: string | null;
+            lines: {
+                skuId?: string | null;
+                description: string;
+                gsm: number;
+                widthIn: number;
+                qualityName?: string | null;
+                quantityM: number;
+                ratePerM: string;
+                /** @enum {string} */
+                gstRate: "0" | "5" | "12" | "18" | "28";
+                notes?: string | null;
+            }[];
+            version: number;
+        };
+        VersionDto: {
+            version: number;
+        };
+        GrnListItemDto: {
+            id: string;
+            grnNo: string;
+            date: string;
+            supplierId: string;
+            supplierName: string;
+            poId: string | null;
+            poNo: string | null;
+            /** @enum {string} */
+            status: "Created" | "Posted" | "Cancelled";
+            rollCount: number;
+            acceptedM: number;
+            unmappedRolls: number;
+            version: number;
+        };
+        GrnDetailDto: {
+            id: string;
+            grnNo: string;
+            date: string;
+            supplierId: string;
+            supplierName: string;
+            poId: string | null;
+            poNo: string | null;
+            /** @enum {string} */
+            status: "Created" | "Posted" | "Cancelled";
+            rollCount: number;
+            acceptedM: number;
+            unmappedRolls: number;
+            version: number;
+            supplierInvoiceNo: string | null;
+            supplierBatchRef: string | null;
+            batchCode: string | null;
+            vehicleNo: string | null;
+            notes: string | null;
+            lines: {
+                poLineId?: string | null;
+                skuId: string | null;
+                description: string;
+                gsm: number;
+                widthIn: number;
+                qualityName?: string | null;
+                rolls: string;
+                rejectedRolls?: string | null;
+                rejectReason?: string | null;
+                id: string;
+                skuCode: string | null;
+                rollCount: number;
+                acceptedM: number;
+                rejectedCount: number;
+                rejectedM: number;
+                overReceiptM: number;
+            }[];
+            postedAt: string | null;
+            overReceiptApprovedByName: string | null;
+        };
+        GrnCreateDto: {
+            supplierId: string;
+            poId?: string | null;
+            /** Format: date */
+            date: string;
+            supplierInvoiceNo?: string | null;
+            supplierBatchRef?: string | null;
+            vehicleNo?: string | null;
+            notes?: string | null;
+            lines: {
+                poLineId?: string | null;
+                skuId?: string | null;
+                description: string;
+                gsm: number;
+                widthIn: number;
+                qualityName?: string | null;
+                rolls: string;
+                rejectedRolls?: string | null;
+                rejectReason?: string | null;
+            }[];
+        };
+        GrnUpdateDto: {
+            supplierId: string;
+            poId?: string | null;
+            /** Format: date */
+            date: string;
+            supplierInvoiceNo?: string | null;
+            supplierBatchRef?: string | null;
+            vehicleNo?: string | null;
+            notes?: string | null;
+            lines: {
+                poLineId?: string | null;
+                skuId?: string | null;
+                description: string;
+                gsm: number;
+                widthIn: number;
+                qualityName?: string | null;
+                rolls: string;
+                rejectedRolls?: string | null;
+                rejectReason?: string | null;
+            }[];
+            version: number;
+        };
+        GrnPostDto: {
+            version: number;
+            /** @default false */
+            approveOverReceipt: boolean;
+        };
+        PiListItemDto: {
+            id: string;
+            piNo: string | null;
+            supplierInvoiceNo: string;
+            supplierInvoiceDate: string;
+            supplierId: string;
+            supplierName: string;
+            /** @enum {string} */
+            status: "Draft" | "Posted" | "Cancelled";
+            total: string;
+            rollCount: number;
+            landedCostAllocated: boolean;
+            version: number;
+        };
+        PiDetailDto: {
+            id: string;
+            piNo: string | null;
+            supplierInvoiceNo: string;
+            supplierInvoiceDate: string;
+            supplierId: string;
+            supplierName: string;
+            /** @enum {string} */
+            status: "Draft" | "Posted" | "Cancelled";
+            total: string;
+            rollCount: number;
+            landedCostAllocated: boolean;
+            version: number;
+            poId: string | null;
+            poNo: string | null;
+            grnIds: string[];
+            irn: string | null;
+            ewayBillNo: string | null;
+            /** @enum {string} */
+            regime: "CGST_SGST" | "IGST";
+            notes: string | null;
+            lines: {
+                poLineId?: string | null;
+                skuId: string | null;
+                description: string;
+                gsm: number;
+                widthIn: number;
+                qualityName?: string | null;
+                hsnCode: string;
+                quantityM: number;
+                ratePerM: string;
+                /** @default 0 */
+                discountPct: string;
+                /** @enum {string} */
+                gstRate: "0" | "5" | "12" | "18" | "28";
+                id: string;
+                taxable: string;
+                withoutPo: boolean;
+            }[];
+            totals: {
+                taxable: string;
+                cgst: string;
+                sgst: string;
+                igst: string;
+                roundOff: string;
+                total: string;
+            };
+            linesWithoutPo: number;
+            postedAt: string | null;
+        };
+        PiCreateDto: {
+            supplierId: string;
+            supplierInvoiceNo: string;
+            /** Format: date */
+            supplierInvoiceDate: string;
+            poId?: string | null;
+            /** @default [] */
+            grnIds: string[];
+            irn?: string | null;
+            ewayBillNo?: string | null;
+            /** @default 0 */
+            roundOff: string;
+            notes?: string | null;
+            lines: {
+                poLineId?: string | null;
+                skuId?: string | null;
+                description: string;
+                gsm: number;
+                widthIn: number;
+                qualityName?: string | null;
+                hsnCode: string;
+                quantityM: number;
+                ratePerM: string;
+                /** @default 0 */
+                discountPct: string;
+                /** @enum {string} */
+                gstRate: "0" | "5" | "12" | "18" | "28";
+            }[];
+        };
+        PiUpdateDto: {
+            supplierId: string;
+            supplierInvoiceNo: string;
+            /** Format: date */
+            supplierInvoiceDate: string;
+            poId?: string | null;
+            /** @default [] */
+            grnIds: string[];
+            irn?: string | null;
+            ewayBillNo?: string | null;
+            /** @default 0 */
+            roundOff: string;
+            notes?: string | null;
+            lines: {
+                poLineId?: string | null;
+                skuId?: string | null;
+                description: string;
+                gsm: number;
+                widthIn: number;
+                qualityName?: string | null;
+                hsnCode: string;
+                quantityM: number;
+                ratePerM: string;
+                /** @default 0 */
+                discountPct: string;
+                /** @enum {string} */
+                gstRate: "0" | "5" | "12" | "18" | "28";
+            }[];
+            version: number;
+        };
+        PiPostDto: {
+            version: number;
+        };
+        LinkGrnsDto: {
+            grnIds: string[];
+        };
+        LandedCostChargeItemDto: {
+            id: string;
+            code: string;
+            label: string;
+            /** @enum {string} */
+            basis: "ROLL" | "METER" | "VALUE" | "WEIGHT";
+            amount: string;
+            vendorName: string | null;
+            billRef: string | null;
+            allocated: boolean;
+            allocatedAt: string | null;
+            reversedAt: string | null;
+        };
+        LandedCostRequestDto: {
+            charges: {
+                code: string;
+                amount: string;
+                /** @enum {string} */
+                basis?: "ROLL" | "METER" | "VALUE" | "WEIGHT";
+                vendorName?: string | null;
+                billRef?: string | null;
+            }[];
+        };
+        LandedCostPreviewDto: {
+            rows: {
+                rollId: string;
+                barcode: string;
+                description: string;
+                lengthM: number;
+                baseValue: string;
+                shares: {
+                    [key: string]: string;
+                };
+                landedCost: string;
+                costPerMetre: string;
+                dispatched: boolean;
+            }[];
+            charges: {
+                code: string;
+                /** @enum {string} */
+                basis: "ROLL" | "METER" | "VALUE" | "WEIGHT";
+                amount: string;
+                allocated: string;
+            }[];
+            varianceAmount: string;
+        };
+        PurchaseReturnItemDto: {
+            id: string;
+            prNo: string | null;
+            dnNo: string | null;
+            date: string;
+            supplierId: string;
+            supplierName: string;
+            piId: string | null;
+            /** @enum {string} */
+            status: "Draft" | "Posted" | "Cancelled";
+            reason: string;
+            rollCount: number;
+            metres: number;
+            totals: {
+                taxable: string;
+                cgst: string;
+                sgst: string;
+                igst: string;
+                roundOff: string;
+                total: string;
+            };
+            version: number;
+        };
+        PurchaseReturnDetailDto: {
+            id: string;
+            prNo: string | null;
+            dnNo: string | null;
+            date: string;
+            supplierId: string;
+            supplierName: string;
+            piId: string | null;
+            /** @enum {string} */
+            status: "Draft" | "Posted" | "Cancelled";
+            reason: string;
+            rollCount: number;
+            metres: number;
+            totals: {
+                taxable: string;
+                cgst: string;
+                sgst: string;
+                igst: string;
+                roundOff: string;
+                total: string;
+            };
+            version: number;
+            notes: string | null;
+            rolls: {
+                rollId: string;
+                barcode: string;
+                description: string;
+                lengthM: number;
+                ratePerM: string;
+                amount: string;
+            }[];
+        };
+        PurchaseReturnCreateDto: {
+            supplierId: string;
+            piId?: string | null;
+            /** Format: date */
+            date: string;
+            reason: string;
+            rollIds: string[];
+            notes?: string | null;
+        };
+        PurchaseReturnUpdateDto: {
+            supplierId: string;
+            piId?: string | null;
+            /** Format: date */
+            date: string;
+            reason: string;
+            rollIds: string[];
+            notes?: string | null;
+            version: number;
+        };
+        PurchaseReturnPostDto: {
+            version: number;
+        };
+        RollPageDto: {
+            items: {
+                id: string;
+                barcode: string;
+                /** @enum {string} */
+                status: "Unmapped" | "Mapped" | "Allocated" | "Dispatched" | "Returned" | "ReturnedToSupplier" | "Scrap";
+                skuId: string | null;
+                skuCode: string | null;
+                description: string;
+                gsm: number;
+                widthIn: string;
+                qualityName: string | null;
+                originalLengthM: number;
+                currentLengthM: number;
+                supplierId: string;
+                supplierName: string;
+                batchCode: string;
+                supplierBatchRef: string | null;
+                grnId: string;
+                grnNo: string;
+                receivedAt: string;
+                ageDays: number;
+                baseCostPerM: string | null;
+                landedCostPerM: string | null;
+                version: number;
+            }[];
+            nextCursor: string | null;
+        };
+        RollInspectorDto: {
+            id: string;
+            barcode: string;
+            /** @enum {string} */
+            status: "Unmapped" | "Mapped" | "Allocated" | "Dispatched" | "Returned" | "ReturnedToSupplier" | "Scrap";
+            skuId: string | null;
+            skuCode: string | null;
+            description: string;
+            gsm: number;
+            widthIn: string;
+            qualityName: string | null;
+            originalLengthM: number;
+            currentLengthM: number;
+            supplierId: string;
+            supplierName: string;
+            batchCode: string;
+            supplierBatchRef: string | null;
+            grnId: string;
+            grnNo: string;
+            receivedAt: string;
+            ageDays: number;
+            baseCostPerM: string | null;
+            landedCostPerM: string | null;
+            version: number;
+            piId: string | null;
+            piNo: string | null;
+            supplierInvoiceNo: string | null;
+            baseValue: string | null;
+            landedCost: string | null;
+            weightKg: string;
+            parentRollId: string | null;
+            childRollIds: string[];
+            labelPrints: number;
+            events: {
+                at: string;
+                /** @enum {string} */
+                kind: "STATUS" | "LENGTH" | "COST" | "LABEL" | "DOCUMENT";
+                title: string;
+                detail: string | null;
+                byName: string | null;
+                docType: string | null;
+                docId: string | null;
+                docNo: string | null;
+            }[];
+        };
+        MapRollsDto: {
+            rollIds: string[];
+            skuId?: string;
+            createSku?: {
+                categoryId: string;
+                qualityId: string;
+                gsm: number;
+                widthIn: number;
+                defaultLengthM: number;
+            };
+        };
+        MapRollsResultDto: {
+            mapped: number;
+            skuId: string;
+        };
+        ScrapRollsDto: {
+            rollIds: string[];
+        };
+        ScrapRollsResultDto: {
+            scrapped: number;
+            value: string | null;
+        };
+        RollLengthCorrectionDto: {
+            currentLengthM: number;
+            version: number;
+        };
+        RollItemDto: {
+            id: string;
+            barcode: string;
+            /** @enum {string} */
+            status: "Unmapped" | "Mapped" | "Allocated" | "Dispatched" | "Returned" | "ReturnedToSupplier" | "Scrap";
+            skuId: string | null;
+            skuCode: string | null;
+            description: string;
+            gsm: number;
+            widthIn: string;
+            qualityName: string | null;
+            originalLengthM: number;
+            currentLengthM: number;
+            supplierId: string;
+            supplierName: string;
+            batchCode: string;
+            supplierBatchRef: string | null;
+            grnId: string;
+            grnNo: string;
+            receivedAt: string;
+            ageDays: number;
+            baseCostPerM: string | null;
+            landedCostPerM: string | null;
+            version: number;
+        };
+        LabelRequestDto: {
+            /** @default [] */
+            rollIds: string[];
+            grnId?: string;
+            /** @default false */
+            reprint: boolean;
+        };
+        LabelJobCreatedDto: {
+            jobId: string;
+            count: number;
+        };
+        LabelJobStatusDto: {
+            jobId: string;
+            /** @enum {string} */
+            state: "waiting" | "active" | "completed" | "failed" | "delayed" | "unknown";
+            done: number;
+            count: number;
+            fileName: string | null;
+            error: string | null;
+        };
+        StockSummaryDto: {
+            asOf: string;
+            rows: {
+                skuId: string | null;
+                skuCode: string | null;
+                description: string;
+                categoryName: string | null;
+                gsm: number;
+                widthIn: string;
+                rolls: number;
+                metres: number;
+                value: string | null;
+                oldestDays: number;
+            }[];
+            totals: {
+                rolls: number;
+                metres: number;
+                value: string | null;
+                unmappedRolls: number;
+                deadStockRolls: number;
+            };
         };
     };
     responses: never;
@@ -3167,6 +4313,985 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["DashboardSummaryDto"];
                 };
+            };
+        };
+    };
+    PurchaseOrdersController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                supplierId?: string;
+                status?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoListItemDto"][];
+                };
+            };
+        };
+    };
+    PurchaseOrdersController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PoCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseOrdersController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseOrdersController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PoUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseOrdersController_approve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseOrdersController_close: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseOrdersController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoDetailDto"];
+                };
+            };
+        };
+    };
+    GoodsReceiptsController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                supplierId?: string;
+                status?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GrnListItemDto"][];
+                };
+            };
+        };
+    };
+    GoodsReceiptsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GrnCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GrnDetailDto"];
+                };
+            };
+        };
+    };
+    GoodsReceiptsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GrnDetailDto"];
+                };
+            };
+        };
+    };
+    GoodsReceiptsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GrnUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GrnDetailDto"];
+                };
+            };
+        };
+    };
+    GoodsReceiptsController_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GrnPostDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GrnDetailDto"];
+                };
+            };
+        };
+    };
+    GoodsReceiptsController_postOverReceipt: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GrnPostDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GrnDetailDto"];
+                };
+            };
+        };
+    };
+    GoodsReceiptsController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GrnDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseInvoicesController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                supplierId?: string;
+                status?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PiListItemDto"][];
+                };
+            };
+        };
+    };
+    PurchaseInvoicesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PiCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PiDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseInvoicesController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PiDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseInvoicesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PiUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PiDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseInvoicesController_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PiPostDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PiDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseInvoicesController_linkGrns: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LinkGrnsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PiDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseInvoicesController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PiDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseInvoicesController_charges: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandedCostChargeItemDto"][];
+                };
+            };
+        };
+    };
+    PurchaseInvoicesController_apply: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LandedCostRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandedCostPreviewDto"];
+                };
+            };
+        };
+    };
+    PurchaseInvoicesController_preview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LandedCostRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandedCostPreviewDto"];
+                };
+            };
+        };
+    };
+    PurchaseInvoicesController_reverse: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LandedCostChargeItemDto"][];
+                };
+            };
+        };
+    };
+    PurchaseReturnsController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PurchaseReturnItemDto"][];
+                };
+            };
+        };
+    };
+    PurchaseReturnsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PurchaseReturnCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PurchaseReturnDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseReturnsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PurchaseReturnDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseReturnsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PurchaseReturnUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PurchaseReturnDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseReturnsController_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PurchaseReturnPostDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PurchaseReturnDetailDto"];
+                };
+            };
+        };
+    };
+    PurchaseReturnsController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PurchaseReturnDetailDto"];
+                };
+            };
+        };
+    };
+    InventoryController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                status?: "Unmapped" | "Mapped" | "Allocated" | "Dispatched" | "Returned" | "ReturnedToSupplier" | "Scrap";
+                skuId?: string;
+                supplierId?: string;
+                grnId?: string;
+                inStock?: "true" | "false";
+                limit?: number;
+                cursor?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RollPageDto"];
+                };
+            };
+        };
+    };
+    InventoryController_inspect: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                idOrBarcode: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RollInspectorDto"];
+                };
+            };
+        };
+    };
+    InventoryController_map: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MapRollsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MapRollsResultDto"];
+                };
+            };
+        };
+    };
+    InventoryController_scrap: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScrapRollsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ScrapRollsResultDto"];
+                };
+            };
+        };
+    };
+    InventoryController_correctLength: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RollLengthCorrectionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RollItemDto"];
+                };
+            };
+        };
+    };
+    InventoryController_printLabels: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LabelRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InventoryController_enqueueLabels: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LabelRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabelJobCreatedDto"];
+                };
+            };
+        };
+    };
+    InventoryController_labelJob: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                jobId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabelJobStatusDto"];
+                };
+            };
+        };
+    };
+    InventoryController_labelJobFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                jobId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InventoryController_stockSummary: {
+        parameters: {
+            query?: {
+                by?: "sku" | "batch" | "supplier";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StockSummaryDto"];
+                };
+            };
+        };
+    };
+    InventoryController_refresh: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

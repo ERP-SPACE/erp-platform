@@ -2217,6 +2217,1605 @@
           "search"
         ]
       }
+    },
+    "/api/purchase-orders": {
+      "get": {
+        "operationId": "PurchaseOrdersController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "supplierId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PoListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      },
+      "post": {
+        "operationId": "PurchaseOrdersController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PoCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-orders/{id}": {
+      "get": {
+        "operationId": "PurchaseOrdersController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      },
+      "patch": {
+        "operationId": "PurchaseOrdersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PoUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-orders/{id}/approve": {
+      "post": {
+        "operationId": "PurchaseOrdersController_approve",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-orders/{id}/close": {
+      "post": {
+        "operationId": "PurchaseOrdersController_close",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-orders/{id}/cancel": {
+      "post": {
+        "operationId": "PurchaseOrdersController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/goods-receipts": {
+      "get": {
+        "operationId": "GoodsReceiptsController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "supplierId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GrnListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      },
+      "post": {
+        "operationId": "GoodsReceiptsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrnCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GrnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/goods-receipts/{id}": {
+      "get": {
+        "operationId": "GoodsReceiptsController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GrnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      },
+      "patch": {
+        "operationId": "GoodsReceiptsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrnUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GrnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/goods-receipts/{id}/post": {
+      "post": {
+        "operationId": "GoodsReceiptsController_post",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrnPostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GrnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/goods-receipts/{id}/post-over-receipt": {
+      "post": {
+        "operationId": "GoodsReceiptsController_postOverReceipt",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GrnPostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GrnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/goods-receipts/{id}/cancel": {
+      "post": {
+        "operationId": "GoodsReceiptsController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GrnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-invoices": {
+      "get": {
+        "operationId": "PurchaseInvoicesController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "supplierId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PiListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      },
+      "post": {
+        "operationId": "PurchaseInvoicesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PiCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PiDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-invoices/{id}": {
+      "get": {
+        "operationId": "PurchaseInvoicesController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PiDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      },
+      "patch": {
+        "operationId": "PurchaseInvoicesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PiUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PiDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-invoices/{id}/post": {
+      "post": {
+        "operationId": "PurchaseInvoicesController_post",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PiPostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PiDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-invoices/{id}/link-grns": {
+      "post": {
+        "operationId": "PurchaseInvoicesController_linkGrns",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkGrnsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PiDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-invoices/{id}/cancel": {
+      "post": {
+        "operationId": "PurchaseInvoicesController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PiDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-invoices/{id}/landed-cost": {
+      "get": {
+        "operationId": "PurchaseInvoicesController_charges",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LandedCostChargeItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      },
+      "post": {
+        "operationId": "PurchaseInvoicesController_apply",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LandedCostRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LandedCostPreviewDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-invoices/{id}/landed-cost/preview": {
+      "post": {
+        "operationId": "PurchaseInvoicesController_preview",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LandedCostRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LandedCostPreviewDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/landed-cost-charges/{id}/reverse": {
+      "post": {
+        "operationId": "PurchaseInvoicesController_reverse",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LandedCostChargeItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-returns": {
+      "get": {
+        "operationId": "PurchaseReturnsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PurchaseReturnItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      },
+      "post": {
+        "operationId": "PurchaseReturnsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseReturnCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseReturnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-returns/{id}": {
+      "get": {
+        "operationId": "PurchaseReturnsController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseReturnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      },
+      "patch": {
+        "operationId": "PurchaseReturnsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseReturnUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseReturnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-returns/{id}/post": {
+      "post": {
+        "operationId": "PurchaseReturnsController_post",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PurchaseReturnPostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseReturnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/purchase-returns/{id}/cancel": {
+      "post": {
+        "operationId": "PurchaseReturnsController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchaseReturnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "purchase"
+        ]
+      }
+    },
+    "/api/rolls": {
+      "get": {
+        "operationId": "InventoryController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Unmapped",
+                "Mapped",
+                "Allocated",
+                "Dispatched",
+                "Returned",
+                "ReturnedToSupplier",
+                "Scrap"
+              ]
+            }
+          },
+          {
+            "name": "skuId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "supplierId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "grnId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "inStock",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ]
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 200,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RollPageDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/rolls/{idOrBarcode}": {
+      "get": {
+        "operationId": "InventoryController_inspect",
+        "parameters": [
+          {
+            "name": "idOrBarcode",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RollInspectorDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/rolls/map": {
+      "post": {
+        "operationId": "InventoryController_map",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MapRollsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MapRollsResultDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/rolls/scrap": {
+      "post": {
+        "operationId": "InventoryController_scrap",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScrapRollsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScrapRollsResultDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/rolls/{id}/length": {
+      "patch": {
+        "operationId": "InventoryController_correctLength",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RollLengthCorrectionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RollItemDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/labels": {
+      "post": {
+        "operationId": "InventoryController_printLabels",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LabelRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/labels/jobs": {
+      "post": {
+        "operationId": "InventoryController_enqueueLabels",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LabelRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LabelJobCreatedDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/labels/jobs/{jobId}": {
+      "get": {
+        "operationId": "InventoryController_labelJob",
+        "parameters": [
+          {
+            "name": "jobId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LabelJobStatusDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/labels/jobs/{jobId}/file": {
+      "get": {
+        "operationId": "InventoryController_labelJobFile",
+        "parameters": [
+          {
+            "name": "jobId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/inventory/stock": {
+      "get": {
+        "operationId": "InventoryController_stockSummary",
+        "parameters": [
+          {
+            "name": "by",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "default": "sku",
+              "type": "string",
+              "enum": [
+                "sku",
+                "batch",
+                "supplier"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StockSummaryDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/inventory/stock/refresh": {
+      "post": {
+        "operationId": "InventoryController_refresh",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
     }
   },
   "info": {
@@ -2546,7 +4145,20 @@
                 "salesmen.view",
                 "salesmen.manage",
                 "commission.manage",
-                "pricing.override.approve"
+                "pricing.override.approve",
+                "purchase.view",
+                "purchase.order.manage",
+                "purchase.order.approve",
+                "purchase.receipt.manage",
+                "purchase.over_receipt.approve",
+                "purchase.invoice.manage",
+                "purchase.landed_cost.manage",
+                "purchase.return.manage",
+                "inventory.view",
+                "inventory.view_cost",
+                "inventory.map",
+                "inventory.adjust",
+                "labels.print"
               ]
             }
           },
@@ -7080,6 +8692,3332 @@
           "blockedCustomers",
           "categoriesMissingTax",
           "totalCreditLimit"
+        ]
+      },
+      "PoListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "poNo": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "supplierId": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Approved",
+              "PartiallyReceived",
+              "Closed",
+              "Cancelled"
+            ]
+          },
+          "orderedM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "receivedM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "taxable": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "poNo",
+          "date",
+          "supplierId",
+          "supplierName",
+          "status",
+          "orderedM",
+          "receivedM",
+          "taxable",
+          "version"
+        ]
+      },
+      "PoDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "poNo": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "supplierId": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Approved",
+              "PartiallyReceived",
+              "Closed",
+              "Cancelled"
+            ]
+          },
+          "orderedM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "receivedM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "taxable": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "expectedDate": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "regime": {
+            "type": "string",
+            "enum": [
+              "CGST_SGST",
+              "IGST"
+            ]
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "skuId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 160
+                },
+                "gsm": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "widthIn": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 200
+                },
+                "qualityName": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "quantityM": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "ratePerM": {
+                  "type": "string",
+                  "pattern": "^\\d{1,8}(\\.\\d{1,4})?$"
+                },
+                "gstRate": {
+                  "type": "string",
+                  "enum": [
+                    "0",
+                    "5",
+                    "12",
+                    "18",
+                    "28"
+                  ]
+                },
+                "notes": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 200
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                },
+                "skuCode": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "amount": {
+                  "type": "string"
+                },
+                "receivedM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "invoicedM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "balanceM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "skuId",
+                "description",
+                "gsm",
+                "widthIn",
+                "quantityM",
+                "ratePerM",
+                "gstRate",
+                "id",
+                "skuCode",
+                "amount",
+                "receivedM",
+                "invoicedM",
+                "balanceM"
+              ]
+            }
+          },
+          "totals": {
+            "type": "object",
+            "properties": {
+              "taxable": {
+                "type": "string"
+              },
+              "tax": {
+                "type": "string"
+              },
+              "total": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "taxable",
+              "tax",
+              "total"
+            ]
+          },
+          "approvedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "approvedByName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "poNo",
+          "date",
+          "supplierId",
+          "supplierName",
+          "status",
+          "orderedM",
+          "receivedM",
+          "taxable",
+          "version",
+          "expectedDate",
+          "notes",
+          "regime",
+          "lines",
+          "totals",
+          "approvedAt",
+          "approvedByName"
+        ]
+      },
+      "PoCreateDto": {
+        "type": "object",
+        "properties": {
+          "supplierId": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "expectedDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lines": {
+            "minItems": 1,
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "skuId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 160
+                },
+                "gsm": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "widthIn": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 200
+                },
+                "qualityName": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "quantityM": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "ratePerM": {
+                  "type": "string",
+                  "pattern": "^\\d{1,8}(\\.\\d{1,4})?$"
+                },
+                "gstRate": {
+                  "type": "string",
+                  "enum": [
+                    "0",
+                    "5",
+                    "12",
+                    "18",
+                    "28"
+                  ]
+                },
+                "notes": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 200
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "description",
+                "gsm",
+                "widthIn",
+                "quantityM",
+                "ratePerM",
+                "gstRate"
+              ]
+            }
+          }
+        },
+        "required": [
+          "supplierId",
+          "date",
+          "lines"
+        ]
+      },
+      "PoUpdateDto": {
+        "type": "object",
+        "properties": {
+          "supplierId": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "expectedDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lines": {
+            "minItems": 1,
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "skuId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 160
+                },
+                "gsm": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "widthIn": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 200
+                },
+                "qualityName": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "quantityM": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "ratePerM": {
+                  "type": "string",
+                  "pattern": "^\\d{1,8}(\\.\\d{1,4})?$"
+                },
+                "gstRate": {
+                  "type": "string",
+                  "enum": [
+                    "0",
+                    "5",
+                    "12",
+                    "18",
+                    "28"
+                  ]
+                },
+                "notes": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 200
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "description",
+                "gsm",
+                "widthIn",
+                "quantityM",
+                "ratePerM",
+                "gstRate"
+              ]
+            }
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "supplierId",
+          "date",
+          "lines",
+          "version"
+        ]
+      },
+      "VersionDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "GrnListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "grnNo": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "supplierId": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "poId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "poNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Created",
+              "Posted",
+              "Cancelled"
+            ]
+          },
+          "rollCount": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "acceptedM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "unmappedRolls": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "grnNo",
+          "date",
+          "supplierId",
+          "supplierName",
+          "poId",
+          "poNo",
+          "status",
+          "rollCount",
+          "acceptedM",
+          "unmappedRolls",
+          "version"
+        ]
+      },
+      "GrnDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "grnNo": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "supplierId": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "poId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "poNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Created",
+              "Posted",
+              "Cancelled"
+            ]
+          },
+          "rollCount": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "acceptedM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "unmappedRolls": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "supplierInvoiceNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "supplierBatchRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "batchCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "vehicleNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "poLineId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "skuId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 160
+                },
+                "gsm": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "widthIn": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 200
+                },
+                "qualityName": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "rolls": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "rejectedRolls": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "rejectReason": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 200
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                },
+                "skuCode": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "rollCount": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "acceptedM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "rejectedCount": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "rejectedM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "overReceiptM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "skuId",
+                "description",
+                "gsm",
+                "widthIn",
+                "rolls",
+                "id",
+                "skuCode",
+                "rollCount",
+                "acceptedM",
+                "rejectedCount",
+                "rejectedM",
+                "overReceiptM"
+              ]
+            }
+          },
+          "postedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "overReceiptApprovedByName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "grnNo",
+          "date",
+          "supplierId",
+          "supplierName",
+          "poId",
+          "poNo",
+          "status",
+          "rollCount",
+          "acceptedM",
+          "unmappedRolls",
+          "version",
+          "supplierInvoiceNo",
+          "supplierBatchRef",
+          "batchCode",
+          "vehicleNo",
+          "notes",
+          "lines",
+          "postedAt",
+          "overReceiptApprovedByName"
+        ]
+      },
+      "GrnCreateDto": {
+        "type": "object",
+        "properties": {
+          "supplierId": {
+            "type": "string"
+          },
+          "poId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "supplierInvoiceNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "supplierBatchRef": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "vehicleNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lines": {
+            "minItems": 1,
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "poLineId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "skuId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 160
+                },
+                "gsm": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "widthIn": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 200
+                },
+                "qualityName": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "rolls": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "rejectedRolls": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "rejectReason": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 200
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "description",
+                "gsm",
+                "widthIn",
+                "rolls"
+              ]
+            }
+          }
+        },
+        "required": [
+          "supplierId",
+          "date",
+          "lines"
+        ]
+      },
+      "GrnUpdateDto": {
+        "type": "object",
+        "properties": {
+          "supplierId": {
+            "type": "string"
+          },
+          "poId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "supplierInvoiceNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "supplierBatchRef": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "vehicleNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lines": {
+            "minItems": 1,
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "poLineId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "skuId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 160
+                },
+                "gsm": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "widthIn": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 200
+                },
+                "qualityName": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "rolls": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "rejectedRolls": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "rejectReason": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 200
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "description",
+                "gsm",
+                "widthIn",
+                "rolls"
+              ]
+            }
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "supplierId",
+          "date",
+          "lines",
+          "version"
+        ]
+      },
+      "GrnPostDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "approveOverReceipt": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "PiListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "piNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "supplierInvoiceNo": {
+            "type": "string"
+          },
+          "supplierInvoiceDate": {
+            "type": "string"
+          },
+          "supplierId": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Posted",
+              "Cancelled"
+            ]
+          },
+          "total": {
+            "type": "string"
+          },
+          "rollCount": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "landedCostAllocated": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "piNo",
+          "supplierInvoiceNo",
+          "supplierInvoiceDate",
+          "supplierId",
+          "supplierName",
+          "status",
+          "total",
+          "rollCount",
+          "landedCostAllocated",
+          "version"
+        ]
+      },
+      "PiDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "piNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "supplierInvoiceNo": {
+            "type": "string"
+          },
+          "supplierInvoiceDate": {
+            "type": "string"
+          },
+          "supplierId": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Posted",
+              "Cancelled"
+            ]
+          },
+          "total": {
+            "type": "string"
+          },
+          "rollCount": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "landedCostAllocated": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "poId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "poNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "grnIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "irn": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ewayBillNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "regime": {
+            "type": "string",
+            "enum": [
+              "CGST_SGST",
+              "IGST"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "poLineId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "skuId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 160
+                },
+                "gsm": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "widthIn": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 200
+                },
+                "qualityName": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "hsnCode": {
+                  "type": "string",
+                  "pattern": "^\\d{4}(\\d{2}){0,2}$"
+                },
+                "quantityM": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "ratePerM": {
+                  "type": "string",
+                  "pattern": "^\\d{1,8}(\\.\\d{1,4})?$"
+                },
+                "discountPct": {
+                  "default": "0",
+                  "type": "string",
+                  "pattern": "^\\d{1,2}(\\.\\d{1,2})?$|^100$"
+                },
+                "gstRate": {
+                  "type": "string",
+                  "enum": [
+                    "0",
+                    "5",
+                    "12",
+                    "18",
+                    "28"
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                },
+                "taxable": {
+                  "type": "string"
+                },
+                "withoutPo": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "skuId",
+                "description",
+                "gsm",
+                "widthIn",
+                "hsnCode",
+                "quantityM",
+                "ratePerM",
+                "gstRate",
+                "id",
+                "taxable",
+                "withoutPo"
+              ]
+            }
+          },
+          "totals": {
+            "type": "object",
+            "properties": {
+              "taxable": {
+                "type": "string"
+              },
+              "cgst": {
+                "type": "string"
+              },
+              "sgst": {
+                "type": "string"
+              },
+              "igst": {
+                "type": "string"
+              },
+              "roundOff": {
+                "type": "string"
+              },
+              "total": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "taxable",
+              "cgst",
+              "sgst",
+              "igst",
+              "roundOff",
+              "total"
+            ]
+          },
+          "linesWithoutPo": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "postedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "piNo",
+          "supplierInvoiceNo",
+          "supplierInvoiceDate",
+          "supplierId",
+          "supplierName",
+          "status",
+          "total",
+          "rollCount",
+          "landedCostAllocated",
+          "version",
+          "poId",
+          "poNo",
+          "grnIds",
+          "irn",
+          "ewayBillNo",
+          "regime",
+          "notes",
+          "lines",
+          "totals",
+          "linesWithoutPo",
+          "postedAt"
+        ]
+      },
+      "PiCreateDto": {
+        "type": "object",
+        "properties": {
+          "supplierId": {
+            "type": "string"
+          },
+          "supplierInvoiceNo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "supplierInvoiceDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "poId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "grnIds": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "irn": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ewayBillNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "roundOff": {
+            "default": "0",
+            "type": "string",
+            "pattern": "^-?\\d{1,12}(\\.\\d{1,2})?$"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lines": {
+            "minItems": 1,
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "poLineId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "skuId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 160
+                },
+                "gsm": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "widthIn": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 200
+                },
+                "qualityName": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "hsnCode": {
+                  "type": "string",
+                  "pattern": "^\\d{4}(\\d{2}){0,2}$"
+                },
+                "quantityM": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "ratePerM": {
+                  "type": "string",
+                  "pattern": "^\\d{1,8}(\\.\\d{1,4})?$"
+                },
+                "discountPct": {
+                  "default": "0",
+                  "type": "string",
+                  "pattern": "^\\d{1,2}(\\.\\d{1,2})?$|^100$"
+                },
+                "gstRate": {
+                  "type": "string",
+                  "enum": [
+                    "0",
+                    "5",
+                    "12",
+                    "18",
+                    "28"
+                  ]
+                }
+              },
+              "required": [
+                "description",
+                "gsm",
+                "widthIn",
+                "hsnCode",
+                "quantityM",
+                "ratePerM",
+                "gstRate"
+              ]
+            }
+          }
+        },
+        "required": [
+          "supplierId",
+          "supplierInvoiceNo",
+          "supplierInvoiceDate",
+          "lines"
+        ]
+      },
+      "PiUpdateDto": {
+        "type": "object",
+        "properties": {
+          "supplierId": {
+            "type": "string"
+          },
+          "supplierInvoiceNo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "supplierInvoiceDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "poId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "grnIds": {
+            "default": [],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "irn": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 64
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ewayBillNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 20
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "roundOff": {
+            "default": "0",
+            "type": "string",
+            "pattern": "^-?\\d{1,12}(\\.\\d{1,2})?$"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lines": {
+            "minItems": 1,
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "poLineId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "skuId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 160
+                },
+                "gsm": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "widthIn": {
+                  "type": "number",
+                  "exclusiveMinimum": 0,
+                  "maximum": 200
+                },
+                "qualityName": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "hsnCode": {
+                  "type": "string",
+                  "pattern": "^\\d{4}(\\d{2}){0,2}$"
+                },
+                "quantityM": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "ratePerM": {
+                  "type": "string",
+                  "pattern": "^\\d{1,8}(\\.\\d{1,4})?$"
+                },
+                "discountPct": {
+                  "default": "0",
+                  "type": "string",
+                  "pattern": "^\\d{1,2}(\\.\\d{1,2})?$|^100$"
+                },
+                "gstRate": {
+                  "type": "string",
+                  "enum": [
+                    "0",
+                    "5",
+                    "12",
+                    "18",
+                    "28"
+                  ]
+                }
+              },
+              "required": [
+                "description",
+                "gsm",
+                "widthIn",
+                "hsnCode",
+                "quantityM",
+                "ratePerM",
+                "gstRate"
+              ]
+            }
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "supplierId",
+          "supplierInvoiceNo",
+          "supplierInvoiceDate",
+          "lines",
+          "version"
+        ]
+      },
+      "PiPostDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "LinkGrnsDto": {
+        "type": "object",
+        "properties": {
+          "grnIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "grnIds"
+        ]
+      },
+      "LandedCostChargeItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "basis": {
+            "type": "string",
+            "enum": [
+              "ROLL",
+              "METER",
+              "VALUE",
+              "WEIGHT"
+            ]
+          },
+          "amount": {
+            "type": "string"
+          },
+          "vendorName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "billRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "allocated": {
+            "type": "boolean"
+          },
+          "allocatedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reversedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "label",
+          "basis",
+          "amount",
+          "vendorName",
+          "billRef",
+          "allocated",
+          "allocatedAt",
+          "reversedAt"
+        ]
+      },
+      "LandedCostRequestDto": {
+        "type": "object",
+        "properties": {
+          "charges": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string",
+                  "pattern": "^-?\\d{1,12}(\\.\\d{1,2})?$"
+                },
+                "basis": {
+                  "type": "string",
+                  "enum": [
+                    "ROLL",
+                    "METER",
+                    "VALUE",
+                    "WEIGHT"
+                  ]
+                },
+                "vendorName": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 120
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "billRef": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "code",
+                "amount"
+              ]
+            }
+          }
+        },
+        "required": [
+          "charges"
+        ]
+      },
+      "LandedCostPreviewDto": {
+        "type": "object",
+        "properties": {
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rollId": {
+                  "type": "string"
+                },
+                "barcode": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "lengthM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "baseValue": {
+                  "type": "string"
+                },
+                "shares": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                },
+                "landedCost": {
+                  "type": "string"
+                },
+                "costPerMetre": {
+                  "type": "string"
+                },
+                "dispatched": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "rollId",
+                "barcode",
+                "description",
+                "lengthM",
+                "baseValue",
+                "shares",
+                "landedCost",
+                "costPerMetre",
+                "dispatched"
+              ]
+            }
+          },
+          "charges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "basis": {
+                  "type": "string",
+                  "enum": [
+                    "ROLL",
+                    "METER",
+                    "VALUE",
+                    "WEIGHT"
+                  ]
+                },
+                "amount": {
+                  "type": "string"
+                },
+                "allocated": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "basis",
+                "amount",
+                "allocated"
+              ]
+            }
+          },
+          "varianceAmount": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "rows",
+          "charges",
+          "varianceAmount"
+        ]
+      },
+      "PurchaseReturnItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "prNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dnNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "supplierId": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "piId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Posted",
+              "Cancelled"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "rollCount": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "metres": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "totals": {
+            "type": "object",
+            "properties": {
+              "taxable": {
+                "type": "string"
+              },
+              "cgst": {
+                "type": "string"
+              },
+              "sgst": {
+                "type": "string"
+              },
+              "igst": {
+                "type": "string"
+              },
+              "roundOff": {
+                "type": "string"
+              },
+              "total": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "taxable",
+              "cgst",
+              "sgst",
+              "igst",
+              "roundOff",
+              "total"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "prNo",
+          "dnNo",
+          "date",
+          "supplierId",
+          "supplierName",
+          "piId",
+          "status",
+          "reason",
+          "rollCount",
+          "metres",
+          "totals",
+          "version"
+        ]
+      },
+      "PurchaseReturnDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "prNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dnNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "supplierId": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "piId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Posted",
+              "Cancelled"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "rollCount": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "metres": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "totals": {
+            "type": "object",
+            "properties": {
+              "taxable": {
+                "type": "string"
+              },
+              "cgst": {
+                "type": "string"
+              },
+              "sgst": {
+                "type": "string"
+              },
+              "igst": {
+                "type": "string"
+              },
+              "roundOff": {
+                "type": "string"
+              },
+              "total": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "taxable",
+              "cgst",
+              "sgst",
+              "igst",
+              "roundOff",
+              "total"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "rolls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rollId": {
+                  "type": "string"
+                },
+                "barcode": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "lengthM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "ratePerM": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "rollId",
+                "barcode",
+                "description",
+                "lengthM",
+                "ratePerM",
+                "amount"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "prNo",
+          "dnNo",
+          "date",
+          "supplierId",
+          "supplierName",
+          "piId",
+          "status",
+          "reason",
+          "rollCount",
+          "metres",
+          "totals",
+          "version",
+          "notes",
+          "rolls"
+        ]
+      },
+      "PurchaseReturnCreateDto": {
+        "type": "object",
+        "properties": {
+          "supplierId": {
+            "type": "string"
+          },
+          "piId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300
+          },
+          "rollIds": {
+            "minItems": 1,
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "supplierId",
+          "date",
+          "reason",
+          "rollIds"
+        ]
+      },
+      "PurchaseReturnUpdateDto": {
+        "type": "object",
+        "properties": {
+          "supplierId": {
+            "type": "string"
+          },
+          "piId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300
+          },
+          "rollIds": {
+            "minItems": 1,
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "supplierId",
+          "date",
+          "reason",
+          "rollIds",
+          "version"
+        ]
+      },
+      "PurchaseReturnPostDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "RollPageDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "barcode": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "Unmapped",
+                    "Mapped",
+                    "Allocated",
+                    "Dispatched",
+                    "Returned",
+                    "ReturnedToSupplier",
+                    "Scrap"
+                  ]
+                },
+                "skuId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "skuCode": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string"
+                },
+                "gsm": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "widthIn": {
+                  "type": "string"
+                },
+                "qualityName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "originalLengthM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "currentLengthM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "supplierId": {
+                  "type": "string"
+                },
+                "supplierName": {
+                  "type": "string"
+                },
+                "batchCode": {
+                  "type": "string"
+                },
+                "supplierBatchRef": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "grnId": {
+                  "type": "string"
+                },
+                "grnNo": {
+                  "type": "string"
+                },
+                "receivedAt": {
+                  "type": "string"
+                },
+                "ageDays": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "baseCostPerM": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "landedCostPerM": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "version": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "id",
+                "barcode",
+                "status",
+                "skuId",
+                "skuCode",
+                "description",
+                "gsm",
+                "widthIn",
+                "qualityName",
+                "originalLengthM",
+                "currentLengthM",
+                "supplierId",
+                "supplierName",
+                "batchCode",
+                "supplierBatchRef",
+                "grnId",
+                "grnNo",
+                "receivedAt",
+                "ageDays",
+                "baseCostPerM",
+                "landedCostPerM",
+                "version"
+              ]
+            }
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "nextCursor"
+        ]
+      },
+      "RollInspectorDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "barcode": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Unmapped",
+              "Mapped",
+              "Allocated",
+              "Dispatched",
+              "Returned",
+              "ReturnedToSupplier",
+              "Scrap"
+            ]
+          },
+          "skuId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "skuCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "gsm": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "widthIn": {
+            "type": "string"
+          },
+          "qualityName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "originalLengthM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "currentLengthM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "supplierId": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "batchCode": {
+            "type": "string"
+          },
+          "supplierBatchRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "grnId": {
+            "type": "string"
+          },
+          "grnNo": {
+            "type": "string"
+          },
+          "receivedAt": {
+            "type": "string"
+          },
+          "ageDays": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "baseCostPerM": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "landedCostPerM": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "piId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "piNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "supplierInvoiceNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "baseValue": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "landedCost": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "weightKg": {
+            "type": "string"
+          },
+          "parentRollId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "childRollIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "labelPrints": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "at": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "STATUS",
+                    "LENGTH",
+                    "COST",
+                    "LABEL",
+                    "DOCUMENT"
+                  ]
+                },
+                "title": {
+                  "type": "string"
+                },
+                "detail": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "byName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "docType": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "docId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "docNo": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "at",
+                "kind",
+                "title",
+                "detail",
+                "byName",
+                "docType",
+                "docId",
+                "docNo"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "barcode",
+          "status",
+          "skuId",
+          "skuCode",
+          "description",
+          "gsm",
+          "widthIn",
+          "qualityName",
+          "originalLengthM",
+          "currentLengthM",
+          "supplierId",
+          "supplierName",
+          "batchCode",
+          "supplierBatchRef",
+          "grnId",
+          "grnNo",
+          "receivedAt",
+          "ageDays",
+          "baseCostPerM",
+          "landedCostPerM",
+          "version",
+          "piId",
+          "piNo",
+          "supplierInvoiceNo",
+          "baseValue",
+          "landedCost",
+          "weightKg",
+          "parentRollId",
+          "childRollIds",
+          "labelPrints",
+          "events"
+        ]
+      },
+      "MapRollsDto": {
+        "type": "object",
+        "properties": {
+          "rollIds": {
+            "minItems": 1,
+            "maxItems": 2000,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "skuId": {
+            "type": "string"
+          },
+          "createSku": {
+            "type": "object",
+            "properties": {
+              "categoryId": {
+                "type": "string"
+              },
+              "qualityId": {
+                "type": "string"
+              },
+              "gsm": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "widthIn": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "defaultLengthM": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "categoryId",
+              "qualityId",
+              "gsm",
+              "widthIn",
+              "defaultLengthM"
+            ]
+          }
+        },
+        "required": [
+          "rollIds"
+        ]
+      },
+      "MapRollsResultDto": {
+        "type": "object",
+        "properties": {
+          "mapped": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "skuId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "mapped",
+          "skuId"
+        ]
+      },
+      "ScrapRollsDto": {
+        "type": "object",
+        "properties": {
+          "rollIds": {
+            "minItems": 1,
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "rollIds"
+        ]
+      },
+      "ScrapRollsResultDto": {
+        "type": "object",
+        "properties": {
+          "scrapped": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "value": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "scrapped",
+          "value"
+        ]
+      },
+      "RollLengthCorrectionDto": {
+        "type": "object",
+        "properties": {
+          "currentLengthM": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "currentLengthM",
+          "version"
+        ]
+      },
+      "RollItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "barcode": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Unmapped",
+              "Mapped",
+              "Allocated",
+              "Dispatched",
+              "Returned",
+              "ReturnedToSupplier",
+              "Scrap"
+            ]
+          },
+          "skuId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "skuCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "gsm": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "widthIn": {
+            "type": "string"
+          },
+          "qualityName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "originalLengthM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "currentLengthM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "supplierId": {
+            "type": "string"
+          },
+          "supplierName": {
+            "type": "string"
+          },
+          "batchCode": {
+            "type": "string"
+          },
+          "supplierBatchRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "grnId": {
+            "type": "string"
+          },
+          "grnNo": {
+            "type": "string"
+          },
+          "receivedAt": {
+            "type": "string"
+          },
+          "ageDays": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "baseCostPerM": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "landedCostPerM": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "barcode",
+          "status",
+          "skuId",
+          "skuCode",
+          "description",
+          "gsm",
+          "widthIn",
+          "qualityName",
+          "originalLengthM",
+          "currentLengthM",
+          "supplierId",
+          "supplierName",
+          "batchCode",
+          "supplierBatchRef",
+          "grnId",
+          "grnNo",
+          "receivedAt",
+          "ageDays",
+          "baseCostPerM",
+          "landedCostPerM",
+          "version"
+        ]
+      },
+      "LabelRequestDto": {
+        "type": "object",
+        "properties": {
+          "rollIds": {
+            "default": [],
+            "maxItems": 2000,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "grnId": {
+            "type": "string"
+          },
+          "reprint": {
+            "default": false,
+            "type": "boolean"
+          }
+        }
+      },
+      "LabelJobCreatedDto": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "jobId",
+          "count"
+        ]
+      },
+      "LabelJobStatusDto": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "waiting",
+              "active",
+              "completed",
+              "failed",
+              "delayed",
+              "unknown"
+            ]
+          },
+          "done": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "count": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "fileName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "jobId",
+          "state",
+          "done",
+          "count",
+          "fileName",
+          "error"
+        ]
+      },
+      "StockSummaryDto": {
+        "type": "object",
+        "properties": {
+          "asOf": {
+            "type": "string"
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "skuId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "skuCode": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string"
+                },
+                "categoryName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "gsm": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "widthIn": {
+                  "type": "string"
+                },
+                "rolls": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "metres": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "value": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "oldestDays": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "skuId",
+                "skuCode",
+                "description",
+                "categoryName",
+                "gsm",
+                "widthIn",
+                "rolls",
+                "metres",
+                "value",
+                "oldestDays"
+              ]
+            }
+          },
+          "totals": {
+            "type": "object",
+            "properties": {
+              "rolls": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "metres": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "value": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "unmappedRolls": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "deadStockRolls": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "rolls",
+              "metres",
+              "value",
+              "unmappedRolls",
+              "deadStockRolls"
+            ]
+          }
+        },
+        "required": [
+          "asOf",
+          "rows",
+          "totals"
         ]
       }
     }

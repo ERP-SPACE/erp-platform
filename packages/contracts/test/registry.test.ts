@@ -48,3 +48,40 @@ describe("default document series (ADR-0003)", () => {
     }
   });
 });
+
+describe("Stage 2 additions", () => {
+  it("landed-cost charges default to the trade split and reject duplicate codes", () => {
+    const charges = SETTINGS["purchase.landedCostCharges"].default;
+    const basis = Object.fromEntries(charges.map((c) => [c.code, c.basis]));
+    expect(basis).toMatchObject({
+      FREIGHT: "WEIGHT",
+      LOADING: "WEIGHT",
+      INSURANCE: "VALUE",
+      CUSTOMS_DUTY: "VALUE",
+    });
+    expect(() =>
+      parseSetting("purchase.landedCostCharges", [
+        { code: "FREIGHT", label: "Freight", basis: "METER" },
+        { code: "FREIGHT", label: "Freight again", basis: "VALUE" },
+      ]),
+    ).toThrow(/unique/);
+  });
+
+  it("an old roll-label value without a layout still parses (defaults to one per page)", () => {
+    expect(
+      parseSetting("labels.roll", { widthMm: 100, heightMm: 50, output: "PDF" }),
+    ).toMatchObject({
+      layout: "SINGLE",
+    });
+  });
+
+  it("warehouse staff can receive and map but not see cost or approve over-receipt", () => {
+    const warehouse = SYSTEM_ROLES.find((r) => r.code === "warehouse")!;
+    const codes = expandGrants(warehouse.grants);
+    expect(codes).toEqual(
+      expect.arrayContaining(["purchase.receipt.manage", "inventory.map", "labels.print"]),
+    );
+    expect(codes).not.toContain("inventory.view_cost");
+    expect(codes).not.toContain("purchase.over_receipt.approve");
+  });
+});

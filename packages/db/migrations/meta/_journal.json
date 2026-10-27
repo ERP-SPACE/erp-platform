@@ -29,6 +29,20 @@
       "when": 1792757522937,
       "tag": "0003_masters_constraints",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793088837067,
+      "tag": "0004_purchase_inventory",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793088838617,
+      "tag": "0005_purchase_inventory_sql",
+      "breakpoints": true
     }
   ]
 }

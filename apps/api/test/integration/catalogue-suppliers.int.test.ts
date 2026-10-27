@@ -173,7 +173,13 @@ describe("suppliers & transporters (PRD §5.4)", () => {
     const first = json(
       await owner.request({ method: "POST", url: "/api/suppliers", payload: supplier() }),
     );
-    expect(first).toMatchObject({ code: "SUP-0001", shortCode: "SAP", pan: "AAACS1234K" });
+    expect(first).toMatchObject({
+      code: expect.stringMatching(/^SUP-\d{4}$/),
+      shortCode: "SAP",
+      pan: "AAACS1234K",
+    });
+    // Other files may create suppliers first (shared database): check the sequence, not 0001.
+    const next = `SUP-${String(Number(String(first.code).slice(4)) + 1).padStart(4, "0")}`;
 
     const second = json(
       await owner.request({
@@ -182,7 +188,7 @@ describe("suppliers & transporters (PRD §5.4)", () => {
         payload: supplier({ name: "Shree Ambika Papers", gstin: null }),
       }),
     );
-    expect(second).toMatchObject({ code: "SUP-0002" });
+    expect(second).toMatchObject({ code: next });
     expect(second.shortCode).not.toBe("SAP");
   });
 

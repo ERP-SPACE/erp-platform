@@ -6,3 +6,5 @@ export * from "./catalogue.js";
 export * from "./parties.js";
 export * from "./pricing.js";
 export * from "./salesmen.js";
+export * from "./purchase.js";
+export * from "./inventory.js";

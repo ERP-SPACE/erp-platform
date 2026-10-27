@@ -36,16 +36,17 @@ export const handlers: Record<JobName, Handler> = {
   },
 
   /**
-   * Refreshes analytics materialized views CONCURRENTLY (ADR-0005). No views exist yet; Stage 2
-   * and Stage 5 register theirs in ANALYTICS_VIEWS.
+   * Refreshes the analytics materialized views (ADR-0005). The worker connects as erp_app, which
+   * can't refresh views itself; each refresh function is SECURITY DEFINER (migration 0005).
    */
   async "analytics.refresh"({ db, redis }) {
-    for (const view of ANALYTICS_VIEWS) {
-      await db.db.execute(sql.raw(`REFRESH MATERIALIZED VIEW CONCURRENTLY ${view}`));
+    for (const fn of ANALYTICS_REFRESH_FUNCTIONS) {
+      await db.db.execute(sql.raw(`SELECT ${fn}()`));
     }
     await redis.set("erp:analytics:refreshed-at", new Date().toISOString());
-    return { refreshed: ANALYTICS_VIEWS.length };
+    return { refreshed: ANALYTICS_REFRESH_FUNCTIONS.length };
   },
 };
 
-export const ANALYTICS_VIEWS: readonly string[] = [];
+/** Stage 2: stock by SKU / batch / supplier. Stage 5 adds its own. */
+export const ANALYTICS_REFRESH_FUNCTIONS: readonly string[] = ["public.refresh_stock_views"];

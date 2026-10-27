@@ -28,6 +28,18 @@ describe("schema-driven setting editor", () => {
     expect(schema.safeParse(fromDraft(schema, "150")).success).toBe(false);
   });
 
+  it("edits a list of records row by row (landed-cost charges)", () => {
+    const schema = SETTINGS["purchase.landedCostCharges"].schema;
+    const rows = toDraft(schema, SETTINGS["purchase.landedCostCharges"].default) as Record<
+      string,
+      unknown
+    >[];
+    expect(rows[0]).toMatchObject({ code: "FREIGHT", basis: "WEIGHT", active: true });
+    const edited = [{ ...rows[0], basis: "METER" }, ...rows.slice(1)];
+    const value = schema.parse(fromDraft(schema, edited as never));
+    expect(value[0]).toMatchObject({ code: "FREIGHT", basis: "METER" });
+  });
+
   it("summarises values for the register", () => {
     expect(summarise([24, 36, 44])).toBe("24, 36, 44");
     expect(summarise({ standardLengthM: 1000, toleranceM: 100 })).toMatch(/1000.*100/);
