@@ -29,6 +29,20 @@ export const PERMISSIONS = {
   "salesmen.manage": "Add and edit salesmen, their defaults and KYC documents",
   "commission.manage": "Set salesman commission rules",
   "pricing.override.approve": "Approve rate overrides beyond the tolerance",
+  // Stage 2 — purchase & inventory
+  "purchase.view": "View purchase orders, goods receipts, purchase invoices and returns",
+  "purchase.order.manage": "Create and edit purchase orders",
+  "purchase.order.approve": "Approve, close and cancel purchase orders",
+  "purchase.receipt.manage": "Create and post goods receipts (creates rolls and barcodes)",
+  "purchase.over_receipt.approve": "Accept goods beyond the purchase order quantity",
+  "purchase.invoice.manage": "Enter and post purchase invoices",
+  "purchase.landed_cost.manage": "Allocate landed cost (freight, duty, insurance…) to rolls",
+  "purchase.return.manage": "Create and post purchase returns and debit notes",
+  "inventory.view": "View stock, rolls and the Roll Inspector",
+  "inventory.view_cost": "See roll cost and stock value",
+  "inventory.map": "Map unmapped rolls to products",
+  "inventory.adjust": "Correct roll lengths and scrap rolls",
+  "labels.print": "Print and reprint roll labels",
 } as const;
 
 export type PermissionCode = keyof typeof PERMISSIONS;
@@ -41,6 +55,8 @@ export const STEP_UP_PERMISSIONS: readonly PermissionCode[] = [
   "roles.manage",
   "customers.credit.manage",
   "rates.bulk_revise",
+  "purchase.over_receipt.approve",
+  "inventory.adjust",
 ];
 
 const MASTERS_VIEW = [
@@ -67,12 +83,31 @@ export const SYSTEM_ROLES = [
       "customers.view",
       "customers.manage",
       "salesmen.*",
+      "purchase.*",
+      "inventory.*",
+      "labels.print",
     ],
   },
   {
     code: "purchase_manager",
     name: "Purchase Manager",
-    grants: ["settings.view", "catalogue.view", "suppliers.*", "transporters.*"],
+    grants: [
+      "settings.view",
+      "catalogue.view",
+      "suppliers.*",
+      "transporters.*",
+      "purchase.view",
+      "purchase.order.manage",
+      "purchase.order.approve",
+      "purchase.receipt.manage",
+      "purchase.invoice.manage",
+      "purchase.landed_cost.manage",
+      "purchase.return.manage",
+      "inventory.view",
+      "inventory.view_cost",
+      "inventory.map",
+      "labels.print",
+    ],
   },
   {
     code: "sales_manager",
@@ -86,6 +121,7 @@ export const SYSTEM_ROLES = [
       "commission.manage",
       "salesmen.manage",
       "pricing.override.approve",
+      "inventory.view",
     ],
   },
   {
@@ -98,13 +134,37 @@ export const SYSTEM_ROLES = [
       "customers.manage",
       "salesmen.view",
       "transporters.view",
+      "inventory.view",
     ],
   },
-  { code: "warehouse", name: "Warehouse", grants: ["catalogue.view", "transporters.view"] },
+  {
+    code: "warehouse",
+    name: "Warehouse",
+    grants: [
+      "catalogue.view",
+      "transporters.view",
+      "purchase.view",
+      "purchase.receipt.manage",
+      "inventory.view",
+      "inventory.map",
+      "labels.print",
+    ],
+  },
   {
     code: "accountant",
     name: "Accountant",
-    grants: ["settings.view", "settings.series.view", "audit.view", ...MASTERS_VIEW],
+    grants: [
+      "settings.view",
+      "settings.series.view",
+      "audit.view",
+      ...MASTERS_VIEW,
+      "purchase.view",
+      "purchase.invoice.manage",
+      "purchase.landed_cost.manage",
+      "purchase.return.manage",
+      "inventory.view",
+      "inventory.view_cost",
+    ],
   },
 ] as const;
 

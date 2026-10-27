@@ -873,7 +873,7 @@ export interface components {
             stepUp: boolean;
         };
         UpdateRolePermissionsDto: {
-            permissionCodes: ("settings.view" | "settings.update" | "settings.company.update" | "settings.series.view" | "settings.series.update" | "users.view" | "users.manage" | "roles.manage" | "audit.view" | "catalogue.view" | "catalogue.manage" | "suppliers.view" | "suppliers.manage" | "transporters.view" | "transporters.manage" | "customers.view" | "customers.manage" | "customers.credit.manage" | "customers.rates.manage" | "rates.bulk_revise" | "salesmen.view" | "salesmen.manage" | "commission.manage" | "pricing.override.approve")[];
+            permissionCodes: ("settings.view" | "settings.update" | "settings.company.update" | "settings.series.view" | "settings.series.update" | "users.view" | "users.manage" | "roles.manage" | "audit.view" | "catalogue.view" | "catalogue.manage" | "suppliers.view" | "suppliers.manage" | "transporters.view" | "transporters.manage" | "customers.view" | "customers.manage" | "customers.credit.manage" | "customers.rates.manage" | "rates.bulk_revise" | "salesmen.view" | "salesmen.manage" | "commission.manage" | "pricing.override.approve" | "purchase.view" | "purchase.order.manage" | "purchase.order.approve" | "purchase.receipt.manage" | "purchase.over_receipt.approve" | "purchase.invoice.manage" | "purchase.landed_cost.manage" | "purchase.return.manage" | "inventory.view" | "inventory.view_cost" | "inventory.map" | "inventory.adjust" | "labels.print")[];
             version: number;
         };
         SettingItemDto: {

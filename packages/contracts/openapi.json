@@ -2546,7 +2546,20 @@
                 "salesmen.view",
                 "salesmen.manage",
                 "commission.manage",
-                "pricing.override.approve"
+                "pricing.override.approve",
+                "purchase.view",
+                "purchase.order.manage",
+                "purchase.order.approve",
+                "purchase.receipt.manage",
+                "purchase.over_receipt.approve",
+                "purchase.invoice.manage",
+                "purchase.landed_cost.manage",
+                "purchase.return.manage",
+                "inventory.view",
+                "inventory.view_cost",
+                "inventory.map",
+                "inventory.adjust",
+                "labels.print"
               ]
             }
           },

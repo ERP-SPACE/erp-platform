@@ -90,8 +90,54 @@ export const SETTINGS = {
       widthMm: z.number().int().min(30).max(150),
       heightMm: z.number().int().min(20).max(150),
       output: z.enum(["PDF", "ZPL"]),
+      /** PDF only: one label per page (label printer) or 2 × 5 on an A4 sheet (office printer). */
+      layout: z.enum(["SINGLE", "A4_2x5"]).default("SINGLE"),
     }),
-    default: { widthMm: 100, heightMm: 50, output: "PDF" },
+    default: { widthMm: 100, heightMm: 50, output: "PDF", layout: "SINGLE" },
+  },
+  "purchase.landedCostCharges": {
+    label: "Landed-cost charges and how each is split across rolls",
+    group: "Purchase",
+    schema: z
+      .array(
+        z.object({
+          code: z.string().regex(/^[A-Z][A-Z0-9_]{1,23}$/, "Upper-case code, e.g. FREIGHT"),
+          label: z.string().trim().min(2).max(60),
+          basis: z.enum(["ROLL", "METER", "VALUE", "WEIGHT"]),
+          active: z.boolean().default(true),
+        }),
+      )
+      .min(1)
+      .refine(
+        (list) => new Set(list.map((c) => c.code)).size === list.length,
+        "Codes must be unique",
+      ),
+    // Trade-standard split (Q16, delegated): weight-driven charges by WEIGHT, value-driven by VALUE.
+    default: [
+      { code: "FREIGHT", label: "Freight / transport inward", basis: "WEIGHT", active: true },
+      { code: "LOADING", label: "Loading / unloading (hamali)", basis: "WEIGHT", active: true },
+      { code: "INSURANCE", label: "Insurance", basis: "VALUE", active: true },
+      { code: "CUSTOMS_DUTY", label: "Customs duty (BCD + SWS)", basis: "VALUE", active: true },
+      {
+        code: "CLEARING",
+        label: "Clearing & forwarding (CHA), port / CFS",
+        basis: "VALUE",
+        active: true,
+      },
+      {
+        code: "BROKERAGE",
+        label: "Brokerage / commission on purchase",
+        basis: "VALUE",
+        active: true,
+      },
+      { code: "OTHER", label: "Other", basis: "VALUE", active: true },
+    ],
+  },
+  "purchase.overReceiptTolerancePct": {
+    label: "Goods receipt above PO quantity allowed without approval (%)",
+    group: "Purchase",
+    schema: z.number().min(0).max(50),
+    default: 0,
   },
   "analytics.refresh": {
     label: "Analytics refresh (ADR-0005)",
