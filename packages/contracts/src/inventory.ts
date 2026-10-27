@@ -153,3 +153,16 @@ export type RollInspector = z.infer<typeof rollInspector>;
 export type RollEvent = z.infer<typeof rollEvent>;
 export type StockSummary = z.infer<typeof stockSummary>;
 export type StockRow = z.infer<typeof stockRow>;
+
+/** Large label batches render in the worker; poll the job, then download the file. */
+export const labelJobCreated = z.object({ jobId: z.string(), count: z.number().int() });
+export const labelJobStatus = z.object({
+  jobId: z.string(),
+  state: z.enum(["waiting", "active", "completed", "failed", "delayed", "unknown"]),
+  /** Labels rendered so far. */
+  done: z.number().int(),
+  count: z.number().int(),
+  fileName: z.string().nullable(),
+  error: z.string().nullable(),
+});
+export type LabelJobStatus = z.infer<typeof labelJobStatus>;

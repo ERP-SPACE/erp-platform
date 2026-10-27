@@ -3683,6 +3683,90 @@
         ]
       }
     },
+    "/api/labels/jobs": {
+      "post": {
+        "operationId": "InventoryController_enqueueLabels",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LabelRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LabelJobCreatedDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/labels/jobs/{jobId}": {
+      "get": {
+        "operationId": "InventoryController_labelJob",
+        "parameters": [
+          {
+            "name": "jobId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LabelJobStatusDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
+    "/api/labels/jobs/{jobId}/file": {
+      "get": {
+        "operationId": "InventoryController_labelJobFile",
+        "parameters": [
+          {
+            "name": "jobId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      }
+    },
     "/api/inventory/stock": {
       "get": {
         "operationId": "InventoryController_stockSummary",
@@ -11748,6 +11832,72 @@
             "type": "boolean"
           }
         }
+      },
+      "LabelJobCreatedDto": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "jobId",
+          "count"
+        ]
+      },
+      "LabelJobStatusDto": {
+        "type": "object",
+        "properties": {
+          "jobId": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "waiting",
+              "active",
+              "completed",
+              "failed",
+              "delayed",
+              "unknown"
+            ]
+          },
+          "done": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "count": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "fileName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "jobId",
+          "state",
+          "done",
+          "count",
+          "fileName",
+          "error"
+        ]
       },
       "StockSummaryDto": {
         "type": "object",

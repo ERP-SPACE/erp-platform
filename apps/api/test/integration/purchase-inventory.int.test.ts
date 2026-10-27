@@ -524,6 +524,24 @@ describe("purchase & inventory (Stage 2 gate)", () => {
     expect(inspector.labelPrints).toBe(1);
   });
 
+  it("big batches queue for the worker: job status, and no file until it is rendered", async () => {
+    const queued = await owner.request({
+      method: "POST",
+      url: "/api/labels/jobs",
+      payload: { grnId: grn.id },
+    });
+    expect(queued.statusCode, queued.body).toBe(202);
+    const { jobId, count } = json<{ jobId: string; count: number }>(queued);
+    expect(count).toBe(16);
+    const status = json<{ state: string; count: number; fileName: string | null }>(
+      await owner.get(`/api/labels/jobs/${jobId}`),
+    );
+    expect(status).toMatchObject({ count: 16, fileName: null });
+    expect(["waiting", "active", "delayed"]).toContain(status.state);
+    expect((await owner.get(`/api/labels/jobs/${jobId}/file`)).statusCode).toBe(404);
+    expect((await owner.get("/api/labels/jobs/does-not-exist")).statusCode).toBe(404);
+  });
+
   it("stock summary from the views: rolls, metres, value; unmapped and dead-stock counts", async () => {
     expect(
       (await owner.request({ method: "POST", url: "/api/inventory/stock/refresh" })).statusCode,

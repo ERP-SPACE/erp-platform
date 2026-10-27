@@ -1,4 +1,6 @@
 import {
+  labelJobCreated,
+  labelJobStatus,
   labelRequest,
   mapRollsInput,
   mapRollsResult,
@@ -29,3 +31,5 @@ export class RollLengthCorrectionDto extends zodDto(
 export class LabelRequestDto extends zodDto("LabelRequestDto", labelRequest) {}
 export class StockGroupByDto extends zodDto("StockGroupByDto", stockGroupBy) {}
 export class StockSummaryDto extends zodDto("StockSummaryDto", stockSummary) {}
+export class LabelJobCreatedDto extends zodDto("LabelJobCreatedDto", labelJobCreated) {}
+export class LabelJobStatusDto extends zodDto("LabelJobStatusDto", labelJobStatus) {}

@@ -12,6 +12,8 @@ import {
 import { ApiOkResponse, ApiProduces, ApiTags } from "@nestjs/swagger";
 import { RequireFreshAuth, RequirePermission, RequireReason } from "../../auth/decorators.js";
 import {
+  LabelJobCreatedDto,
+  LabelJobStatusDto,
   LabelRequestDto,
   MapRollsDto,
   MapRollsResultDto,
@@ -87,6 +89,34 @@ export class InventoryController {
   @Post("labels")
   async printLabels(@Body() dto: LabelRequestDto) {
     const file = await this.labels.render(dto);
+    return new StreamableFile(file.body, {
+      type: file.contentType,
+      length: file.body.length,
+      disposition: `inline; filename="${file.fileName}"`,
+    });
+  }
+
+  /** Large batches (a whole container): queued for the worker. Poll, then download. */
+  @RequirePermission("labels.print")
+  @HttpCode(202)
+  @ApiOkResponse({ type: LabelJobCreatedDto })
+  @Post("labels/jobs")
+  enqueueLabels(@Body() dto: LabelRequestDto) {
+    return this.labels.enqueue(dto);
+  }
+
+  @RequirePermission("labels.print")
+  @ApiOkResponse({ type: LabelJobStatusDto })
+  @Get("labels/jobs/:jobId")
+  labelJob(@Param("jobId") jobId: string) {
+    return this.labels.status(jobId);
+  }
+
+  @RequirePermission("labels.print")
+  @ApiProduces("application/pdf", "text/plain")
+  @Get("labels/jobs/:jobId/file")
+  async labelJobFile(@Param("jobId") jobId: string) {
+    const file = await this.labels.file(jobId);
     return new StreamableFile(file.body, {
       type: file.contentType,
       length: file.body.length,

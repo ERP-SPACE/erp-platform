@@ -1252,6 +1252,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/labels/jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InventoryController_enqueueLabels"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/labels/jobs/{jobId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InventoryController_labelJob"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/labels/jobs/{jobId}/file": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InventoryController_labelJobFile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/inventory/stock": {
         parameters: {
             query?: never;
@@ -2775,6 +2823,19 @@ export interface components {
             grnId?: string;
             /** @default false */
             reprint: boolean;
+        };
+        LabelJobCreatedDto: {
+            jobId: string;
+            count: number;
+        };
+        LabelJobStatusDto: {
+            jobId: string;
+            /** @enum {string} */
+            state: "waiting" | "active" | "completed" | "failed" | "delayed" | "unknown";
+            done: number;
+            count: number;
+            fileName: string | null;
+            error: string | null;
         };
         StockSummaryDto: {
             asOf: string;
@@ -5124,6 +5185,69 @@ export interface operations {
                 "application/json": components["schemas"]["LabelRequestDto"];
             };
         };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InventoryController_enqueueLabels: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LabelRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabelJobCreatedDto"];
+                };
+            };
+        };
+    };
+    InventoryController_labelJob: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                jobId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LabelJobStatusDto"];
+                };
+            };
+        };
+    };
+    InventoryController_labelJobFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                jobId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
                 headers: {
