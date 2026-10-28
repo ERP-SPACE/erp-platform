@@ -54,6 +54,15 @@ export const PERMISSIONS = {
   "sales.return.manage": "Receive and inspect customer returns",
   "sales.note.manage": "Issue credit and debit notes to customers",
   "compliance.einvoice.manage": "Retry or record IRNs and e-way bills by hand",
+  // Stage 4 — collections, credit & commission
+  "collections.view": "View customer receipts, statements and AR aging",
+  "collections.receipt.manage": "Record and post customer receipts and allocate them to invoices",
+  "collections.receipt.reverse": "Reverse a posted receipt or payment (cheque bounce, mistake)",
+  "payables.view": "View supplier payments, statements and AP aging",
+  "payables.payment.manage": "Record and post supplier payments and allocate them to invoices",
+  "payables.payment.approve": "Approve supplier payments above the approval threshold",
+  "commission.view": "View salesman commission entries, payouts and statements",
+  "commission.payout.manage": "Create and pay commission payout batches",
 } as const;
 
 export type PermissionCode = keyof typeof PERMISSIONS;
@@ -72,6 +81,9 @@ export const STEP_UP_PERMISSIONS: readonly PermissionCode[] = [
   "sales.credit.release",
   "sales.invoice.cancel",
   "sales.note.manage",
+  "collections.receipt.reverse",
+  "payables.payment.approve",
+  "commission.payout.manage",
 ];
 
 const MASTERS_VIEW = [
@@ -103,6 +115,9 @@ export const SYSTEM_ROLES = [
       "labels.print",
       "sales.*",
       "compliance.*",
+      "collections.*",
+      "payables.*",
+      "commission.*",
     ],
   },
   {
@@ -146,6 +161,8 @@ export const SYSTEM_ROLES = [
       "sales.invoice.manage",
       "sales.return.manage",
       "sales.note.manage",
+      "collections.view",
+      "commission.view",
     ],
   },
   {
@@ -198,6 +215,13 @@ export const SYSTEM_ROLES = [
       "sales.invoice.manage",
       "sales.invoice.cancel",
       "sales.note.manage",
+      "collections.view",
+      "collections.receipt.manage",
+      "collections.receipt.reverse",
+      "payables.view",
+      "payables.payment.manage",
+      "commission.view",
+      "commission.payout.manage",
       "compliance.einvoice.manage",
     ],
   },

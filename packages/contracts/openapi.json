@@ -6579,7 +6579,15 @@
                 "sales.invoice.cancel",
                 "sales.return.manage",
                 "sales.note.manage",
-                "compliance.einvoice.manage"
+                "compliance.einvoice.manage",
+                "collections.view",
+                "collections.receipt.manage",
+                "collections.receipt.reverse",
+                "payables.view",
+                "payables.payment.manage",
+                "payables.payment.approve",
+                "commission.view",
+                "commission.payout.manage"
               ]
             }
           },

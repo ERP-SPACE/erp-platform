@@ -215,6 +215,40 @@ export const SETTINGS = {
     schema: z.number().int().min(0),
     default: 50000,
   },
+  "ar.agingBuckets": {
+    label: "AR / AP aging buckets (days since the invoice date)",
+    group: "Collections",
+    schema: z
+      .array(z.number().int().min(1).max(3650))
+      .min(1)
+      .max(6)
+      .refine(
+        (b) => b.every((d, i) => i === 0 || d > b[i - 1]!),
+        "Each bucket must be longer than the last",
+      ),
+    default: [30, 60, 90],
+  },
+  "collections.suggestFifo": {
+    label: "Suggest allocating receipts to the oldest invoices first",
+    group: "Collections",
+    schema: z.boolean(),
+    default: true,
+  },
+  "credit.nightlyCheck": {
+    label: "Nightly credit check (blocks overdue customers, lifts its own blocks once paid)",
+    group: "Collections",
+    schema: z.object({
+      enabled: z.boolean(),
+      time: z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Use HH:MM (IST)"),
+    }),
+    default: { enabled: true, time: "02:00" },
+  },
+  "payables.approvalThresholdInr": {
+    label: "Supplier payments above this amount need the Owner's approval (₹, Q33)",
+    group: "Collections",
+    schema: z.number().int().min(0),
+    default: 500000,
+  },
   "analytics.refresh": {
     label: "Analytics refresh (ADR-0005)",
     group: "System",

@@ -11,7 +11,11 @@ import {
   expandGrants,
   isSettingKey,
   STEP_UP_PERMISSIONS,
+  agingQuery,
+  applyCredit,
   dcPick,
+  payoutPay,
+  receiptCreate,
   parseSetting,
   siCreate,
   soLineInput,
@@ -187,5 +191,72 @@ describe("Stage 3 additions", () => {
     expect(transportInput.parse({ vehicleNo: "gj05ab1234" }).vehicleNo).toBe("GJ05AB1234");
     expect(transportInput.safeParse({ vehicleNo: "GJ-05" }).success).toBe(false);
     expect(transportInput.safeParse({ ewayBillNo: "12345" }).success).toBe(false);
+  });
+});
+
+describe("Stage 4 additions", () => {
+  const roles = Object.fromEntries(SYSTEM_ROLES.map((r) => [r.code, expandGrants(r.grants)]));
+  const receipt = {
+    partyId: "c1",
+    date: "2026-10-28",
+    mode: "NEFT",
+    amount: "8000",
+    reference: "UTR123",
+    allocations: [
+      { invoiceId: "i1", amount: "3000" },
+      { invoiceId: "i2", amount: "4995", deduction: "5" },
+    ],
+  };
+
+  it("roles: accountants handle money; managers see it; bounces and big payments need a fresh login", () => {
+    expect(roles.accountant).toEqual(
+      expect.arrayContaining([
+        "collections.receipt.manage",
+        "payables.payment.manage",
+        "commission.payout.manage",
+      ]),
+    );
+    expect(roles.accountant).not.toContain("payables.payment.approve");
+    expect(roles.sales_manager).toEqual(
+      expect.arrayContaining(["collections.view", "commission.view"]),
+    );
+    expect(roles.sales_manager).not.toContain("collections.receipt.manage");
+    expect(roles.admin).toEqual(
+      expect.arrayContaining(["payables.payment.approve", "commission.payout.manage"]),
+    );
+    expect(STEP_UP_PERMISSIONS).toEqual(
+      expect.arrayContaining([
+        "collections.receipt.reverse",
+        "payables.payment.approve",
+        "commission.payout.manage",
+      ]),
+    );
+  });
+
+  it("settings and series: aging buckets must grow; commission payouts are numbered CP", () => {
+    expect(parseSetting("ar.agingBuckets", [30, 60, 90])).toEqual([30, 60, 90]);
+    expect(() => parseSetting("ar.agingBuckets", [60, 30])).toThrow();
+    expect(() => parseSetting("credit.nightlyCheck", { enabled: true, time: "25:00" })).toThrow();
+    expect(SETTINGS["payables.approvalThresholdInr"].default).toBe(500000);
+    expect(DOC_TYPES.CP).toMatchObject({ numberedOn: "post", gst: false });
+  });
+
+  it("a receipt needs a reference unless it is cash; amounts are rupees and paise", () => {
+    expect(receiptCreate.safeParse(receipt).success).toBe(true);
+    expect(receiptCreate.safeParse({ ...receipt, reference: "" }).success).toBe(false);
+    expect(receiptCreate.safeParse({ ...receipt, mode: "CASH", reference: null }).success).toBe(
+      true,
+    );
+    expect(receiptCreate.safeParse({ ...receipt, amount: "0" }).success).toBe(false);
+    expect(receiptCreate.safeParse({ ...receipt, amount: "10.555" }).success).toBe(false);
+    // No allocations: everything stays on account.
+    expect(receiptCreate.parse({ ...receipt, allocations: undefined }).allocations).toEqual([]);
+    expect(
+      applyCredit.safeParse({ source: "RECEIPT", sourceId: "r1", allocations: [] }).success,
+    ).toBe(false);
+    expect(agingQuery.safeParse({ partyType: "SUPPLIER" }).success).toBe(true);
+    expect(
+      payoutPay.safeParse({ version: 1, paidOn: "2026-10-31", mode: "NEFT", tds: "41.01" }).success,
+    ).toBe(true);
   });
 });
