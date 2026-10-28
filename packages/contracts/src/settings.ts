@@ -139,6 +139,82 @@ export const SETTINGS = {
     schema: z.number().min(0).max(50),
     default: 0,
   },
+  "sales.proformaValidityDays": {
+    label: "Proforma valid for (days)",
+    group: "Sales",
+    schema: z.number().int().min(1).max(90),
+    default: 7,
+  },
+  "invoice.extraCharges": {
+    label: "Extra charges on customer invoices (Q21)",
+    group: "Invoicing",
+    // Taxed at the goods' GST rate. HSN blank = the main goods' HSN (part of the same supply).
+    schema: z
+      .array(
+        z.object({
+          code: z.string().regex(/^[A-Z][A-Z0-9_]{1,23}$/, "Upper-case code, e.g. FREIGHT"),
+          label: z.string().trim().min(2).max(60),
+          hsnCode: z
+            .string()
+            .regex(/^\d{4}(\d{2}){0,2}$/, "4, 6 or 8 digits")
+            .nullable(),
+          active: z.boolean().default(true),
+        }),
+      )
+      .refine(
+        (list) => new Set(list.map((c) => c.code)).size === list.length,
+        "Codes must be unique",
+      ),
+    default: [
+      { code: "FREIGHT", label: "Freight", hsnCode: null, active: true },
+      { code: "PACKING", label: "Packing", hsnCode: null, active: true },
+      { code: "LOADING", label: "Loading", hsnCode: null, active: true },
+    ],
+  },
+  "invoice.pdf": {
+    label: "Invoice print (Q30: same content and order as R/649)",
+    group: "Invoicing",
+    schema: z.object({
+      copies: z.array(z.string().trim().min(2).max(40)).min(1).max(4),
+      /** List each roll's barcode and length under its line. */
+      showRolls: z.boolean(),
+      terms: z.array(z.string().trim().min(2).max(200)).max(8),
+    }),
+    default: {
+      copies: ["Original for recipient", "Duplicate for transporter", "Triplicate for supplier"],
+      showRolls: true,
+      terms: [
+        "Goods once sold will not be taken back without prior approval.",
+        "Interest may be charged on payments received after the due date.",
+        "Subject to Surat jurisdiction.",
+      ],
+    },
+  },
+  "einvoice.config": {
+    label: "E-invoicing (ADR-0011)",
+    group: "Compliance",
+    schema: z.object({
+      /** SANDBOX = NIC test portal; MANUAL = IRN typed in from the portal; GSP = live provider (Q27). */
+      provider: z.enum(["SANDBOX", "MANUAL", "GSP"]),
+      /** Days after the invoice date the IRP still accepts it (verify with the CA). */
+      reportingWindowDays: z.number().int().min(1).max(365),
+      /** Warn on drafts older than this many days. */
+      warnAfterDays: z.number().int().min(1).max(365),
+      cancelWindowHours: z.number().int().min(1).max(24),
+    }),
+    default: {
+      provider: "SANDBOX",
+      reportingWindowDays: 30,
+      warnAfterDays: 25,
+      cancelWindowHours: 24,
+    },
+  },
+  "ewaybill.thresholdInr": {
+    label: "E-way bill needed above this consignment value (₹)",
+    group: "Compliance",
+    schema: z.number().int().min(0),
+    default: 50000,
+  },
   "analytics.refresh": {
     label: "Analytics refresh (ADR-0005)",
     group: "System",

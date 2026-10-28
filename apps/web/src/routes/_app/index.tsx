@@ -1,18 +1,23 @@
 import { formatINRCompact, fyLabel, istToday } from "@erp/domain";
 import { ActivityFeed, Badge, Button, Card, EmptyState, Mono, PageHeader, StatCard } from "@erp/ui";
 import { useQuery } from "@tanstack/react-query";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
   CheckCircle2,
   Circle,
   History,
+  IndianRupee,
   Package,
+  PauseCircle,
   ShieldAlert,
+  ShieldCheck,
+  Truck,
   Users,
   Warehouse,
 } from "lucide-react";
 import { dateTime, greeting, longDate } from "../../lib/format.js";
 import { dashboardQuery } from "../../lib/masters.js";
+import { count } from "../../lib/sales.js";
 import { auditQuery, can, meQuery, seriesQuery } from "../../lib/queries.js";
 
 export const Route = createFileRoute("/_app/")({ component: DashboardPage });
@@ -41,6 +46,7 @@ function DashboardPage() {
   const series = useQuery({ ...seriesQuery, enabled: can(me, "settings.series.view") });
   const audit = useQuery({ ...auditQuery({}), enabled: can(me, "audit.view") });
   const summary = useQuery(dashboardQuery).data;
+  const navigate = useNavigate();
   if (!me) return null;
 
   const firstName = me.user.name.split(" ")[0];
@@ -111,12 +117,55 @@ function DashboardPage() {
                 <Link to="/customers/new">Add customer</Link>
               </Button>
             ) : null}
-            <Button variant="primary" disabled title="Available in Stage 3">
-              New sales order
-            </Button>
+            {can(me, "sales.order.manage") ? (
+              <Button asChild variant="primary">
+                <Link to="/sales/orders/new">New sales order</Link>
+              </Button>
+            ) : null}
           </>
         }
       />
+
+      {summary?.sales ? (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <StatCard
+            label="Invoiced this month"
+            value={formatINRCompact(summary.sales.invoicedThisMonth)}
+            icon={IndianRupee}
+            hint={count(summary.sales.invoicesThisMonth, "invoice")}
+            onClick={() => void navigate({ to: "/sales/invoices" })}
+          />
+          <StatCard
+            label="Open orders"
+            value={fmt(summary.sales.openOrders)}
+            icon={Truck}
+            hint={`${count(summary.sales.challansToInvoice, "challan")} to invoice`}
+            onClick={() => void navigate({ to: "/sales/orders" })}
+          />
+          <StatCard
+            label="Orders on hold"
+            value={fmt(summary.sales.onHold)}
+            icon={PauseCircle}
+            hint={
+              summary.sales.awaitingApproval
+                ? `${summary.sales.awaitingApproval} awaiting rate approval`
+                : "Credit holds"
+            }
+            onClick={() => void navigate({ to: "/sales" })}
+          />
+          <StatCard
+            label="IRN pending"
+            value={fmt(summary.sales.irnPending + summary.sales.irnFailed)}
+            icon={ShieldCheck}
+            hint={
+              summary.sales.irnFailed
+                ? `${summary.sales.irnFailed} rejected`
+                : "E-invoices to report"
+            }
+            onClick={() => void navigate({ to: "/sales/irn" })}
+          />
+        </div>
+      ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <StatCard

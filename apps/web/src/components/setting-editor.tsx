@@ -1,4 +1,4 @@
-import { Button, Field, NumberInput, Select, Switch, TextInput } from "@erp/ui";
+import { Button, Field, NumberInput, Select, Switch, TextArea, TextInput } from "@erp/ui";
 import { Plus, Trash2 } from "lucide-react";
 import type { z } from "zod";
 
@@ -10,10 +10,11 @@ export type Draft = string | boolean | Draft[] | { [key: string]: Draft };
 
 type AnySchema = z.ZodType & { def: { type: string; innerType?: z.ZodType } };
 
-/** Looks through `.default()` / `.optional()` wrappers to the schema that shapes the editor. */
+/** Looks through `.default()` / `.optional()` / `.nullable()` to the schema that shapes the editor. */
 function unwrap(schema: z.ZodType): z.ZodType {
   const def = (schema as AnySchema).def;
-  return (def.type === "default" || def.type === "optional") && def.innerType
+  return (def.type === "default" || def.type === "optional" || def.type === "nullable") &&
+    def.innerType
     ? unwrap(def.innerType)
     : schema;
 }
@@ -23,6 +24,9 @@ const elementOf = (schema: z.ZodType) =>
 /** Lists of records (e.g. landed-cost charges) are edited as a table, not comma text. */
 const isRecordList = (schema: z.ZodType) =>
   kind(schema) === "array" && kind(elementOf(schema)) === "object";
+/** Lists of sentences (print copies, terms) are edited one per line; numbers stay comma text. */
+const isTextList = (schema: z.ZodType) =>
+  kind(schema) === "array" && kind(elementOf(schema)) === "string";
 const shapeOf = (schema: z.ZodType) =>
   (unwrap(schema) as unknown as z.ZodObject).shape as Record<string, z.ZodType>;
 
@@ -45,7 +49,7 @@ export function toDraft(schema: z.ZodType, value: unknown): Draft {
       if (isRecordList(schema)) {
         return Array.isArray(value) ? value.map((v) => toDraft(elementOf(schema), v)) : [];
       }
-      return Array.isArray(value) ? value.join(", ") : "";
+      return Array.isArray(value) ? value.join(isTextList(schema) ? "\n" : ", ") : "";
     case "boolean":
       return Boolean(value);
     case "object": {
@@ -58,11 +62,21 @@ export function toDraft(schema: z.ZodType, value: unknown): Draft {
   }
 }
 
+/** A blank field in a `.nullable()` setting (e.g. an optional HSN code) saves as null. */
+const isNullable = (schema: z.ZodType) => (schema as AnySchema).def.type === "nullable";
+
 export function fromDraft(schema: z.ZodType, draft: Draft): unknown {
+  if (isNullable(schema) && draft === "") return null;
   switch (kind(schema)) {
     case "array": {
       const element = elementOf(schema);
       if (isRecordList(schema)) return (draft as Draft[]).map((row) => fromDraft(element, row));
+      if (isTextList(schema)) {
+        return String(draft)
+          .split("\n")
+          .map((line) => line.trim())
+          .filter(Boolean);
+      }
       const parts = String(draft)
         .split(/[,\s]+/)
         .filter(Boolean);
@@ -159,6 +173,20 @@ export function SettingEditor({
             value={String(draft)}
             onValueChange={onChange}
             options={options.map((o) => ({ value: o, label: o }))}
+          />
+        )}
+      </Field>
+    );
+  }
+  if (isTextList(schema)) {
+    return (
+      <Field label={label} error={error} hint="One per line">
+        {(p) => (
+          <TextArea
+            {...p}
+            rows={4}
+            value={String(draft)}
+            onChange={(e) => onChange(e.target.value)}
           />
         )}
       </Field>

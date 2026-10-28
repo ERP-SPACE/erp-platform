@@ -1332,6 +1332,774 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/sales-orders/rate-quote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesOrdersController_quote"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesOrdersController_list"];
+        put?: never;
+        post: operations["SalesOrdersController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-orders/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesOrdersController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["SalesOrdersController_update"];
+        trace?: never;
+    };
+    "/api/sales-orders/{id}/allocation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesOrdersController_allocation"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-orders/{id}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesOrdersController_confirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-orders/{id}/approve-rates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesOrdersController_approveRates"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-orders/{id}/recheck": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesOrdersController_recheck"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-orders/{id}/release": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesOrdersController_release"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-orders/{id}/hold": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesOrdersController_hold"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-orders/{id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesOrdersController_close"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-orders/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesOrdersController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/delivery-challans": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ChallansController_list"];
+        put?: never;
+        post: operations["ChallansController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/delivery-challans/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ChallansController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["ChallansController_update"];
+        trace?: never;
+    };
+    "/api/delivery-challans/{id}/pick": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChallansController_pick"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/delivery-challans/{id}/unpick": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChallansController_unpick"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/delivery-challans/{id}/cut": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChallansController_cut"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/delivery-challans/{id}/post": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChallansController_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/delivery-challans/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ChallansController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-invoices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesInvoicesController_list"];
+        put?: never;
+        post: operations["SalesInvoicesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-invoices/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesInvoicesController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["SalesInvoicesController_update"];
+        trace?: never;
+    };
+    "/api/sales-invoices/{id}/post": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesInvoicesController_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-invoices/{id}/discard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesInvoicesController_discard"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-invoices/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesInvoicesController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/proformas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProformasController_list"];
+        put?: never;
+        post: operations["ProformasController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/proformas/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProformasController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["ProformasController_update"];
+        trace?: never;
+    };
+    "/api/proformas/{id}/send": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ProformasController_send"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/proformas/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ProformasController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-returns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesReturnsController_list"];
+        put?: never;
+        post: operations["SalesReturnsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-returns/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesReturnsController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["SalesReturnsController_update"];
+        trace?: never;
+    };
+    "/api/sales-returns/{id}/post": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesReturnsController_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-returns/{id}/inspect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesReturnsController_inspect"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-returns/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SalesReturnsController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customer-notes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NotesController_list"];
+        put?: never;
+        post: operations["NotesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customer-notes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["NotesController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["NotesController_update"];
+        trace?: never;
+    };
+    "/api/customer-notes/{id}/post": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NotesController_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customer-notes/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["NotesController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/{id}/ledger": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CustomerAccountController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/{id}/credit-check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CustomerAccountController_creditCheck"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/sales-invoices/{id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesDocumentsController_invoice"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customer-notes/{id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesDocumentsController_note"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/delivery-challans/{id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesDocumentsController_challan"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/proformas/{id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SalesDocumentsController_proforma"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/einvoice/queue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ComplianceController_queue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/einvoice/{docType}/{id}/requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ComplianceController_requests"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/einvoice/{docType}/{id}/generate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ComplianceController_generate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/einvoice/{docType}/{id}/manual": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ComplianceController_manual"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/einvoice/SI/{id}/eway-bill": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ComplianceController_ewayBill"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/einvoice/SI/{id}/eway-bill/manual": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ComplianceController_ewayBillManual"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1401,7 +2169,7 @@ export interface components {
             stepUp: boolean;
         };
         UpdateRolePermissionsDto: {
-            permissionCodes: ("settings.view" | "settings.update" | "settings.company.update" | "settings.series.view" | "settings.series.update" | "users.view" | "users.manage" | "roles.manage" | "audit.view" | "catalogue.view" | "catalogue.manage" | "suppliers.view" | "suppliers.manage" | "transporters.view" | "transporters.manage" | "customers.view" | "customers.manage" | "customers.credit.manage" | "customers.rates.manage" | "rates.bulk_revise" | "salesmen.view" | "salesmen.manage" | "commission.manage" | "pricing.override.approve" | "purchase.view" | "purchase.order.manage" | "purchase.order.approve" | "purchase.receipt.manage" | "purchase.over_receipt.approve" | "purchase.invoice.manage" | "purchase.landed_cost.manage" | "purchase.return.manage" | "inventory.view" | "inventory.view_cost" | "inventory.map" | "inventory.adjust" | "labels.print")[];
+            permissionCodes: ("settings.view" | "settings.update" | "settings.company.update" | "settings.series.view" | "settings.series.update" | "users.view" | "users.manage" | "roles.manage" | "audit.view" | "catalogue.view" | "catalogue.manage" | "suppliers.view" | "suppliers.manage" | "transporters.view" | "transporters.manage" | "customers.view" | "customers.manage" | "customers.credit.manage" | "customers.rates.manage" | "rates.bulk_revise" | "salesmen.view" | "salesmen.manage" | "commission.manage" | "pricing.override.approve" | "purchase.view" | "purchase.order.manage" | "purchase.order.approve" | "purchase.receipt.manage" | "purchase.over_receipt.approve" | "purchase.invoice.manage" | "purchase.landed_cost.manage" | "purchase.return.manage" | "inventory.view" | "inventory.view_cost" | "inventory.map" | "inventory.adjust" | "labels.print" | "inventory.roll.cut" | "sales.view" | "sales.order.manage" | "sales.credit.release" | "sales.dispatch.manage" | "sales.invoice.manage" | "sales.invoice.cancel" | "sales.return.manage" | "sales.note.manage" | "compliance.einvoice.manage")[];
             version: number;
         };
         SettingItemDto: {
@@ -2240,6 +3008,16 @@ export interface components {
             blockedCustomers: number;
             categoriesMissingTax: number;
             totalCreditLimit: string;
+            sales: {
+                openOrders: number;
+                onHold: number;
+                awaitingApproval: number;
+                challansToInvoice: number;
+                invoicedThisMonth: string;
+                invoicesThisMonth: number;
+                irnPending: number;
+                irnFailed: number;
+            } | null;
         };
         PoListItemDto: {
             id: string;
@@ -2858,6 +3636,848 @@ export interface components {
                 unmappedRolls: number;
                 deadStockRolls: number;
             };
+        };
+        RateQuoteDto: {
+            /** @enum {string} */
+            source: "PARTY_RATE" | "SALESMAN_DEFAULT" | "NONE";
+            base44: string | null;
+            ratePerM: string | null;
+            widthIn: string;
+            gstRate: string | null;
+            availableM: number;
+        };
+        SoListItemDto: {
+            id: string;
+            soNo: string;
+            date: string;
+            customerId: string;
+            customerName: string;
+            salesmanName: string | null;
+            /** @enum {string} */
+            status: "Draft" | "Confirmed" | "OnHold" | "PartiallyFulfilled" | "Closed" | "Cancelled";
+            orderedM: number;
+            dispatchedM: number;
+            total: string;
+            pendingApproval: boolean;
+            heldReasons: ("MANUAL_BLOCK" | "OVER_LIMIT" | "OVER_DUE")[];
+            version: number;
+        };
+        SoDetailDto: {
+            id: string;
+            soNo: string;
+            date: string;
+            customerId: string;
+            customerName: string;
+            salesmanName: string | null;
+            /** @enum {string} */
+            status: "Draft" | "Confirmed" | "OnHold" | "PartiallyFulfilled" | "Closed" | "Cancelled";
+            orderedM: number;
+            dispatchedM: number;
+            total: string;
+            pendingApproval: boolean;
+            heldReasons: ("MANUAL_BLOCK" | "OVER_LIMIT" | "OVER_DUE")[];
+            version: number;
+            customerRef: string | null;
+            shippingAddressId: string | null;
+            placeOfSupply: string;
+            notes: string | null;
+            lines: {
+                id: string;
+                skuId: string;
+                skuCode: string;
+                description: string;
+                widthIn: string;
+                gsm: number;
+                hsnCode: string | null;
+                gstRate: string | null;
+                totalM: number;
+                lengthMix: {
+                    lengthM: number;
+                    rolls: number;
+                }[] | null;
+                qtyRolls: number;
+                allowCut: boolean;
+                /** @enum {string} */
+                rateSource: "PARTY_RATE" | "SALESMAN_DEFAULT" | "NONE";
+                base44: string | null;
+                derivedRatePerM: string | null;
+                ratePerM: string;
+                deviationPct: string | null;
+                needsApproval: boolean;
+                approvedByName: string | null;
+                discountPct: string;
+                amount: string;
+                dispatchedM: number;
+                invoicedM: number;
+                balanceM: number;
+                notes: string | null;
+            }[];
+            charges: {
+                code: string;
+                amount: string;
+                label: string;
+                taxable: string;
+            }[];
+            totals: {
+                taxable: string;
+                cgst: string;
+                sgst: string;
+                igst: string;
+                roundOff: string;
+                total: string;
+                gross: string;
+                discount: string;
+                /** @enum {string} */
+                regime: "CGST_SGST" | "IGST";
+            };
+            credit: {
+                blocked: boolean;
+                reasons: ("MANUAL_BLOCK" | "OVER_LIMIT" | "OVER_DUE")[];
+                outstanding: string;
+                otherOpenOrders: string;
+                thisOrder: string;
+                exposure: string;
+                limit: string;
+                headroom: string;
+                overdueInvoices: number;
+                maxDaysPastDue: number;
+                autoBlock: boolean;
+                checkedAt: string;
+            } | null;
+            releasedByName: string | null;
+            dcs: {
+                id: string;
+                dcNo: string;
+                /** @enum {string} */
+                status: "Draft" | "Open" | "Closed" | "Cancelled";
+            }[];
+            invoices: {
+                id: string;
+                siNo: string | null;
+                /** @enum {string} */
+                status: "Draft" | "Posted" | "Cancelled";
+            }[];
+        };
+        AllocationPreviewDto: {
+            lines: {
+                soLineId: string;
+                /** @enum {string} */
+                status: "FULFILLED" | "PARTIAL" | "NO_INVENTORY";
+                rolls: {
+                    rollId: string;
+                    barcode: string;
+                    lengthM: number;
+                    ageDays: number;
+                }[];
+                cut: {
+                    rollId: string;
+                    barcode: string;
+                    cutM: number;
+                    leftoverM: number;
+                } | null;
+                groups: {
+                    lengthM: number;
+                    qty: number;
+                }[];
+                requiredM: number;
+                allocatedM: number;
+                remainingM: number;
+            }[];
+        };
+        SoCreateDto: {
+            customerId: string;
+            /** Format: date */
+            date: string;
+            shippingAddressId?: string | null;
+            customerRef?: string | null;
+            billDiscount?: string;
+            charges?: {
+                code: string;
+                amount: string;
+            }[];
+            notes?: string | null;
+            lines: {
+                skuId: string;
+                totalM: number;
+                lengthMix?: {
+                    lengthM: number;
+                    rolls: number;
+                }[] | null;
+                allowCut?: boolean;
+                ratePerM: string;
+                discountPct?: string;
+                notes?: string | null;
+            }[];
+        };
+        SoUpdateDto: {
+            customerId: string;
+            /** Format: date */
+            date: string;
+            shippingAddressId?: string | null;
+            customerRef?: string | null;
+            billDiscount?: string;
+            charges?: {
+                code: string;
+                amount: string;
+            }[];
+            notes?: string | null;
+            lines: {
+                skuId: string;
+                totalM: number;
+                lengthMix?: {
+                    lengthM: number;
+                    rolls: number;
+                }[] | null;
+                allowCut?: boolean;
+                ratePerM: string;
+                discountPct?: string;
+                notes?: string | null;
+            }[];
+            version: number;
+        };
+        SalesVersionDto: {
+            version: number;
+        };
+        DcListItemDto: {
+            id: string;
+            dcNo: string;
+            date: string;
+            soId: string;
+            soNo: string;
+            customerId: string;
+            customerName: string;
+            /** @enum {string} */
+            status: "Draft" | "Open" | "Closed" | "Cancelled";
+            rollCount: number;
+            metres: number;
+            vehicleNo: string | null;
+            invoiced: boolean;
+            version: number;
+        };
+        DcDetailDto: {
+            id: string;
+            dcNo: string;
+            date: string;
+            soId: string;
+            soNo: string;
+            customerId: string;
+            customerName: string;
+            /** @enum {string} */
+            status: "Draft" | "Open" | "Closed" | "Cancelled";
+            rollCount: number;
+            metres: number;
+            vehicleNo?: string | null;
+            invoiced: boolean;
+            version: number;
+            transporterId?: string | null;
+            lrNo?: string | null;
+            lrDate?: string | null;
+            distanceKm?: number | null;
+            ewayBillNo?: string | null;
+            ewayBillDate?: string | null;
+            transporterName: string | null;
+            notes: string | null;
+            value: string;
+            ewayBillRequired: boolean;
+            lines: {
+                soLineId: string;
+                description: string;
+                orderedM: number;
+                pickedM: number;
+                balanceM: number;
+                allowCut: boolean;
+            }[];
+            rolls: {
+                rollId: string;
+                barcode: string;
+                lengthM: number;
+                soLineId: string;
+                description: string;
+                cutFromBarcode: string | null;
+            }[];
+        };
+        DcCreateDto: {
+            soId: string;
+            /** Format: date */
+            date: string;
+        };
+        DcUpdateDto: {
+            transporterId?: string | null;
+            vehicleNo?: string | null;
+            lrNo?: string | null;
+            lrDate?: string | null;
+            distanceKm?: number | null;
+            ewayBillNo?: string | null;
+            ewayBillDate?: string | null;
+            /** Format: date */
+            date: string;
+            notes?: string | null;
+            version: number;
+        };
+        DcPickDto: {
+            soLineId: string;
+            rollId?: string;
+            barcode?: string;
+        };
+        DcUnpickDto: {
+            rollId: string;
+        };
+        DcCutDto: {
+            soLineId: string;
+            rollId: string;
+            cutM: number;
+            /** @default 0 */
+            wasteM: number;
+        };
+        DcCutResultDto: {
+            child: {
+                rollId: string;
+                barcode: string;
+                lengthM: number;
+            };
+            parent: {
+                rollId: string;
+                barcode: string;
+                lengthM: number;
+            };
+            labelRollIds: string[];
+        };
+        DcPostDto: {
+            version: number;
+        };
+        SiListItemDto: {
+            id: string;
+            siNo: string | null;
+            date: string;
+            customerId: string;
+            customerName: string;
+            /** @enum {string} */
+            status: "Draft" | "Posted" | "Cancelled";
+            total: string;
+            /** @enum {string} */
+            einvoiceStatus: "NotRequired" | "Pending" | "Generated" | "Failed" | "Cancelled";
+            dueDate: string;
+            outstanding: string;
+            version: number;
+        };
+        SiDetailDto: {
+            id: string;
+            siNo: string | null;
+            date: string;
+            customerId: string;
+            customerName: string;
+            /** @enum {string} */
+            status: "Draft" | "Posted" | "Cancelled";
+            total: string;
+            /** @enum {string} */
+            einvoiceStatus: "NotRequired" | "Pending" | "Generated" | "Failed" | "Cancelled";
+            dueDate: string;
+            outstanding: string;
+            version: number;
+            /** @enum {string} */
+            source: "DC" | "DIRECT" | "PROFORMA";
+            dcs: {
+                id: string;
+                dcNo: string;
+            }[];
+            soIds: string[];
+            proformaId: string | null;
+            placeOfSupply: string;
+            billingAddress: string;
+            shippingAddress: string;
+            customerGstin: string | null;
+            /** @enum {string} */
+            supplyType: "B2B" | "B2C" | "SEZWP" | "SEZWOP";
+            billDiscount: string;
+            notes: string | null;
+            lines: {
+                id: string;
+                /** @enum {string} */
+                kind: "GOODS" | "CHARGE";
+                soLineId: string | null;
+                description: string;
+                hsnCode: string;
+                widthIn: string | null;
+                metres: number | null;
+                ratePerM: string | null;
+                discountPct: string;
+                gross: string;
+                discount: string;
+                taxable: string;
+                gstRate: string;
+                cgst: string;
+                sgst: string;
+                igst: string;
+                cogs: string | null;
+                rolls: {
+                    rollId: string;
+                    barcode: string;
+                    lengthM: number;
+                }[];
+            }[];
+            totals: {
+                taxable: string;
+                cgst: string;
+                sgst: string;
+                igst: string;
+                roundOff: string;
+                total: string;
+                gross: string;
+                discount: string;
+                /** @enum {string} */
+                regime: "CGST_SGST" | "IGST";
+            };
+            cogs: string | null;
+            einvoice: {
+                /** @enum {string} */
+                status: "NotRequired" | "Pending" | "Generated" | "Failed" | "Cancelled";
+                irn: string | null;
+                ackNo: string | null;
+                ackDate: string | null;
+                signedQr: string | null;
+                attempts: number;
+                lastError: string | null;
+                cancellableUntil: string | null;
+            };
+            transport: {
+                transporterId?: string | null;
+                vehicleNo?: string | null;
+                lrNo?: string | null;
+                lrDate?: string | null;
+                distanceKm?: number | null;
+                ewayBillNo?: string | null;
+                ewayBillDate?: string | null;
+                transporterName: string | null;
+            };
+            blockers: string[];
+        };
+        SiCreateDto: {
+            /** @enum {string} */
+            source: "DC" | "DIRECT" | "PROFORMA";
+            /** Format: date */
+            date: string;
+            dcIds?: string[];
+            soId?: string;
+            proformaId?: string;
+            rolls?: {
+                lineId: string;
+                rollId: string;
+            }[];
+        };
+        SiUpdateDto: {
+            /** Format: date */
+            date: string;
+            billDiscount: string;
+            charges: {
+                code: string;
+                amount: string;
+            }[];
+            lineDiscounts: {
+                lineId: string;
+                discountPct: string;
+            }[];
+            notes?: string | null;
+            version: number;
+        };
+        SiActionDto: {
+            version: number;
+        };
+        ProformaListItemDto: {
+            id: string;
+            proformaNo: string;
+            date: string;
+            validUntil: string;
+            customerId: string;
+            customerName: string;
+            /** @enum {string} */
+            status: "Draft" | "Sent" | "Converted" | "Cancelled";
+            total: string;
+            convertedSiId: string | null;
+            convertedSiNo: string | null;
+            version: number;
+        };
+        ProformaDetailDto: {
+            id: string;
+            proformaNo: string;
+            date: string;
+            validUntil: string;
+            customerId: string;
+            customerName: string;
+            /** @enum {string} */
+            status: "Draft" | "Sent" | "Converted" | "Cancelled";
+            total: string;
+            convertedSiId: string | null;
+            convertedSiNo: string | null;
+            version: number;
+            soId: string | null;
+            notes: string | null;
+            lines: {
+                skuId: string;
+                metres: number;
+                ratePerM: string;
+                discountPct: string;
+                id: string;
+                description: string;
+                widthIn: string;
+                hsnCode: string | null;
+                gstRate: string | null;
+                taxable: string;
+            }[];
+            charges: {
+                code: string;
+                amount: string;
+                label: string;
+                taxable: string;
+            }[];
+            totals: {
+                taxable: string;
+                cgst: string;
+                sgst: string;
+                igst: string;
+                roundOff: string;
+                total: string;
+                gross: string;
+                discount: string;
+                /** @enum {string} */
+                regime: "CGST_SGST" | "IGST";
+            };
+        };
+        ProformaCreateDto: {
+            customerId: string;
+            soId?: string | null;
+            /** Format: date */
+            date: string;
+            validUntil?: string | null;
+            billDiscount?: string;
+            charges?: {
+                code: string;
+                amount: string;
+            }[];
+            notes?: string | null;
+            lines: {
+                skuId: string;
+                metres: number;
+                ratePerM: string;
+                discountPct?: string;
+            }[];
+        };
+        ProformaUpdateDto: {
+            customerId: string;
+            soId?: string | null;
+            /** Format: date */
+            date: string;
+            validUntil?: string | null;
+            billDiscount?: string;
+            charges?: {
+                code: string;
+                amount: string;
+            }[];
+            notes?: string | null;
+            lines: {
+                skuId: string;
+                metres: number;
+                ratePerM: string;
+                discountPct?: string;
+            }[];
+            version: number;
+        };
+        SalesReturnItemDto: {
+            id: string;
+            srNo: string | null;
+            cnId: string | null;
+            cnNo: string | null;
+            date: string;
+            siId: string;
+            siNo: string;
+            customerId: string;
+            customerName: string;
+            /** @enum {string} */
+            status: "Draft" | "Posted" | "Cancelled";
+            reason: string;
+            rollCount: number;
+            returnedM: number;
+            awaitingInspection: number;
+            total: string;
+            version: number;
+        };
+        SalesReturnDetailDto: {
+            id: string;
+            srNo: string | null;
+            cnId: string | null;
+            cnNo: string | null;
+            date: string;
+            siId: string;
+            siNo: string;
+            customerId: string;
+            customerName: string;
+            /** @enum {string} */
+            status: "Draft" | "Posted" | "Cancelled";
+            reason: string;
+            rollCount: number;
+            returnedM: number;
+            awaitingInspection: number;
+            total: string;
+            version: number;
+            notes: string | null;
+            rolls: {
+                rollId: string;
+                barcode: string;
+                lengthM: number;
+                description: string;
+                dispatchedM: number;
+                returnedM: number;
+                taxable: string;
+                cost: string | null;
+                rollStatus: string;
+                suggestScrap: boolean;
+            }[];
+            totals: {
+                taxable: string;
+                cgst: string;
+                sgst: string;
+                igst: string;
+                roundOff: string;
+                total: string;
+                gross: string;
+                discount: string;
+                /** @enum {string} */
+                regime: "CGST_SGST" | "IGST";
+            };
+        };
+        SalesReturnCreateDto: {
+            siId: string;
+            /** Format: date */
+            date: string;
+            reason: string;
+            rolls: {
+                rollId: string;
+                returnedM: number;
+            }[];
+            notes?: string | null;
+        };
+        SalesReturnUpdateDto: {
+            siId: string;
+            /** Format: date */
+            date: string;
+            reason: string;
+            rolls: {
+                rollId: string;
+                returnedM: number;
+            }[];
+            notes?: string | null;
+            version: number;
+        };
+        ReturnInspectionDto: {
+            /** @enum {string} */
+            outcome: "RESTOCK" | "SCRAP";
+            rollId: string;
+            skuId?: string;
+        };
+        NoteItemDto: {
+            id: string;
+            /** @enum {string} */
+            kind: "CREDIT" | "DEBIT";
+            noteNo: string | null;
+            date: string;
+            customerId: string;
+            customerName: string;
+            siId: string | null;
+            siNo: string | null;
+            salesReturnId: string | null;
+            /** @enum {string} */
+            reasonCode: "RATE_DIFFERENCE" | "DISCOUNT" | "SHORTAGE" | "OTHER" | "RETURN";
+            reason: string;
+            /** @enum {string} */
+            status: "Draft" | "Posted" | "Cancelled";
+            total: string;
+            /** @enum {string} */
+            einvoiceStatus: "NotRequired" | "Pending" | "Generated" | "Failed" | "Cancelled";
+            version: number;
+        };
+        NoteDetailDto: {
+            id: string;
+            /** @enum {string} */
+            kind: "CREDIT" | "DEBIT";
+            noteNo: string | null;
+            date: string;
+            customerId: string;
+            customerName: string;
+            siId: string | null;
+            siNo: string | null;
+            salesReturnId: string | null;
+            /** @enum {string} */
+            reasonCode: "RATE_DIFFERENCE" | "DISCOUNT" | "SHORTAGE" | "OTHER" | "RETURN";
+            reason: string;
+            /** @enum {string} */
+            status: "Draft" | "Posted" | "Cancelled";
+            total: string;
+            /** @enum {string} */
+            einvoiceStatus: "NotRequired" | "Pending" | "Generated" | "Failed" | "Cancelled";
+            version: number;
+            lines: {
+                description: string;
+                hsnCode: string;
+                taxable: string;
+                gstRate: string;
+                cgst: string;
+                sgst: string;
+                igst: string;
+            }[];
+            totals: {
+                taxable: string;
+                cgst: string;
+                sgst: string;
+                igst: string;
+                roundOff: string;
+                total: string;
+                gross: string;
+                discount: string;
+                /** @enum {string} */
+                regime: "CGST_SGST" | "IGST";
+            };
+            einvoice: {
+                /** @enum {string} */
+                status: "NotRequired" | "Pending" | "Generated" | "Failed" | "Cancelled";
+                irn: string | null;
+                ackNo: string | null;
+                ackDate: string | null;
+                signedQr: string | null;
+                attempts: number;
+                lastError: string | null;
+                cancellableUntil: string | null;
+            };
+        };
+        NoteCreateDto: {
+            /** @enum {string} */
+            kind: "CREDIT" | "DEBIT";
+            customerId: string;
+            siId?: string | null;
+            /** Format: date */
+            date: string;
+            /** @enum {string} */
+            reasonCode: "RATE_DIFFERENCE" | "DISCOUNT" | "SHORTAGE" | "OTHER";
+            reason: string;
+            lines: {
+                description: string;
+                hsnCode: string;
+                taxable: string;
+                /** @enum {string} */
+                gstRate: "0" | "5" | "12" | "18" | "28";
+            }[];
+        };
+        NoteUpdateDto: {
+            /** @enum {string} */
+            kind: "CREDIT" | "DEBIT";
+            customerId: string;
+            siId?: string | null;
+            /** Format: date */
+            date: string;
+            /** @enum {string} */
+            reasonCode: "RATE_DIFFERENCE" | "DISCOUNT" | "SHORTAGE" | "OTHER";
+            reason: string;
+            lines: {
+                description: string;
+                hsnCode: string;
+                taxable: string;
+                /** @enum {string} */
+                gstRate: "0" | "5" | "12" | "18" | "28";
+            }[];
+            version: number;
+        };
+        CustomerLedgerDto: {
+            customerId: string;
+            opening: string;
+            entries: {
+                date: string;
+                /** @enum {string} */
+                docType: "SI" | "CN" | "DN" | "OPENING";
+                docId: string | null;
+                docNo: string;
+                debit: string;
+                credit: string;
+                balance: string;
+                dueDate: string | null;
+            }[];
+            closing: string;
+            aging: {
+                bucket: string;
+                amount: string;
+            }[];
+        };
+        CreditCheckDto: {
+            blocked: boolean;
+            reasons: ("MANUAL_BLOCK" | "OVER_LIMIT" | "OVER_DUE")[];
+            outstanding: string;
+            otherOpenOrders: string;
+            thisOrder: string;
+            exposure: string;
+            limit: string;
+            headroom: string;
+            overdueInvoices: number;
+            maxDaysPastDue: number;
+            autoBlock: boolean;
+            checkedAt: string;
+        };
+        EInvoiceQueueItemDto: {
+            /** @enum {string} */
+            docType: "SI" | "CN" | "DN";
+            id: string;
+            docNo: string | null;
+            date: string;
+            customerName: string;
+            total: string;
+            /** @enum {string} */
+            status: "NotRequired" | "Pending" | "Generated" | "Failed" | "Cancelled";
+            attempts: number;
+            lastError: string | null;
+            daysLeft: number;
+        };
+        EInvoiceRequestItemDto: {
+            id: string;
+            /** @enum {string} */
+            action: "GENERATE" | "CANCEL" | "EWAY_BILL" | "MANUAL";
+            provider: string;
+            ok: boolean;
+            error: string | null;
+            durationMs: number | null;
+            createdAt: string;
+        };
+        EInvoiceInfoDto: {
+            /** @enum {string} */
+            status: "NotRequired" | "Pending" | "Generated" | "Failed" | "Cancelled";
+            irn: string | null;
+            ackNo: string | null;
+            ackDate: string | null;
+            signedQr: string | null;
+            attempts: number;
+            lastError: string | null;
+            cancellableUntil: string | null;
+        };
+        ManualIrnDto: {
+            irn: string;
+            ackNo: string;
+            /** Format: date-time */
+            ackDate: string;
+            signedQr?: string | null;
+        };
+        EwayBillGenerateDto: {
+            distanceKm: number;
+            vehicleNo?: string | null;
+            transporterGstin?: string | null;
+            transDocNo?: string | null;
+            transDocDate?: string | null;
+        };
+        EwayBillResultDto: {
+            siId: string;
+            ewayBillNo: string;
+            ewayBillDate: string;
+            validUntil: string | null;
+        };
+        EwayBillInputDto: {
+            ewayBillNo: string;
+            /** Format: date */
+            ewayBillDate: string;
+            validUntil?: string | null;
         };
     };
     responses: never;
@@ -5292,6 +6912,1432 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    SalesOrdersController_quote: {
+        parameters: {
+            query: {
+                customerId: string;
+                skuId: string;
+                date?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RateQuoteDto"];
+                };
+            };
+        };
+    };
+    SalesOrdersController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                customerId?: string;
+                status?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SoListItemDto"][];
+                };
+            };
+        };
+    };
+    SalesOrdersController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SoCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SoDetailDto"];
+                };
+            };
+        };
+    };
+    SalesOrdersController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SoDetailDto"];
+                };
+            };
+        };
+    };
+    SalesOrdersController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SoUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SoDetailDto"];
+                };
+            };
+        };
+    };
+    SalesOrdersController_allocation: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AllocationPreviewDto"];
+                };
+            };
+        };
+    };
+    SalesOrdersController_confirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SoDetailDto"];
+                };
+            };
+        };
+    };
+    SalesOrdersController_approveRates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SoDetailDto"];
+                };
+            };
+        };
+    };
+    SalesOrdersController_recheck: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SoDetailDto"];
+                };
+            };
+        };
+    };
+    SalesOrdersController_release: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SoDetailDto"];
+                };
+            };
+        };
+    };
+    SalesOrdersController_hold: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SoDetailDto"];
+                };
+            };
+        };
+    };
+    SalesOrdersController_close: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SoDetailDto"];
+                };
+            };
+        };
+    };
+    SalesOrdersController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SoDetailDto"];
+                };
+            };
+        };
+    };
+    ChallansController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                customerId?: string;
+                status?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DcListItemDto"][];
+                };
+            };
+        };
+    };
+    ChallansController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DcCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DcDetailDto"];
+                };
+            };
+        };
+    };
+    ChallansController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DcDetailDto"];
+                };
+            };
+        };
+    };
+    ChallansController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DcUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DcDetailDto"];
+                };
+            };
+        };
+    };
+    ChallansController_pick: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DcPickDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DcDetailDto"];
+                };
+            };
+        };
+    };
+    ChallansController_unpick: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DcUnpickDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DcDetailDto"];
+                };
+            };
+        };
+    };
+    ChallansController_cut: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DcCutDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DcCutResultDto"];
+                };
+            };
+        };
+    };
+    ChallansController_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DcPostDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DcDetailDto"];
+                };
+            };
+        };
+    };
+    ChallansController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DcPostDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DcDetailDto"];
+                };
+            };
+        };
+    };
+    SalesInvoicesController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                customerId?: string;
+                status?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiListItemDto"][];
+                };
+            };
+        };
+    };
+    SalesInvoicesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiDetailDto"];
+                };
+            };
+        };
+    };
+    SalesInvoicesController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiDetailDto"];
+                };
+            };
+        };
+    };
+    SalesInvoicesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiDetailDto"];
+                };
+            };
+        };
+    };
+    SalesInvoicesController_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiActionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiDetailDto"];
+                };
+            };
+        };
+    };
+    SalesInvoicesController_discard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiActionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiDetailDto"];
+                };
+            };
+        };
+    };
+    SalesInvoicesController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SiActionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SiDetailDto"];
+                };
+            };
+        };
+    };
+    ProformasController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                customerId?: string;
+                status?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProformaListItemDto"][];
+                };
+            };
+        };
+    };
+    ProformasController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProformaCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProformaDetailDto"];
+                };
+            };
+        };
+    };
+    ProformasController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProformaDetailDto"];
+                };
+            };
+        };
+    };
+    ProformasController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ProformaUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProformaDetailDto"];
+                };
+            };
+        };
+    };
+    ProformasController_send: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProformaDetailDto"];
+                };
+            };
+        };
+    };
+    ProformasController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProformaDetailDto"];
+                };
+            };
+        };
+    };
+    SalesReturnsController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                customerId?: string;
+                status?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesReturnItemDto"][];
+                };
+            };
+        };
+    };
+    SalesReturnsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesReturnCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesReturnDetailDto"];
+                };
+            };
+        };
+    };
+    SalesReturnsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesReturnDetailDto"];
+                };
+            };
+        };
+    };
+    SalesReturnsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesReturnUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesReturnDetailDto"];
+                };
+            };
+        };
+    };
+    SalesReturnsController_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesReturnDetailDto"];
+                };
+            };
+        };
+    };
+    SalesReturnsController_inspect: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReturnInspectionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesReturnDetailDto"];
+                };
+            };
+        };
+    };
+    SalesReturnsController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SalesReturnDetailDto"];
+                };
+            };
+        };
+    };
+    NotesController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                customerId?: string;
+                status?: string;
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoteItemDto"][];
+                };
+            };
+        };
+    };
+    NotesController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NoteCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoteDetailDto"];
+                };
+            };
+        };
+    };
+    NotesController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoteDetailDto"];
+                };
+            };
+        };
+    };
+    NotesController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["NoteUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoteDetailDto"];
+                };
+            };
+        };
+    };
+    NotesController_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoteDetailDto"];
+                };
+            };
+        };
+    };
+    NotesController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SalesVersionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NoteDetailDto"];
+                };
+            };
+        };
+    };
+    CustomerAccountController_get: {
+        parameters: {
+            query?: {
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CustomerLedgerDto"];
+                };
+            };
+        };
+    };
+    CustomerAccountController_creditCheck: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreditCheckDto"];
+                };
+            };
+        };
+    };
+    SalesDocumentsController_invoice: {
+        parameters: {
+            query?: {
+                format?: "pdf" | "html";
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SalesDocumentsController_note: {
+        parameters: {
+            query?: {
+                format?: "pdf" | "html";
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SalesDocumentsController_challan: {
+        parameters: {
+            query?: {
+                format?: "pdf" | "html";
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SalesDocumentsController_proforma: {
+        parameters: {
+            query?: {
+                format?: "pdf" | "html";
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ComplianceController_queue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EInvoiceQueueItemDto"][];
+                };
+            };
+        };
+    };
+    ComplianceController_requests: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                docType: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EInvoiceRequestItemDto"][];
+                };
+            };
+        };
+    };
+    ComplianceController_generate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                docType: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EInvoiceInfoDto"];
+                };
+            };
+        };
+    };
+    ComplianceController_manual: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                docType: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ManualIrnDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EInvoiceInfoDto"];
+                };
+            };
+        };
+    };
+    ComplianceController_ewayBill: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EwayBillGenerateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EwayBillResultDto"];
+                };
+            };
+        };
+    };
+    ComplianceController_ewayBillManual: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EwayBillInputDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EwayBillResultDto"];
+                };
             };
         };
     };

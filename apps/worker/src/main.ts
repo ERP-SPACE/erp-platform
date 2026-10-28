@@ -1,5 +1,7 @@
 import { parseSetting } from "@erp/contracts";
 import { createDb, settings } from "@erp/db";
+import { DOCUMENT_QUEUE, type DocumentJobData, type DocumentJobResult } from "@erp/documents";
+import { closePdfBrowser, htmlToPdf } from "@erp/documents/pdf";
 import { LABEL_QUEUE, type LabelJobData, type LabelJobResult } from "@erp/labels";
 import { eq } from "drizzle-orm";
 import { Queue, Worker } from "bullmq";
@@ -15,6 +17,7 @@ const env = z
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
     DATABASE_URL: z.url(),
     REDIS_URL: z.url(),
+    QUEUE_PREFIX: z.string().min(1).default("bull"),
     LOG_LEVEL: z.string().default("info"),
   })
   .parse(process.env);
@@ -34,7 +37,7 @@ const connection = new Redis(env.REDIS_URL, { maxRetriesPerRequest: null });
 const redis = new Redis(env.REDIS_URL);
 const db = createDb(env.DATABASE_URL, { max: 3 });
 
-const queue = new Queue(QUEUE, { connection });
+const queue = new Queue(QUEUE, { connection, prefix: env.QUEUE_PREFIX });
 // Refresh cadence from Settings → analytics.refresh (single company; restart to apply changes).
 const [stored] = await db.db
   .select({ value: settings.value })
@@ -70,17 +73,27 @@ const worker = new Worker(
     if (!handler) throw new Error(`No handler for job ${job.name}`);
     return handler({ db, redis, log: log.child({ job: job.name }) });
   },
-  { connection, concurrency: 2 },
+  { connection, prefix: env.QUEUE_PREFIX, concurrency: 2 },
 );
 
 // Large label batches queued by the API (Stage 2); one at a time, they are CPU-heavy.
 const labelWorker = new Worker<LabelJobData, LabelJobResult>(
   LABEL_QUEUE,
   (job) => processLabelJob(job, { db, redis, log: log.child({ job: "labels.render" }) }),
-  { connection, concurrency: 1 },
+  { connection, prefix: env.QUEUE_PREFIX, concurrency: 1 },
 );
 labelWorker.on("failed", (job, error) =>
   log.error({ job: job?.id, err: error }, "label job failed"),
+);
+
+// Invoice / note / challan / proforma PDFs (Stage 3): the API sends finished HTML and waits.
+const documentWorker = new Worker<DocumentJobData, DocumentJobResult>(
+  DOCUMENT_QUEUE,
+  async (job) => ({ pdfBase64: Buffer.from(await htmlToPdf(job.data.html)).toString("base64") }),
+  { connection, prefix: env.QUEUE_PREFIX, concurrency: 2 },
+);
+documentWorker.on("failed", (job, error) =>
+  log.error({ job: job?.id, err: error }, "document job failed"),
 );
 
 worker.on("completed", (job, result) => {
@@ -93,6 +106,8 @@ const shutdown = async () => {
   log.info("worker shutting down");
   await worker.close();
   await labelWorker.close();
+  await documentWorker.close();
+  await closePdfBrowser();
   await queue.close();
   await db.close();
   redis.disconnect();

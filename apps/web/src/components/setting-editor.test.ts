@@ -44,4 +44,20 @@ describe("schema-driven setting editor", () => {
     expect(summarise([24, 36, 44])).toBe("24, 36, 44");
     expect(summarise({ standardLengthM: 1000, toleranceM: 100 })).toMatch(/1000.*100/);
   });
+
+  it("edits text lists one per line, and saves a blank optional field as null", () => {
+    const pdf = SETTINGS["invoice.pdf"].schema;
+    const draft = toDraft(pdf, SETTINGS["invoice.pdf"].default) as Record<string, string>;
+    expect(draft.copies).toBe(
+      "Original for recipient\nDuplicate for transporter\nTriplicate for supplier",
+    );
+    const charges = SETTINGS["invoice.extraCharges"].schema;
+    const rows = toDraft(charges, [
+      { code: "FREIGHT", label: "Freight", hsnCode: null, active: true },
+    ]);
+    expect(rows).toEqual([{ code: "FREIGHT", label: "Freight", hsnCode: "", active: true }]);
+    expect(fromDraft(charges, rows)).toEqual([
+      { code: "FREIGHT", label: "Freight", hsnCode: null, active: true },
+    ]);
+  });
 });

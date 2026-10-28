@@ -10,7 +10,12 @@ import {
   defaultSeries,
   expandGrants,
   isSettingKey,
+  STEP_UP_PERMISSIONS,
+  dcPick,
   parseSetting,
+  siCreate,
+  soLineInput,
+  transportInput,
 } from "../src/index.js";
 
 describe("settings registry", () => {
@@ -83,5 +88,104 @@ describe("Stage 2 additions", () => {
     );
     expect(codes).not.toContain("inventory.view_cost");
     expect(codes).not.toContain("purchase.over_receipt.approve");
+  });
+});
+
+describe("Stage 3 additions", () => {
+  const roles = Object.fromEntries(SYSTEM_ROLES.map((r) => [r.code, expandGrants(r.grants)]));
+
+  it("roles: who sells, who dispatches, who invoices", () => {
+    expect(roles.sales_executive).toEqual(
+      expect.arrayContaining(["sales.view", "sales.order.manage"]),
+    );
+    expect(roles.sales_executive).not.toContain("sales.credit.release");
+    expect(roles.warehouse).toEqual(
+      expect.arrayContaining([
+        "sales.dispatch.manage",
+        "inventory.roll.cut",
+        "sales.return.manage",
+      ]),
+    );
+    expect(roles.warehouse).not.toContain("sales.invoice.manage");
+    expect(roles.accountant).toEqual(
+      expect.arrayContaining([
+        "sales.invoice.manage",
+        "sales.note.manage",
+        "compliance.einvoice.manage",
+      ]),
+    );
+    expect(roles.sales_manager).toContain("sales.credit.release");
+    expect(roles.admin).toEqual(
+      expect.arrayContaining(["sales.invoice.cancel", "compliance.einvoice.manage"]),
+    );
+  });
+
+  it("releasing credit holds, rate approvals, cancellations and notes need a fresh login", () => {
+    expect(STEP_UP_PERMISSIONS).toEqual(
+      expect.arrayContaining([
+        "pricing.override.approve",
+        "sales.credit.release",
+        "sales.invoice.cancel",
+        "sales.note.manage",
+      ]),
+    );
+  });
+
+  it("e-invoice and invoice defaults", () => {
+    expect(SETTINGS["einvoice.config"].default).toMatchObject({
+      provider: "SANDBOX",
+      cancelWindowHours: 24,
+    });
+    expect(SETTINGS["ewaybill.thresholdInr"].default).toBe(50000);
+    expect(SETTINGS["invoice.extraCharges"].default.map((c) => c.code)).toEqual([
+      "FREIGHT",
+      "PACKING",
+      "LOADING",
+    ]);
+    expect(() =>
+      parseSetting("invoice.extraCharges", [
+        { code: "FREIGHT", label: "Freight", hsnCode: "99", active: true },
+      ]),
+    ).toThrow();
+  });
+
+  it("an SO line's length mix must add up to its metres", () => {
+    const line = { skuId: "s", totalM: 5000, ratePerM: "6.10" };
+    expect(
+      soLineInput.safeParse({
+        ...line,
+        lengthMix: [
+          { lengthM: 1000, rolls: 3 },
+          { lengthM: 1000, rolls: 2 },
+        ],
+      }).success,
+    ).toBe(true);
+    expect(
+      soLineInput.safeParse({ ...line, lengthMix: [{ lengthM: 1000, rolls: 4 }] }).success,
+    ).toBe(false);
+    expect(soLineInput.safeParse({ ...line, discountPct: "101" }).success).toBe(false);
+  });
+
+  it("pick by roll id or barcode, not both; invoices come from DCs, a direct sale or a proforma", () => {
+    expect(dcPick.safeParse({ soLineId: "l", barcode: "2610-SBC-0001-0001-K" }).success).toBe(true);
+    expect(dcPick.safeParse({ soLineId: "l" }).success).toBe(false);
+    expect(dcPick.safeParse({ soLineId: "l", rollId: "r", barcode: "b" }).success).toBe(false);
+    expect(
+      siCreate.safeParse({ source: "DC", dcIds: ["a", "b"], date: "2026-10-27" }).success,
+    ).toBe(true);
+    expect(
+      siCreate.safeParse({ source: "DIRECT", soId: "s", date: "2026-10-27", rolls: [] }).success,
+    ).toBe(false);
+    // Each source needs its own fields.
+    expect(siCreate.safeParse({ source: "DIRECT", soId: "s", date: "2026-10-27" }).success).toBe(
+      false,
+    );
+    expect(siCreate.safeParse({ source: "DC", date: "2026-10-27" }).success).toBe(false);
+  });
+
+  it("vehicle numbers are normalised and checked; e-way bills have 12 digits", () => {
+    expect(transportInput.parse({ vehicleNo: "gj05ab1234" }).vehicleNo).toBe("GJ05AB1234");
+    expect(transportInput.safeParse({ vehicleNo: "GJ-05" }).success).toBe(false);
+    expect(transportInput.safeParse({ ewayBillNo: "12345" }).success).toBe(false);
   });
 });

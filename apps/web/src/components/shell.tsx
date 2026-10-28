@@ -71,7 +71,7 @@ const NAV: { heading?: string; items: NavItem[] }[] = [
   {
     heading: "Operations",
     items: [
-      { label: "Sales", icon: FileText, stage: 3 },
+      { label: "Sales", icon: FileText, to: "/sales", permission: "sales.view" },
       { label: "Purchase", icon: ShoppingCart, to: "/purchase", permission: "purchase.view" },
       { label: "Inventory", icon: Boxes, to: "/inventory", permission: "inventory.view" },
       { label: "Collections", icon: Wallet, stage: 4 },
@@ -152,6 +152,33 @@ export function Shell({ me, children }: { me: MeResponse; children: ReactNode })
         label: "New customer",
         shortcut: "Alt N",
         onRun: go("/customers/new"),
+      });
+    }
+    if (can(me, "sales.order.manage")) {
+      items.push(
+        {
+          id: "new-order",
+          group: "Create",
+          label: "New sales order",
+          keywords: ["so", "order"],
+          onRun: go("/sales/orders/new"),
+        },
+        {
+          id: "new-proforma",
+          group: "Create",
+          label: "New proforma",
+          keywords: ["quote", "quotation"],
+          onRun: go("/sales/proformas/new"),
+        },
+      );
+    }
+    if (can(me, "sales.invoice.manage")) {
+      items.push({
+        id: "new-invoice",
+        group: "Create",
+        label: "New sales invoice",
+        keywords: ["bill", "si"],
+        onRun: go("/sales/invoices/new"),
       });
     }
     if (can(me, "rates.bulk_revise")) {
@@ -604,6 +631,26 @@ const MASTER_PAGES = [
     label: "Salesmen",
     permission: "salesmen.view",
     keywords: ["broker", "agent", "commission"],
+  },
+  { to: "/sales", label: "Sales Board", permission: "sales.view", keywords: ["orders", "hold"] },
+  { to: "/sales/orders", label: "Sales orders", permission: "sales.view", keywords: ["so"] },
+  {
+    to: "/sales/challans",
+    label: "Delivery challans",
+    permission: "sales.view",
+    keywords: ["dc", "dispatch", "picking"],
+  },
+  {
+    to: "/sales/invoices",
+    label: "Sales invoices",
+    permission: "sales.view",
+    keywords: ["bill", "si", "gst"],
+  },
+  {
+    to: "/sales/irn",
+    label: "IRN queue",
+    permission: "sales.view",
+    keywords: ["e-invoice", "einvoice", "irp"],
   },
 ];
 

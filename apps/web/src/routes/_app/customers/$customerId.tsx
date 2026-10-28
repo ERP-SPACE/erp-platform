@@ -35,6 +35,11 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { z } from "zod";
+import {
+  CustomerInvoicesTab,
+  CustomerLedgerTab,
+  CustomerOrdersTab,
+} from "../../../components/customer-sales-tabs.js";
 import { ReasonField } from "../../../components/reason-field.js";
 import { ApiError, api, call, reasonHeader } from "../../../lib/api.js";
 import { useApiErrorToast } from "../../../lib/errors.js";
@@ -55,6 +60,9 @@ const TABS = [
   "overview",
   "profile",
   "credit",
+  "orders",
+  "invoices",
+  "ledger",
   "rates",
   "salesman",
   "whatsapp",
@@ -186,6 +194,30 @@ function Customer360() {
             label: "Credit",
             content: <CreditTab key={c.creditPolicy.version} c={c} editable={canCredit} />,
           },
+          ...(can(me, "sales.view")
+            ? [
+                {
+                  value: "orders",
+                  label: "Orders",
+                  content: (
+                    <CustomerOrdersTab
+                      customerId={c.id}
+                      canCreate={can(me, "sales.order.manage")}
+                    />
+                  ),
+                },
+                {
+                  value: "invoices",
+                  label: "Invoices",
+                  content: <CustomerInvoicesTab customerId={c.id} />,
+                },
+                {
+                  value: "ledger",
+                  label: "Ledger",
+                  content: <CustomerLedgerTab customerId={c.id} />,
+                },
+              ]
+            : []),
           {
             value: "rates",
             label: "Rates",

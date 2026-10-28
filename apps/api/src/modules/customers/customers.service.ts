@@ -32,6 +32,7 @@ import { updateVersioned } from "../../db/versioning.js";
 import { loadProductNames } from "../catalogue/catalogue.service.js";
 import { EventBus } from "../realtime/event-bus.js";
 import { SettingsService } from "../settings/settings.service.js";
+import { CreditRecheckQueue } from "../sales/credit-recheck.queue.js";
 import { activeFilter, searchFilter } from "../suppliers/suppliers.service.js";
 import { type CustomerScope, customerScopeFilter, loadCustomerScope } from "./customer-scope.js";
 import type {
@@ -65,6 +66,7 @@ export class CustomersService {
     private readonly uow: UnitOfWork,
     private readonly bus: EventBus,
     private readonly settings: SettingsService,
+    private readonly creditRecheck: CreditRecheckQueue,
   ) {}
 
   async groups(): Promise<CustomerGroupItem[]> {
@@ -268,6 +270,7 @@ export class CustomersService {
         "Credit policy",
       );
       this.bus.publishAfterCommit("customers.changed", { id });
+      this.creditRecheck.enqueueAfterCommit(id);
     });
     return this.get(id);
   }
@@ -295,6 +298,7 @@ export class CustomersService {
         "Credit policy",
       );
       this.bus.publishAfterCommit("customers.changed", { id });
+      this.creditRecheck.enqueueAfterCommit(id);
     });
     return this.get(id);
   }

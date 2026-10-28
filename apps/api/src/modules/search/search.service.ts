@@ -10,6 +10,7 @@ import {
   suppliers,
   transporters,
 } from "@erp/db";
+import { D, istToday } from "@erp/domain";
 import { Injectable } from "@nestjs/common";
 import { and, asc, eq, isNull, or, sql } from "drizzle-orm";
 import { actor } from "../../common/context.js";
@@ -247,6 +248,52 @@ export class SearchService {
       suppliers: count(supplierCount[0]?.n),
       skus: count(skuCount[0]?.n),
       categoriesMissingTax: count(missingTax[0]?.n),
+      sales: has("sales.view") ? await this.salesKpis() : null,
+    };
+  }
+
+  /** Sales Board / dashboard counts (Stage 3), within the actor's customer scope. */
+  private async salesKpis(): Promise<NonNullable<DashboardSummary["sales"]>> {
+    const db = this.uow.db;
+    const scope = customerScopeFilter(await loadCustomerScope(db));
+    const month = istToday().slice(0, 8) + "01";
+    const [r] = (
+      await db.execute<Record<string, string | number>>(sql`
+        SELECT
+          (SELECT count(*) FROM sales_orders so JOIN customers ON customers.id = so.customer_id
+            WHERE ${scope} AND so.status IN ('Confirmed','PartiallyFulfilled'))::int AS open_orders,
+          (SELECT count(*) FROM sales_orders so JOIN customers ON customers.id = so.customer_id
+            WHERE ${scope} AND so.status = 'OnHold')::int AS on_hold,
+          (SELECT count(DISTINCT so.id) FROM sales_orders so
+             JOIN customers ON customers.id = so.customer_id
+             JOIN sales_order_lines l ON l.so_id = so.id
+            WHERE ${scope} AND so.status = 'Draft' AND l.needs_approval AND l.approved_at IS NULL)::int AS awaiting,
+          (SELECT count(*) FROM delivery_challans dc JOIN customers ON customers.id = dc.customer_id
+            WHERE ${scope} AND dc.status = 'Open')::int AS to_invoice,
+          (SELECT coalesce(sum(si.total), 0)::text FROM sales_invoices si
+             JOIN customers ON customers.id = si.customer_id
+            WHERE ${scope} AND si.status = 'Posted' AND si.date >= ${month}) AS month_total,
+          (SELECT count(*) FROM sales_invoices si JOIN customers ON customers.id = si.customer_id
+            WHERE ${scope} AND si.status = 'Posted' AND si.date >= ${month})::int AS month_count,
+          (SELECT count(*) FROM sales_invoices si JOIN customers ON customers.id = si.customer_id
+            WHERE ${scope} AND si.status = 'Posted' AND si.einvoice_status = 'Pending')::int
+          + (SELECT count(*) FROM customer_notes n JOIN customers ON customers.id = n.customer_id
+            WHERE ${scope} AND n.status = 'Posted' AND n.einvoice_status = 'Pending')::int AS irn_pending,
+          (SELECT count(*) FROM sales_invoices si JOIN customers ON customers.id = si.customer_id
+            WHERE ${scope} AND si.status = 'Posted' AND si.einvoice_status = 'Failed')::int
+          + (SELECT count(*) FROM customer_notes n JOIN customers ON customers.id = n.customer_id
+            WHERE ${scope} AND n.status = 'Posted' AND n.einvoice_status = 'Failed')::int AS irn_failed
+      `)
+    ).rows;
+    return {
+      openOrders: Number(r!.open_orders),
+      onHold: Number(r!.on_hold),
+      awaitingApproval: Number(r!.awaiting),
+      challansToInvoice: Number(r!.to_invoice),
+      invoicedThisMonth: D(r!.month_total!).toFixed(2),
+      invoicesThisMonth: Number(r!.month_count),
+      irnPending: Number(r!.irn_pending),
+      irnFailed: Number(r!.irn_failed),
     };
   }
 }

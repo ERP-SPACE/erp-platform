@@ -13,6 +13,8 @@ const env = loadEnv({
   WEB_ORIGIN: "http://localhost:5173",
   AUTH_SECRET: "openapi-export-only-not-a-real-secret-000",
   ...process.env,
+  // Exporting the spec must not start the background consumers.
+  API_JOBS: "false",
   LOG_LEVEL: "silent",
 });
 const app = await createApp(env, { logger: false });

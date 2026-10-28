@@ -1,6 +1,6 @@
 # 0015 — Partial returns keep the roll identity
 
-- **Status:** Proposed — owner may prefer the legacy "child roll" approach
+- **Status:** Accepted (owner, 2026-10-27, Q19): same roll, same barcode
 - **Date:** 2026-10-23
 
 ## Context

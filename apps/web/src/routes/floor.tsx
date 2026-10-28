@@ -1,7 +1,15 @@
 import { cn } from "@erp/ui";
 import { useQuery } from "@tanstack/react-query";
 import { Link, Outlet, createFileRoute, redirect, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Link2, PackageCheck, ScanLine, WifiOff } from "lucide-react";
+import {
+  ArrowLeft,
+  ClipboardCheck,
+  Link2,
+  PackageCheck,
+  ScanLine,
+  Truck,
+  WifiOff,
+} from "lucide-react";
 import { ApiError } from "../lib/api.js";
 import { useOnline } from "../lib/floor.js";
 import { can, meQuery } from "../lib/queries.js";
@@ -29,14 +37,22 @@ export const Route = createFileRoute("/floor")({
 
 const NAV = [
   { to: "/floor", label: "Scan", icon: ScanLine, permission: "inventory.view" },
+  { to: "/floor/pick", label: "Pick", icon: Truck, permission: "sales.dispatch.manage" },
   { to: "/floor/map", label: "Map", icon: Link2, permission: "inventory.map" },
   { to: "/floor/receive", label: "Receive", icon: PackageCheck, permission: "purchase.view" },
+  {
+    to: "/floor/inspect",
+    label: "Inspect",
+    icon: ClipboardCheck,
+    permission: "sales.return.manage",
+  },
 ] as const;
 
 function FloorLayout() {
   const { data: me } = useQuery(meQuery);
   const online = useOnline();
   useRealtime(online);
+  const tasks = NAV.filter((n) => can(me, n.permission));
   const path = useRouterState({ select: (s) => s.location.pathname.replace(/\/$/, "") });
   return (
     <div className="flex min-h-dvh flex-col bg-canvas text-[1.0625rem]">
@@ -67,8 +83,11 @@ function FloorLayout() {
         aria-label="Godown tasks"
         className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)]"
       >
-        <ul className="mx-auto grid max-w-xl grid-cols-3">
-          {NAV.filter((n) => can(me, n.permission)).map((n) => {
+        <ul
+          className="mx-auto grid max-w-xl"
+          style={{ gridTemplateColumns: `repeat(${tasks.length}, minmax(0, 1fr))` }}
+        >
+          {tasks.map((n) => {
             const active = n.to === "/floor" ? path === "/floor" : path.startsWith(n.to);
             const Icon = n.icon;
             return (
@@ -77,7 +96,7 @@ function FloorLayout() {
                   to={n.to}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "flex h-16 flex-col items-center justify-center gap-1 text-sm font-medium",
+                    "flex h-16 flex-col items-center justify-center gap-1 text-xs font-medium sm:text-sm",
                     active ? "text-primary" : "text-fg-2",
                   )}
                 >

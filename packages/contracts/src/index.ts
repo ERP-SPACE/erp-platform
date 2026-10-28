@@ -7,4 +7,5 @@ export * from "./api.js";
 export * from "./masters.js";
 export * from "./purchase.js";
 export * from "./inventory.js";
+export * from "./sales.js";
 export type { paths as ApiPaths, components as ApiComponents } from "./generated/api.js";

@@ -43,6 +43,17 @@ export const PERMISSIONS = {
   "inventory.map": "Map unmapped rolls to products",
   "inventory.adjust": "Correct roll lengths and scrap rolls",
   "labels.print": "Print and reprint roll labels",
+  // Stage 3 — sales & e-invoicing
+  "inventory.roll.cut": "Cut a roll into two (new barcode for the cut piece)",
+  "sales.view": "View sales orders, challans, invoices, proformas, returns and notes",
+  "sales.order.manage": "Create, edit and confirm sales orders and proformas",
+  "sales.credit.release": "Release an order held for credit",
+  "sales.dispatch.manage": "Pick rolls onto delivery challans and dispatch them",
+  "sales.invoice.manage": "Create and post sales invoices",
+  "sales.invoice.cancel": "Cancel a posted invoice or note (within the IRN's 24 hours)",
+  "sales.return.manage": "Receive and inspect customer returns",
+  "sales.note.manage": "Issue credit and debit notes to customers",
+  "compliance.einvoice.manage": "Retry or record IRNs and e-way bills by hand",
 } as const;
 
 export type PermissionCode = keyof typeof PERMISSIONS;
@@ -57,6 +68,10 @@ export const STEP_UP_PERMISSIONS: readonly PermissionCode[] = [
   "rates.bulk_revise",
   "purchase.over_receipt.approve",
   "inventory.adjust",
+  "pricing.override.approve",
+  "sales.credit.release",
+  "sales.invoice.cancel",
+  "sales.note.manage",
 ];
 
 const MASTERS_VIEW = [
@@ -86,6 +101,8 @@ export const SYSTEM_ROLES = [
       "purchase.*",
       "inventory.*",
       "labels.print",
+      "sales.*",
+      "compliance.*",
     ],
   },
   {
@@ -122,6 +139,13 @@ export const SYSTEM_ROLES = [
       "salesmen.manage",
       "pricing.override.approve",
       "inventory.view",
+      "sales.view",
+      "sales.order.manage",
+      "sales.credit.release",
+      "sales.dispatch.manage",
+      "sales.invoice.manage",
+      "sales.return.manage",
+      "sales.note.manage",
     ],
   },
   {
@@ -135,6 +159,8 @@ export const SYSTEM_ROLES = [
       "salesmen.view",
       "transporters.view",
       "inventory.view",
+      "sales.view",
+      "sales.order.manage",
     ],
   },
   {
@@ -147,7 +173,11 @@ export const SYSTEM_ROLES = [
       "purchase.receipt.manage",
       "inventory.view",
       "inventory.map",
+      "inventory.roll.cut",
       "labels.print",
+      "sales.view",
+      "sales.dispatch.manage",
+      "sales.return.manage",
     ],
   },
   {
@@ -164,6 +194,11 @@ export const SYSTEM_ROLES = [
       "purchase.return.manage",
       "inventory.view",
       "inventory.view_cost",
+      "sales.view",
+      "sales.invoice.manage",
+      "sales.invoice.cancel",
+      "sales.note.manage",
+      "compliance.einvoice.manage",
     ],
   },
 ] as const;

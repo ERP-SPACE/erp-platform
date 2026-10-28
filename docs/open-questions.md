@@ -23,6 +23,13 @@ Owner: business owner, unless marked **CA**. Each question is tagged with the st
 | Q13 | Measure each roll at inward? | **No — trust the supplier's lengths** (suppliers list them, e.g. "4 X 1000, 500+450 MTRS") | GRN takes the supplier's per-roll lengths; no re-measure step |
 | Q15 | Godown locations? | **Not tracked today** | No location fields in Stage 2; can be added later |
 | Q16 | Landed-cost split | **Delegated to engineering**: follow the common trade structure; must stay editable | Built: setting `purchase.landedCostCharges` — freight and loading by weight (GSM × width × length), insurance, duty, clearing, brokerage and other by value; the split can be changed per charge on each invoice |
+| Q19 | Partial return: same roll or new barcode? | **Same roll, same barcode, measured length, new label (ADR-0015 accepted)** (owner approved the default, 2026-10-27) | Stage 3 plan |
+| Q20 | Discount practice | **Line discount in %, bill discount in ₹ (spread over lines by value); no cash discount** (owner approved the default, 2026-10-27) | Stage 3 plan |
+| Q21 | Extra charges on customer invoices? | **Freight / packing / loading allowed as extra taxable lines at the goods' GST rate** (owner approved the default, 2026-10-27) | Stage 3 plan |
+| Q22 | Every dispatch via a DC? | **Both: DC route and direct invoice for counter sales** (owner approved the default, 2026-10-27) | Stage 3 plan |
+| Q28 | Cutting defaults | **No trim waste by default (can be entered per cut); 100 m minimum remnant; `allow_cut` per customer** (owner approved the default, 2026-10-27) | Stage 3 plan |
+| Q29 | One SI per DC or several DCs? | **One SI can cover several open DCs of the same customer** (owner approved the default, 2026-10-27) | Stage 3 plan |
+| Q30 | Invoice PDF layout | **Same information and order as R/649, in a cleaner layout** (owner approved the default, 2026-10-27) | Stage 3 plan |
 
 ## Deferred by owner
 
@@ -47,12 +54,9 @@ Owner: business owner, unless marked **CA**. Each question is tagged with the st
 
 | # | Question | Why it matters | Linked |
 |---|---|---|---|
-| Q19 | Partial returns: keep the same roll and barcode with an updated length (proposed), or create a new child roll? | Roll lineage + labels. | ADR-0015 |
-| Q20 | Discount practice: line discount as % or ₹? Is a bill-level discount common? Any cash discount for early payment? | Invoice engine. | PRD §8.2 |
-| Q21 | Do invoices carry extra charges (freight, packing, loading) billed to the customer? | Extra taxable lines on the SI and in the e-invoice. | — |
-| Q22 | Is every dispatch a DC, or do counter/cash sales skip the DC? How often? | Flow priority. | PRD §6.5 |
-| Q27 | **E-invoice access:** use an existing GSP/ASP (e.g. the one your accountant uses for GST filing), or register for direct IRP API access on einvoice1.gst.gov.in? We need sandbox credentials for testing. | IRN integration in Stage 3. | ADR-0011 |
-| Q28 | Cutting: is there usually trim waste per cut? What is the smallest piece worth keeping in stock (default 100 m)? Do some customers never accept cut rolls? | Cut defaults and `allow_cut` per customer. | ADR-0018 |
+| Q27 | *(Owner arranging sandbox access, 2026-10-27.)* **E-invoice access:** use an existing GSP/ASP (e.g. the one your accountant uses for GST filing), or register for direct IRP API access on einvoice1.gst.gov.in? We need sandbox credentials for testing. | IRN integration in Stage 3. | ADR-0011 |
+
+| Q31 *(new, from the Stage 3 gate)* | **Roll suggestions may overshoot.** The legacy allocation keeps its "swap for a slightly longer roll" step, ported unchanged: e.g. 51 m still needed and a 152 m roll in stock → it suggests the 152 m roll. Suggestions are only advice (the godown scans what it sends), but should a swap be capped at the tolerance (100 m over)? | Default: keep the legacy behaviour; a cap is a one-line change in `packages/domain/src/allocation.ts`. | Port matrix 2.1 |
 
 ## Before Stage 4 (collections, credit, commission)
 

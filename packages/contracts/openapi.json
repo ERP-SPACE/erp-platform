@@ -3816,6 +3816,2417 @@
           "inventory"
         ]
       }
+    },
+    "/api/sales-orders/rate-quote": {
+      "get": {
+        "operationId": "SalesOrdersController_quote",
+        "parameters": [
+          {
+            "name": "customerId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skuId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateQuoteDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-orders": {
+      "get": {
+        "operationId": "SalesOrdersController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "customerId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SoListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      },
+      "post": {
+        "operationId": "SalesOrdersController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SoCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-orders/{id}": {
+      "get": {
+        "operationId": "SalesOrdersController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      },
+      "patch": {
+        "operationId": "SalesOrdersController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SoUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-orders/{id}/allocation": {
+      "get": {
+        "operationId": "SalesOrdersController_allocation",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllocationPreviewDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-orders/{id}/confirm": {
+      "post": {
+        "operationId": "SalesOrdersController_confirm",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-orders/{id}/approve-rates": {
+      "post": {
+        "operationId": "SalesOrdersController_approveRates",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-orders/{id}/recheck": {
+      "post": {
+        "operationId": "SalesOrdersController_recheck",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-orders/{id}/release": {
+      "post": {
+        "operationId": "SalesOrdersController_release",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-orders/{id}/hold": {
+      "post": {
+        "operationId": "SalesOrdersController_hold",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-orders/{id}/close": {
+      "post": {
+        "operationId": "SalesOrdersController_close",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-orders/{id}/cancel": {
+      "post": {
+        "operationId": "SalesOrdersController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SoDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/delivery-challans": {
+      "get": {
+        "operationId": "ChallansController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "customerId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DcListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      },
+      "post": {
+        "operationId": "ChallansController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DcCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DcDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/delivery-challans/{id}": {
+      "get": {
+        "operationId": "ChallansController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DcDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      },
+      "patch": {
+        "operationId": "ChallansController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DcUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DcDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/delivery-challans/{id}/pick": {
+      "post": {
+        "operationId": "ChallansController_pick",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DcPickDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DcDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/delivery-challans/{id}/unpick": {
+      "post": {
+        "operationId": "ChallansController_unpick",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DcUnpickDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DcDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/delivery-challans/{id}/cut": {
+      "post": {
+        "operationId": "ChallansController_cut",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DcCutDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DcCutResultDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/delivery-challans/{id}/post": {
+      "post": {
+        "operationId": "ChallansController_post",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DcPostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DcDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/delivery-challans/{id}/cancel": {
+      "post": {
+        "operationId": "ChallansController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DcPostDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DcDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-invoices": {
+      "get": {
+        "operationId": "SalesInvoicesController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "customerId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SiListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      },
+      "post": {
+        "operationId": "SalesInvoicesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SiCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-invoices/{id}": {
+      "get": {
+        "operationId": "SalesInvoicesController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      },
+      "patch": {
+        "operationId": "SalesInvoicesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SiUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-invoices/{id}/post": {
+      "post": {
+        "operationId": "SalesInvoicesController_post",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SiActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-invoices/{id}/discard": {
+      "post": {
+        "operationId": "SalesInvoicesController_discard",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SiActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-invoices/{id}/cancel": {
+      "post": {
+        "operationId": "SalesInvoicesController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SiActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SiDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/proformas": {
+      "get": {
+        "operationId": "ProformasController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "customerId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProformaListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      },
+      "post": {
+        "operationId": "ProformasController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProformaCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProformaDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/proformas/{id}": {
+      "get": {
+        "operationId": "ProformasController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProformaDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      },
+      "patch": {
+        "operationId": "ProformasController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProformaUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProformaDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/proformas/{id}/send": {
+      "post": {
+        "operationId": "ProformasController_send",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProformaDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/proformas/{id}/cancel": {
+      "post": {
+        "operationId": "ProformasController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProformaDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-returns": {
+      "get": {
+        "operationId": "SalesReturnsController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "customerId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SalesReturnItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      },
+      "post": {
+        "operationId": "SalesReturnsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesReturnCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalesReturnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-returns/{id}": {
+      "get": {
+        "operationId": "SalesReturnsController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalesReturnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      },
+      "patch": {
+        "operationId": "SalesReturnsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesReturnUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalesReturnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-returns/{id}/post": {
+      "post": {
+        "operationId": "SalesReturnsController_post",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalesReturnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-returns/{id}/inspect": {
+      "post": {
+        "operationId": "SalesReturnsController_inspect",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReturnInspectionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalesReturnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-returns/{id}/cancel": {
+      "post": {
+        "operationId": "SalesReturnsController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SalesReturnDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/customer-notes": {
+      "get": {
+        "operationId": "NotesController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "customerId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/NoteItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      },
+      "post": {
+        "operationId": "NotesController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/customer-notes/{id}": {
+      "get": {
+        "operationId": "NotesController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      },
+      "patch": {
+        "operationId": "NotesController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/customer-notes/{id}/post": {
+      "post": {
+        "operationId": "NotesController_post",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/customer-notes/{id}/cancel": {
+      "post": {
+        "operationId": "NotesController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesVersionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/customers/{id}/ledger": {
+      "get": {
+        "operationId": "CustomerAccountController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerLedgerDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/customers/{id}/credit-check": {
+      "get": {
+        "operationId": "CustomerAccountController_creditCheck",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditCheckDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/sales-invoices/{id}/pdf": {
+      "get": {
+        "operationId": "SalesDocumentsController_invoice",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pdf",
+                "html"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/customer-notes/{id}/pdf": {
+      "get": {
+        "operationId": "SalesDocumentsController_note",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pdf",
+                "html"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/delivery-challans/{id}/pdf": {
+      "get": {
+        "operationId": "SalesDocumentsController_challan",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pdf",
+                "html"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/proformas/{id}/pdf": {
+      "get": {
+        "operationId": "SalesDocumentsController_proforma",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pdf",
+                "html"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "sales"
+        ]
+      }
+    },
+    "/api/einvoice/queue": {
+      "get": {
+        "operationId": "ComplianceController_queue",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EInvoiceQueueItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "compliance"
+        ]
+      }
+    },
+    "/api/einvoice/{docType}/{id}/requests": {
+      "get": {
+        "operationId": "ComplianceController_requests",
+        "parameters": [
+          {
+            "name": "docType",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EInvoiceRequestItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "compliance"
+        ]
+      }
+    },
+    "/api/einvoice/{docType}/{id}/generate": {
+      "post": {
+        "operationId": "ComplianceController_generate",
+        "parameters": [
+          {
+            "name": "docType",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EInvoiceInfoDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "compliance"
+        ]
+      }
+    },
+    "/api/einvoice/{docType}/{id}/manual": {
+      "post": {
+        "operationId": "ComplianceController_manual",
+        "parameters": [
+          {
+            "name": "docType",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManualIrnDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EInvoiceInfoDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "compliance"
+        ]
+      }
+    },
+    "/api/einvoice/SI/{id}/eway-bill": {
+      "post": {
+        "operationId": "ComplianceController_ewayBill",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EwayBillGenerateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EwayBillResultDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "compliance"
+        ]
+      }
+    },
+    "/api/einvoice/SI/{id}/eway-bill/manual": {
+      "post": {
+        "operationId": "ComplianceController_ewayBillManual",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EwayBillInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EwayBillResultDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "compliance"
+        ]
+      }
     }
   },
   "info": {
@@ -4158,7 +6569,17 @@
                 "inventory.view_cost",
                 "inventory.map",
                 "inventory.adjust",
-                "labels.print"
+                "labels.print",
+                "inventory.roll.cut",
+                "sales.view",
+                "sales.order.manage",
+                "sales.credit.release",
+                "sales.dispatch.manage",
+                "sales.invoice.manage",
+                "sales.invoice.cancel",
+                "sales.return.manage",
+                "sales.note.manage",
+                "compliance.einvoice.manage"
               ]
             }
           },
@@ -8683,6 +11104,66 @@
           },
           "totalCreditLimit": {
             "type": "string"
+          },
+          "sales": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "openOrders": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "onHold": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "awaitingApproval": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "challansToInvoice": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "invoicedThisMonth": {
+                    "type": "string"
+                  },
+                  "invoicesThisMonth": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "irnPending": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "irnFailed": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "openOrders",
+                  "onHold",
+                  "awaitingApproval",
+                  "challansToInvoice",
+                  "invoicedThisMonth",
+                  "invoicesThisMonth",
+                  "irnPending",
+                  "irnFailed"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -8691,7 +11172,8 @@
           "skus",
           "blockedCustomers",
           "categoriesMissingTax",
-          "totalCreditLimit"
+          "totalCreditLimit",
+          "sales"
         ]
       },
       "PoListItemDto": {
@@ -12018,6 +14500,4338 @@
           "asOf",
           "rows",
           "totals"
+        ]
+      },
+      "RateQuoteDto": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "PARTY_RATE",
+              "SALESMAN_DEFAULT",
+              "NONE"
+            ]
+          },
+          "base44": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ratePerM": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "widthIn": {
+            "type": "string"
+          },
+          "gstRate": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "availableM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "source",
+          "base44",
+          "ratePerM",
+          "widthIn",
+          "gstRate",
+          "availableM"
+        ]
+      },
+      "SoListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "soNo": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "salesmanName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Confirmed",
+              "OnHold",
+              "PartiallyFulfilled",
+              "Closed",
+              "Cancelled"
+            ]
+          },
+          "orderedM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "dispatchedM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "total": {
+            "type": "string"
+          },
+          "pendingApproval": {
+            "type": "boolean"
+          },
+          "heldReasons": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "MANUAL_BLOCK",
+                "OVER_LIMIT",
+                "OVER_DUE"
+              ]
+            }
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "soNo",
+          "date",
+          "customerId",
+          "customerName",
+          "salesmanName",
+          "status",
+          "orderedM",
+          "dispatchedM",
+          "total",
+          "pendingApproval",
+          "heldReasons",
+          "version"
+        ]
+      },
+      "SoDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "soNo": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "salesmanName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Confirmed",
+              "OnHold",
+              "PartiallyFulfilled",
+              "Closed",
+              "Cancelled"
+            ]
+          },
+          "orderedM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "dispatchedM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "total": {
+            "type": "string"
+          },
+          "pendingApproval": {
+            "type": "boolean"
+          },
+          "heldReasons": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "MANUAL_BLOCK",
+                "OVER_LIMIT",
+                "OVER_DUE"
+              ]
+            }
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "customerRef": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "shippingAddressId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "placeOfSupply": {
+            "type": "string"
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "skuId": {
+                  "type": "string"
+                },
+                "skuCode": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "widthIn": {
+                  "type": "string"
+                },
+                "gsm": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "hsnCode": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "gstRate": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "totalM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "lengthMix": {
+                  "anyOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "lengthM": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "rolls": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "lengthM",
+                          "rolls"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "qtyRolls": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "allowCut": {
+                  "type": "boolean"
+                },
+                "rateSource": {
+                  "type": "string",
+                  "enum": [
+                    "PARTY_RATE",
+                    "SALESMAN_DEFAULT",
+                    "NONE"
+                  ]
+                },
+                "base44": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "derivedRatePerM": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "ratePerM": {
+                  "type": "string"
+                },
+                "deviationPct": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "needsApproval": {
+                  "type": "boolean"
+                },
+                "approvedByName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "discountPct": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string"
+                },
+                "dispatchedM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "invoicedM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "balanceM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "notes": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "skuId",
+                "skuCode",
+                "description",
+                "widthIn",
+                "gsm",
+                "hsnCode",
+                "gstRate",
+                "totalM",
+                "lengthMix",
+                "qtyRolls",
+                "allowCut",
+                "rateSource",
+                "base44",
+                "derivedRatePerM",
+                "ratePerM",
+                "deviationPct",
+                "needsApproval",
+                "approvedByName",
+                "discountPct",
+                "amount",
+                "dispatchedM",
+                "invoicedM",
+                "balanceM",
+                "notes"
+              ]
+            }
+          },
+          "charges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "taxable": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "amount",
+                "label",
+                "taxable"
+              ]
+            }
+          },
+          "totals": {
+            "type": "object",
+            "properties": {
+              "taxable": {
+                "type": "string"
+              },
+              "cgst": {
+                "type": "string"
+              },
+              "sgst": {
+                "type": "string"
+              },
+              "igst": {
+                "type": "string"
+              },
+              "roundOff": {
+                "type": "string"
+              },
+              "total": {
+                "type": "string"
+              },
+              "gross": {
+                "type": "string"
+              },
+              "discount": {
+                "type": "string"
+              },
+              "regime": {
+                "type": "string",
+                "enum": [
+                  "CGST_SGST",
+                  "IGST"
+                ]
+              }
+            },
+            "required": [
+              "taxable",
+              "cgst",
+              "sgst",
+              "igst",
+              "roundOff",
+              "total",
+              "gross",
+              "discount",
+              "regime"
+            ]
+          },
+          "credit": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "blocked": {
+                    "type": "boolean"
+                  },
+                  "reasons": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "MANUAL_BLOCK",
+                        "OVER_LIMIT",
+                        "OVER_DUE"
+                      ]
+                    }
+                  },
+                  "outstanding": {
+                    "type": "string"
+                  },
+                  "otherOpenOrders": {
+                    "type": "string"
+                  },
+                  "thisOrder": {
+                    "type": "string"
+                  },
+                  "exposure": {
+                    "type": "string"
+                  },
+                  "limit": {
+                    "type": "string"
+                  },
+                  "headroom": {
+                    "type": "string"
+                  },
+                  "overdueInvoices": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "maxDaysPastDue": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "autoBlock": {
+                    "type": "boolean"
+                  },
+                  "checkedAt": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "blocked",
+                  "reasons",
+                  "outstanding",
+                  "otherOpenOrders",
+                  "thisOrder",
+                  "exposure",
+                  "limit",
+                  "headroom",
+                  "overdueInvoices",
+                  "maxDaysPastDue",
+                  "autoBlock",
+                  "checkedAt"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "releasedByName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "dcs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "dcNo": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "Draft",
+                    "Open",
+                    "Closed",
+                    "Cancelled"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "dcNo",
+                "status"
+              ]
+            }
+          },
+          "invoices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "siNo": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "Draft",
+                    "Posted",
+                    "Cancelled"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "siNo",
+                "status"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "soNo",
+          "date",
+          "customerId",
+          "customerName",
+          "salesmanName",
+          "status",
+          "orderedM",
+          "dispatchedM",
+          "total",
+          "pendingApproval",
+          "heldReasons",
+          "version",
+          "customerRef",
+          "shippingAddressId",
+          "placeOfSupply",
+          "notes",
+          "lines",
+          "charges",
+          "totals",
+          "credit",
+          "releasedByName",
+          "dcs",
+          "invoices"
+        ]
+      },
+      "AllocationPreviewDto": {
+        "type": "object",
+        "properties": {
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "soLineId": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "FULFILLED",
+                    "PARTIAL",
+                    "NO_INVENTORY"
+                  ]
+                },
+                "rolls": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "rollId": {
+                        "type": "string"
+                      },
+                      "barcode": {
+                        "type": "string"
+                      },
+                      "lengthM": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "ageDays": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "rollId",
+                      "barcode",
+                      "lengthM",
+                      "ageDays"
+                    ]
+                  }
+                },
+                "cut": {
+                  "anyOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "rollId": {
+                          "type": "string"
+                        },
+                        "barcode": {
+                          "type": "string"
+                        },
+                        "cutM": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        },
+                        "leftoverM": {
+                          "type": "integer",
+                          "minimum": -9007199254740991,
+                          "maximum": 9007199254740991
+                        }
+                      },
+                      "required": [
+                        "rollId",
+                        "barcode",
+                        "cutM",
+                        "leftoverM"
+                      ]
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "groups": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "lengthM": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "qty": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "lengthM",
+                      "qty"
+                    ]
+                  }
+                },
+                "requiredM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "allocatedM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "remainingM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "soLineId",
+                "status",
+                "rolls",
+                "cut",
+                "groups",
+                "requiredM",
+                "allocatedM",
+                "remainingM"
+              ]
+            }
+          }
+        },
+        "required": [
+          "lines"
+        ]
+      },
+      "SoCreateDto": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "shippingAddressId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customerRef": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 60
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "billDiscount": {
+            "type": "string",
+            "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+          },
+          "charges": {
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                }
+              },
+              "required": [
+                "code",
+                "amount"
+              ]
+            }
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lines": {
+            "minItems": 1,
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "skuId": {
+                  "type": "string"
+                },
+                "totalM": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "lengthMix": {
+                  "anyOf": [
+                    {
+                      "maxItems": 10,
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "lengthM": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "rolls": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "lengthM",
+                          "rolls"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "allowCut": {
+                  "type": "boolean"
+                },
+                "ratePerM": {
+                  "type": "string",
+                  "pattern": "^\\d{1,8}(\\.\\d{1,4})?$"
+                },
+                "discountPct": {
+                  "type": "string",
+                  "pattern": "^\\d{1,2}(\\.\\d{1,2})?$|^100$"
+                },
+                "notes": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 200
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "skuId",
+                "totalM",
+                "ratePerM"
+              ]
+            }
+          }
+        },
+        "required": [
+          "customerId",
+          "date",
+          "lines"
+        ]
+      },
+      "SoUpdateDto": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "shippingAddressId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "customerRef": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 60
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "billDiscount": {
+            "type": "string",
+            "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+          },
+          "charges": {
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                }
+              },
+              "required": [
+                "code",
+                "amount"
+              ]
+            }
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lines": {
+            "minItems": 1,
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "skuId": {
+                  "type": "string"
+                },
+                "totalM": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "lengthMix": {
+                  "anyOf": [
+                    {
+                      "maxItems": 10,
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "lengthM": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0,
+                            "maximum": 9007199254740991
+                          },
+                          "rolls": {
+                            "type": "integer",
+                            "exclusiveMinimum": 0,
+                            "maximum": 9007199254740991
+                          }
+                        },
+                        "required": [
+                          "lengthM",
+                          "rolls"
+                        ]
+                      }
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "allowCut": {
+                  "type": "boolean"
+                },
+                "ratePerM": {
+                  "type": "string",
+                  "pattern": "^\\d{1,8}(\\.\\d{1,4})?$"
+                },
+                "discountPct": {
+                  "type": "string",
+                  "pattern": "^\\d{1,2}(\\.\\d{1,2})?$|^100$"
+                },
+                "notes": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 200
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "skuId",
+                "totalM",
+                "ratePerM"
+              ]
+            }
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "customerId",
+          "date",
+          "lines",
+          "version"
+        ]
+      },
+      "SalesVersionDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "DcListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "dcNo": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "soId": {
+            "type": "string"
+          },
+          "soNo": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Open",
+              "Closed",
+              "Cancelled"
+            ]
+          },
+          "rollCount": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "metres": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "vehicleNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "invoiced": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "dcNo",
+          "date",
+          "soId",
+          "soNo",
+          "customerId",
+          "customerName",
+          "status",
+          "rollCount",
+          "metres",
+          "vehicleNo",
+          "invoiced",
+          "version"
+        ]
+      },
+      "DcDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "dcNo": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "soId": {
+            "type": "string"
+          },
+          "soNo": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Open",
+              "Closed",
+              "Cancelled"
+            ]
+          },
+          "rollCount": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "metres": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "vehicleNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Z]{2}[0-9]{1,2}[A-Z]{0,3}[0-9]{4}$|^TM[A-Z0-9]{6,}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "invoiced": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "transporterId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lrNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 30
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lrDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "distanceKm": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ewayBillNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ewayBillDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transporterName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "value": {
+            "type": "string"
+          },
+          "ewayBillRequired": {
+            "type": "boolean"
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "soLineId": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "orderedM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "pickedM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "balanceM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "allowCut": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "soLineId",
+                "description",
+                "orderedM",
+                "pickedM",
+                "balanceM",
+                "allowCut"
+              ]
+            }
+          },
+          "rolls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rollId": {
+                  "type": "string"
+                },
+                "barcode": {
+                  "type": "string"
+                },
+                "lengthM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "soLineId": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "cutFromBarcode": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "rollId",
+                "barcode",
+                "lengthM",
+                "soLineId",
+                "description",
+                "cutFromBarcode"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "dcNo",
+          "date",
+          "soId",
+          "soNo",
+          "customerId",
+          "customerName",
+          "status",
+          "rollCount",
+          "metres",
+          "invoiced",
+          "version",
+          "transporterName",
+          "notes",
+          "value",
+          "ewayBillRequired",
+          "lines",
+          "rolls"
+        ]
+      },
+      "DcCreateDto": {
+        "type": "object",
+        "properties": {
+          "soId": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          }
+        },
+        "required": [
+          "soId",
+          "date"
+        ]
+      },
+      "DcUpdateDto": {
+        "type": "object",
+        "properties": {
+          "transporterId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "vehicleNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Z]{2}[0-9]{1,2}[A-Z]{0,3}[0-9]{4}$|^TM[A-Z0-9]{6,}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lrNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 30
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lrDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "distanceKm": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ewayBillNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^\\d{12}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ewayBillDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "date",
+          "version"
+        ]
+      },
+      "DcPickDto": {
+        "type": "object",
+        "properties": {
+          "soLineId": {
+            "type": "string"
+          },
+          "rollId": {
+            "type": "string"
+          },
+          "barcode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "soLineId"
+        ]
+      },
+      "DcUnpickDto": {
+        "type": "object",
+        "properties": {
+          "rollId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "rollId"
+        ]
+      },
+      "DcCutDto": {
+        "type": "object",
+        "properties": {
+          "soLineId": {
+            "type": "string"
+          },
+          "rollId": {
+            "type": "string"
+          },
+          "cutM": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "wasteM": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "soLineId",
+          "rollId",
+          "cutM"
+        ]
+      },
+      "DcCutResultDto": {
+        "type": "object",
+        "properties": {
+          "child": {
+            "type": "object",
+            "properties": {
+              "rollId": {
+                "type": "string"
+              },
+              "barcode": {
+                "type": "string"
+              },
+              "lengthM": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "rollId",
+              "barcode",
+              "lengthM"
+            ]
+          },
+          "parent": {
+            "type": "object",
+            "properties": {
+              "rollId": {
+                "type": "string"
+              },
+              "barcode": {
+                "type": "string"
+              },
+              "lengthM": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "rollId",
+              "barcode",
+              "lengthM"
+            ]
+          },
+          "labelRollIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "child",
+          "parent",
+          "labelRollIds"
+        ]
+      },
+      "DcPostDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "SiListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "siNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Posted",
+              "Cancelled"
+            ]
+          },
+          "total": {
+            "type": "string"
+          },
+          "einvoiceStatus": {
+            "type": "string",
+            "enum": [
+              "NotRequired",
+              "Pending",
+              "Generated",
+              "Failed",
+              "Cancelled"
+            ]
+          },
+          "dueDate": {
+            "type": "string"
+          },
+          "outstanding": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "siNo",
+          "date",
+          "customerId",
+          "customerName",
+          "status",
+          "total",
+          "einvoiceStatus",
+          "dueDate",
+          "outstanding",
+          "version"
+        ]
+      },
+      "SiDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "siNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Posted",
+              "Cancelled"
+            ]
+          },
+          "total": {
+            "type": "string"
+          },
+          "einvoiceStatus": {
+            "type": "string",
+            "enum": [
+              "NotRequired",
+              "Pending",
+              "Generated",
+              "Failed",
+              "Cancelled"
+            ]
+          },
+          "dueDate": {
+            "type": "string"
+          },
+          "outstanding": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "DC",
+              "DIRECT",
+              "PROFORMA"
+            ]
+          },
+          "dcs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "dcNo": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "dcNo"
+              ]
+            }
+          },
+          "soIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "proformaId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "placeOfSupply": {
+            "type": "string"
+          },
+          "billingAddress": {
+            "type": "string"
+          },
+          "shippingAddress": {
+            "type": "string"
+          },
+          "customerGstin": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "supplyType": {
+            "type": "string",
+            "enum": [
+              "B2B",
+              "B2C",
+              "SEZWP",
+              "SEZWOP"
+            ]
+          },
+          "billDiscount": {
+            "type": "string"
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "GOODS",
+                    "CHARGE"
+                  ]
+                },
+                "soLineId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "description": {
+                  "type": "string"
+                },
+                "hsnCode": {
+                  "type": "string"
+                },
+                "widthIn": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "metres": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "ratePerM": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "discountPct": {
+                  "type": "string"
+                },
+                "gross": {
+                  "type": "string"
+                },
+                "discount": {
+                  "type": "string"
+                },
+                "taxable": {
+                  "type": "string"
+                },
+                "gstRate": {
+                  "type": "string"
+                },
+                "cgst": {
+                  "type": "string"
+                },
+                "sgst": {
+                  "type": "string"
+                },
+                "igst": {
+                  "type": "string"
+                },
+                "cogs": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "rolls": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "rollId": {
+                        "type": "string"
+                      },
+                      "barcode": {
+                        "type": "string"
+                      },
+                      "lengthM": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "rollId",
+                      "barcode",
+                      "lengthM"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "kind",
+                "soLineId",
+                "description",
+                "hsnCode",
+                "widthIn",
+                "metres",
+                "ratePerM",
+                "discountPct",
+                "gross",
+                "discount",
+                "taxable",
+                "gstRate",
+                "cgst",
+                "sgst",
+                "igst",
+                "cogs",
+                "rolls"
+              ]
+            }
+          },
+          "totals": {
+            "type": "object",
+            "properties": {
+              "taxable": {
+                "type": "string"
+              },
+              "cgst": {
+                "type": "string"
+              },
+              "sgst": {
+                "type": "string"
+              },
+              "igst": {
+                "type": "string"
+              },
+              "roundOff": {
+                "type": "string"
+              },
+              "total": {
+                "type": "string"
+              },
+              "gross": {
+                "type": "string"
+              },
+              "discount": {
+                "type": "string"
+              },
+              "regime": {
+                "type": "string",
+                "enum": [
+                  "CGST_SGST",
+                  "IGST"
+                ]
+              }
+            },
+            "required": [
+              "taxable",
+              "cgst",
+              "sgst",
+              "igst",
+              "roundOff",
+              "total",
+              "gross",
+              "discount",
+              "regime"
+            ]
+          },
+          "cogs": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "einvoice": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "NotRequired",
+                  "Pending",
+                  "Generated",
+                  "Failed",
+                  "Cancelled"
+                ]
+              },
+              "irn": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "ackNo": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "ackDate": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "signedQr": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "attempts": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "lastError": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "cancellableUntil": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "status",
+              "irn",
+              "ackNo",
+              "ackDate",
+              "signedQr",
+              "attempts",
+              "lastError",
+              "cancellableUntil"
+            ]
+          },
+          "transport": {
+            "type": "object",
+            "properties": {
+              "transporterId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "vehicleNo": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^[A-Z]{2}[0-9]{1,2}[A-Z]{0,3}[0-9]{4}$|^TM[A-Z0-9]{6,}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "lrNo": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 30
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "lrDate": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "distanceKm": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4000
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "ewayBillNo": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^\\d{12}$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "ewayBillDate": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "transporterName": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "transporterName"
+            ]
+          },
+          "blockers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "siNo",
+          "date",
+          "customerId",
+          "customerName",
+          "status",
+          "total",
+          "einvoiceStatus",
+          "dueDate",
+          "outstanding",
+          "version",
+          "source",
+          "dcs",
+          "soIds",
+          "proformaId",
+          "placeOfSupply",
+          "billingAddress",
+          "shippingAddress",
+          "customerGstin",
+          "supplyType",
+          "billDiscount",
+          "notes",
+          "lines",
+          "totals",
+          "cogs",
+          "einvoice",
+          "transport",
+          "blockers"
+        ]
+      },
+      "SiCreateDto": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "DC",
+              "DIRECT",
+              "PROFORMA"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "dcIds": {
+            "minItems": 1,
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "soId": {
+            "type": "string"
+          },
+          "proformaId": {
+            "type": "string"
+          },
+          "rolls": {
+            "minItems": 1,
+            "maxItems": 2000,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lineId": {
+                  "type": "string"
+                },
+                "rollId": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "lineId",
+                "rollId"
+              ]
+            }
+          }
+        },
+        "required": [
+          "source",
+          "date"
+        ]
+      },
+      "SiUpdateDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "billDiscount": {
+            "type": "string",
+            "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+          },
+          "charges": {
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                }
+              },
+              "required": [
+                "code",
+                "amount"
+              ]
+            }
+          },
+          "lineDiscounts": {
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "lineId": {
+                  "type": "string"
+                },
+                "discountPct": {
+                  "type": "string",
+                  "pattern": "^\\d{1,2}(\\.\\d{1,2})?$|^100$"
+                }
+              },
+              "required": [
+                "lineId",
+                "discountPct"
+              ]
+            }
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "date",
+          "billDiscount",
+          "charges",
+          "lineDiscounts",
+          "version"
+        ]
+      },
+      "SiActionDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "ProformaListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "proformaNo": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "validUntil": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Sent",
+              "Converted",
+              "Cancelled"
+            ]
+          },
+          "total": {
+            "type": "string"
+          },
+          "convertedSiId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "convertedSiNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "proformaNo",
+          "date",
+          "validUntil",
+          "customerId",
+          "customerName",
+          "status",
+          "total",
+          "convertedSiId",
+          "convertedSiNo",
+          "version"
+        ]
+      },
+      "ProformaDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "proformaNo": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "validUntil": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Sent",
+              "Converted",
+              "Cancelled"
+            ]
+          },
+          "total": {
+            "type": "string"
+          },
+          "convertedSiId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "convertedSiNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "soId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "skuId": {
+                  "type": "string"
+                },
+                "metres": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "ratePerM": {
+                  "type": "string",
+                  "pattern": "^\\d{1,8}(\\.\\d{1,4})?$"
+                },
+                "discountPct": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "widthIn": {
+                  "type": "string"
+                },
+                "hsnCode": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "gstRate": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "taxable": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "skuId",
+                "metres",
+                "ratePerM",
+                "discountPct",
+                "id",
+                "description",
+                "widthIn",
+                "hsnCode",
+                "gstRate",
+                "taxable"
+              ]
+            }
+          },
+          "charges": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "taxable": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "code",
+                "amount",
+                "label",
+                "taxable"
+              ]
+            }
+          },
+          "totals": {
+            "type": "object",
+            "properties": {
+              "taxable": {
+                "type": "string"
+              },
+              "cgst": {
+                "type": "string"
+              },
+              "sgst": {
+                "type": "string"
+              },
+              "igst": {
+                "type": "string"
+              },
+              "roundOff": {
+                "type": "string"
+              },
+              "total": {
+                "type": "string"
+              },
+              "gross": {
+                "type": "string"
+              },
+              "discount": {
+                "type": "string"
+              },
+              "regime": {
+                "type": "string",
+                "enum": [
+                  "CGST_SGST",
+                  "IGST"
+                ]
+              }
+            },
+            "required": [
+              "taxable",
+              "cgst",
+              "sgst",
+              "igst",
+              "roundOff",
+              "total",
+              "gross",
+              "discount",
+              "regime"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "proformaNo",
+          "date",
+          "validUntil",
+          "customerId",
+          "customerName",
+          "status",
+          "total",
+          "convertedSiId",
+          "convertedSiNo",
+          "version",
+          "soId",
+          "notes",
+          "lines",
+          "charges",
+          "totals"
+        ]
+      },
+      "ProformaCreateDto": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string"
+          },
+          "soId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "validUntil": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "billDiscount": {
+            "type": "string",
+            "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+          },
+          "charges": {
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                }
+              },
+              "required": [
+                "code",
+                "amount"
+              ]
+            }
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lines": {
+            "minItems": 1,
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "skuId": {
+                  "type": "string"
+                },
+                "metres": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "ratePerM": {
+                  "type": "string",
+                  "pattern": "^\\d{1,8}(\\.\\d{1,4})?$"
+                },
+                "discountPct": {
+                  "type": "string",
+                  "pattern": "^\\d{1,2}(\\.\\d{1,2})?$|^100$"
+                }
+              },
+              "required": [
+                "skuId",
+                "metres",
+                "ratePerM"
+              ]
+            }
+          }
+        },
+        "required": [
+          "customerId",
+          "date",
+          "lines"
+        ]
+      },
+      "ProformaUpdateDto": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string"
+          },
+          "soId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "validUntil": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "billDiscount": {
+            "type": "string",
+            "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+          },
+          "charges": {
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                }
+              },
+              "required": [
+                "code",
+                "amount"
+              ]
+            }
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lines": {
+            "minItems": 1,
+            "maxItems": 100,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "skuId": {
+                  "type": "string"
+                },
+                "metres": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "ratePerM": {
+                  "type": "string",
+                  "pattern": "^\\d{1,8}(\\.\\d{1,4})?$"
+                },
+                "discountPct": {
+                  "type": "string",
+                  "pattern": "^\\d{1,2}(\\.\\d{1,2})?$|^100$"
+                }
+              },
+              "required": [
+                "skuId",
+                "metres",
+                "ratePerM"
+              ]
+            }
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "customerId",
+          "date",
+          "lines",
+          "version"
+        ]
+      },
+      "SalesReturnItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "srNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cnId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cnNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "siId": {
+            "type": "string"
+          },
+          "siNo": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Posted",
+              "Cancelled"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "rollCount": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "returnedM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "awaitingInspection": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "total": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "srNo",
+          "cnId",
+          "cnNo",
+          "date",
+          "siId",
+          "siNo",
+          "customerId",
+          "customerName",
+          "status",
+          "reason",
+          "rollCount",
+          "returnedM",
+          "awaitingInspection",
+          "total",
+          "version"
+        ]
+      },
+      "SalesReturnDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "srNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cnId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cnNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "siId": {
+            "type": "string"
+          },
+          "siNo": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Posted",
+              "Cancelled"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "rollCount": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "returnedM": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "awaitingInspection": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "total": {
+            "type": "string"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "rolls": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rollId": {
+                  "type": "string"
+                },
+                "barcode": {
+                  "type": "string"
+                },
+                "lengthM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "description": {
+                  "type": "string"
+                },
+                "dispatchedM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "returnedM": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "taxable": {
+                  "type": "string"
+                },
+                "cost": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "rollStatus": {
+                  "type": "string"
+                },
+                "suggestScrap": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "rollId",
+                "barcode",
+                "lengthM",
+                "description",
+                "dispatchedM",
+                "returnedM",
+                "taxable",
+                "cost",
+                "rollStatus",
+                "suggestScrap"
+              ]
+            }
+          },
+          "totals": {
+            "type": "object",
+            "properties": {
+              "taxable": {
+                "type": "string"
+              },
+              "cgst": {
+                "type": "string"
+              },
+              "sgst": {
+                "type": "string"
+              },
+              "igst": {
+                "type": "string"
+              },
+              "roundOff": {
+                "type": "string"
+              },
+              "total": {
+                "type": "string"
+              },
+              "gross": {
+                "type": "string"
+              },
+              "discount": {
+                "type": "string"
+              },
+              "regime": {
+                "type": "string",
+                "enum": [
+                  "CGST_SGST",
+                  "IGST"
+                ]
+              }
+            },
+            "required": [
+              "taxable",
+              "cgst",
+              "sgst",
+              "igst",
+              "roundOff",
+              "total",
+              "gross",
+              "discount",
+              "regime"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "srNo",
+          "cnId",
+          "cnNo",
+          "date",
+          "siId",
+          "siNo",
+          "customerId",
+          "customerName",
+          "status",
+          "reason",
+          "rollCount",
+          "returnedM",
+          "awaitingInspection",
+          "total",
+          "version",
+          "notes",
+          "rolls",
+          "totals"
+        ]
+      },
+      "SalesReturnCreateDto": {
+        "type": "object",
+        "properties": {
+          "siId": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300
+          },
+          "rolls": {
+            "minItems": 1,
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rollId": {
+                  "type": "string"
+                },
+                "returnedM": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "rollId",
+                "returnedM"
+              ]
+            }
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "siId",
+          "date",
+          "reason",
+          "rolls"
+        ]
+      },
+      "SalesReturnUpdateDto": {
+        "type": "object",
+        "properties": {
+          "siId": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300
+          },
+          "rolls": {
+            "minItems": 1,
+            "maxItems": 500,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rollId": {
+                  "type": "string"
+                },
+                "returnedM": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "rollId",
+                "returnedM"
+              ]
+            }
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "siId",
+          "date",
+          "reason",
+          "rolls",
+          "version"
+        ]
+      },
+      "ReturnInspectionDto": {
+        "type": "object",
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "RESTOCK",
+              "SCRAP"
+            ]
+          },
+          "rollId": {
+            "type": "string"
+          },
+          "skuId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "outcome",
+          "rollId"
+        ]
+      },
+      "NoteItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "CREDIT",
+              "DEBIT"
+            ]
+          },
+          "noteNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "siId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "siNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "salesReturnId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reasonCode": {
+            "type": "string",
+            "enum": [
+              "RATE_DIFFERENCE",
+              "DISCOUNT",
+              "SHORTAGE",
+              "OTHER",
+              "RETURN"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Posted",
+              "Cancelled"
+            ]
+          },
+          "total": {
+            "type": "string"
+          },
+          "einvoiceStatus": {
+            "type": "string",
+            "enum": [
+              "NotRequired",
+              "Pending",
+              "Generated",
+              "Failed",
+              "Cancelled"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "noteNo",
+          "date",
+          "customerId",
+          "customerName",
+          "siId",
+          "siNo",
+          "salesReturnId",
+          "reasonCode",
+          "reason",
+          "status",
+          "total",
+          "einvoiceStatus",
+          "version"
+        ]
+      },
+      "NoteDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "CREDIT",
+              "DEBIT"
+            ]
+          },
+          "noteNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "siId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "siNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "salesReturnId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reasonCode": {
+            "type": "string",
+            "enum": [
+              "RATE_DIFFERENCE",
+              "DISCOUNT",
+              "SHORTAGE",
+              "OTHER",
+              "RETURN"
+            ]
+          },
+          "reason": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Posted",
+              "Cancelled"
+            ]
+          },
+          "total": {
+            "type": "string"
+          },
+          "einvoiceStatus": {
+            "type": "string",
+            "enum": [
+              "NotRequired",
+              "Pending",
+              "Generated",
+              "Failed",
+              "Cancelled"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "hsnCode": {
+                  "type": "string"
+                },
+                "taxable": {
+                  "type": "string"
+                },
+                "gstRate": {
+                  "type": "string"
+                },
+                "cgst": {
+                  "type": "string"
+                },
+                "sgst": {
+                  "type": "string"
+                },
+                "igst": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "description",
+                "hsnCode",
+                "taxable",
+                "gstRate",
+                "cgst",
+                "sgst",
+                "igst"
+              ]
+            }
+          },
+          "totals": {
+            "type": "object",
+            "properties": {
+              "taxable": {
+                "type": "string"
+              },
+              "cgst": {
+                "type": "string"
+              },
+              "sgst": {
+                "type": "string"
+              },
+              "igst": {
+                "type": "string"
+              },
+              "roundOff": {
+                "type": "string"
+              },
+              "total": {
+                "type": "string"
+              },
+              "gross": {
+                "type": "string"
+              },
+              "discount": {
+                "type": "string"
+              },
+              "regime": {
+                "type": "string",
+                "enum": [
+                  "CGST_SGST",
+                  "IGST"
+                ]
+              }
+            },
+            "required": [
+              "taxable",
+              "cgst",
+              "sgst",
+              "igst",
+              "roundOff",
+              "total",
+              "gross",
+              "discount",
+              "regime"
+            ]
+          },
+          "einvoice": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": [
+                  "NotRequired",
+                  "Pending",
+                  "Generated",
+                  "Failed",
+                  "Cancelled"
+                ]
+              },
+              "irn": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "ackNo": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "ackDate": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "signedQr": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "attempts": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "lastError": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "cancellableUntil": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "status",
+              "irn",
+              "ackNo",
+              "ackDate",
+              "signedQr",
+              "attempts",
+              "lastError",
+              "cancellableUntil"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "noteNo",
+          "date",
+          "customerId",
+          "customerName",
+          "siId",
+          "siNo",
+          "salesReturnId",
+          "reasonCode",
+          "reason",
+          "status",
+          "total",
+          "einvoiceStatus",
+          "version",
+          "lines",
+          "totals",
+          "einvoice"
+        ]
+      },
+      "NoteCreateDto": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "CREDIT",
+              "DEBIT"
+            ]
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "siId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "reasonCode": {
+            "type": "string",
+            "enum": [
+              "RATE_DIFFERENCE",
+              "DISCOUNT",
+              "SHORTAGE",
+              "OTHER"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300
+          },
+          "lines": {
+            "minItems": 1,
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 160
+                },
+                "hsnCode": {
+                  "type": "string",
+                  "pattern": "^\\d{4}(\\d{2}){0,2}$"
+                },
+                "taxable": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                },
+                "gstRate": {
+                  "type": "string",
+                  "enum": [
+                    "0",
+                    "5",
+                    "12",
+                    "18",
+                    "28"
+                  ]
+                }
+              },
+              "required": [
+                "description",
+                "hsnCode",
+                "taxable",
+                "gstRate"
+              ]
+            }
+          }
+        },
+        "required": [
+          "kind",
+          "customerId",
+          "date",
+          "reasonCode",
+          "reason",
+          "lines"
+        ]
+      },
+      "NoteUpdateDto": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "CREDIT",
+              "DEBIT"
+            ]
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "siId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "reasonCode": {
+            "type": "string",
+            "enum": [
+              "RATE_DIFFERENCE",
+              "DISCOUNT",
+              "SHORTAGE",
+              "OTHER"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 300
+          },
+          "lines": {
+            "minItems": 1,
+            "maxItems": 50,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 160
+                },
+                "hsnCode": {
+                  "type": "string",
+                  "pattern": "^\\d{4}(\\d{2}){0,2}$"
+                },
+                "taxable": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                },
+                "gstRate": {
+                  "type": "string",
+                  "enum": [
+                    "0",
+                    "5",
+                    "12",
+                    "18",
+                    "28"
+                  ]
+                }
+              },
+              "required": [
+                "description",
+                "hsnCode",
+                "taxable",
+                "gstRate"
+              ]
+            }
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "kind",
+          "customerId",
+          "date",
+          "reasonCode",
+          "reason",
+          "lines",
+          "version"
+        ]
+      },
+      "CustomerLedgerDto": {
+        "type": "object",
+        "properties": {
+          "customerId": {
+            "type": "string"
+          },
+          "opening": {
+            "type": "string"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "docType": {
+                  "type": "string",
+                  "enum": [
+                    "SI",
+                    "CN",
+                    "DN",
+                    "OPENING"
+                  ]
+                },
+                "docId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "docNo": {
+                  "type": "string"
+                },
+                "debit": {
+                  "type": "string"
+                },
+                "credit": {
+                  "type": "string"
+                },
+                "balance": {
+                  "type": "string"
+                },
+                "dueDate": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "date",
+                "docType",
+                "docId",
+                "docNo",
+                "debit",
+                "credit",
+                "balance",
+                "dueDate"
+              ]
+            }
+          },
+          "closing": {
+            "type": "string"
+          },
+          "aging": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "bucket": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "bucket",
+                "amount"
+              ]
+            }
+          }
+        },
+        "required": [
+          "customerId",
+          "opening",
+          "entries",
+          "closing",
+          "aging"
+        ]
+      },
+      "CreditCheckDto": {
+        "type": "object",
+        "properties": {
+          "blocked": {
+            "type": "boolean"
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "MANUAL_BLOCK",
+                "OVER_LIMIT",
+                "OVER_DUE"
+              ]
+            }
+          },
+          "outstanding": {
+            "type": "string"
+          },
+          "otherOpenOrders": {
+            "type": "string"
+          },
+          "thisOrder": {
+            "type": "string"
+          },
+          "exposure": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "string"
+          },
+          "headroom": {
+            "type": "string"
+          },
+          "overdueInvoices": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "maxDaysPastDue": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "autoBlock": {
+            "type": "boolean"
+          },
+          "checkedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "blocked",
+          "reasons",
+          "outstanding",
+          "otherOpenOrders",
+          "thisOrder",
+          "exposure",
+          "limit",
+          "headroom",
+          "overdueInvoices",
+          "maxDaysPastDue",
+          "autoBlock",
+          "checkedAt"
+        ]
+      },
+      "EInvoiceQueueItemDto": {
+        "type": "object",
+        "properties": {
+          "docType": {
+            "type": "string",
+            "enum": [
+              "SI",
+              "CN",
+              "DN"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "docNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "total": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NotRequired",
+              "Pending",
+              "Generated",
+              "Failed",
+              "Cancelled"
+            ]
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "lastError": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "daysLeft": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "docType",
+          "id",
+          "docNo",
+          "date",
+          "customerName",
+          "total",
+          "status",
+          "attempts",
+          "lastError",
+          "daysLeft"
+        ]
+      },
+      "EInvoiceRequestItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "GENERATE",
+              "CANCEL",
+              "EWAY_BILL",
+              "MANUAL"
+            ]
+          },
+          "provider": {
+            "type": "string"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "durationMs": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "action",
+          "provider",
+          "ok",
+          "error",
+          "durationMs",
+          "createdAt"
+        ]
+      },
+      "EInvoiceInfoDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "NotRequired",
+              "Pending",
+              "Generated",
+              "Failed",
+              "Cancelled"
+            ]
+          },
+          "irn": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ackNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ackDate": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "signedQr": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "lastError": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cancellableUntil": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "irn",
+          "ackNo",
+          "ackDate",
+          "signedQr",
+          "attempts",
+          "lastError",
+          "cancellableUntil"
+        ]
+      },
+      "ManualIrnDto": {
+        "type": "object",
+        "properties": {
+          "irn": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "ackNo": {
+            "type": "string",
+            "pattern": "^\\d{12,20}$"
+          },
+          "ackDate": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "signedQr": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 10,
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "irn",
+          "ackNo",
+          "ackDate"
+        ]
+      },
+      "EwayBillGenerateDto": {
+        "type": "object",
+        "properties": {
+          "distanceKm": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4000
+          },
+          "vehicleNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Z]{2}[0-9]{1,2}[A-Z]{0,3}[0-9]{4}$|^TM[A-Z0-9]{6,}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transporterGstin": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 15,
+                "maxLength": 15
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transDocNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 15
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transDocDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "distanceKm"
+        ]
+      },
+      "EwayBillResultDto": {
+        "type": "object",
+        "properties": {
+          "siId": {
+            "type": "string"
+          },
+          "ewayBillNo": {
+            "type": "string"
+          },
+          "ewayBillDate": {
+            "type": "string"
+          },
+          "validUntil": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "siId",
+          "ewayBillNo",
+          "ewayBillDate",
+          "validUntil"
+        ]
+      },
+      "EwayBillInputDto": {
+        "type": "object",
+        "properties": {
+          "ewayBillNo": {
+            "type": "string",
+            "pattern": "^\\d{12}$"
+          },
+          "ewayBillDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "validUntil": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "ewayBillNo",
+          "ewayBillDate"
         ]
       }
     }

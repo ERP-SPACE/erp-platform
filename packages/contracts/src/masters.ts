@@ -555,6 +555,19 @@ export const dashboardSummary = z.object({
   blockedCustomers: z.number().int(),
   categoriesMissingTax: z.number().int(),
   totalCreditLimit: z.string(),
+  /** Stage 3 sales KPIs; null without `sales.view`. */
+  sales: z
+    .object({
+      openOrders: z.number().int(),
+      onHold: z.number().int(),
+      awaitingApproval: z.number().int(),
+      challansToInvoice: z.number().int(),
+      invoicedThisMonth: z.string(),
+      invoicesThisMonth: z.number().int(),
+      irnPending: z.number().int(),
+      irnFailed: z.number().int(),
+    })
+    .nullable(),
 });
 
 export type CategoryItem = z.infer<typeof categoryItem>;

@@ -37,6 +37,11 @@ const CONSTRAINTS: Record<string, { path: string; message: string }> = {
     path: "shippingAddresses",
     message: "Only one shipping address can be the default.",
   },
+  sales_return_rolls_open_uq: {
+    path: "rolls",
+    message: "A roll is already on another open return.",
+  },
+  delivery_challan_rolls_uq: { path: "rollId", message: "This roll is already on the challan." },
   party_rates_no_overlap: {
     path: "validFrom",
     message: "This rate overlaps an existing rate for the same product.",

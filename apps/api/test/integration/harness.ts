@@ -21,6 +21,8 @@ export async function startApp(
     NODE_ENV: "test",
     DATABASE_URL: inject("databaseUrl"),
     REDIS_URL: inject("redisUrl"),
+    API_JOBS: "false",
+    PDF_RENDERER: "inline",
     API_PUBLIC_URL: "http://localhost:3000",
     WEB_ORIGIN: "http://localhost:5173",
     AUTH_SECRET: "integration-test-secret-that-is-long-enough-000",
