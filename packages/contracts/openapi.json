@@ -5856,6 +5856,237 @@
           "sales"
         ]
       }
+    },
+    "/api/einvoice/queue": {
+      "get": {
+        "operationId": "ComplianceController_queue",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EInvoiceQueueItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "compliance"
+        ]
+      }
+    },
+    "/api/einvoice/{docType}/{id}/requests": {
+      "get": {
+        "operationId": "ComplianceController_requests",
+        "parameters": [
+          {
+            "name": "docType",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EInvoiceRequestItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "compliance"
+        ]
+      }
+    },
+    "/api/einvoice/{docType}/{id}/generate": {
+      "post": {
+        "operationId": "ComplianceController_generate",
+        "parameters": [
+          {
+            "name": "docType",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EInvoiceInfoDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "compliance"
+        ]
+      }
+    },
+    "/api/einvoice/{docType}/{id}/manual": {
+      "post": {
+        "operationId": "ComplianceController_manual",
+        "parameters": [
+          {
+            "name": "docType",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManualIrnDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EInvoiceInfoDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "compliance"
+        ]
+      }
+    },
+    "/api/einvoice/SI/{id}/eway-bill": {
+      "post": {
+        "operationId": "ComplianceController_ewayBill",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EwayBillGenerateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EwayBillResultDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "compliance"
+        ]
+      }
+    },
+    "/api/einvoice/SI/{id}/eway-bill/manual": {
+      "post": {
+        "operationId": "ComplianceController_ewayBillManual",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EwayBillInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EwayBillResultDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "compliance"
+        ]
+      }
     }
   },
   "info": {
@@ -18062,6 +18293,344 @@
           "maxDaysPastDue",
           "autoBlock",
           "checkedAt"
+        ]
+      },
+      "EInvoiceQueueItemDto": {
+        "type": "object",
+        "properties": {
+          "docType": {
+            "type": "string",
+            "enum": [
+              "SI",
+              "CN",
+              "DN"
+            ]
+          },
+          "id": {
+            "type": "string"
+          },
+          "docNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "total": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "NotRequired",
+              "Pending",
+              "Generated",
+              "Failed",
+              "Cancelled"
+            ]
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "lastError": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "daysLeft": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "docType",
+          "id",
+          "docNo",
+          "date",
+          "customerName",
+          "total",
+          "status",
+          "attempts",
+          "lastError",
+          "daysLeft"
+        ]
+      },
+      "EInvoiceRequestItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "GENERATE",
+              "CANCEL",
+              "EWAY_BILL",
+              "MANUAL"
+            ]
+          },
+          "provider": {
+            "type": "string"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "durationMs": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "action",
+          "provider",
+          "ok",
+          "error",
+          "durationMs",
+          "createdAt"
+        ]
+      },
+      "EInvoiceInfoDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "NotRequired",
+              "Pending",
+              "Generated",
+              "Failed",
+              "Cancelled"
+            ]
+          },
+          "irn": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ackNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ackDate": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "signedQr": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "attempts": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "lastError": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "cancellableUntil": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "status",
+          "irn",
+          "ackNo",
+          "ackDate",
+          "signedQr",
+          "attempts",
+          "lastError",
+          "cancellableUntil"
+        ]
+      },
+      "ManualIrnDto": {
+        "type": "object",
+        "properties": {
+          "irn": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "ackNo": {
+            "type": "string",
+            "pattern": "^\\d{12,20}$"
+          },
+          "ackDate": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+          },
+          "signedQr": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 10,
+                "maxLength": 4000
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "irn",
+          "ackNo",
+          "ackDate"
+        ]
+      },
+      "EwayBillGenerateDto": {
+        "type": "object",
+        "properties": {
+          "distanceKm": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4000
+          },
+          "vehicleNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Z]{2}[0-9]{1,2}[A-Z]{0,3}[0-9]{4}$|^TM[A-Z0-9]{6,}$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transporterGstin": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 15,
+                "maxLength": 15
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transDocNo": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 15
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "transDocDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "distanceKm"
+        ]
+      },
+      "EwayBillResultDto": {
+        "type": "object",
+        "properties": {
+          "siId": {
+            "type": "string"
+          },
+          "ewayBillNo": {
+            "type": "string"
+          },
+          "ewayBillDate": {
+            "type": "string"
+          },
+          "validUntil": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "siId",
+          "ewayBillNo",
+          "ewayBillDate",
+          "validUntil"
+        ]
+      },
+      "EwayBillInputDto": {
+        "type": "object",
+        "properties": {
+          "ewayBillNo": {
+            "type": "string",
+            "pattern": "^\\d{12}$"
+          },
+          "ewayBillDate": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "validUntil": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "ewayBillNo",
+          "ewayBillDate"
         ]
       }
     }

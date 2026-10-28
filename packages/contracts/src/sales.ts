@@ -597,6 +597,43 @@ export const ewayBillInput = z.object({
   ewayBillDate: isoDate,
   validUntil: isoDate.nullable().optional(),
 });
+/** Part B transport details for an e-way bill generated from the IRN. */
+export const ewayBillGenerate = z.object({
+  distanceKm: z.number().int().min(0).max(4000),
+  vehicleNo: vehicleNo.nullable().optional(),
+  transporterGstin: z.string().length(15).nullable().optional(),
+  transDocNo: optionalText(15),
+  transDocDate: isoDate.nullable().optional(),
+});
+export const ewayBillResult = z.object({
+  siId: z.string(),
+  ewayBillNo: z.string(),
+  ewayBillDate: z.string(),
+  validUntil: z.string().nullable(),
+});
+export const EINVOICE_DOC_TYPES = ["SI", "CN", "DN"] as const;
+export const einvoiceQueueItem = z.object({
+  docType: z.enum(EINVOICE_DOC_TYPES),
+  id: z.string(),
+  docNo: z.string().nullable(),
+  date: z.string(),
+  customerName: z.string(),
+  total: z.string(),
+  status: z.enum(EINVOICE_STATUSES),
+  attempts: z.number().int(),
+  lastError: z.string().nullable(),
+  /** Days left in the IRP reporting window; negative once it has passed. */
+  daysLeft: z.number().int(),
+});
+export const einvoiceRequestItem = z.object({
+  id: z.string(),
+  action: z.enum(["GENERATE", "CANCEL", "EWAY_BILL", "MANUAL"]),
+  provider: z.string(),
+  ok: z.boolean(),
+  error: z.string().nullable(),
+  durationMs: z.number().int().nullable(),
+  createdAt: z.string(),
+});
 
 export type CreditCheck = z.infer<typeof creditCheck>;
 export type RateQuote = z.infer<typeof rateQuote>;
@@ -610,6 +647,9 @@ export type DcCutResult = z.infer<typeof dcCutResult>;
 export type SiListItem = z.infer<typeof siListItem>;
 export type SiDetail = z.infer<typeof siDetail>;
 export type EInvoiceInfo = z.infer<typeof einvoiceInfo>;
+export type EInvoiceQueueItem = z.infer<typeof einvoiceQueueItem>;
+export type EInvoiceRequestItem = z.infer<typeof einvoiceRequestItem>;
+export type EwayBillResult = z.infer<typeof ewayBillResult>;
 export type ProformaListItem = z.infer<typeof proformaListItem>;
 export type ProformaDetail = z.infer<typeof proformaDetail>;
 export type SalesReturnItem = z.infer<typeof salesReturnItem>;

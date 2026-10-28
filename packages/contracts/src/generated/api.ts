@@ -1940,6 +1940,102 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/einvoice/queue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ComplianceController_queue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/einvoice/{docType}/{id}/requests": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ComplianceController_requests"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/einvoice/{docType}/{id}/generate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ComplianceController_generate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/einvoice/{docType}/{id}/manual": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ComplianceController_manual"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/einvoice/SI/{id}/eway-bill": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ComplianceController_ewayBill"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/einvoice/SI/{id}/eway-bill/manual": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ComplianceController_ewayBillManual"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -4247,6 +4343,67 @@ export interface components {
             maxDaysPastDue: number;
             autoBlock: boolean;
             checkedAt: string;
+        };
+        EInvoiceQueueItemDto: {
+            /** @enum {string} */
+            docType: "SI" | "CN" | "DN";
+            id: string;
+            docNo: string | null;
+            date: string;
+            customerName: string;
+            total: string;
+            /** @enum {string} */
+            status: "NotRequired" | "Pending" | "Generated" | "Failed" | "Cancelled";
+            attempts: number;
+            lastError: string | null;
+            daysLeft: number;
+        };
+        EInvoiceRequestItemDto: {
+            id: string;
+            /** @enum {string} */
+            action: "GENERATE" | "CANCEL" | "EWAY_BILL" | "MANUAL";
+            provider: string;
+            ok: boolean;
+            error: string | null;
+            durationMs: number | null;
+            createdAt: string;
+        };
+        EInvoiceInfoDto: {
+            /** @enum {string} */
+            status: "NotRequired" | "Pending" | "Generated" | "Failed" | "Cancelled";
+            irn: string | null;
+            ackNo: string | null;
+            ackDate: string | null;
+            signedQr: string | null;
+            attempts: number;
+            lastError: string | null;
+            cancellableUntil: string | null;
+        };
+        ManualIrnDto: {
+            irn: string;
+            ackNo: string;
+            /** Format: date-time */
+            ackDate: string;
+            signedQr?: string | null;
+        };
+        EwayBillGenerateDto: {
+            distanceKm: number;
+            vehicleNo?: string | null;
+            transporterGstin?: string | null;
+            transDocNo?: string | null;
+            transDocDate?: string | null;
+        };
+        EwayBillResultDto: {
+            siId: string;
+            ewayBillNo: string;
+            ewayBillDate: string;
+            validUntil: string | null;
+        };
+        EwayBillInputDto: {
+            ewayBillNo: string;
+            /** Format: date */
+            ewayBillDate: string;
+            validUntil?: string | null;
         };
     };
     responses: never;
@@ -7883,6 +8040,145 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CreditCheckDto"];
+                };
+            };
+        };
+    };
+    ComplianceController_queue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EInvoiceQueueItemDto"][];
+                };
+            };
+        };
+    };
+    ComplianceController_requests: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                docType: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EInvoiceRequestItemDto"][];
+                };
+            };
+        };
+    };
+    ComplianceController_generate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                docType: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EInvoiceInfoDto"];
+                };
+            };
+        };
+    };
+    ComplianceController_manual: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                docType: string;
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ManualIrnDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EInvoiceInfoDto"];
+                };
+            };
+        };
+    };
+    ComplianceController_ewayBill: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EwayBillGenerateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EwayBillResultDto"];
+                };
+            };
+        };
+    };
+    ComplianceController_ewayBillManual: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EwayBillInputDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EwayBillResultDto"];
                 };
             };
         };

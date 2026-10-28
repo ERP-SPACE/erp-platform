@@ -11,6 +11,8 @@ import { recordTransition, writePostingEvent } from "../../db/ledger.js";
 import { UnitOfWork } from "../../db/unit-of-work.js";
 import { updateVersioned } from "../../db/versioning.js";
 import { customerScopeFilter, loadCustomerScope } from "../customers/customer-scope.js";
+import { EInvoiceQueue } from "../compliance/einvoice.queue.js";
+import { EInvoiceService } from "../compliance/einvoice.service.js";
 import { EventBus } from "../realtime/event-bus.js";
 import { SeriesService } from "../series/series.service.js";
 import { SettingsService } from "../settings/settings.service.js";
@@ -36,6 +38,8 @@ export class NotesService {
     private readonly bus: EventBus,
     private readonly series: SeriesService,
     private readonly settings: SettingsService,
+    private readonly einvoice: EInvoiceService,
+    private readonly irnQueue: EInvoiceQueue,
   ) {}
 
   async list(query: z.infer<typeof salesListQuery>): Promise<NoteItem[]> {
@@ -308,6 +312,8 @@ export class NotesService {
       "Note",
     );
     await recordTransition(tx, "CustomerNote", n.id, "Draft", "Posted");
+    if (n.supplyType !== "B2C")
+      this.irnQueue.enqueueAfterCommit(n.kind === "CREDIT" ? "CN" : "DN", n.id);
     const lines = await tx
       .select()
       .from(customerNoteLines)
@@ -382,11 +388,18 @@ export class NotesService {
           status: "Cancelled",
           cancelledAt: new Date(),
           cancelledBy: actor().userId,
-          ...(n.einvoiceStatus === "Pending" ? { einvoiceStatus: "NotRequired" as const } : {}),
         },
         "Note",
       );
       await recordTransition(tx, "CustomerNote", id, n.status, "Cancelled");
+      if (n.status === "Posted") {
+        await this.einvoice.cancelIrn(
+          tx,
+          n.kind === "CREDIT" ? "CN" : "DN",
+          id,
+          ctx().reason!.trim(),
+        );
+      }
       this.changed(id);
     });
     return this.get(id);

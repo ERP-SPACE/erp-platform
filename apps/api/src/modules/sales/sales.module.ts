@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { ComplianceModule } from "../compliance/compliance.module.js";
 import { SeriesModule } from "../series/series.module.js";
 import { SettingsModule } from "../settings/settings.module.js";
 import { ChallansService } from "./challans.service.js";
@@ -21,7 +22,7 @@ import { SalesReturnsService } from "./sales-returns.service.js";
 
 /** Stage 3 sales cycle: SO (credit) → DC (picking, cuts) → SI → returns / notes; proformas; ledger. */
 @Module({
-  imports: [SeriesModule, SettingsModule],
+  imports: [SeriesModule, SettingsModule, ComplianceModule],
   controllers: [
     SalesOrdersController,
     ChallansController,

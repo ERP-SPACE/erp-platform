@@ -21,6 +21,21 @@ const envSchema = z.object({
     .int()
     .positive()
     .default(5 * 1024 * 1024),
+  /** Run the IRN queue consumer in this process (ADR-0011); integration tests drive IRNs directly. */
+  EINVOICE_QUEUE: z.stringbool().default(true),
+  /**
+   * NIC e-invoice sandbox (ADR-0011, Q27). Without credentials the SANDBOX provider runs a local
+   * simulator that returns well-formed but unsigned IRNs, so dev and CI work offline.
+   */
+  NIC_BASE_URL: z.url().default("https://einv-apisandbox.nic.in"),
+  NIC_CLIENT_ID: z.string().min(1).optional(),
+  NIC_CLIENT_SECRET: z.string().min(1).optional(),
+  NIC_USERNAME: z.string().min(1).optional(),
+  NIC_PASSWORD: z.string().min(1).optional(),
+  /** The GSTIN registered on the sandbox; it replaces the seller GSTIN on sandbox calls. */
+  NIC_GSTIN: z.string().length(15).optional(),
+  /** NIC's RSA public key: PEM, or the base64 DER published on the portal. */
+  NIC_PUBLIC_KEY: z.string().min(1).optional(),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),
 });
 
