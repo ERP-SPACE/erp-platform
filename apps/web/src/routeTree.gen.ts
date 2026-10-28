@@ -23,7 +23,9 @@ import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppSuppliersRouteImport } from './routes/_app/suppliers'
 import { Route as AppTransportersRouteImport } from './routes/_app/transporters'
 import { Route as FloorIndexRouteImport } from './routes/floor/index'
+import { Route as FloorInspectRouteImport } from './routes/floor/inspect'
 import { Route as FloorMapRouteImport } from './routes/floor/map'
+import { Route as FloorPickRouteImport } from './routes/floor/pick'
 import { Route as FloorReceiveRouteImport } from './routes/floor/receive'
 import { Route as AppCustomersIndexRouteImport } from './routes/_app/customers/index'
 import { Route as AppCustomersCustomerIdRouteImport } from './routes/_app/customers/$customerId'
@@ -143,9 +145,19 @@ const FloorIndexRoute = FloorIndexRouteImport.update({
   path: '/',
   getParentRoute: () => FloorRoute,
 } as any)
+const FloorInspectRoute = FloorInspectRouteImport.update({
+  id: '/inspect',
+  path: '/inspect',
+  getParentRoute: () => FloorRoute,
+} as any)
 const FloorMapRoute = FloorMapRouteImport.update({
   id: '/map',
   path: '/map',
+  getParentRoute: () => FloorRoute,
+} as any)
+const FloorPickRoute = FloorPickRouteImport.update({
+  id: '/pick',
+  path: '/pick',
   getParentRoute: () => FloorRoute,
 } as any)
 const FloorReceiveRoute = FloorReceiveRouteImport.update({
@@ -411,7 +423,9 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AppSettingsRouteWithChildren
   '/suppliers': typeof AppSuppliersRoute
   '/transporters': typeof AppTransportersRoute
+  '/floor/inspect': typeof FloorInspectRoute
   '/floor/map': typeof FloorMapRoute
+  '/floor/pick': typeof FloorPickRoute
   '/floor/receive': typeof FloorReceiveRoute
   '/floor/': typeof FloorIndexRoute
   '/customers/$customerId': typeof AppCustomersCustomerIdRoute
@@ -471,7 +485,9 @@ export interface FileRoutesByTo {
   '/purchase': typeof AppPurchaseRouteWithChildren
   '/suppliers': typeof AppSuppliersRoute
   '/transporters': typeof AppTransportersRoute
+  '/floor/inspect': typeof FloorInspectRoute
   '/floor/map': typeof FloorMapRoute
+  '/floor/pick': typeof FloorPickRoute
   '/floor/receive': typeof FloorReceiveRoute
   '/': typeof AppIndexRoute
   '/floor': typeof FloorIndexRoute
@@ -538,7 +554,9 @@ export interface FileRoutesById {
   '/_app/settings': typeof AppSettingsRouteWithChildren
   '/_app/suppliers': typeof AppSuppliersRoute
   '/_app/transporters': typeof AppTransportersRoute
+  '/floor/inspect': typeof FloorInspectRoute
   '/floor/map': typeof FloorMapRoute
+  '/floor/pick': typeof FloorPickRoute
   '/floor/receive': typeof FloorReceiveRoute
   '/_app/': typeof AppIndexRoute
   '/floor/': typeof FloorIndexRoute
@@ -606,7 +624,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/suppliers'
     | '/transporters'
+    | '/floor/inspect'
     | '/floor/map'
+    | '/floor/pick'
     | '/floor/receive'
     | '/floor/'
     | '/customers/$customerId'
@@ -666,7 +686,9 @@ export interface FileRouteTypes {
     | '/purchase'
     | '/suppliers'
     | '/transporters'
+    | '/floor/inspect'
     | '/floor/map'
+    | '/floor/pick'
     | '/floor/receive'
     | '/'
     | '/floor'
@@ -732,7 +754,9 @@ export interface FileRouteTypes {
     | '/_app/settings'
     | '/_app/suppliers'
     | '/_app/transporters'
+    | '/floor/inspect'
     | '/floor/map'
+    | '/floor/pick'
     | '/floor/receive'
     | '/_app/'
     | '/floor/'
@@ -894,11 +918,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FloorIndexRouteImport
       parentRoute: typeof FloorRoute
     }
+    '/floor/inspect': {
+      id: '/floor/inspect'
+      path: '/inspect'
+      fullPath: '/floor/inspect'
+      preLoaderRoute: typeof FloorInspectRouteImport
+      parentRoute: typeof FloorRoute
+    }
     '/floor/map': {
       id: '/floor/map'
       path: '/map'
       fullPath: '/floor/map'
       preLoaderRoute: typeof FloorMapRouteImport
+      parentRoute: typeof FloorRoute
+    }
+    '/floor/pick': {
+      id: '/floor/pick'
+      path: '/pick'
+      fullPath: '/floor/pick'
+      preLoaderRoute: typeof FloorPickRouteImport
       parentRoute: typeof FloorRoute
     }
     '/floor/receive': {
@@ -1408,13 +1446,17 @@ const AppRouteChildren: AppRouteChildren = {
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface FloorRouteChildren {
+  FloorInspectRoute: typeof FloorInspectRoute
   FloorMapRoute: typeof FloorMapRoute
+  FloorPickRoute: typeof FloorPickRoute
   FloorReceiveRoute: typeof FloorReceiveRoute
   FloorIndexRoute: typeof FloorIndexRoute
 }
 
 const FloorRouteChildren: FloorRouteChildren = {
+  FloorInspectRoute: FloorInspectRoute,
   FloorMapRoute: FloorMapRoute,
+  FloorPickRoute: FloorPickRoute,
   FloorReceiveRoute: FloorReceiveRoute,
   FloorIndexRoute: FloorIndexRoute,
 }
