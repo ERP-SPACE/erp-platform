@@ -13,6 +13,7 @@ import { updateVersioned } from "../../db/versioning.js";
 import { customerScopeFilter, loadCustomerScope } from "../customers/customer-scope.js";
 import { EInvoiceQueue } from "../compliance/einvoice.queue.js";
 import { EInvoiceService } from "../compliance/einvoice.service.js";
+import { CreditRecheckQueue } from "./credit-recheck.queue.js";
 import { EventBus } from "../realtime/event-bus.js";
 import { SeriesService } from "../series/series.service.js";
 import { SettingsService } from "../settings/settings.service.js";
@@ -40,6 +41,7 @@ export class NotesService {
     private readonly settings: SettingsService,
     private readonly einvoice: EInvoiceService,
     private readonly irnQueue: EInvoiceQueue,
+    private readonly creditRecheck: CreditRecheckQueue,
   ) {}
 
   async list(query: z.infer<typeof salesListQuery>): Promise<NoteItem[]> {
@@ -314,6 +316,7 @@ export class NotesService {
     await recordTransition(tx, "CustomerNote", n.id, "Draft", "Posted");
     if (n.supplyType !== "B2C")
       this.irnQueue.enqueueAfterCommit(n.kind === "CREDIT" ? "CN" : "DN", n.id);
+    if (n.kind === "CREDIT") this.creditRecheck.enqueueAfterCommit(n.customerId);
     const lines = await tx
       .select()
       .from(customerNoteLines)
@@ -399,6 +402,7 @@ export class NotesService {
           id,
           ctx().reason!.trim(),
         );
+        if (n.kind === "DEBIT") this.creditRecheck.enqueueAfterCommit(n.customerId);
       }
       this.changed(id);
     });

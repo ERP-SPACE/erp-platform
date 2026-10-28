@@ -270,7 +270,7 @@ describe("e-invoicing (ADR-0011)", () => {
   });
 
   it("with the queue running, posting alone gets the IRN (no one has to ask)", async () => {
-    const worker = await startApp({ EINVOICE_QUEUE: "true" });
+    const worker = await startApp({ API_JOBS: "true" });
     try {
       const inv = await invoice(b2b, rolls[5]!);
       expect(inv.einvoice.status).toBe("Pending");

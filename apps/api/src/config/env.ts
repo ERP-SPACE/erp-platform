@@ -21,8 +21,16 @@ const envSchema = z.object({
     .int()
     .positive()
     .default(5 * 1024 * 1024),
-  /** Run the IRN queue consumer in this process (ADR-0011); integration tests drive IRNs directly. */
-  EINVOICE_QUEUE: z.stringbool().default(true),
+  /**
+   * Run the API's own background consumers in this process: the IRN queue (ADR-0011) and the
+   * credit re-check of held orders. Integration tests turn it off and drive them directly.
+   */
+  API_JOBS: z.stringbool().default(true),
+  /**
+   * Where document PDFs are made: "worker" sends the HTML to the worker's Chromium (default);
+   * "inline" runs Chromium in the API process (tests, single-process setups).
+   */
+  PDF_RENDERER: z.enum(["worker", "inline"]).default("worker"),
   /**
    * NIC e-invoice sandbox (ADR-0011, Q27). Without credentials the SANDBOX provider runs a local
    * simulator that returns well-formed but unsigned IRNs, so dev and CI work offline.

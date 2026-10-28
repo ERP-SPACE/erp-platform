@@ -16,6 +16,7 @@
   "dependencies": {
     "@erp/contracts": "workspace:*",
     "@erp/db": "workspace:*",
+    "@erp/documents": "workspace:*",
     "@erp/domain": "workspace:*",
     "@erp/labels": "workspace:*",
     "@fastify/cookie": "11.1.3",

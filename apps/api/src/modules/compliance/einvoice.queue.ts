@@ -25,7 +25,7 @@ interface IrnJob {
  * The IRN queue (ADR-0011). Posting enqueues the document after commit; the consumer reports it
  * and retries outages with exponential backoff (30 s → ~1 h over 8 tries). A sweep every
  * 15 minutes re-queues anything still Pending — e.g. after Redis lost a job or the API restarted.
- * The consumer runs in the API process (EINVOICE_QUEUE=true) so it shares the provider session.
+ * The consumer runs in the API process (API_JOBS=true) so it shares the provider session.
  */
 @Injectable()
 export class EInvoiceQueue implements OnApplicationBootstrap, OnModuleDestroy {
@@ -60,7 +60,7 @@ export class EInvoiceQueue implements OnApplicationBootstrap, OnModuleDestroy {
   }
 
   async onApplicationBootstrap() {
-    if (!this.env.EINVOICE_QUEUE) return;
+    if (!this.env.API_JOBS) return;
     await this.queue.upsertJobScheduler(
       "einvoice-sweep",
       { every: 15 * 60_000 },
@@ -81,6 +81,8 @@ export class EInvoiceQueue implements OnApplicationBootstrap, OnModuleDestroy {
       },
       { connection: { url: this.env.REDIS_URL, maxRetriesPerRequest: null }, concurrency: 1 },
     );
+    // Redis hiccups are reported, never thrown as unhandled 'error' events.
+    this.worker.on("error", (error) => this.logger.error(error, "IRN queue error"));
     this.worker.on("failed", (job, error) =>
       this.logger.warn(
         { job: job?.id, attempts: job?.attemptsMade, err: error.message },

@@ -16,13 +16,18 @@ import {
   SalesOrdersController,
   SalesReturnsController,
 } from "./sales.controller.js";
+import { CreditRecheckConsumer } from "./credit-recheck.consumer.js";
+import { CreditRecheckModule } from "./credit-recheck.queue.js";
+import { PdfService } from "./pdf.service.js";
+import { SalesDocumentsController } from "./sales-documents.controller.js";
+import { SalesDocumentsService } from "./sales-documents.service.js";
 import { SalesInvoicesService } from "./sales-invoices.service.js";
 import { SalesOrdersService } from "./sales-orders.service.js";
 import { SalesReturnsService } from "./sales-returns.service.js";
 
 /** Stage 3 sales cycle: SO (credit) → DC (picking, cuts) → SI → returns / notes; proformas; ledger. */
 @Module({
-  imports: [SeriesModule, SettingsModule, ComplianceModule],
+  imports: [SeriesModule, SettingsModule, ComplianceModule, CreditRecheckModule],
   controllers: [
     SalesOrdersController,
     ChallansController,
@@ -31,6 +36,7 @@ import { SalesReturnsService } from "./sales-returns.service.js";
     SalesReturnsController,
     NotesController,
     CustomerAccountController,
+    SalesDocumentsController,
   ],
   providers: [
     CreditService,
@@ -41,6 +47,9 @@ import { SalesReturnsService } from "./sales-returns.service.js";
     SalesReturnsService,
     NotesService,
     LedgerService,
+    PdfService,
+    CreditRecheckConsumer,
+    SalesDocumentsService,
   ],
   exports: [CreditService, SalesInvoicesService, NotesService],
 })

@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import type {
   EInvoiceInfo,
   EInvoiceQueueItem,
@@ -22,7 +21,7 @@ import { D, istToday } from "@erp/domain";
 import { Inject, Injectable, Logger } from "@nestjs/common";
 import { and, desc, eq, inArray } from "drizzle-orm";
 import type { z } from "zod";
-import { type Actor, actor, ctx, requestContext } from "../../common/context.js";
+import { actor, ctx, requestContext, runAsSystem } from "../../common/context.js";
 import { AppError, notFound, validationError } from "../../common/errors.js";
 import { UnitOfWork } from "../../db/unit-of-work.js";
 import { customerScopeFilter, loadCustomerScope } from "../customers/customer-scope.js";
@@ -162,19 +161,7 @@ export class EInvoiceService {
     companyId: string;
     userId: string | null;
   }) {
-    const system: Actor = {
-      userId: job.userId ?? "",
-      name: "E-invoice queue",
-      email: "",
-      companyId: job.companyId,
-      branchId: null,
-      roles: [],
-      permissions: new Set(),
-      sessionId: "",
-      sessionCreatedAt: new Date(),
-      twoFactorEnabled: false,
-    };
-    return requestContext.run({ requestId: `einvoice-${randomUUID()}`, actor: system }, () =>
+    return runAsSystem({ ...job, name: "E-invoice queue" }, () =>
       this.generate(job.docType, job.id),
     );
   }

@@ -1,5 +1,7 @@
 import { parseSetting } from "@erp/contracts";
 import { createDb, settings } from "@erp/db";
+import { DOCUMENT_QUEUE, type DocumentJobData, type DocumentJobResult } from "@erp/documents";
+import { closePdfBrowser, htmlToPdf } from "@erp/documents/pdf";
 import { LABEL_QUEUE, type LabelJobData, type LabelJobResult } from "@erp/labels";
 import { eq } from "drizzle-orm";
 import { Queue, Worker } from "bullmq";
@@ -83,6 +85,16 @@ labelWorker.on("failed", (job, error) =>
   log.error({ job: job?.id, err: error }, "label job failed"),
 );
 
+// Invoice / note / challan / proforma PDFs (Stage 3): the API sends finished HTML and waits.
+const documentWorker = new Worker<DocumentJobData, DocumentJobResult>(
+  DOCUMENT_QUEUE,
+  async (job) => ({ pdfBase64: Buffer.from(await htmlToPdf(job.data.html)).toString("base64") }),
+  { connection, concurrency: 2 },
+);
+documentWorker.on("failed", (job, error) =>
+  log.error({ job: job?.id, err: error }, "document job failed"),
+);
+
 worker.on("completed", (job, result) => {
   if (job.name !== "system.heartbeat") log.info({ job: job.name, result }, "job completed");
 });
@@ -93,6 +105,8 @@ const shutdown = async () => {
   log.info("worker shutting down");
   await worker.close();
   await labelWorker.close();
+  await documentWorker.close();
+  await closePdfBrowser();
   await queue.close();
   await db.close();
   redis.disconnect();

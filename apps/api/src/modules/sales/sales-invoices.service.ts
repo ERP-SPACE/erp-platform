@@ -42,6 +42,7 @@ import { customerScopeFilter, loadCustomerScope } from "../customers/customer-sc
 import { canSeeCost } from "../inventory/rolls.service.js";
 import { EInvoiceQueue } from "../compliance/einvoice.queue.js";
 import { EInvoiceService } from "../compliance/einvoice.service.js";
+import { CreditRecheckQueue } from "./credit-recheck.queue.js";
 import { EventBus } from "../realtime/event-bus.js";
 import { SeriesService } from "../series/series.service.js";
 import { SettingsService } from "../settings/settings.service.js";
@@ -96,6 +97,7 @@ export class SalesInvoicesService {
     private readonly settings: SettingsService,
     private readonly einvoice: EInvoiceService,
     private readonly irnQueue: EInvoiceQueue,
+    private readonly creditRecheck: CreditRecheckQueue,
   ) {}
 
   // ── read ───────────────────────────────────────────────────────────────────
@@ -1016,7 +1018,10 @@ export class SalesInvoicesService {
       );
       await recordTransition(tx, "SalesInvoice", id, si.status, "Cancelled");
       // Last, so an IRP refusal rolls the whole cancellation back (ADR-0011).
-      if (si.status === "Posted") await this.einvoice.cancelIrn(tx, "SI", id, ctx().reason!.trim());
+      if (si.status === "Posted") {
+        await this.einvoice.cancelIrn(tx, "SI", id, ctx().reason!.trim());
+        this.creditRecheck.enqueueAfterCommit(si.customerId);
+      }
       this.changed(id);
       this.bus.publishAfterCommit("inventory.changed", { siId: id });
     });

@@ -35,3 +35,26 @@ export function actor(): Actor {
   if (!a) throw new Error("No authenticated actor in this request");
   return a;
 }
+
+/**
+ * Runs background work (queue consumers) with an actor, as the person whose action caused it,
+ * so audit columns, settings and customer scope work as they do in a request.
+ */
+export function runAsSystem<T>(
+  who: { companyId: string; userId: string | null; name: string },
+  work: () => Promise<T>,
+): Promise<T> {
+  const system: Actor = {
+    userId: who.userId ?? "",
+    name: who.name,
+    email: "",
+    companyId: who.companyId,
+    branchId: null,
+    roles: [],
+    permissions: new Set(),
+    sessionId: "",
+    sessionCreatedAt: new Date(),
+    twoFactorEnabled: false,
+  };
+  return requestContext.run({ requestId: `job-${crypto.randomUUID()}`, actor: system }, work);
+}

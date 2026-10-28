@@ -34,7 +34,7 @@ import {
 import { Injectable } from "@nestjs/common";
 import { and, asc, desc, eq, gte, ilike, inArray, lte, ne, or, sql } from "drizzle-orm";
 import type { z } from "zod";
-import { actor, ctx } from "../../common/context.js";
+import { actor, ctx, runAsSystem } from "../../common/context.js";
 import { trimDecimal } from "../../common/decimal.js";
 import {
   approvalRequired,
@@ -49,6 +49,7 @@ import { customerScopeFilter, loadCustomerScope } from "../customers/customer-sc
 import { EventBus } from "../realtime/event-bus.js";
 import { SeriesService } from "../series/series.service.js";
 import { SettingsService } from "../settings/settings.service.js";
+import { CreditRecheckQueue } from "./credit-recheck.queue.js";
 import { CreditService } from "./credit.service.js";
 import {
   type Db,
@@ -78,6 +79,7 @@ export class SalesOrdersService {
     private readonly series: SeriesService,
     private readonly settings: SettingsService,
     private readonly credit: CreditService,
+    private readonly creditRecheck: CreditRecheckQueue,
   ) {}
 
   // ── rates & stock ──────────────────────────────────────────────────────────
@@ -504,6 +506,72 @@ export class SalesOrdersService {
     return this.get(id);
   }
 
+  /**
+   * Automatic credit re-check (Stage 3 step 6): after a credit note, a cancelled invoice or order,
+   * or a credit-policy change, orders the credit check put on hold are checked again, oldest
+   * first, and confirmed once the customer is within terms. Manual holds (no credit reasons) are
+   * left for a person. Runs per order as whoever confirmed it, so its company and scope apply.
+   */
+  async recheckHeld(
+    filter: { companyId: string; customerId: string | null } | null,
+  ): Promise<{ checked: number; released: number }> {
+    const held = await this.uow.db
+      .select({
+        id: salesOrders.id,
+        companyId: salesOrders.companyId,
+        userId: sql<string | null>`coalesce(${salesOrders.confirmedBy}, ${salesOrders.createdBy})`,
+      })
+      .from(salesOrders)
+      .where(
+        and(
+          eq(salesOrders.status, "OnHold"),
+          sql`cardinality(${salesOrders.heldReasons}) > 0`,
+          filter ? eq(salesOrders.companyId, filter.companyId) : undefined,
+          filter?.customerId ? eq(salesOrders.customerId, filter.customerId) : undefined,
+        ),
+      )
+      .orderBy(asc(salesOrders.confirmedAt), asc(salesOrders.createdAt));
+    let released = 0;
+    for (const h of held) {
+      const confirmed = await runAsSystem({ ...h, name: "Credit re-check" }, () =>
+        this.uow.run(async (tx) => {
+          const [so] = await tx
+            .select()
+            .from(salesOrders)
+            .where(eq(salesOrders.id, h.id))
+            .for("update");
+          if (!so || so.status !== "OnHold" || !so.heldReasons.length) return false;
+          const c = await customerContext(tx, so.customerId);
+          const check = await this.credit.check(tx, so.customerId, so.total, so.id, c.policy);
+          const to: SoStatus = check.blocked ? "OnHold" : "Confirmed";
+          await updateVersioned(
+            tx,
+            salesOrders,
+            eq(salesOrders.id, so.id),
+            so.version,
+            { status: to, creditCheck: check, heldReasons: check.blocked ? check.reasons : [] },
+            "Sales order",
+          );
+          if (to === "Confirmed") {
+            salesOrderMachine.assert("OnHold", "Confirmed");
+            await recordTransition(
+              tx,
+              "SalesOrder",
+              so.id,
+              "OnHold",
+              "Confirmed",
+              "Credit re-check: customer is within terms again",
+            );
+          }
+          this.changed(so.id);
+          return to === "Confirmed";
+        }),
+      );
+      if (confirmed) released++;
+    }
+    return { checked: held.length, released };
+  }
+
   /** Release a credit hold (PRD §8.5 step 4): reason mandatory, step-up, audited. */
   async release(id: string, version: number): Promise<SoDetail> {
     const reason = ctx().reason?.trim();
@@ -560,6 +628,8 @@ export class SalesOrdersService {
         "Sales order",
       );
       await recordTransition(tx, "SalesOrder", id, so.status, to);
+      // Its value leaves the customer's exposure; other held orders may now fit.
+      if (to !== "OnHold") this.creditRecheck.enqueueAfterCommit(so.customerId);
       this.changed(id);
     });
     return this.get(id);
