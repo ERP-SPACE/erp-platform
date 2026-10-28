@@ -224,6 +224,10 @@ export const creditPolicies = pgTable(
     blockReason: text("block_reason"),
     blockedAt: timestamp("blocked_at", { withTimezone: true }),
     blockedBy: text("blocked_by"),
+    /** Set by the nightly credit check (Q35); lifted by it once paid. Separate from manual blocks. */
+    systemBlock: boolean("system_block").notNull().default(false),
+    systemBlockedAt: timestamp("system_blocked_at", { withTimezone: true }),
+    systemBlockReason: text("system_block_reason"),
     ...audited,
   },
   (t) => [
