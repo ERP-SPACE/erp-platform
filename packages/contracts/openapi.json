@@ -11104,6 +11104,66 @@
           },
           "totalCreditLimit": {
             "type": "string"
+          },
+          "sales": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "openOrders": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "onHold": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "awaitingApproval": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "challansToInvoice": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "invoicedThisMonth": {
+                    "type": "string"
+                  },
+                  "invoicesThisMonth": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "irnPending": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  },
+                  "irnFailed": {
+                    "type": "integer",
+                    "minimum": -9007199254740991,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "openOrders",
+                  "onHold",
+                  "awaitingApproval",
+                  "challansToInvoice",
+                  "invoicedThisMonth",
+                  "invoicesThisMonth",
+                  "irnPending",
+                  "irnFailed"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -11112,7 +11172,8 @@
           "skus",
           "blockedCustomers",
           "categoriesMissingTax",
-          "totalCreditLimit"
+          "totalCreditLimit",
+          "sales"
         ]
       },
       "PoListItemDto": {

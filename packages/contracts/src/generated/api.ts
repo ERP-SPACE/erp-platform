@@ -3008,6 +3008,16 @@ export interface components {
             blockedCustomers: number;
             categoriesMissingTax: number;
             totalCreditLimit: string;
+            sales: {
+                openOrders: number;
+                onHold: number;
+                awaitingApproval: number;
+                challansToInvoice: number;
+                invoicedThisMonth: string;
+                invoicesThisMonth: number;
+                irnPending: number;
+                irnFailed: number;
+            } | null;
         };
         PoListItemDto: {
             id: string;
