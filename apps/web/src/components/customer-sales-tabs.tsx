@@ -1,4 +1,4 @@
-import type { CustomerLedger, SiListItem, SoListItem } from "@erp/contracts";
+import type { CustomerLedger, ReceiptListItem, SiListItem, SoListItem } from "@erp/contracts";
 import { D } from "@erp/domain";
 import { Badge, Button, Card, DataTable, Mono, StatCard } from "@erp/ui";
 import { useQuery } from "@tanstack/react-query";
@@ -16,6 +16,7 @@ import {
   soListQuery,
   rupees,
 } from "../lib/sales.js";
+import { MODE_LABEL, MONEY_TONE, moneyListQuery } from "../lib/collections.js";
 
 const soColumns: ColumnDef<SoListItem, unknown>[] = [
   { accessorKey: "soNo", header: "Order", cell: (c) => <Mono>{c.getValue() as string}</Mono> },
@@ -153,13 +154,12 @@ const DOC_LINK: Record<Entry["docType"], string | null> = {
   CN: "/sales/notes/$noteId",
   DN: "/sales/notes/$noteId",
   OPENING: null,
-  // Receipt screens arrive with the Stage 4 web step.
-  RC: null,
-  REV: null,
+  RC: "/collections/$kind/$moneyId",
+  REV: "/collections/$kind/$moneyId",
   TDS: null,
 };
 
-/** Sub-ledger (receipts arrive in Stage 4): invoices debit, notes credit, running balance. */
+/** Sub-ledger: invoices and debit notes debit; notes, receipts and TDS credit; running balance. */
 export function CustomerLedgerTab({ customerId }: { customerId: string }) {
   const { data } = useQuery(ledgerQuery(customerId));
   const money = (v: string) => (D(v).isZero() ? "" : rupees(v));
@@ -175,7 +175,13 @@ export function CustomerLedgerTab({ customerId }: { customerId: string }) {
         return (
           <Link
             to={to}
-            params={e.docType === "SI" ? { siId: e.docId } : { noteId: e.docId }}
+            params={
+              e.docType === "SI"
+                ? { siId: e.docId }
+                : e.docType === "RC" || e.docType === "REV"
+                  ? { kind: "receipts", moneyId: e.docId }
+                  : { noteId: e.docId }
+            }
             className="text-primary hover:underline"
           >
             <Mono>{e.docNo}</Mono>
@@ -215,7 +221,16 @@ export function CustomerLedgerTab({ customerId }: { customerId: string }) {
       <Card
         title="Ledger"
         padded={false}
-        description="Receipts are added in Stage 4 (collections)."
+        actions={
+          <Button asChild size="sm" variant="secondary">
+            <Link
+              to="/collections/statement/$party/$partyId"
+              params={{ party: "CUSTOMER", partyId: customerId }}
+            >
+              Statement & PDF
+            </Link>
+          </Button>
+        }
       >
         <DataTable
           caption="Customer ledger"
@@ -226,5 +241,91 @@ export function CustomerLedgerTab({ customerId }: { customerId: string }) {
         />
       </Card>
     </div>
+  );
+}
+
+const receiptColumns: ColumnDef<ReceiptListItem, unknown>[] = [
+  {
+    accessorKey: "docNo",
+    header: "Receipt",
+    cell: (c) =>
+      c.getValue() ? (
+        <Mono>{c.getValue() as string}</Mono>
+      ) : (
+        <span className="text-fg-3">Draft</span>
+      ),
+  },
+  { accessorKey: "date", header: "Date" },
+  {
+    accessorKey: "mode",
+    header: "Mode",
+    cell: (c) => MODE_LABEL[c.getValue() as ReceiptListItem["mode"]],
+  },
+  {
+    accessorKey: "amount",
+    header: "Amount",
+    meta: { numeric: true },
+    cell: (c) => rupees(c.getValue() as string),
+  },
+  {
+    accessorKey: "unallocated",
+    header: "On account",
+    meta: { numeric: true },
+    cell: (c) =>
+      Number(c.getValue()) ? <Badge tone="warning">{rupees(c.getValue() as string)}</Badge> : "—",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: (c) => (
+      <Badge tone={MONEY_TONE[c.getValue() as ReceiptListItem["status"]]}>
+        {c.getValue() as string}
+      </Badge>
+    ),
+  },
+];
+
+export function CustomerReceiptsTab({
+  customerId,
+  canCreate,
+}: {
+  customerId: string;
+  canCreate: boolean;
+}) {
+  const { data, isLoading } = useQuery(moneyListQuery("receipts", { partyId: customerId }));
+  const navigate = useNavigate();
+  return (
+    <Card
+      title="Receipts"
+      padded={false}
+      actions={
+        canCreate ? (
+          <Button asChild size="sm" variant="secondary" icon={Plus}>
+            <Link
+              to="/collections/$kind/new"
+              params={{ kind: "receipts" }}
+              search={{ partyId: customerId }}
+            >
+              New receipt
+            </Link>
+          </Button>
+        ) : null
+      }
+    >
+      <DataTable
+        caption="Customer's receipts"
+        data={data ?? []}
+        loading={isLoading}
+        columns={receiptColumns}
+        getRowId={(r) => r.id}
+        empty="No money received yet."
+        onRowClick={(r) =>
+          void navigate({
+            to: "/collections/$kind/$moneyId",
+            params: { kind: "receipts", moneyId: r.id },
+          })
+        }
+      />
+    </Card>
   );
 }

@@ -12655,6 +12655,40 @@
                 "type": "null"
               }
             ]
+          },
+          "collections": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "collectedToday": {
+                    "type": "string"
+                  },
+                  "collectedThisMonth": {
+                    "type": "string"
+                  },
+                  "receivable": {
+                    "type": "string"
+                  },
+                  "overdue": {
+                    "type": "string"
+                  },
+                  "onAccount": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "collectedToday",
+                  "collectedThisMonth",
+                  "receivable",
+                  "overdue",
+                  "onAccount"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -12664,7 +12698,8 @@
           "blockedCustomers",
           "categoriesMissingTax",
           "totalCreditLimit",
-          "sales"
+          "sales",
+          "collections"
         ]
       },
       "PoListItemDto": {

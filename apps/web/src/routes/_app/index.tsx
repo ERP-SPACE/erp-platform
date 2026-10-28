@@ -5,6 +5,8 @@ import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import {
   CheckCircle2,
   Circle,
+  CalendarClock,
+  HandCoins,
   History,
   IndianRupee,
   Package,
@@ -13,6 +15,7 @@ import {
   ShieldCheck,
   Truck,
   Users,
+  Wallet,
   Warehouse,
 } from "lucide-react";
 import { dateTime, greeting, longDate } from "../../lib/format.js";
@@ -163,6 +166,45 @@ function DashboardPage() {
                 : "E-invoices to report"
             }
             onClick={() => void navigate({ to: "/sales/irn" })}
+          />
+        </div>
+      ) : null}
+
+      {summary?.collections ? (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <StatCard
+            label="Collected this month"
+            value={formatINRCompact(summary.collections.collectedThisMonth)}
+            icon={HandCoins}
+            hint={`${formatINRCompact(summary.collections.collectedToday)} today`}
+            onClick={() =>
+              void navigate({ to: "/collections/$kind", params: { kind: "receipts" } })
+            }
+          />
+          <StatCard
+            label="Receivable"
+            value={formatINRCompact(summary.collections.receivable)}
+            icon={Wallet}
+            hint={
+              Number(summary.collections.onAccount)
+                ? `${formatINRCompact(summary.collections.onAccount)} on account`
+                : "Owed by customers"
+            }
+            onClick={() => void navigate({ to: "/collections/aging" })}
+          />
+          <StatCard
+            label="Overdue"
+            value={formatINRCompact(summary.collections.overdue)}
+            icon={CalendarClock}
+            hint="Past the due date"
+            onClick={() => void navigate({ to: "/collections/aging" })}
+          />
+          <StatCard
+            label="Blocked orders"
+            value={fmt(summary.sales?.onHold)}
+            icon={PauseCircle}
+            hint="Held for credit or by hand"
+            onClick={() => void navigate({ to: "/collections/blocked" })}
           />
         </div>
       ) : null}

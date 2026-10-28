@@ -74,7 +74,7 @@ const NAV: { heading?: string; items: NavItem[] }[] = [
       { label: "Sales", icon: FileText, to: "/sales", permission: "sales.view" },
       { label: "Purchase", icon: ShoppingCart, to: "/purchase", permission: "purchase.view" },
       { label: "Inventory", icon: Boxes, to: "/inventory", permission: "inventory.view" },
-      { label: "Collections", icon: Wallet, stage: 4 },
+      { label: "Collections", icon: Wallet, to: "/collections", permission: "collections.view" },
       { label: "Reports", icon: BarChart3, stage: 5 },
     ],
   },
@@ -179,6 +179,15 @@ export function Shell({ me, children }: { me: MeResponse; children: ReactNode })
         label: "New sales invoice",
         keywords: ["bill", "si"],
         onRun: go("/sales/invoices/new"),
+      });
+    }
+    if (can(me, "collections.receipt.manage")) {
+      items.push({
+        id: "new-receipt",
+        group: "Create",
+        label: "New receipt",
+        keywords: ["payment received", "collection"],
+        onRun: go("/collections/receipts/new"),
       });
     }
     if (can(me, "rates.bulk_revise")) {
@@ -651,6 +660,30 @@ const MASTER_PAGES = [
     label: "IRN queue",
     permission: "sales.view",
     keywords: ["e-invoice", "einvoice", "irp"],
+  },
+  {
+    to: "/collections/receipts",
+    label: "Receipts",
+    permission: "collections.view",
+    keywords: ["payment", "money", "collection"],
+  },
+  {
+    to: "/collections/aging",
+    label: "Receivables aging",
+    permission: "collections.view",
+    keywords: ["outstanding", "overdue", "ar"],
+  },
+  {
+    to: "/collections/blocked",
+    label: "Blocked orders",
+    permission: "collections.view",
+    keywords: ["hold", "credit"],
+  },
+  {
+    to: "/collections/commission",
+    label: "Commission",
+    permission: "commission.view",
+    keywords: ["salesman", "payout", "broker"],
   },
 ];
 

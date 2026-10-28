@@ -3530,6 +3530,13 @@ export interface components {
                 irnPending: number;
                 irnFailed: number;
             } | null;
+            collections: {
+                collectedToday: string;
+                collectedThisMonth: string;
+                receivable: string;
+                overdue: string;
+                onAccount: string;
+            } | null;
         };
         PoListItemDto: {
             id: string;

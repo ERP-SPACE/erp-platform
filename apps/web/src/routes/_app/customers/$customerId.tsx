@@ -39,6 +39,7 @@ import {
   CustomerInvoicesTab,
   CustomerLedgerTab,
   CustomerOrdersTab,
+  CustomerReceiptsTab,
 } from "../../../components/customer-sales-tabs.js";
 import { ReasonField } from "../../../components/reason-field.js";
 import { ApiError, api, call, reasonHeader } from "../../../lib/api.js";
@@ -62,6 +63,7 @@ const TABS = [
   "credit",
   "orders",
   "invoices",
+  "receipts",
   "ledger",
   "rates",
   "salesman",
@@ -211,6 +213,20 @@ function Customer360() {
                   label: "Invoices",
                   content: <CustomerInvoicesTab customerId={c.id} />,
                 },
+                ...(can(me, "collections.view")
+                  ? [
+                      {
+                        value: "receipts",
+                        label: "Receipts",
+                        content: (
+                          <CustomerReceiptsTab
+                            customerId={c.id}
+                            canCreate={can(me, "collections.receipt.manage")}
+                          />
+                        ),
+                      },
+                    ]
+                  : []),
                 {
                   value: "ledger",
                   label: "Ledger",
