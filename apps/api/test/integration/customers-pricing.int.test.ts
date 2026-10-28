@@ -87,7 +87,7 @@ describe("customers, rates and salesmen (Stage 1 gate)", () => {
     await rm(storageDir, { recursive: true, force: true });
   });
 
-  it("creates a salesman SLS-0001 with default credit terms and product rates", async () => {
+  it("creates a salesman SLS-#### with default credit terms and product rates", async () => {
     const res = await owner.request({
       method: "POST",
       url: "/api/salesmen",
@@ -95,7 +95,7 @@ describe("customers, rates and salesmen (Stage 1 gate)", () => {
     });
     expect(res.statusCode).toBe(201);
     const s = json<{ id: string; code: string }>(res);
-    expect(s.code).toBe("SLS-0001");
+    expect(s.code).toMatch(/^SLS-\d{4}$/); // other suites may create salesmen first
     salesmanId = s.id;
     const rates = await owner.request({
       method: "PUT",

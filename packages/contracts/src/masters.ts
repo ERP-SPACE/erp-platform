@@ -568,6 +568,16 @@ export const dashboardSummary = z.object({
       irnFailed: z.number().int(),
     })
     .nullable(),
+  /** Stage 4: money in and owed; null without `collections.view`. */
+  collections: z
+    .object({
+      collectedToday: z.string(),
+      collectedThisMonth: z.string(),
+      receivable: z.string(),
+      overdue: z.string(),
+      onAccount: z.string(),
+    })
+    .nullable(),
 });
 
 export type CategoryItem = z.infer<typeof categoryItem>;

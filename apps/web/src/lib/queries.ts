@@ -40,6 +40,7 @@ export const keys = {
   purchase: ["purchase"] as const,
   inventory: ["inventory"] as const,
   sales: ["sales"] as const,
+  collections: ["collections"] as const,
 };
 
 export const meQuery = queryOptions({

@@ -1,7 +1,3 @@
-# Open Questions
-
-Owner: business owner, unless marked **CA**. Each question is tagged with the stage it blocks. When a question is answered, move it to **Answered** and update or accept the linked ADR.
-
 ## Answered
 
 | # | Question | Answer (2026-10-23) | Effect |
@@ -30,6 +26,12 @@ Owner: business owner, unless marked **CA**. Each question is tagged with the st
 | Q28 | Cutting defaults | **No trim waste by default (can be entered per cut); 100 m minimum remnant; `allow_cut` per customer** (owner approved the default, 2026-10-27) | Stage 3 plan |
 | Q29 | One SI per DC or several DCs? | **One SI can cover several open DCs of the same customer** (owner approved the default, 2026-10-27) | Stage 3 plan |
 | Q30 | Invoice PDF layout | **Same information and order as R/649, in a cleaner layout** (owner approved the default, 2026-10-27) | Stage 3 plan |
+| Q23 | Advances, bounces, interest | **Advances kept on account and used against later invoices; a bounce reverses the receipt with a reason; no interest** (owner approved the default, 2026-10-28) | Stage 4 plan |
+| Q24 | Pro-rata commission on partial payment | **Yes, pro-rata** (owner approved the default, 2026-10-28) | Stage 4 plan |
+| Q32 | TDS / short payment by customers | **A receipt line can carry TDS or a short-payment amount that settles the invoice without cash** (owner approved the default, 2026-10-28) | Stage 4 plan |
+| Q33 | Receipts / supplier payments | **Accounts role records both; supplier payments above ₹5,00,000 need the Owner's approval with password** (owner approved the default, 2026-10-28) | Stage 4 plan |
+| Q34 | Commission payouts | **Monthly batches; mode and reference recorded; optional TDS on the batch** (owner approved the default, 2026-10-28) | Stage 4 plan |
+| Q35 | Nightly credit job | **Unblock automatically for blocks the system placed; manual blocks stay** (owner approved the default, 2026-10-28) | Stage 4 plan |
 
 ## Deferred by owner
 
@@ -57,13 +59,6 @@ Owner: business owner, unless marked **CA**. Each question is tagged with the st
 | Q27 | *(Owner arranging sandbox access, 2026-10-27.)* **E-invoice access:** use an existing GSP/ASP (e.g. the one your accountant uses for GST filing), or register for direct IRP API access on einvoice1.gst.gov.in? We need sandbox credentials for testing. | IRN integration in Stage 3. | ADR-0011 |
 
 | Q31 *(new, from the Stage 3 gate)* | **Roll suggestions may overshoot.** The legacy allocation keeps its "swap for a slightly longer roll" step, ported unchanged: e.g. 51 m still needed and a 152 m roll in stock → it suggests the 152 m roll. Suggestions are only advice (the godown scans what it sends), but should a swap be capped at the tolerance (100 m over)? | Default: keep the legacy behaviour; a cap is a one-line change in `packages/domain/src/allocation.ts`. | Port matrix 2.1 |
-
-## Before Stage 4 (collections, credit, commission)
-
-| # | Question | Why it matters | Linked |
-|---|---|---|---|
-| Q23 | Advances / on-account receipts and cheque bounces: how are they handled today? Is any interest charged on overdue amounts? | Receipt + allocation design. | PRD §5.9 |
-| Q24 | With commission `ON_PAYMENT_RECEIVED`, should partial payments accrue commission pro-rata? | Commission accrual. | PRD §5.6 |
 
 ## Before Stage 6 (go-live)
 

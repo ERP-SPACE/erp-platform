@@ -1,19 +1,21 @@
 import type { CreditCheck } from "@erp/contracts";
-import { D, type DecimalLike, evaluateCredit, istToday } from "@erp/domain";
+import { D, type DecimalLike, evaluateCredit, istToday, sum } from "@erp/domain";
 import { Injectable } from "@nestjs/common";
 import { sql } from "drizzle-orm";
 import { actor } from "../../common/context.js";
 import { UnitOfWork } from "../../db/unit-of-work.js";
 import { SettingsService } from "../settings/settings.service.js";
+import { siOutstanding, unusedCredits } from "../collections/outstanding.js";
 import type { Db } from "./sales-common.js";
 
 /**
  * Credit exposure (PRD §8.5, ADR-0016), computed live — no cached exposure column:
- * - each posted invoice owes its total, less credit notes and plus debit notes raised against it
- *   (receipts and opening balances join in Stages 4 and 6);
- * - credit notes not tied to an invoice reduce exposure; debit notes not tied to one owe from
- *   their own date;
- * - other Confirmed / PartiallyFulfilled orders count for their undelivered share;
+ * - each posted invoice owes what is left after notes and allocations (`siOutstanding`);
+ *   opening balances join in Stage 6;
+ * - money on account and credit notes not tied to an invoice reduce exposure; debit notes not
+ *   tied to one owe from their own date;
+ * - orders count for their uninvoiced share: undelivered metres of Confirmed / PartiallyFulfilled
+ *   orders plus dispatched-but-unbilled metres of any order (OnHold never counts);
  * - the order being confirmed counts in full.
  */
 @Injectable()
@@ -41,13 +43,7 @@ export class CreditService {
     const companyId = actor().companyId;
     const invoices = (
       await db.execute<{ date: string; outstanding: string }>(sql`
-        SELECT si.date::text AS date,
-               (si.total
-                 - coalesce((SELECT sum(n.total) FROM customer_notes n
-                             WHERE n.si_id = si.id AND n.status = 'Posted' AND n.kind = 'CREDIT'), 0)
-                 + coalesce((SELECT sum(n.total) FROM customer_notes n
-                             WHERE n.si_id = si.id AND n.status = 'Posted' AND n.kind = 'DEBIT'), 0)
-               )::text AS outstanding
+        SELECT si.date::text AS date, ${siOutstanding()}::text AS outstanding
         FROM sales_invoices si
         WHERE si.company_id = ${companyId} AND si.customer_id = ${customerId} AND si.status = 'Posted'
         UNION ALL
@@ -55,24 +51,26 @@ export class CreditService {
         WHERE n.company_id = ${companyId} AND n.customer_id = ${customerId} AND n.status = 'Posted'
           AND n.kind = 'DEBIT' AND n.si_id IS NULL`)
     ).rows;
-    const [credits] = (
-      await db.execute<{ total: string }>(sql`
-        SELECT coalesce(sum(total), 0)::text AS total FROM customer_notes
-        WHERE company_id = ${companyId} AND customer_id = ${customerId} AND status = 'Posted'
-          AND kind = 'CREDIT' AND si_id IS NULL`)
-    ).rows;
+    // Money on account and credit notes not tied to an invoice (Stage 4).
+    const credits = sum((await unusedCredits(db, "CUSTOMER", customerId)).map((c) => c.available));
     const [orders] = (
       await db.execute<{ total: string }>(sql`
         SELECT coalesce(sum(so.total * u.share), 0)::numeric(14,2)::text AS total
         FROM sales_orders so
         JOIN LATERAL (
+          -- Not yet invoiced: undelivered metres of open orders, and metres dispatched on challans
+          -- but not billed yet (also on closed orders) — a challan's goods stay in exposure until
+          -- the invoice takes over (Stage 4).
           SELECT CASE WHEN sum(l.amount) = 0 THEN 0
-                      ELSE sum(l.amount * greatest(l.total_m - l.dispatched_m, 0) / l.total_m) / sum(l.amount)
+                      ELSE sum(l.amount * (CASE WHEN so.status IN ('Confirmed', 'PartiallyFulfilled')
+                                                THEN greatest(l.total_m - l.invoiced_m, 0)
+                                                ELSE greatest(l.dispatched_m - l.invoiced_m, 0) END)
+                               / l.total_m) / sum(l.amount)
                  END AS share
           FROM sales_order_lines l WHERE l.so_id = so.id
         ) u ON true
         WHERE so.company_id = ${companyId} AND so.customer_id = ${customerId}
-          AND so.status IN ('Confirmed', 'PartiallyFulfilled')
+          AND so.status IN ('Confirmed', 'PartiallyFulfilled', 'Closed')
           AND (${excludeSoId}::uuid IS NULL OR so.id <> ${excludeSoId}::uuid)`)
     ).rows;
     const result = evaluateCredit({
@@ -85,7 +83,7 @@ export class CreditService {
       },
       manualBlock: p.manualBlock,
       openInvoices: invoices,
-      unappliedCredits: credits?.total ?? "0",
+      unappliedCredits: credits,
       otherOpenOrders: orders?.total ?? "0",
       thisOrder,
       today: istToday(),

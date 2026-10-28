@@ -5,12 +5,13 @@ import { sql } from "drizzle-orm";
 import { actor } from "../../common/context.js";
 import { UnitOfWork } from "../../db/unit-of-work.js";
 import { SettingsService } from "../settings/settings.service.js";
+import { siOutstanding } from "../collections/outstanding.js";
 import { customerContext, daysBetween } from "./sales-common.js";
 
 type Row = {
   date: string;
   due_date: string | null;
-  doc_type: "SI" | "CN" | "DN";
+  doc_type: "SI" | "CN" | "DN" | "RC" | "REV" | "TDS";
   doc_id: string;
   doc_no: string;
   debit: string;
@@ -18,8 +19,9 @@ type Row = {
 };
 
 /**
- * The customer's sub-ledger (ADR-0016) from `v_customer_ledger`: invoices and debit notes owe,
- * credit notes reduce. Receipts (Stage 4) and opening balances (Stage 6) join the view later.
+ * The customer's sub-ledger (ADR-0016) from `v_customer_ledger`: invoices and debit notes owe;
+ * credit notes, receipts and TDS reduce; a reversed receipt owes again. Opening balances join in
+ * Stage 6.
  * Ageing is by due date over what each invoice still owes.
  */
 @Injectable()
@@ -74,11 +76,7 @@ export class LedgerService {
   private async aging(customerId: string) {
     const open = (
       await this.uow.db.execute<{ due_date: string; owed: string }>(sql`
-        SELECT si.due_date::text,
-               (si.total - coalesce((SELECT sum(n.total) FROM customer_notes n
-                 WHERE n.si_id = si.id AND n.status = 'Posted' AND n.kind = 'CREDIT'), 0)
-                 + coalesce((SELECT sum(n.total) FROM customer_notes n
-                 WHERE n.si_id = si.id AND n.status = 'Posted' AND n.kind = 'DEBIT'), 0))::text AS owed
+        SELECT si.due_date::text, ${siOutstanding()}::text AS owed
         FROM sales_invoices si
         WHERE si.company_id = ${actor().companyId} AND si.customer_id = ${customerId} AND si.status = 'Posted'`)
     ).rows;

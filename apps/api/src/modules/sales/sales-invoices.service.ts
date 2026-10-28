@@ -42,6 +42,7 @@ import { customerScopeFilter, loadCustomerScope } from "../customers/customer-sc
 import { canSeeCost } from "../inventory/rolls.service.js";
 import { EInvoiceQueue } from "../compliance/einvoice.queue.js";
 import { EInvoiceService } from "../compliance/einvoice.service.js";
+import { CommissionService } from "../collections/commission.service.js";
 import { CreditRecheckQueue } from "./credit-recheck.queue.js";
 import { EventBus } from "../realtime/event-bus.js";
 import { SeriesService } from "../series/series.service.js";
@@ -98,6 +99,7 @@ export class SalesInvoicesService {
     private readonly einvoice: EInvoiceService,
     private readonly irnQueue: EInvoiceQueue,
     private readonly creditRecheck: CreditRecheckQueue,
+    private readonly commission: CommissionService,
   ) {}
 
   // ── read ───────────────────────────────────────────────────────────────────
@@ -806,6 +808,16 @@ export class SalesInvoicesService {
       }
 
       const siNo = await this.series.allocate(tx, "SI", si.date);
+      // Commission goes to the order's salesman, else the customer's (PRD §5.6), frozen now.
+      const [owner] = (
+        await tx.execute<{ salesman_id: string | null }>(sql`
+          SELECT coalesce(
+            (SELECT so.salesman_id FROM sales_invoice_lines l
+               JOIN sales_order_lines sl ON sl.id = l.so_line_id
+               JOIN sales_orders so ON so.id = sl.so_id
+              WHERE l.si_id = ${id} AND so.salesman_id IS NOT NULL LIMIT 1),
+            (SELECT c.salesman_id FROM customers c WHERE c.id = ${si.customerId})) AS salesman_id`)
+      ).rows;
       const einvoiceStatus = si.supplyType === "B2C" ? "NotRequired" : "Pending";
       await updateVersioned(
         tx,
@@ -819,10 +831,12 @@ export class SalesInvoicesService {
           einvoiceStatus,
           postedAt: new Date(),
           postedBy: actor().userId,
+          salesmanId: owner?.salesman_id ?? null,
         },
         "Sales invoice",
       );
       await recordTransition(tx, "SalesInvoice", id, "Draft", "Posted");
+      await this.commission.onInvoicePosted(tx, id);
       if (einvoiceStatus === "Pending") this.irnQueue.enqueueAfterCommit("SI", id);
       const fresh = await tx
         .select()
@@ -953,12 +967,13 @@ export class SalesInvoicesService {
           .execute<{ n: number }>(
             sql`
           SELECT (SELECT count(*) FROM sales_returns WHERE si_id = ${id} AND status <> 'Cancelled')
-               + (SELECT count(*) FROM customer_notes WHERE si_id = ${id} AND status <> 'Cancelled') AS n`,
+               + (SELECT count(*) FROM customer_notes WHERE si_id = ${id} AND status <> 'Cancelled')
+               + (SELECT count(*) FROM allocations WHERE sales_invoice_id = ${id} AND reversed_at IS NULL) AS n`,
           )
           .then((r) => r.rows);
         if (Number(later!.n) > 0)
           throw validationError(
-            "This invoice has returns or notes against it and can't be cancelled.",
+            "This invoice has returns, notes or payments against it and can't be cancelled. Reverse the receipt first.",
           );
         const lines = await tx
           .select()
@@ -1020,6 +1035,7 @@ export class SalesInvoicesService {
       // Last, so an IRP refusal rolls the whole cancellation back (ADR-0011).
       if (si.status === "Posted") {
         await this.einvoice.cancelIrn(tx, "SI", id, ctx().reason!.trim());
+        await this.commission.onInvoiceCancelled(tx, id, ctx().reason!.trim());
         this.creditRecheck.enqueueAfterCommit(si.customerId);
       }
       this.changed(id);

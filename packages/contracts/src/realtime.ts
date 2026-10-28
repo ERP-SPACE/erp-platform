@@ -14,6 +14,7 @@ export const REALTIME_TOPICS = [
   "purchase.changed",
   "sales.changed",
   "inventory.changed",
+  "collections.changed",
 ] as const;
 export type RealtimeTopic = (typeof REALTIME_TOPICS)[number];
 

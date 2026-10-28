@@ -6227,6 +6227,1489 @@
           "compliance"
         ]
       }
+    },
+    "/api/customers/{id}/statement/pdf": {
+      "get": {
+        "operationId": "AccountDocumentsController_customerStatement",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pdf",
+                "html"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/suppliers/{id}/statement/pdf": {
+      "get": {
+        "operationId": "AccountDocumentsController_supplierStatement",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pdf",
+                "html"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/receipts/{id}/pdf": {
+      "get": {
+        "operationId": "AccountDocumentsController_receipt",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pdf",
+                "html"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/supplier-payments/{id}/pdf": {
+      "get": {
+        "operationId": "AccountDocumentsController_payment",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pdf",
+                "html"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/commission/payouts/{id}/pdf": {
+      "get": {
+        "operationId": "AccountDocumentsController_payout",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "format",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "pdf",
+                "html"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/receipts": {
+      "get": {
+        "operationId": "ReceiptsController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "partyId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "onAccount",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReceiptListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      },
+      "post": {
+        "operationId": "ReceiptsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiptCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/receipts/{id}": {
+      "get": {
+        "operationId": "ReceiptsController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      },
+      "patch": {
+        "operationId": "ReceiptsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiptUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/receipts/{id}/post": {
+      "post": {
+        "operationId": "ReceiptsController_post",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiptActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/receipts/{id}/cancel": {
+      "post": {
+        "operationId": "ReceiptsController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiptActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/receipts/{id}/reverse": {
+      "post": {
+        "operationId": "ReceiptsController_reverse",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiptReverseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/supplier-payments": {
+      "get": {
+        "operationId": "SupplierPaymentsController_list",
+        "parameters": [
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          },
+          {
+            "name": "partyId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "onAccount",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "true",
+                "false"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ReceiptListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      },
+      "post": {
+        "operationId": "SupplierPaymentsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiptCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/supplier-payments/{id}": {
+      "get": {
+        "operationId": "SupplierPaymentsController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      },
+      "patch": {
+        "operationId": "SupplierPaymentsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiptUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/supplier-payments/{id}/post": {
+      "post": {
+        "operationId": "SupplierPaymentsController_post",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiptActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/supplier-payments/{id}/cancel": {
+      "post": {
+        "operationId": "SupplierPaymentsController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiptActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/supplier-payments/{id}/reverse": {
+      "post": {
+        "operationId": "SupplierPaymentsController_reverse",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReceiptReverseDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReceiptDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/customers/{id}/open-items": {
+      "get": {
+        "operationId": "PartyAccountsController_customerOpenItems",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenItemsDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/customers/{id}/allocation-suggestion": {
+      "get": {
+        "operationId": "PartyAccountsController_customerSuggestion",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "amount",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "pattern": "^\\d{1,12}(\\.\\d{1,2})?$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllocationSuggestionDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/customers/{id}/apply-credit": {
+      "post": {
+        "operationId": "PartyAccountsController_customerApply",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplyCreditDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenItemsDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/customers/{id}/statement": {
+      "get": {
+        "operationId": "PartyAccountsController_customerStatement",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyStatementDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/suppliers/{id}/open-items": {
+      "get": {
+        "operationId": "PartyAccountsController_supplierOpenItems",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenItemsDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/suppliers/{id}/allocation-suggestion": {
+      "get": {
+        "operationId": "PartyAccountsController_supplierSuggestion",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "amount",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "pattern": "^\\d{1,12}(\\.\\d{1,2})?$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AllocationSuggestionDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/suppliers/{id}/apply-credit": {
+      "post": {
+        "operationId": "PartyAccountsController_supplierApply",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplyCreditDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenItemsDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/suppliers/{id}/statement": {
+      "get": {
+        "operationId": "PartyAccountsController_supplierStatement",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartyStatementDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/aging": {
+      "get": {
+        "operationId": "CreditControlController_aging",
+        "parameters": [
+          {
+            "name": "partyType",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "CUSTOMER",
+                "SUPPLIER"
+              ]
+            }
+          },
+          {
+            "name": "asOf",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 100,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgingReportDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/credit/blocked-orders": {
+      "get": {
+        "operationId": "CreditControlController_blocked",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BlockedOrderItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/credit/nightly-check": {
+      "post": {
+        "operationId": "CreditControlController_runNightly",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/commission/entries": {
+      "get": {
+        "operationId": "CommissionController_entries",
+        "parameters": [
+          {
+            "name": "salesmanId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Accrued",
+                "Paid"
+              ]
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommissionEntryItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/commission/summary": {
+      "get": {
+        "operationId": "CommissionController_summary",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CommissionSummaryDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/commission/payouts": {
+      "get": {
+        "operationId": "CommissionController_payouts",
+        "parameters": [
+          {
+            "name": "salesmanId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PayoutListItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      },
+      "post": {
+        "operationId": "CommissionController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayoutCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/commission/payouts/{id}": {
+      "get": {
+        "operationId": "CommissionController_payout",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/commission/payouts/{id}/pay": {
+      "post": {
+        "operationId": "CommissionController_pay",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayoutPayDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
+    },
+    "/api/commission/payouts/{id}/cancel": {
+      "post": {
+        "operationId": "CommissionController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PayoutActionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayoutDetailDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "collections"
+        ]
+      }
     }
   },
   "info": {
@@ -6579,7 +8062,15 @@
                 "sales.invoice.cancel",
                 "sales.return.manage",
                 "sales.note.manage",
-                "compliance.einvoice.manage"
+                "compliance.einvoice.manage",
+                "collections.view",
+                "collections.receipt.manage",
+                "collections.receipt.reverse",
+                "payables.view",
+                "payables.payment.manage",
+                "payables.payment.approve",
+                "commission.view",
+                "commission.payout.manage"
               ]
             }
           },
@@ -11164,6 +12655,40 @@
                 "type": "null"
               }
             ]
+          },
+          "collections": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "collectedToday": {
+                    "type": "string"
+                  },
+                  "collectedThisMonth": {
+                    "type": "string"
+                  },
+                  "receivable": {
+                    "type": "string"
+                  },
+                  "overdue": {
+                    "type": "string"
+                  },
+                  "onAccount": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "collectedToday",
+                  "collectedThisMonth",
+                  "receivable",
+                  "overdue",
+                  "onAccount"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "required": [
@@ -11173,7 +12698,8 @@
           "blockedCustomers",
           "categoriesMissingTax",
           "totalCreditLimit",
-          "sales"
+          "sales",
+          "collections"
         ]
       },
       "PoListItemDto": {
@@ -18359,7 +19885,10 @@
                     "SI",
                     "CN",
                     "DN",
-                    "OPENING"
+                    "OPENING",
+                    "RC",
+                    "REV",
+                    "TDS"
                   ]
                 },
                 "docId": {
@@ -18832,6 +20361,1445 @@
         "required": [
           "ewayBillNo",
           "ewayBillDate"
+        ]
+      },
+      "ReceiptListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "docNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "partyType": {
+            "type": "string",
+            "enum": [
+              "CUSTOMER",
+              "SUPPLIER"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "partyId": {
+            "type": "string"
+          },
+          "partyName": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "CASH",
+              "NEFT",
+              "RTGS",
+              "UPI",
+              "CHEQUE"
+            ]
+          },
+          "reference": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": "string"
+          },
+          "allocated": {
+            "type": "string"
+          },
+          "unallocated": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Posted",
+              "Reversed",
+              "Cancelled"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "docNo",
+          "partyType",
+          "date",
+          "partyId",
+          "partyName",
+          "mode",
+          "reference",
+          "amount",
+          "allocated",
+          "unallocated",
+          "status",
+          "version"
+        ]
+      },
+      "ReceiptDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "docNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "partyType": {
+            "type": "string",
+            "enum": [
+              "CUSTOMER",
+              "SUPPLIER"
+            ]
+          },
+          "date": {
+            "type": "string"
+          },
+          "partyId": {
+            "type": "string"
+          },
+          "partyName": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "CASH",
+              "NEFT",
+              "RTGS",
+              "UPI",
+              "CHEQUE"
+            ]
+          },
+          "reference": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": "string"
+          },
+          "allocated": {
+            "type": "string"
+          },
+          "unallocated": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Posted",
+              "Reversed",
+              "Cancelled"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "bankName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "instrumentDate": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "allocations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "invoiceId": {
+                  "type": "string"
+                },
+                "invoiceNo": {
+                  "type": "string"
+                },
+                "invoiceDate": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string"
+                },
+                "deduction": {
+                  "type": "string"
+                },
+                "reversedAt": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "invoiceId",
+                "invoiceNo",
+                "invoiceDate",
+                "amount",
+                "deduction",
+                "reversedAt"
+              ]
+            }
+          },
+          "postedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reversedAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reversalKind": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "BOUNCED",
+                  "MISTAKE"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reversalReason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "docNo",
+          "partyType",
+          "date",
+          "partyId",
+          "partyName",
+          "mode",
+          "reference",
+          "amount",
+          "allocated",
+          "unallocated",
+          "status",
+          "version",
+          "bankName",
+          "instrumentDate",
+          "notes",
+          "allocations",
+          "postedAt",
+          "reversedAt",
+          "reversalKind",
+          "reversalReason"
+        ]
+      },
+      "ReceiptCreateDto": {
+        "type": "object",
+        "properties": {
+          "partyId": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "CASH",
+              "NEFT",
+              "RTGS",
+              "UPI",
+              "CHEQUE"
+            ]
+          },
+          "amount": {
+            "type": "string",
+            "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "bankName": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 60
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "instrumentDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "allocations": {
+            "default": [],
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "invoiceId": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                },
+                "deduction": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                }
+              },
+              "required": [
+                "invoiceId",
+                "amount"
+              ]
+            }
+          }
+        },
+        "required": [
+          "partyId",
+          "date",
+          "mode",
+          "amount"
+        ]
+      },
+      "ReceiptUpdateDto": {
+        "type": "object",
+        "properties": {
+          "partyId": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "CASH",
+              "NEFT",
+              "RTGS",
+              "UPI",
+              "CHEQUE"
+            ]
+          },
+          "amount": {
+            "type": "string",
+            "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "bankName": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 60
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "instrumentDate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "allocations": {
+            "default": [],
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "invoiceId": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                },
+                "deduction": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                }
+              },
+              "required": [
+                "invoiceId",
+                "amount"
+              ]
+            }
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "partyId",
+          "date",
+          "mode",
+          "amount",
+          "version"
+        ]
+      },
+      "ReceiptActionDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "version"
+        ]
+      },
+      "ReceiptReverseDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "BOUNCED",
+              "MISTAKE"
+            ]
+          }
+        },
+        "required": [
+          "version",
+          "kind"
+        ]
+      },
+      "OpenItemsDto": {
+        "type": "object",
+        "properties": {
+          "invoices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "docNo": {
+                  "type": "string"
+                },
+                "date": {
+                  "type": "string"
+                },
+                "dueDate": {
+                  "type": "string"
+                },
+                "total": {
+                  "type": "string"
+                },
+                "outstanding": {
+                  "type": "string"
+                },
+                "daysPastDue": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "id",
+                "docNo",
+                "date",
+                "dueDate",
+                "total",
+                "outstanding",
+                "daysPastDue"
+              ]
+            }
+          },
+          "credits": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "RECEIPT",
+                    "PAYMENT",
+                    "CREDIT_NOTE",
+                    "DEBIT_NOTE"
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                },
+                "docNo": {
+                  "type": "string"
+                },
+                "date": {
+                  "type": "string"
+                },
+                "available": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "source",
+                "id",
+                "docNo",
+                "date",
+                "available"
+              ]
+            }
+          }
+        },
+        "required": [
+          "invoices",
+          "credits"
+        ]
+      },
+      "AllocationSuggestionDto": {
+        "type": "object",
+        "properties": {
+          "lines": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "invoiceId": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "invoiceId",
+                "amount"
+              ]
+            }
+          },
+          "unallocated": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "lines",
+          "unallocated"
+        ]
+      },
+      "ApplyCreditDto": {
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string",
+            "enum": [
+              "RECEIPT",
+              "PAYMENT",
+              "CREDIT_NOTE",
+              "DEBIT_NOTE"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "allocations": {
+            "minItems": 1,
+            "maxItems": 200,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "invoiceId": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                },
+                "deduction": {
+                  "type": "string",
+                  "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+                }
+              },
+              "required": [
+                "invoiceId",
+                "amount"
+              ]
+            }
+          }
+        },
+        "required": [
+          "source",
+          "sourceId",
+          "allocations"
+        ]
+      },
+      "PartyStatementDto": {
+        "type": "object",
+        "properties": {
+          "partyType": {
+            "type": "string",
+            "enum": [
+              "CUSTOMER",
+              "SUPPLIER"
+            ]
+          },
+          "partyId": {
+            "type": "string"
+          },
+          "partyName": {
+            "type": "string"
+          },
+          "gstin": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "from": {
+            "type": "string"
+          },
+          "to": {
+            "type": "string"
+          },
+          "opening": {
+            "type": "string"
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string"
+                },
+                "docType": {
+                  "type": "string",
+                  "enum": [
+                    "OPENING",
+                    "SI",
+                    "CN",
+                    "DN",
+                    "PI",
+                    "RC",
+                    "PY",
+                    "REV",
+                    "TDS"
+                  ]
+                },
+                "docId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "docNo": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "debit": {
+                  "type": "string"
+                },
+                "credit": {
+                  "type": "string"
+                },
+                "balance": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "date",
+                "docType",
+                "docId",
+                "docNo",
+                "description",
+                "debit",
+                "credit",
+                "balance"
+              ]
+            }
+          },
+          "closing": {
+            "type": "string"
+          },
+          "onAccount": {
+            "type": "string"
+          },
+          "aging": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "label",
+                "amount"
+              ]
+            }
+          }
+        },
+        "required": [
+          "partyType",
+          "partyId",
+          "partyName",
+          "gstin",
+          "from",
+          "to",
+          "opening",
+          "entries",
+          "closing",
+          "onAccount",
+          "aging"
+        ]
+      },
+      "AgingReportDto": {
+        "type": "object",
+        "properties": {
+          "partyType": {
+            "type": "string",
+            "enum": [
+              "CUSTOMER",
+              "SUPPLIER"
+            ]
+          },
+          "asOf": {
+            "type": "string"
+          },
+          "buckets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "partyId": {
+                  "type": "string"
+                },
+                "partyName": {
+                  "type": "string"
+                },
+                "buckets": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "total": {
+                  "type": "string"
+                },
+                "onAccount": {
+                  "type": "string"
+                },
+                "oldestDays": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                }
+              },
+              "required": [
+                "partyId",
+                "partyName",
+                "buckets",
+                "total",
+                "onAccount",
+                "oldestDays"
+              ]
+            }
+          },
+          "totals": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "total": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "partyType",
+          "asOf",
+          "buckets",
+          "rows",
+          "totals",
+          "total"
+        ]
+      },
+      "BlockedOrderItemDto": {
+        "type": "object",
+        "properties": {
+          "soId": {
+            "type": "string"
+          },
+          "soNo": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "total": {
+            "type": "string"
+          },
+          "reasons": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "MANUAL_BLOCK",
+                "OVER_LIMIT",
+                "OVER_DUE"
+              ]
+            }
+          },
+          "exposure": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "string"
+          },
+          "maxDaysPastDue": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "lastReceiptDate": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lastReceiptAmount": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "heldSince": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "soId",
+          "soNo",
+          "date",
+          "customerId",
+          "customerName",
+          "total",
+          "reasons",
+          "exposure",
+          "limit",
+          "maxDaysPastDue",
+          "lastReceiptDate",
+          "lastReceiptAmount",
+          "heldSince",
+          "version"
+        ]
+      },
+      "CommissionEntryItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "salesmanId": {
+            "type": "string"
+          },
+          "customerId": {
+            "type": "string"
+          },
+          "customerName": {
+            "type": "string"
+          },
+          "sourceType": {
+            "type": "string",
+            "enum": [
+              "SI",
+              "CN",
+              "RC"
+            ]
+          },
+          "sourceId": {
+            "type": "string"
+          },
+          "sourceNo": {
+            "type": "string"
+          },
+          "invoiceId": {
+            "type": "string"
+          },
+          "invoiceNo": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "PER_METER",
+              "PERCENT_SALES"
+            ]
+          },
+          "rate": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "reversalReason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Accrued",
+              "Paid"
+            ]
+          },
+          "payoutId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "payoutNo": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "salesmanId",
+          "customerId",
+          "customerName",
+          "sourceType",
+          "sourceId",
+          "sourceNo",
+          "invoiceId",
+          "invoiceNo",
+          "date",
+          "method",
+          "rate",
+          "amount",
+          "reversalReason",
+          "status",
+          "payoutId",
+          "payoutNo"
+        ]
+      },
+      "CommissionSummaryDto": {
+        "type": "object",
+        "properties": {
+          "salesmanId": {
+            "type": "string"
+          },
+          "salesmanName": {
+            "type": "string"
+          },
+          "accrued": {
+            "type": "string"
+          },
+          "paid": {
+            "type": "string"
+          },
+          "outstanding": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "salesmanId",
+          "salesmanName",
+          "accrued",
+          "paid",
+          "outstanding"
+        ]
+      },
+      "PayoutListItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "payoutNo": {
+            "type": "string"
+          },
+          "salesmanId": {
+            "type": "string"
+          },
+          "salesmanName": {
+            "type": "string"
+          },
+          "upTo": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Paid",
+              "Cancelled"
+            ]
+          },
+          "gross": {
+            "type": "string"
+          },
+          "tds": {
+            "type": "string"
+          },
+          "net": {
+            "type": "string"
+          },
+          "entryCount": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "paidOn": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "id",
+          "payoutNo",
+          "salesmanId",
+          "salesmanName",
+          "upTo",
+          "status",
+          "gross",
+          "tds",
+          "net",
+          "entryCount",
+          "paidOn",
+          "version"
+        ]
+      },
+      "PayoutDetailDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "payoutNo": {
+            "type": "string"
+          },
+          "salesmanId": {
+            "type": "string"
+          },
+          "salesmanName": {
+            "type": "string"
+          },
+          "upTo": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Draft",
+              "Paid",
+              "Cancelled"
+            ]
+          },
+          "gross": {
+            "type": "string"
+          },
+          "tds": {
+            "type": "string"
+          },
+          "net": {
+            "type": "string"
+          },
+          "entryCount": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "paidOn": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "mode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "CASH",
+                  "NEFT",
+                  "RTGS",
+                  "UPI",
+                  "CHEQUE"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reference": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "entries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "salesmanId": {
+                  "type": "string"
+                },
+                "customerId": {
+                  "type": "string"
+                },
+                "customerName": {
+                  "type": "string"
+                },
+                "sourceType": {
+                  "type": "string",
+                  "enum": [
+                    "SI",
+                    "CN",
+                    "RC"
+                  ]
+                },
+                "sourceId": {
+                  "type": "string"
+                },
+                "sourceNo": {
+                  "type": "string"
+                },
+                "invoiceId": {
+                  "type": "string"
+                },
+                "invoiceNo": {
+                  "type": "string"
+                },
+                "date": {
+                  "type": "string"
+                },
+                "method": {
+                  "type": "string",
+                  "enum": [
+                    "PER_METER",
+                    "PERCENT_SALES"
+                  ]
+                },
+                "rate": {
+                  "type": "string"
+                },
+                "amount": {
+                  "type": "string"
+                },
+                "reversalReason": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "Accrued",
+                    "Paid"
+                  ]
+                },
+                "payoutId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "payoutNo": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "salesmanId",
+                "customerId",
+                "customerName",
+                "sourceType",
+                "sourceId",
+                "sourceNo",
+                "invoiceId",
+                "invoiceNo",
+                "date",
+                "method",
+                "rate",
+                "amount",
+                "reversalReason",
+                "status",
+                "payoutId",
+                "payoutNo"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "payoutNo",
+          "salesmanId",
+          "salesmanName",
+          "upTo",
+          "status",
+          "gross",
+          "tds",
+          "net",
+          "entryCount",
+          "paidOn",
+          "version",
+          "mode",
+          "reference",
+          "notes",
+          "entries"
+        ]
+      },
+      "PayoutCreateDto": {
+        "type": "object",
+        "properties": {
+          "salesmanId": {
+            "type": "string"
+          },
+          "upTo": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "salesmanId",
+          "upTo"
+        ]
+      },
+      "PayoutPayDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "paidOn": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "CASH",
+              "NEFT",
+              "RTGS",
+              "UPI",
+              "CHEQUE"
+            ]
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "tds": {
+            "type": "string",
+            "pattern": "^\\d{1,12}(\\.\\d{1,2})?$"
+          }
+        },
+        "required": [
+          "version",
+          "paidOn",
+          "mode"
+        ]
+      },
+      "PayoutActionDto": {
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "version"
         ]
       }
     }

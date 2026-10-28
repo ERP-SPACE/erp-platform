@@ -16,6 +16,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as Setup2faRouteImport } from './routes/setup-2fa'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AppCatalogueRouteImport } from './routes/_app/catalogue'
+import { Route as AppCollectionsRouteImport } from './routes/_app/collections'
 import { Route as AppInventoryRouteImport } from './routes/_app/inventory'
 import { Route as AppPurchaseRouteImport } from './routes/_app/purchase'
 import { Route as AppSalesRouteImport } from './routes/_app/sales'
@@ -27,6 +28,8 @@ import { Route as FloorInspectRouteImport } from './routes/floor/inspect'
 import { Route as FloorMapRouteImport } from './routes/floor/map'
 import { Route as FloorPickRouteImport } from './routes/floor/pick'
 import { Route as FloorReceiveRouteImport } from './routes/floor/receive'
+import { Route as AppCollectionsAgingRouteImport } from './routes/_app/collections/aging'
+import { Route as AppCollectionsBlockedRouteImport } from './routes/_app/collections/blocked'
 import { Route as AppCustomersIndexRouteImport } from './routes/_app/customers/index'
 import { Route as AppCustomersCustomerIdRouteImport } from './routes/_app/customers/$customerId'
 import { Route as AppCustomersNewRouteImport } from './routes/_app/customers/new'
@@ -44,6 +47,11 @@ import { Route as AppSettingsCompanyRouteImport } from './routes/_app/settings/c
 import { Route as AppSettingsGeneralRouteImport } from './routes/_app/settings/general'
 import { Route as AppSettingsSeriesRouteImport } from './routes/_app/settings/series'
 import { Route as AppSettingsUsersRouteImport } from './routes/_app/settings/users'
+import { Route as AppCollectionsKindIndexRouteImport } from './routes/_app/collections/$kind/index'
+import { Route as AppCollectionsKindMoneyIdRouteImport } from './routes/_app/collections/$kind/$moneyId'
+import { Route as AppCollectionsKindNewRouteImport } from './routes/_app/collections/$kind/new'
+import { Route as AppCollectionsCommissionIndexRouteImport } from './routes/_app/collections/commission/index'
+import { Route as AppCollectionsCommissionPayoutIdRouteImport } from './routes/_app/collections/commission/$payoutId'
 import { Route as AppCustomersEditCustomerIdRouteImport } from './routes/_app/customers/edit.$customerId'
 import { Route as AppInventoryRollRollIdRouteImport } from './routes/_app/inventory/roll.$rollId'
 import { Route as AppPurchaseInvoicesIndexRouteImport } from './routes/_app/purchase/invoices/index'
@@ -75,6 +83,7 @@ import { Route as AppSalesProformasNewRouteImport } from './routes/_app/sales/pr
 import { Route as AppSalesReturnsIndexRouteImport } from './routes/_app/sales/returns/index'
 import { Route as AppSalesReturnsSrIdRouteImport } from './routes/_app/sales/returns/$srId'
 import { Route as AppSalesReturnsNewRouteImport } from './routes/_app/sales/returns/new'
+import { Route as AppCollectionsStatementPartyPartyIdRouteImport } from './routes/_app/collections/statement/$party/$partyId'
 
 const AppRoute = AppRouteImport.update({
   id: '/_app',
@@ -108,6 +117,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const AppCatalogueRoute = AppCatalogueRouteImport.update({
   id: '/catalogue',
   path: '/catalogue',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCollectionsRoute = AppCollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
   getParentRoute: () => AppRoute,
 } as any)
 const AppInventoryRoute = AppInventoryRouteImport.update({
@@ -164,6 +178,16 @@ const FloorReceiveRoute = FloorReceiveRouteImport.update({
   id: '/receive',
   path: '/receive',
   getParentRoute: () => FloorRoute,
+} as any)
+const AppCollectionsAgingRoute = AppCollectionsAgingRouteImport.update({
+  id: '/aging',
+  path: '/aging',
+  getParentRoute: () => AppCollectionsRoute,
+} as any)
+const AppCollectionsBlockedRoute = AppCollectionsBlockedRouteImport.update({
+  id: '/blocked',
+  path: '/blocked',
+  getParentRoute: () => AppCollectionsRoute,
 } as any)
 const AppCustomersIndexRoute = AppCustomersIndexRouteImport.update({
   id: '/customers/',
@@ -250,6 +274,34 @@ const AppSettingsUsersRoute = AppSettingsUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AppSettingsRoute,
 } as any)
+const AppCollectionsKindIndexRoute = AppCollectionsKindIndexRouteImport.update({
+  id: '/$kind/',
+  path: '/$kind/',
+  getParentRoute: () => AppCollectionsRoute,
+} as any)
+const AppCollectionsKindMoneyIdRoute =
+  AppCollectionsKindMoneyIdRouteImport.update({
+    id: '/$kind/$moneyId',
+    path: '/$kind/$moneyId',
+    getParentRoute: () => AppCollectionsRoute,
+  } as any)
+const AppCollectionsKindNewRoute = AppCollectionsKindNewRouteImport.update({
+  id: '/$kind/new',
+  path: '/$kind/new',
+  getParentRoute: () => AppCollectionsRoute,
+} as any)
+const AppCollectionsCommissionIndexRoute =
+  AppCollectionsCommissionIndexRouteImport.update({
+    id: '/commission/',
+    path: '/commission/',
+    getParentRoute: () => AppCollectionsRoute,
+  } as any)
+const AppCollectionsCommissionPayoutIdRoute =
+  AppCollectionsCommissionPayoutIdRouteImport.update({
+    id: '/commission/$payoutId',
+    path: '/commission/$payoutId',
+    getParentRoute: () => AppCollectionsRoute,
+  } as any)
 const AppCustomersEditCustomerIdRoute =
   AppCustomersEditCustomerIdRouteImport.update({
     id: '/customers/edit/$customerId',
@@ -409,6 +461,12 @@ const AppSalesReturnsNewRoute = AppSalesReturnsNewRouteImport.update({
   path: '/returns/new',
   getParentRoute: () => AppSalesRoute,
 } as any)
+const AppCollectionsStatementPartyPartyIdRoute =
+  AppCollectionsStatementPartyPartyIdRouteImport.update({
+    id: '/statement/$party/$partyId',
+    path: '/statement/$party/$partyId',
+    getParentRoute: () => AppCollectionsRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
@@ -417,6 +475,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/setup-2fa': typeof Setup2faRoute
   '/catalogue': typeof AppCatalogueRoute
+  '/collections': typeof AppCollectionsRouteWithChildren
   '/inventory': typeof AppInventoryRouteWithChildren
   '/purchase': typeof AppPurchaseRouteWithChildren
   '/sales': typeof AppSalesRouteWithChildren
@@ -428,6 +487,8 @@ export interface FileRoutesByFullPath {
   '/floor/pick': typeof FloorPickRoute
   '/floor/receive': typeof FloorReceiveRoute
   '/floor/': typeof FloorIndexRoute
+  '/collections/aging': typeof AppCollectionsAgingRoute
+  '/collections/blocked': typeof AppCollectionsBlockedRoute
   '/customers/$customerId': typeof AppCustomersCustomerIdRoute
   '/customers/new': typeof AppCustomersNewRoute
   '/inventory/rolls': typeof AppInventoryRollsRoute
@@ -445,6 +506,9 @@ export interface FileRoutesByFullPath {
   '/sales/': typeof AppSalesIndexRoute
   '/salesmen/': typeof AppSalesmenIndexRoute
   '/settings/': typeof AppSettingsIndexRoute
+  '/collections/$kind/$moneyId': typeof AppCollectionsKindMoneyIdRoute
+  '/collections/$kind/new': typeof AppCollectionsKindNewRoute
+  '/collections/commission/$payoutId': typeof AppCollectionsCommissionPayoutIdRoute
   '/customers/edit/$customerId': typeof AppCustomersEditCustomerIdRoute
   '/inventory/roll/$rollId': typeof AppInventoryRollRollIdRoute
   '/purchase/invoices/$piId': typeof AppPurchaseInvoicesPiIdRoute
@@ -466,6 +530,8 @@ export interface FileRoutesByFullPath {
   '/sales/proformas/new': typeof AppSalesProformasNewRoute
   '/sales/returns/$srId': typeof AppSalesReturnsSrIdRoute
   '/sales/returns/new': typeof AppSalesReturnsNewRoute
+  '/collections/$kind/': typeof AppCollectionsKindIndexRoute
+  '/collections/commission/': typeof AppCollectionsCommissionIndexRoute
   '/purchase/invoices/': typeof AppPurchaseInvoicesIndexRoute
   '/purchase/orders/': typeof AppPurchaseOrdersIndexRoute
   '/purchase/receipts/': typeof AppPurchaseReceiptsIndexRoute
@@ -476,12 +542,14 @@ export interface FileRoutesByFullPath {
   '/sales/orders/': typeof AppSalesOrdersIndexRoute
   '/sales/proformas/': typeof AppSalesProformasIndexRoute
   '/sales/returns/': typeof AppSalesReturnsIndexRoute
+  '/collections/statement/$party/$partyId': typeof AppCollectionsStatementPartyPartyIdRoute
 }
 export interface FileRoutesByTo {
   '/_design': typeof DesignRoute
   '/login': typeof LoginRoute
   '/setup-2fa': typeof Setup2faRoute
   '/catalogue': typeof AppCatalogueRoute
+  '/collections': typeof AppCollectionsRouteWithChildren
   '/purchase': typeof AppPurchaseRouteWithChildren
   '/suppliers': typeof AppSuppliersRoute
   '/transporters': typeof AppTransportersRoute
@@ -491,6 +559,8 @@ export interface FileRoutesByTo {
   '/floor/receive': typeof FloorReceiveRoute
   '/': typeof AppIndexRoute
   '/floor': typeof FloorIndexRoute
+  '/collections/aging': typeof AppCollectionsAgingRoute
+  '/collections/blocked': typeof AppCollectionsBlockedRoute
   '/customers/$customerId': typeof AppCustomersCustomerIdRoute
   '/customers/new': typeof AppCustomersNewRoute
   '/inventory/rolls': typeof AppInventoryRollsRoute
@@ -508,6 +578,9 @@ export interface FileRoutesByTo {
   '/sales': typeof AppSalesIndexRoute
   '/salesmen': typeof AppSalesmenIndexRoute
   '/settings': typeof AppSettingsIndexRoute
+  '/collections/$kind/$moneyId': typeof AppCollectionsKindMoneyIdRoute
+  '/collections/$kind/new': typeof AppCollectionsKindNewRoute
+  '/collections/commission/$payoutId': typeof AppCollectionsCommissionPayoutIdRoute
   '/customers/edit/$customerId': typeof AppCustomersEditCustomerIdRoute
   '/inventory/roll/$rollId': typeof AppInventoryRollRollIdRoute
   '/purchase/invoices/$piId': typeof AppPurchaseInvoicesPiIdRoute
@@ -529,6 +602,8 @@ export interface FileRoutesByTo {
   '/sales/proformas/new': typeof AppSalesProformasNewRoute
   '/sales/returns/$srId': typeof AppSalesReturnsSrIdRoute
   '/sales/returns/new': typeof AppSalesReturnsNewRoute
+  '/collections/$kind': typeof AppCollectionsKindIndexRoute
+  '/collections/commission': typeof AppCollectionsCommissionIndexRoute
   '/purchase/invoices': typeof AppPurchaseInvoicesIndexRoute
   '/purchase/orders': typeof AppPurchaseOrdersIndexRoute
   '/purchase/receipts': typeof AppPurchaseReceiptsIndexRoute
@@ -539,6 +614,7 @@ export interface FileRoutesByTo {
   '/sales/orders': typeof AppSalesOrdersIndexRoute
   '/sales/proformas': typeof AppSalesProformasIndexRoute
   '/sales/returns': typeof AppSalesReturnsIndexRoute
+  '/collections/statement/$party/$partyId': typeof AppCollectionsStatementPartyPartyIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -548,6 +624,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/setup-2fa': typeof Setup2faRoute
   '/_app/catalogue': typeof AppCatalogueRoute
+  '/_app/collections': typeof AppCollectionsRouteWithChildren
   '/_app/inventory': typeof AppInventoryRouteWithChildren
   '/_app/purchase': typeof AppPurchaseRouteWithChildren
   '/_app/sales': typeof AppSalesRouteWithChildren
@@ -560,6 +637,8 @@ export interface FileRoutesById {
   '/floor/receive': typeof FloorReceiveRoute
   '/_app/': typeof AppIndexRoute
   '/floor/': typeof FloorIndexRoute
+  '/_app/collections/aging': typeof AppCollectionsAgingRoute
+  '/_app/collections/blocked': typeof AppCollectionsBlockedRoute
   '/_app/customers/$customerId': typeof AppCustomersCustomerIdRoute
   '/_app/customers/new': typeof AppCustomersNewRoute
   '/_app/inventory/rolls': typeof AppInventoryRollsRoute
@@ -577,6 +656,9 @@ export interface FileRoutesById {
   '/_app/sales/': typeof AppSalesIndexRoute
   '/_app/salesmen/': typeof AppSalesmenIndexRoute
   '/_app/settings/': typeof AppSettingsIndexRoute
+  '/_app/collections/$kind/$moneyId': typeof AppCollectionsKindMoneyIdRoute
+  '/_app/collections/$kind/new': typeof AppCollectionsKindNewRoute
+  '/_app/collections/commission/$payoutId': typeof AppCollectionsCommissionPayoutIdRoute
   '/_app/customers/edit/$customerId': typeof AppCustomersEditCustomerIdRoute
   '/_app/inventory/roll/$rollId': typeof AppInventoryRollRollIdRoute
   '/_app/purchase/invoices/$piId': typeof AppPurchaseInvoicesPiIdRoute
@@ -598,6 +680,8 @@ export interface FileRoutesById {
   '/_app/sales/proformas/new': typeof AppSalesProformasNewRoute
   '/_app/sales/returns/$srId': typeof AppSalesReturnsSrIdRoute
   '/_app/sales/returns/new': typeof AppSalesReturnsNewRoute
+  '/_app/collections/$kind/': typeof AppCollectionsKindIndexRoute
+  '/_app/collections/commission/': typeof AppCollectionsCommissionIndexRoute
   '/_app/purchase/invoices/': typeof AppPurchaseInvoicesIndexRoute
   '/_app/purchase/orders/': typeof AppPurchaseOrdersIndexRoute
   '/_app/purchase/receipts/': typeof AppPurchaseReceiptsIndexRoute
@@ -608,6 +692,7 @@ export interface FileRoutesById {
   '/_app/sales/orders/': typeof AppSalesOrdersIndexRoute
   '/_app/sales/proformas/': typeof AppSalesProformasIndexRoute
   '/_app/sales/returns/': typeof AppSalesReturnsIndexRoute
+  '/_app/collections/statement/$party/$partyId': typeof AppCollectionsStatementPartyPartyIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -618,6 +703,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/setup-2fa'
     | '/catalogue'
+    | '/collections'
     | '/inventory'
     | '/purchase'
     | '/sales'
@@ -629,6 +715,8 @@ export interface FileRouteTypes {
     | '/floor/pick'
     | '/floor/receive'
     | '/floor/'
+    | '/collections/aging'
+    | '/collections/blocked'
     | '/customers/$customerId'
     | '/customers/new'
     | '/inventory/rolls'
@@ -646,6 +734,9 @@ export interface FileRouteTypes {
     | '/sales/'
     | '/salesmen/'
     | '/settings/'
+    | '/collections/$kind/$moneyId'
+    | '/collections/$kind/new'
+    | '/collections/commission/$payoutId'
     | '/customers/edit/$customerId'
     | '/inventory/roll/$rollId'
     | '/purchase/invoices/$piId'
@@ -667,6 +758,8 @@ export interface FileRouteTypes {
     | '/sales/proformas/new'
     | '/sales/returns/$srId'
     | '/sales/returns/new'
+    | '/collections/$kind/'
+    | '/collections/commission/'
     | '/purchase/invoices/'
     | '/purchase/orders/'
     | '/purchase/receipts/'
@@ -677,12 +770,14 @@ export interface FileRouteTypes {
     | '/sales/orders/'
     | '/sales/proformas/'
     | '/sales/returns/'
+    | '/collections/statement/$party/$partyId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/_design'
     | '/login'
     | '/setup-2fa'
     | '/catalogue'
+    | '/collections'
     | '/purchase'
     | '/suppliers'
     | '/transporters'
@@ -692,6 +787,8 @@ export interface FileRouteTypes {
     | '/floor/receive'
     | '/'
     | '/floor'
+    | '/collections/aging'
+    | '/collections/blocked'
     | '/customers/$customerId'
     | '/customers/new'
     | '/inventory/rolls'
@@ -709,6 +806,9 @@ export interface FileRouteTypes {
     | '/sales'
     | '/salesmen'
     | '/settings'
+    | '/collections/$kind/$moneyId'
+    | '/collections/$kind/new'
+    | '/collections/commission/$payoutId'
     | '/customers/edit/$customerId'
     | '/inventory/roll/$rollId'
     | '/purchase/invoices/$piId'
@@ -730,6 +830,8 @@ export interface FileRouteTypes {
     | '/sales/proformas/new'
     | '/sales/returns/$srId'
     | '/sales/returns/new'
+    | '/collections/$kind'
+    | '/collections/commission'
     | '/purchase/invoices'
     | '/purchase/orders'
     | '/purchase/receipts'
@@ -740,6 +842,7 @@ export interface FileRouteTypes {
     | '/sales/orders'
     | '/sales/proformas'
     | '/sales/returns'
+    | '/collections/statement/$party/$partyId'
   id:
     | '__root__'
     | '/_app'
@@ -748,6 +851,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/setup-2fa'
     | '/_app/catalogue'
+    | '/_app/collections'
     | '/_app/inventory'
     | '/_app/purchase'
     | '/_app/sales'
@@ -760,6 +864,8 @@ export interface FileRouteTypes {
     | '/floor/receive'
     | '/_app/'
     | '/floor/'
+    | '/_app/collections/aging'
+    | '/_app/collections/blocked'
     | '/_app/customers/$customerId'
     | '/_app/customers/new'
     | '/_app/inventory/rolls'
@@ -777,6 +883,9 @@ export interface FileRouteTypes {
     | '/_app/sales/'
     | '/_app/salesmen/'
     | '/_app/settings/'
+    | '/_app/collections/$kind/$moneyId'
+    | '/_app/collections/$kind/new'
+    | '/_app/collections/commission/$payoutId'
     | '/_app/customers/edit/$customerId'
     | '/_app/inventory/roll/$rollId'
     | '/_app/purchase/invoices/$piId'
@@ -798,6 +907,8 @@ export interface FileRouteTypes {
     | '/_app/sales/proformas/new'
     | '/_app/sales/returns/$srId'
     | '/_app/sales/returns/new'
+    | '/_app/collections/$kind/'
+    | '/_app/collections/commission/'
     | '/_app/purchase/invoices/'
     | '/_app/purchase/orders/'
     | '/_app/purchase/receipts/'
@@ -808,6 +919,7 @@ export interface FileRouteTypes {
     | '/_app/sales/orders/'
     | '/_app/sales/proformas/'
     | '/_app/sales/returns/'
+    | '/_app/collections/statement/$party/$partyId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -867,6 +979,13 @@ declare module '@tanstack/react-router' {
       path: '/catalogue'
       fullPath: '/catalogue'
       preLoaderRoute: typeof AppCatalogueRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/collections': {
+      id: '/_app/collections'
+      path: '/collections'
+      fullPath: '/collections'
+      preLoaderRoute: typeof AppCollectionsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/inventory': {
@@ -945,6 +1064,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/floor/receive'
       preLoaderRoute: typeof FloorReceiveRouteImport
       parentRoute: typeof FloorRoute
+    }
+    '/_app/collections/aging': {
+      id: '/_app/collections/aging'
+      path: '/aging'
+      fullPath: '/collections/aging'
+      preLoaderRoute: typeof AppCollectionsAgingRouteImport
+      parentRoute: typeof AppCollectionsRoute
+    }
+    '/_app/collections/blocked': {
+      id: '/_app/collections/blocked'
+      path: '/blocked'
+      fullPath: '/collections/blocked'
+      preLoaderRoute: typeof AppCollectionsBlockedRouteImport
+      parentRoute: typeof AppCollectionsRoute
     }
     '/_app/customers/': {
       id: '/_app/customers/'
@@ -1064,6 +1197,41 @@ declare module '@tanstack/react-router' {
       fullPath: '/settings/users'
       preLoaderRoute: typeof AppSettingsUsersRouteImport
       parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/collections/$kind/': {
+      id: '/_app/collections/$kind/'
+      path: '/$kind'
+      fullPath: '/collections/$kind/'
+      preLoaderRoute: typeof AppCollectionsKindIndexRouteImport
+      parentRoute: typeof AppCollectionsRoute
+    }
+    '/_app/collections/$kind/$moneyId': {
+      id: '/_app/collections/$kind/$moneyId'
+      path: '/$kind/$moneyId'
+      fullPath: '/collections/$kind/$moneyId'
+      preLoaderRoute: typeof AppCollectionsKindMoneyIdRouteImport
+      parentRoute: typeof AppCollectionsRoute
+    }
+    '/_app/collections/$kind/new': {
+      id: '/_app/collections/$kind/new'
+      path: '/$kind/new'
+      fullPath: '/collections/$kind/new'
+      preLoaderRoute: typeof AppCollectionsKindNewRouteImport
+      parentRoute: typeof AppCollectionsRoute
+    }
+    '/_app/collections/commission/': {
+      id: '/_app/collections/commission/'
+      path: '/commission'
+      fullPath: '/collections/commission/'
+      preLoaderRoute: typeof AppCollectionsCommissionIndexRouteImport
+      parentRoute: typeof AppCollectionsRoute
+    }
+    '/_app/collections/commission/$payoutId': {
+      id: '/_app/collections/commission/$payoutId'
+      path: '/commission/$payoutId'
+      fullPath: '/collections/commission/$payoutId'
+      preLoaderRoute: typeof AppCollectionsCommissionPayoutIdRouteImport
+      parentRoute: typeof AppCollectionsRoute
     }
     '/_app/customers/edit/$customerId': {
       id: '/_app/customers/edit/$customerId'
@@ -1282,8 +1450,42 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSalesReturnsNewRouteImport
       parentRoute: typeof AppSalesRoute
     }
+    '/_app/collections/statement/$party/$partyId': {
+      id: '/_app/collections/statement/$party/$partyId'
+      path: '/statement/$party/$partyId'
+      fullPath: '/collections/statement/$party/$partyId'
+      preLoaderRoute: typeof AppCollectionsStatementPartyPartyIdRouteImport
+      parentRoute: typeof AppCollectionsRoute
+    }
   }
 }
+
+interface AppCollectionsRouteChildren {
+  AppCollectionsAgingRoute: typeof AppCollectionsAgingRoute
+  AppCollectionsBlockedRoute: typeof AppCollectionsBlockedRoute
+  AppCollectionsKindMoneyIdRoute: typeof AppCollectionsKindMoneyIdRoute
+  AppCollectionsKindNewRoute: typeof AppCollectionsKindNewRoute
+  AppCollectionsCommissionPayoutIdRoute: typeof AppCollectionsCommissionPayoutIdRoute
+  AppCollectionsKindIndexRoute: typeof AppCollectionsKindIndexRoute
+  AppCollectionsCommissionIndexRoute: typeof AppCollectionsCommissionIndexRoute
+  AppCollectionsStatementPartyPartyIdRoute: typeof AppCollectionsStatementPartyPartyIdRoute
+}
+
+const AppCollectionsRouteChildren: AppCollectionsRouteChildren = {
+  AppCollectionsAgingRoute: AppCollectionsAgingRoute,
+  AppCollectionsBlockedRoute: AppCollectionsBlockedRoute,
+  AppCollectionsKindMoneyIdRoute: AppCollectionsKindMoneyIdRoute,
+  AppCollectionsKindNewRoute: AppCollectionsKindNewRoute,
+  AppCollectionsCommissionPayoutIdRoute: AppCollectionsCommissionPayoutIdRoute,
+  AppCollectionsKindIndexRoute: AppCollectionsKindIndexRoute,
+  AppCollectionsCommissionIndexRoute: AppCollectionsCommissionIndexRoute,
+  AppCollectionsStatementPartyPartyIdRoute:
+    AppCollectionsStatementPartyPartyIdRoute,
+}
+
+const AppCollectionsRouteWithChildren = AppCollectionsRoute._addFileChildren(
+  AppCollectionsRouteChildren,
+)
 
 interface AppInventoryRouteChildren {
   AppInventoryRollsRoute: typeof AppInventoryRollsRoute
@@ -1409,6 +1611,7 @@ const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
 
 interface AppRouteChildren {
   AppCatalogueRoute: typeof AppCatalogueRoute
+  AppCollectionsRoute: typeof AppCollectionsRouteWithChildren
   AppInventoryRoute: typeof AppInventoryRouteWithChildren
   AppPurchaseRoute: typeof AppPurchaseRouteWithChildren
   AppSalesRoute: typeof AppSalesRouteWithChildren
@@ -1427,6 +1630,7 @@ interface AppRouteChildren {
 
 const AppRouteChildren: AppRouteChildren = {
   AppCatalogueRoute: AppCatalogueRoute,
+  AppCollectionsRoute: AppCollectionsRouteWithChildren,
   AppInventoryRoute: AppInventoryRouteWithChildren,
   AppPurchaseRoute: AppPurchaseRouteWithChildren,
   AppSalesRoute: AppSalesRouteWithChildren,

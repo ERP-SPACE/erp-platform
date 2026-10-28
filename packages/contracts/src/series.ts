@@ -15,6 +15,7 @@ export const DOC_TYPES = {
   CN: { label: "Credit Note", numberedOn: "post", gst: true },
   RC: { label: "Receipt", numberedOn: "post", gst: false },
   PY: { label: "Payment", numberedOn: "post", gst: false },
+  CP: { label: "Commission Payout", numberedOn: "post", gst: false },
   JV: { label: "Journal Voucher (accounting stage)", numberedOn: "post", gst: false },
 } as const satisfies Record<string, { label: string; numberedOn: "create" | "post"; gst: boolean }>;
 

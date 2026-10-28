@@ -1,9 +1,12 @@
 import { afterAll, describe, expect, it } from "vitest";
 import {
+  type AccountDocument,
   type SalesDocument,
+  accountFileName,
   documentFileName,
   indianWords,
   inr,
+  renderAccountDocumentHtml,
   renderSalesDocumentHtml,
   rupeesInWords,
 } from "../src/index.js";
@@ -107,6 +110,43 @@ describe("renderSalesDocumentHtml", () => {
     expect(
       documentFileName({ kind: "TAX_INVOICE", number: "SI/2627/00001", watermark: "PROVISIONAL" }),
     ).toBe("invoice-SI-2627-00001-provisional.pdf");
+  });
+});
+
+describe("renderAccountDocumentHtml (statements, advices)", () => {
+  const doc: AccountDocument = {
+    title: "Statement of account",
+    number: null,
+    date: "2026-10-28",
+    seller: { name: "Gulmohar Creation", gstin: "24AAOFG2101Q1ZB", address: ["Surat"] },
+    party: { label: "Customer", name: "Shree <Prints>", address: ["12 Ring Road"] },
+    meta: [["Period", "01-10-2026 to 28-10-2026"]],
+    columns: [
+      { key: "doc", label: "Document" },
+      { key: "balance", label: "Balance ₹", numeric: true },
+    ],
+    rows: [{ doc: "SI/2627/00001", balance: "8,260.00" }],
+    summary: [["Closing balance", "₹ 8,260.00"]],
+    aging: [{ label: "0–30 days", amount: "₹ 8,260.00" }],
+  };
+
+  it("prints the party, rows, totals and aging, escaped", () => {
+    const html = renderAccountDocumentHtml(doc);
+    expect(html).toContain("Shree &#60;Prints&#62;");
+    expect(html).toContain("SI/2627/00001");
+    expect(html).toContain('class="grand"');
+    expect(html).toContain("0–30 days");
+    expect(html).toContain("28-10-2026");
+  });
+
+  it("says so when the period is empty, and watermarks a bounced receipt", () => {
+    expect(renderAccountDocumentHtml({ ...doc, rows: [] })).toContain("Nothing in this period.");
+    expect(renderAccountDocumentHtml({ ...doc, watermark: "Cheque bounced" })).toContain(
+      "Cheque bounced",
+    );
+    expect(accountFileName("statement", "Shree Prints & Co.", "2026-10-28")).toBe(
+      "statement-Shree-Prints-Co-2026-10-28.pdf",
+    );
   });
 });
 

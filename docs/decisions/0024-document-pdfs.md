@@ -17,3 +17,7 @@ Invoices, notes, challans and proformas must print as PDFs (PRD §5.7). The brie
 ## Consequences
 - Chromium is a worker dependency (installed with Playwright); the API stays light.
 - The first PDF after a worker start takes ~1 s longer while Chromium launches.
+
+## Stage 4 addition (2026-10-28)
+- Account documents use a second template, `renderAccountDocumentHtml` (statement of account, receipt / payment advice, commission payout advice), sharing the invoice styles. Endpoints: `GET /customers|suppliers/:id/statement/pdf` (with `from` / `to`), `/receipts/:id/pdf`, `/supplier-payments/:id/pdf`, `/commission/payouts/:id/pdf`; `?format=html` previews.
+- The nightly credit check stays in the API process (scheduled by the credit consumer, `API_JOBS`), like the IRN queue: it needs the credit and order services; the worker keeps rendering only.

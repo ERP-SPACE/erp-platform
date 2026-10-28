@@ -17,6 +17,7 @@ import { actor } from "../../common/context.js";
 import { trimDecimal } from "../../common/decimal.js";
 import { UnitOfWork } from "../../db/unit-of-work.js";
 import { productName } from "../catalogue/catalogue.service.js";
+import { siOutstanding } from "../collections/outstanding.js";
 import { customerScopeFilter, loadCustomerScope } from "../customers/customer-scope.js";
 import { searchFilter } from "../suppliers/suppliers.service.js";
 
@@ -249,6 +250,39 @@ export class SearchService {
       skus: count(skuCount[0]?.n),
       categoriesMissingTax: count(missingTax[0]?.n),
       sales: has("sales.view") ? await this.salesKpis() : null,
+      collections: has("collections.view") ? await this.collectionKpis() : null,
+    };
+  }
+
+  /** Money in and owed (Stage 4), within the actor's customer scope. */
+  private async collectionKpis(): Promise<NonNullable<DashboardSummary["collections"]>> {
+    const db = this.uow.db;
+    const scope = customerScopeFilter(await loadCustomerScope(db));
+    const today = istToday();
+    const month = today.slice(0, 8) + "01";
+    const [r] = (
+      await db.execute<Record<string, string>>(sql`
+        SELECT
+          (SELECT coalesce(sum(r.amount), 0) FROM receipts r JOIN customers ON customers.id = r.customer_id
+            WHERE ${scope} AND r.party_type = 'CUSTOMER' AND r.status = 'Posted' AND r.date = ${today})::text AS today,
+          (SELECT coalesce(sum(r.amount), 0) FROM receipts r JOIN customers ON customers.id = r.customer_id
+            WHERE ${scope} AND r.party_type = 'CUSTOMER' AND r.status = 'Posted' AND r.date >= ${month})::text AS month,
+          (SELECT coalesce(sum(${siOutstanding()}), 0) FROM sales_invoices si JOIN customers ON customers.id = si.customer_id
+            WHERE ${scope} AND si.status = 'Posted')::text AS receivable,
+          (SELECT coalesce(sum(${siOutstanding()}), 0) FROM sales_invoices si JOIN customers ON customers.id = si.customer_id
+            WHERE ${scope} AND si.status = 'Posted' AND si.due_date < ${today})::text AS overdue,
+          (SELECT coalesce(sum(r.amount - coalesce((SELECT sum(a.amount) FROM allocations a
+                  WHERE a.receipt_id = r.id AND a.reversed_at IS NULL), 0)), 0)
+             FROM receipts r JOIN customers ON customers.id = r.customer_id
+            WHERE ${scope} AND r.party_type = 'CUSTOMER' AND r.status = 'Posted')::text AS on_account
+      `)
+    ).rows;
+    return {
+      collectedToday: D(r!.today!).toFixed(2),
+      collectedThisMonth: D(r!.month!).toFixed(2),
+      receivable: D(r!.receivable!).toFixed(2),
+      overdue: D(r!.overdue!).toFixed(2),
+      onAccount: D(r!.on_account!).toFixed(2),
     };
   }
 

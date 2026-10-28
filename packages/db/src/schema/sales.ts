@@ -380,6 +380,8 @@ export const salesInvoices = pgTable(
     status: purchaseDocStatus("status").notNull().default("Draft"),
     source: siSource("source").notNull(),
     proformaId: uuid("proforma_id").references(() => proformas.id),
+    /** Commission goes to this salesman: the order's, else the customer's; frozen at posting. */
+    salesmanId: uuid("salesman_id").references(() => salesmen.id),
     ...partySnapshot(),
     ...salesTotals(),
     /** Σ landed cost of the billed rolls (PRD §8.4); fixed at posting. */
