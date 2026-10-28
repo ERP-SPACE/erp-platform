@@ -25,7 +25,10 @@ export class CreditRecheckQueue implements OnModuleDestroy {
     private readonly uow: UnitOfWork,
     @Inject(ENV) env: Env,
   ) {
-    this.queue = new Queue(CREDIT_QUEUE, { connection: { url: env.REDIS_URL } });
+    this.queue = new Queue(CREDIT_QUEUE, {
+      connection: { url: env.REDIS_URL },
+      prefix: env.QUEUE_PREFIX,
+    });
   }
 
   enqueueAfterCommit(customerId: string) {

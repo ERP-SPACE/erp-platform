@@ -41,7 +41,10 @@ export class LabelsService implements OnModuleDestroy {
     @Inject(REDIS) private readonly redis: Redis,
     @Inject(ENV) env: Env,
   ) {
-    this.queue = new Queue(LABEL_QUEUE, { connection: { url: env.REDIS_URL } });
+    this.queue = new Queue(LABEL_QUEUE, {
+      connection: { url: env.REDIS_URL },
+      prefix: env.QUEUE_PREFIX,
+    });
   }
 
   async onModuleDestroy() {

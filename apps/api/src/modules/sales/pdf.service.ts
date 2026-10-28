@@ -22,8 +22,14 @@ export class PdfService implements OnModuleDestroy {
       const { htmlToPdf } = await import("@erp/documents/pdf");
       return Buffer.from(await htmlToPdf(html));
     }
-    this.queue ??= new Queue(DOCUMENT_QUEUE, { connection: { url: this.env.REDIS_URL } });
-    this.events ??= new QueueEvents(DOCUMENT_QUEUE, { connection: { url: this.env.REDIS_URL } });
+    this.queue ??= new Queue(DOCUMENT_QUEUE, {
+      connection: { url: this.env.REDIS_URL },
+      prefix: this.env.QUEUE_PREFIX,
+    });
+    this.events ??= new QueueEvents(DOCUMENT_QUEUE, {
+      connection: { url: this.env.REDIS_URL },
+      prefix: this.env.QUEUE_PREFIX,
+    });
     const job = await this.queue.add(
       "document.pdf",
       { html },

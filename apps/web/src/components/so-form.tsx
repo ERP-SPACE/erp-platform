@@ -150,7 +150,7 @@ export function SoForm({ so, onDone }: { so?: SoDetail; onDone?: () => void }) {
         e.preventDefault();
         save.mutate();
       }}
-      className="grid gap-6 [&>*]:min-w-0 xl:grid-cols-[minmax(0,1fr)_340px]"
+      className="grid gap-6 [&>*]:min-w-0 2xl:grid-cols-[minmax(0,1fr)_340px]"
     >
       <Card
         footer={

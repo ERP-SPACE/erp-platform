@@ -410,3 +410,32 @@ describe("e-invoice payload (ADR-0011, NIC schema 1.1)", () => {
     ).toThrow();
   });
 });
+
+describe("COGS properties (Stage 3 gate)", () => {
+  it("an invoice's COGS is exactly the sum of its rolls' COGS, each to the paisa", () => {
+    fc.assert(
+      fc.property(
+        fc.array(
+          fc.record({
+            lengthM: fc.integer({ min: 1, max: 2000 }),
+            paise: fc.integer({ min: 1, max: 1_000_000 }),
+          }),
+          { minLength: 1, maxLength: 60 },
+        ),
+        (rolls) => {
+          const each = rolls.map((r) => rollCogs(r.lengthM, D(r.paise).dividedBy(10_000)));
+          for (const c of each) expect(c.decimalPlaces()).toBeLessThanOrEqual(2);
+          const total = each.reduce((s, c) => s.plus(c), D(0));
+          // Summing per roll then per line gives the same as summing all at once.
+          const half = Math.floor(each.length / 2);
+          const byLine = each
+            .slice(0, half)
+            .reduce((s, c) => s.plus(c), D(0))
+            .plus(each.slice(half).reduce((s, c) => s.plus(c), D(0)));
+          expect(byLine.equals(total)).toBe(true);
+        },
+      ),
+      { numRuns: 300 },
+    );
+  });
+});

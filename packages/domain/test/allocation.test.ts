@@ -202,3 +202,63 @@ describe.skipIf(!existsSync(legacyPath))("matches legacy allocationService", () 
     );
   });
 });
+
+describe("allocation properties (Stage 3 gate)", () => {
+  const anyRolls = fc.array(
+    fc.record({
+      lengthM: fc.integer({ min: 50, max: 1500 }),
+      inwardAt: fc.integer({ min: 0, max: 400 }),
+    }),
+    { maxLength: 40 },
+  );
+
+  it("never double-books a roll or invents one; the totals add up", () => {
+    fc.assert(
+      fc.property(
+        anyRolls,
+        fc.integer({ min: 1, max: 30_000 }),
+        fc.boolean(),
+        (specs, required, allowCut) => {
+          const rolls = specs.map((s, i) => ({ id: `p${i}`, ...s }));
+          const r = allocateRolls(rolls, required, { ...opts, allowCut, minRemnantM: 100 });
+          const ids = r.rolls.map((x) => x.id);
+          expect(new Set(ids).size).toBe(ids.length);
+          for (const id of ids) expect(rolls.some((x) => x.id === id)).toBe(true);
+          if (r.cut) {
+            // The cut comes from a roll that is not also picked whole, and leaves a usable remnant.
+            expect(ids).not.toContain(r.cut.rollId);
+            expect(r.cut.leftoverM).toBeGreaterThanOrEqual(100);
+          }
+          const picked = r.rolls.reduce((s, x) => s + x.lengthM, 0) + (r.cut?.cutM ?? 0);
+          expect(picked).toBe(r.allocatedM);
+          expect(r.allocatedM + r.remainingM).toBeGreaterThanOrEqual(required - opts.toleranceM);
+          // No upper bound: the legacy swap step (ported as-is, characterised) may trade a
+          // short pick for a longer roll and overshoot by more than the tolerance.
+        },
+      ),
+      { numRuns: 500 },
+    );
+  });
+
+  it("two lines given disjoint stock never share a roll", () => {
+    fc.assert(
+      fc.property(
+        anyRolls,
+        fc.integer({ min: 1, max: 8000 }),
+        fc.integer({ min: 1, max: 8000 }),
+        (specs, a, b) => {
+          const rolls = specs.map((s, i) => ({ id: `q${i}`, ...s }));
+          const first = allocateRolls(rolls, a, opts);
+          const taken = new Set(first.rolls.map((x) => x.id));
+          const second = allocateRolls(
+            rolls.filter((x) => !taken.has(x.id)),
+            b,
+            opts,
+          );
+          for (const x of second.rolls) expect(taken.has(x.id)).toBe(false);
+        },
+      ),
+      { numRuns: 300 },
+    );
+  });
+});

@@ -38,7 +38,10 @@ export class EInvoiceQueue implements OnApplicationBootstrap, OnModuleDestroy {
     private readonly service: EInvoiceService,
     @Inject(ENV) private readonly env: Env,
   ) {
-    this.queue = new Queue(EINVOICE_QUEUE, { connection: { url: env.REDIS_URL } });
+    this.queue = new Queue(EINVOICE_QUEUE, {
+      connection: { url: env.REDIS_URL },
+      prefix: env.QUEUE_PREFIX,
+    });
   }
 
   /** Queues a just-posted document once the current transaction commits. */
@@ -79,7 +82,11 @@ export class EInvoiceQueue implements OnApplicationBootstrap, OnModuleDestroy {
         if (r.outcome === "Failed" && r.retryable) throw new Error(r.error);
         return r;
       },
-      { connection: { url: this.env.REDIS_URL, maxRetriesPerRequest: null }, concurrency: 1 },
+      {
+        connection: { url: this.env.REDIS_URL, maxRetriesPerRequest: null },
+        prefix: this.env.QUEUE_PREFIX,
+        concurrency: 1,
+      },
     );
     // Redis hiccups are reported, never thrown as unhandled 'error' events.
     this.worker.on("error", (error) => this.logger.error(error, "IRN queue error"));

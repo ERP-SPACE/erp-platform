@@ -1,6 +1,6 @@
 # Stage 3 — Sales & E-invoicing: implementation plan
 
-**Status:** approved 2026-10-27 with the default answers below (Q27 pending: owner is arranging sandbox access) · **Branch:** `stage-3-sales-einvoicing` (from `main` after the Stage 2 merge, f42e607)
+**Status:** built and gated 2026-10-28; awaiting owner sign-off (Q27 sandbox run and Q18 CA review outstanding) · **Branch:** `stage-3-sales-einvoicing` (from `main` after the Stage 2 merge, f42e607)
 
 ## What Stage 3 delivers
 
@@ -111,6 +111,21 @@ An order is taken at the right price, checked against the customer's credit, fil
 - **§11.3:** a 36″ order's rate is derived from the 44″ rate; an override above 5 % opens the approval dialog and the manager's approval confirms it; a credit-blocked customer's order goes OnHold and the exposure includes this order; full SO → DC (transporter, vehicle) → SI with the posting event and correct customer balance; proforma → SI with status Converted and the link back.
 - **§11.4 / §11.2:** 700 m of a 1000 m roll returned → credit note at 70 % of the roll's cost → roll Returned → scrapped at the partial cost.
 - **IRN:** a B2B invoice gets an IRN and signed QR from the sandbox; the final PDF prints only after that.
+
+## Gate results (2026-10-28)
+
+| Check | Result |
+|---|---|
+| PRD UAT §11.3 in the browser (`e2e/stage3.gate.spec.ts`) | Pass: 36″ rate from the 44″ rate; 10 % override blocked until a manager approves (password re-check); credit hold with this order in the exposure, released with a reason; order → challan (FIFO scan, a 300 m cut, transporter, vehicle) → invoice ₹32,491 → IRN and signed QR → final print → e-way bill → customer ledger; proforma → invoice, proforma Converted with the link back |
+| PRD UAT §11.4 / §11.2 return | Pass: 700 m of a 1,000 m roll back → credit note ₹4,620 + GST (70 % of billed), ₹3,080 cost back (70 %), roll Returned with the same barcode at 700 m → scrapped from `/floor/inspect` |
+| API integration tests | 83 pass (sales 12, e-invoicing 7, documents and credit re-check 3, performance 3, earlier stages 58) |
+| IRN | Pass against the offline simulator and a fake NIC portal (protocol and encryption). **Not yet run against the real NIC sandbox: needs Q27 credentials** — set `NIC_*` and re-run the same gate |
+| Property tests | Bill discount and per-line tax add up exactly; a cut never loses or creates cost; COGS sums exactly; allocation never double-books or invents a roll (fast-check, 300–500 runs each). Domain coverage 99.8 % |
+| Performance, 50,000 seeded rolls | Scan lookup p95 < 500 ms, credit check p95 < 1 s, roll list p95 < 300 ms — all pass (`perf.int.test.ts`) |
+| Accessibility (axe, WCAG 2.1 A/AA) | Pass in light and dark: every sales list, form and document page, `/floor/pick`, `/floor/inspect` |
+| Full isolated E2E run (`pnpm test:e2e:isolated`, Stages 0–3) | 94 pass |
+
+Found by the gate and fixed: the order form's credit panel covered the line row at 1280 px (now stacks below 1536 px); the isolated E2E stack and the dev API could take each other's queue jobs on the shared Redis (`QUEUE_PREFIX`).
 
 ## Not in Stage 3
 

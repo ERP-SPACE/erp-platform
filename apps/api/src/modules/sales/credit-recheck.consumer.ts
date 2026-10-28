@@ -44,7 +44,11 @@ export class CreditRecheckConsumer implements OnApplicationBootstrap, OnModuleDe
         if (r.released) this.logger.log(r, "held orders released by credit re-check");
         return r;
       },
-      { connection: { url: this.env.REDIS_URL, maxRetriesPerRequest: null }, concurrency: 1 },
+      {
+        connection: { url: this.env.REDIS_URL, maxRetriesPerRequest: null },
+        prefix: this.env.QUEUE_PREFIX,
+        concurrency: 1,
+      },
     );
     // Redis hiccups are reported, never thrown as unhandled 'error' events.
     this.worker.on("error", (error) => this.logger.error(error, "credit re-check queue error"));

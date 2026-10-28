@@ -56,6 +56,8 @@ Owner: business owner, unless marked **CA**. Each question is tagged with the st
 |---|---|---|---|
 | Q27 | *(Owner arranging sandbox access, 2026-10-27.)* **E-invoice access:** use an existing GSP/ASP (e.g. the one your accountant uses for GST filing), or register for direct IRP API access on einvoice1.gst.gov.in? We need sandbox credentials for testing. | IRN integration in Stage 3. | ADR-0011 |
 
+| Q31 *(new, from the Stage 3 gate)* | **Roll suggestions may overshoot.** The legacy allocation keeps its "swap for a slightly longer roll" step, ported unchanged: e.g. 51 m still needed and a 152 m roll in stock → it suggests the 152 m roll. Suggestions are only advice (the godown scans what it sends), but should a swap be capped at the tolerance (100 m over)? | Default: keep the legacy behaviour; a cap is a one-line change in `packages/domain/src/allocation.ts`. | Port matrix 2.1 |
+
 ## Before Stage 4 (collections, credit, commission)
 
 | # | Question | Why it matters | Linked |

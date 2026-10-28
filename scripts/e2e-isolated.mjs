@@ -44,6 +44,8 @@ const env = {
   REQUIRE_OWNER_TOTP: "true",
   NODE_ENV: "development",
   LOG_LEVEL: "warn",
+  // Own BullMQ keys, so the dev API's IRN consumer never takes the e2e stack's jobs.
+  QUEUE_PREFIX: "e2e",
   E2E_BASE_URL: `http://localhost:${WEB_PORT}`,
   E2E_API_URL: `http://localhost:${API_PORT}`,
 };

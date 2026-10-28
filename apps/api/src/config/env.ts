@@ -5,6 +5,8 @@ const envSchema = z.object({
   NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
   DATABASE_URL: z.url(),
   REDIS_URL: z.url(),
+  /** BullMQ key prefix: keeps an isolated stack (e2e) off the dev queues on the same Redis. */
+  QUEUE_PREFIX: z.string().min(1).default("bull"),
   API_PORT: z.coerce.number().int().positive().default(3000),
   API_PUBLIC_URL: z.url(),
   WEB_ORIGIN: z.url(),
