@@ -83,6 +83,20 @@ Money comes in and goes out against the right invoices; everyone can see who owe
 - **Exposure:** includes Confirmed / PartiallyFulfilled SO value, excludes OnHold.
 - The other §11.5 items (PI / SI vouchers, GST summary) belong to the Accounting stage: the posting events they will consume are already tested.
 
+## Gate results (2026-10-28)
+
+| Check | Result |
+|---|---|
+| PRD UAT §11.5 in the browser (`e2e/stage4.gate.spec.ts`) | Pass: three invoices of ₹8,260; a ₹16,520 NEFT receipt applied "Oldest first" to two of them, posted; aging drops to ₹8,260; nothing left on account or unused |
+| PRD UAT §11.6 in the browser | Pass: 1 % `ON_SI_POSTED` accrues ₹70 per invoice; a ₹1,000 + GST credit note posted from `/sales/notes/new` creates the ₹10 reversal entry with the note's reason |
+| Bounce and payout | Pass: a cheque reversed as bounced from the receipt page re-opens the invoice (₹7,080); a commission payout of ₹200 is paid with ₹10 TDS, numbered CP, net ₹190 |
+| API integration tests | 93 pass (collections included) |
+| Domain tests | 115 pass, coverage 99.7 % |
+| Accessibility (axe, WCAG 2.1 A/AA) | Pass in light and dark: receipts, payments, both new forms, aging, blocked orders, commission, a receipt, a statement, a payout |
+| Full isolated E2E run (`pnpm test:e2e:isolated`, Stages 0–4) | 114 pass |
+
+Open: Q31 (allocation swap overshoot) is still waiting for the owner.
+
 ## Not in Stage 4
 
 - Vouchers, chart of accounts, GST summary, bank reconciliation (Accounting stage; posting events are written now).
