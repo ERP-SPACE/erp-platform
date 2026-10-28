@@ -4390,7 +4390,7 @@ export interface components {
             entries: {
                 date: string;
                 /** @enum {string} */
-                docType: "SI" | "CN" | "DN" | "OPENING";
+                docType: "SI" | "CN" | "DN" | "OPENING" | "RC" | "REV" | "TDS";
                 docId: string | null;
                 docNo: string;
                 debit: string;

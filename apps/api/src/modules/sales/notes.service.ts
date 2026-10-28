@@ -1,8 +1,15 @@
 import type { NoteDetail, NoteItem, noteCreate, salesListQuery } from "@erp/contracts";
-import { type Tx, customerNoteLines, customerNotes, customers, salesInvoices } from "@erp/db";
+import {
+  type Tx,
+  allocations,
+  customerNoteLines,
+  customerNotes,
+  customers,
+  salesInvoices,
+} from "@erp/db";
 import { D, customerNoteMachine, invoiceTotals, lineTaxes, taxLine } from "@erp/domain";
 import { Injectable } from "@nestjs/common";
-import { and, asc, desc, eq, gte, ilike, lte, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, ilike, isNull, lte, or, sql } from "drizzle-orm";
 import type { z } from "zod";
 import { actor, ctx } from "../../common/context.js";
 import { trimDecimal } from "../../common/decimal.js";
@@ -13,6 +20,7 @@ import { updateVersioned } from "../../db/versioning.js";
 import { customerScopeFilter, loadCustomerScope } from "../customers/customer-scope.js";
 import { EInvoiceQueue } from "../compliance/einvoice.queue.js";
 import { EInvoiceService } from "../compliance/einvoice.service.js";
+import { CommissionService } from "../collections/commission.service.js";
 import { CreditRecheckQueue } from "./credit-recheck.queue.js";
 import { EventBus } from "../realtime/event-bus.js";
 import { SeriesService } from "../series/series.service.js";
@@ -42,6 +50,7 @@ export class NotesService {
     private readonly einvoice: EInvoiceService,
     private readonly irnQueue: EInvoiceQueue,
     private readonly creditRecheck: CreditRecheckQueue,
+    private readonly commission: CommissionService,
   ) {}
 
   async list(query: z.infer<typeof salesListQuery>): Promise<NoteItem[]> {
@@ -316,7 +325,10 @@ export class NotesService {
     await recordTransition(tx, "CustomerNote", n.id, "Draft", "Posted");
     if (n.supplyType !== "B2C")
       this.irnQueue.enqueueAfterCommit(n.kind === "CREDIT" ? "CN" : "DN", n.id);
-    if (n.kind === "CREDIT") this.creditRecheck.enqueueAfterCommit(n.customerId);
+    if (n.kind === "CREDIT") {
+      await this.commission.onCreditNote(tx, n.id);
+      this.creditRecheck.enqueueAfterCommit(n.customerId);
+    }
     const lines = await tx
       .select()
       .from(customerNoteLines)
@@ -365,6 +377,15 @@ export class NotesService {
       if (n.status === "Posted") {
         const reason = ctx().reason?.trim();
         if (!reason) throw reasonRequired();
+        const [used] = await tx
+          .select({ id: allocations.id })
+          .from(allocations)
+          .where(and(eq(allocations.customerNoteId, id), isNull(allocations.reversedAt)))
+          .limit(1);
+        if (used)
+          throw validationError(
+            "This credit note has been applied to invoices and can't be cancelled.",
+          );
         const { cancelWindowHours } = await this.settings.value("einvoice.config");
         if (Date.now() - n.postedAt!.getTime() > cancelWindowHours * 3_600_000) {
           throw validationError(
@@ -403,6 +424,7 @@ export class NotesService {
           ctx().reason!.trim(),
         );
         if (n.kind === "DEBIT") this.creditRecheck.enqueueAfterCommit(n.customerId);
+        else await this.commission.onCreditNoteCancelled(tx, id);
       }
       this.changed(id);
     });

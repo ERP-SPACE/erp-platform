@@ -153,6 +153,10 @@ const DOC_LINK: Record<Entry["docType"], string | null> = {
   CN: "/sales/notes/$noteId",
   DN: "/sales/notes/$noteId",
   OPENING: null,
+  // Receipt screens arrive with the Stage 4 web step.
+  RC: null,
+  REV: null,
+  TDS: null,
 };
 
 /** Sub-ledger (receipts arrive in Stage 4): invoices debit, notes credit, running balance. */

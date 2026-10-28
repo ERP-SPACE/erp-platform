@@ -16,6 +16,8 @@ import {
   SalesOrdersController,
   SalesReturnsController,
 } from "./sales.controller.js";
+import { CommissionModule } from "../collections/commission.module.js";
+import { CreditNightlyService } from "./credit-nightly.service.js";
 import { CreditRecheckConsumer } from "./credit-recheck.consumer.js";
 import { CreditRecheckModule } from "./credit-recheck.queue.js";
 import { PdfService } from "./pdf.service.js";
@@ -27,7 +29,7 @@ import { SalesReturnsService } from "./sales-returns.service.js";
 
 /** Stage 3 sales cycle: SO (credit) → DC (picking, cuts) → SI → returns / notes; proformas; ledger. */
 @Module({
-  imports: [SeriesModule, SettingsModule, ComplianceModule, CreditRecheckModule],
+  imports: [SeriesModule, SettingsModule, ComplianceModule, CreditRecheckModule, CommissionModule],
   controllers: [
     SalesOrdersController,
     ChallansController,
@@ -49,8 +51,9 @@ import { SalesReturnsService } from "./sales-returns.service.js";
     LedgerService,
     PdfService,
     CreditRecheckConsumer,
+    CreditNightlyService,
     SalesDocumentsService,
   ],
-  exports: [CreditService, SalesInvoicesService, NotesService],
+  exports: [CreditService, SalesInvoicesService, NotesService, CreditNightlyService],
 })
 export class SalesModule {}

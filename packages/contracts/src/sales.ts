@@ -567,7 +567,8 @@ export const noteDetail = noteItem.extend({
 export const ledgerQuery = z.object({ from: isoDate.optional(), to: isoDate.optional() });
 export const ledgerEntry = z.object({
   date: z.string(),
-  docType: z.enum(["SI", "CN", "DN", "OPENING"]),
+  /** RC receipt, REV reversed receipt, TDS deducted by the customer (Stage 4). */
+  docType: z.enum(["SI", "CN", "DN", "OPENING", "RC", "REV", "TDS"]),
   docId: z.string().nullable(),
   docNo: z.string(),
   debit: z.string(),

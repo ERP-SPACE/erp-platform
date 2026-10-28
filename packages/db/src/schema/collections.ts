@@ -3,6 +3,7 @@ import {
   check,
   date,
   index,
+  jsonb,
   numeric,
   pgEnum,
   pgTable,
@@ -64,6 +65,11 @@ export const receipts = pgTable(
     bankName: text("bank_name"),
     instrumentDate: date("instrument_date"),
     notes: text("notes"),
+    /** A draft's planned allocations; written to `allocations` (and cleared) on posting. */
+    draftAllocations:
+      jsonb("draft_allocations").$type<
+        { invoiceId: string; amount: string; deduction?: string }[]
+      >(),
     status: receiptStatus("status").notNull().default("Draft"),
     /** Supplier payments above the threshold need the Owner's approval before posting (Q33). */
     approvedAt: timestamp("approved_at", { withTimezone: true }),

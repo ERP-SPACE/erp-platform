@@ -277,7 +277,7 @@ describe("purchase & inventory (Stage 2 gate)", () => {
     expect(posted.statusCode, posted.body).toBe(200);
     expect(json(posted)).toMatchObject({
       status: "Posted",
-      piNo: expect.stringMatching(/^PI\/\d{4}\/00001$/),
+      piNo: expect.stringMatching(/^PI\/\d{4}\/\d{5}$/), // other suites may post PIs first
       rollCount: 16,
       totals: {
         taxable: "82066.00",

@@ -148,7 +148,7 @@ export const moneyListQuery = z.object({
 export const statementQuery = z.object({ from: isoDate.optional(), to: isoDate.optional() });
 export const statementEntry = z.object({
   date: z.string(),
-  docType: z.enum(["OPENING", "SI", "CN", "DN", "PI", "RC", "PY", "REV"]),
+  docType: z.enum(["OPENING", "SI", "CN", "DN", "PI", "RC", "PY", "REV", "TDS"]),
   docId: z.string().nullable(),
   docNo: z.string(),
   description: z.string(),
