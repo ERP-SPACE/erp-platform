@@ -54,6 +54,6 @@ import { SalesReturnsService } from "./sales-returns.service.js";
     CreditNightlyService,
     SalesDocumentsService,
   ],
-  exports: [CreditService, SalesInvoicesService, NotesService, CreditNightlyService],
+  exports: [CreditService, SalesInvoicesService, NotesService, CreditNightlyService, PdfService],
 })
 export class SalesModule {}

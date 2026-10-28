@@ -481,6 +481,30 @@ describe("collections, credit & commission (Stage 4 gate)", () => {
     )!;
     expect(again.outstanding).toBe("0.00");
     expect((await events("COMMISSION_PAID")).some((e) => e.docNo === paid.payoutNo)).toBe(true);
+    // The salesman's payout advice, as a real PDF.
+    const pdf = await owner.get(`/api/commission/payouts/${draft.id}/pdf`);
+    expect(pdf.headers["content-type"]).toBe("application/pdf");
+    expect(pdf.rawPayload.subarray(0, 5).toString()).toBe("%PDF-");
+    const advice = (await owner.get(`/api/commission/payouts/${draft.id}/pdf?format=html`)).body;
+    expect(advice).toContain(paid.payoutNo);
+    expect(advice).toContain("Net payable");
+  });
+
+  it("prints statements and receipt advices", async () => {
+    const st = await owner.get(`/api/customers/${custA}/statement/pdf?format=html`);
+    expect(st.statusCode, st.body).toBe(200);
+    expect(st.body).toContain("Statement of account");
+    expect(st.body).toContain("Collect A Prints");
+    expect(st.body).toMatch(/RC\/\d{4}\/\d{5}/);
+    expect(st.body).toContain("Closing balance");
+    const list = json<{ id: string; docNo: string; mode: string }[]>(
+      await owner.get(`/api/receipts?partyId=${custB}`),
+    );
+    const bounced = list.find((r) => r.mode === "CHEQUE")!;
+    const advice = (await owner.get(`/api/receipts/${bounced.id}/pdf?format=html`)).body;
+    expect(advice).toContain("Payment receipt");
+    expect(advice).toContain(bounced.docNo);
+    expect(advice).toContain("Cheque bounced");
   });
 
   it("exposure counts confirmed orders and dispatched-unbilled goods, never orders on hold", async () => {

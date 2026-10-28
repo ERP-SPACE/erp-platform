@@ -3,6 +3,8 @@ import { SalesModule } from "../sales/sales.module.js";
 import { CreditRecheckModule } from "../sales/credit-recheck.queue.js";
 import { SeriesModule } from "../series/series.module.js";
 import { SettingsModule } from "../settings/settings.module.js";
+import { AccountDocumentsController } from "./account-documents.controller.js";
+import { AccountDocumentsService } from "./account-documents.service.js";
 import {
   CommissionController,
   CreditControlController,
@@ -18,12 +20,13 @@ import { StatementsService } from "./statements.service.js";
 @Module({
   imports: [SeriesModule, SettingsModule, SalesModule, CommissionModule, CreditRecheckModule],
   controllers: [
+    AccountDocumentsController,
     ReceiptsController,
     SupplierPaymentsController,
     PartyAccountsController,
     CreditControlController,
     CommissionController,
   ],
-  providers: [ReceiptsService, StatementsService],
+  providers: [ReceiptsService, StatementsService, AccountDocumentsService],
 })
 export class CollectionsModule {}

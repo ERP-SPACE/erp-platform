@@ -300,3 +300,6 @@ export function documentFileName(d: Pick<SalesDocument, "kind" | "number" | "wat
   }[d.kind];
   return `${prefix}-${base}${d.watermark === "PROVISIONAL" ? "-provisional" : ""}.pdf`;
 }
+
+/** Shared with the other printable documents (statements, advices). */
+export { CSS as DOCUMENT_CSS, esc as escapeHtml, ddmmyyyy as printDate };

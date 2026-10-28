@@ -2100,6 +2100,518 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/customers/{id}/statement/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AccountDocumentsController_customerStatement"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/suppliers/{id}/statement/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AccountDocumentsController_supplierStatement"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/receipts/{id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AccountDocumentsController_receipt"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/supplier-payments/{id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AccountDocumentsController_payment"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/commission/payouts/{id}/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["AccountDocumentsController_payout"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/receipts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReceiptsController_list"];
+        put?: never;
+        post: operations["ReceiptsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/receipts/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReceiptsController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["ReceiptsController_update"];
+        trace?: never;
+    };
+    "/api/receipts/{id}/post": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ReceiptsController_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/receipts/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ReceiptsController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/receipts/{id}/reverse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ReceiptsController_reverse"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/supplier-payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SupplierPaymentsController_list"];
+        put?: never;
+        post: operations["SupplierPaymentsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/supplier-payments/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SupplierPaymentsController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["SupplierPaymentsController_update"];
+        trace?: never;
+    };
+    "/api/supplier-payments/{id}/post": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SupplierPaymentsController_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/supplier-payments/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SupplierPaymentsController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/supplier-payments/{id}/reverse": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["SupplierPaymentsController_reverse"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/{id}/open-items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PartyAccountsController_customerOpenItems"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/{id}/allocation-suggestion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PartyAccountsController_customerSuggestion"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/{id}/apply-credit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PartyAccountsController_customerApply"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/customers/{id}/statement": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PartyAccountsController_customerStatement"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/suppliers/{id}/open-items": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PartyAccountsController_supplierOpenItems"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/suppliers/{id}/allocation-suggestion": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PartyAccountsController_supplierSuggestion"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/suppliers/{id}/apply-credit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PartyAccountsController_supplierApply"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/suppliers/{id}/statement": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PartyAccountsController_supplierStatement"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/aging": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CreditControlController_aging"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credit/blocked-orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CreditControlController_blocked"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/credit/nightly-check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["CreditControlController_runNightly"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/commission/entries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CommissionController_entries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/commission/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CommissionController_summary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/commission/payouts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CommissionController_payouts"];
+        put?: never;
+        post: operations["CommissionController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/commission/payouts/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CommissionController_payout"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/commission/payouts/{id}/pay": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["CommissionController_pay"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/commission/payouts/{id}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["CommissionController_cancel"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -4478,6 +4990,300 @@ export interface components {
             /** Format: date */
             ewayBillDate: string;
             validUntil?: string | null;
+        };
+        ReceiptListItemDto: {
+            id: string;
+            docNo: string | null;
+            /** @enum {string} */
+            partyType: "CUSTOMER" | "SUPPLIER";
+            date: string;
+            partyId: string;
+            partyName: string;
+            /** @enum {string} */
+            mode: "CASH" | "NEFT" | "RTGS" | "UPI" | "CHEQUE";
+            reference: string | null;
+            amount: string;
+            allocated: string;
+            unallocated: string;
+            /** @enum {string} */
+            status: "Draft" | "Posted" | "Reversed" | "Cancelled";
+            version: number;
+        };
+        ReceiptDetailDto: {
+            id: string;
+            docNo: string | null;
+            /** @enum {string} */
+            partyType: "CUSTOMER" | "SUPPLIER";
+            date: string;
+            partyId: string;
+            partyName: string;
+            /** @enum {string} */
+            mode: "CASH" | "NEFT" | "RTGS" | "UPI" | "CHEQUE";
+            reference: string | null;
+            amount: string;
+            allocated: string;
+            unallocated: string;
+            /** @enum {string} */
+            status: "Draft" | "Posted" | "Reversed" | "Cancelled";
+            version: number;
+            bankName: string | null;
+            instrumentDate: string | null;
+            notes: string | null;
+            allocations: {
+                id: string;
+                invoiceId: string;
+                invoiceNo: string;
+                invoiceDate: string;
+                amount: string;
+                deduction: string;
+                reversedAt: string | null;
+            }[];
+            postedAt: string | null;
+            reversedAt: string | null;
+            reversalKind: ("BOUNCED" | "MISTAKE") | null;
+            reversalReason: string | null;
+        };
+        ReceiptCreateDto: {
+            partyId: string;
+            /** Format: date */
+            date: string;
+            /** @enum {string} */
+            mode: "CASH" | "NEFT" | "RTGS" | "UPI" | "CHEQUE";
+            amount: string;
+            reference?: string | null;
+            bankName?: string | null;
+            instrumentDate?: string | null;
+            notes?: string | null;
+            /** @default [] */
+            allocations: {
+                invoiceId: string;
+                amount: string;
+                deduction?: string;
+            }[];
+        };
+        ReceiptUpdateDto: {
+            partyId: string;
+            /** Format: date */
+            date: string;
+            /** @enum {string} */
+            mode: "CASH" | "NEFT" | "RTGS" | "UPI" | "CHEQUE";
+            amount: string;
+            reference?: string | null;
+            bankName?: string | null;
+            instrumentDate?: string | null;
+            notes?: string | null;
+            /** @default [] */
+            allocations: {
+                invoiceId: string;
+                amount: string;
+                deduction?: string;
+            }[];
+            version: number;
+        };
+        ReceiptActionDto: {
+            version: number;
+        };
+        ReceiptReverseDto: {
+            version: number;
+            /** @enum {string} */
+            kind: "BOUNCED" | "MISTAKE";
+        };
+        OpenItemsDto: {
+            invoices: {
+                id: string;
+                docNo: string;
+                date: string;
+                dueDate: string;
+                total: string;
+                outstanding: string;
+                daysPastDue: number;
+            }[];
+            credits: {
+                /** @enum {string} */
+                source: "RECEIPT" | "PAYMENT" | "CREDIT_NOTE" | "DEBIT_NOTE";
+                id: string;
+                docNo: string;
+                date: string;
+                available: string;
+            }[];
+        };
+        AllocationSuggestionDto: {
+            lines: {
+                invoiceId: string;
+                amount: string;
+            }[];
+            unallocated: string;
+        };
+        ApplyCreditDto: {
+            /** @enum {string} */
+            source: "RECEIPT" | "PAYMENT" | "CREDIT_NOTE" | "DEBIT_NOTE";
+            sourceId: string;
+            allocations: {
+                invoiceId: string;
+                amount: string;
+                deduction?: string;
+            }[];
+        };
+        PartyStatementDto: {
+            /** @enum {string} */
+            partyType: "CUSTOMER" | "SUPPLIER";
+            partyId: string;
+            partyName: string;
+            gstin: string | null;
+            from: string;
+            to: string;
+            opening: string;
+            entries: {
+                date: string;
+                /** @enum {string} */
+                docType: "OPENING" | "SI" | "CN" | "DN" | "PI" | "RC" | "PY" | "REV" | "TDS";
+                docId: string | null;
+                docNo: string;
+                description: string;
+                debit: string;
+                credit: string;
+                balance: string;
+            }[];
+            closing: string;
+            onAccount: string;
+            aging: {
+                label: string;
+                amount: string;
+            }[];
+        };
+        AgingReportDto: {
+            /** @enum {string} */
+            partyType: "CUSTOMER" | "SUPPLIER";
+            asOf: string;
+            buckets: string[];
+            rows: {
+                partyId: string;
+                partyName: string;
+                buckets: string[];
+                total: string;
+                onAccount: string;
+                oldestDays: number;
+            }[];
+            totals: string[];
+            total: string;
+        };
+        BlockedOrderItemDto: {
+            soId: string;
+            soNo: string;
+            date: string;
+            customerId: string;
+            customerName: string;
+            total: string;
+            reasons: ("MANUAL_BLOCK" | "OVER_LIMIT" | "OVER_DUE")[];
+            exposure: string;
+            limit: string;
+            maxDaysPastDue: number;
+            lastReceiptDate: string | null;
+            lastReceiptAmount: string | null;
+            heldSince: string | null;
+            version: number;
+        };
+        CommissionEntryItemDto: {
+            id: string;
+            salesmanId: string;
+            customerId: string;
+            customerName: string;
+            /** @enum {string} */
+            sourceType: "SI" | "CN" | "RC";
+            sourceId: string;
+            sourceNo: string;
+            invoiceId: string;
+            invoiceNo: string;
+            date: string;
+            /** @enum {string} */
+            method: "PER_METER" | "PERCENT_SALES";
+            rate: string;
+            amount: string;
+            reversalReason: string | null;
+            /** @enum {string} */
+            status: "Accrued" | "Paid";
+            payoutId: string | null;
+            payoutNo: string | null;
+        };
+        CommissionSummaryDto: {
+            salesmanId: string;
+            salesmanName: string;
+            accrued: string;
+            paid: string;
+            outstanding: string;
+        };
+        PayoutListItemDto: {
+            id: string;
+            payoutNo: string;
+            salesmanId: string;
+            salesmanName: string;
+            upTo: string;
+            /** @enum {string} */
+            status: "Draft" | "Paid" | "Cancelled";
+            gross: string;
+            tds: string;
+            net: string;
+            entryCount: number;
+            paidOn: string | null;
+            version: number;
+        };
+        PayoutDetailDto: {
+            id: string;
+            payoutNo: string;
+            salesmanId: string;
+            salesmanName: string;
+            upTo: string;
+            /** @enum {string} */
+            status: "Draft" | "Paid" | "Cancelled";
+            gross: string;
+            tds: string;
+            net: string;
+            entryCount: number;
+            paidOn: string | null;
+            version: number;
+            mode: ("CASH" | "NEFT" | "RTGS" | "UPI" | "CHEQUE") | null;
+            reference: string | null;
+            notes: string | null;
+            entries: {
+                id: string;
+                salesmanId: string;
+                customerId: string;
+                customerName: string;
+                /** @enum {string} */
+                sourceType: "SI" | "CN" | "RC";
+                sourceId: string;
+                sourceNo: string;
+                invoiceId: string;
+                invoiceNo: string;
+                date: string;
+                /** @enum {string} */
+                method: "PER_METER" | "PERCENT_SALES";
+                rate: string;
+                amount: string;
+                reversalReason: string | null;
+                /** @enum {string} */
+                status: "Accrued" | "Paid";
+                payoutId: string | null;
+                payoutNo: string | null;
+            }[];
+        };
+        PayoutCreateDto: {
+            salesmanId: string;
+            /** Format: date */
+            upTo: string;
+            notes?: string | null;
+        };
+        PayoutPayDto: {
+            version: number;
+            /** Format: date */
+            paidOn: string;
+            /** @enum {string} */
+            mode: "CASH" | "NEFT" | "RTGS" | "UPI" | "CHEQUE";
+            reference?: string | null;
+            tds?: string;
+        };
+        PayoutActionDto: {
+            version: number;
         };
     };
     responses: never;
@@ -8337,6 +9143,858 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["EwayBillResultDto"];
+                };
+            };
+        };
+    };
+    AccountDocumentsController_customerStatement: {
+        parameters: {
+            query?: {
+                from?: string;
+                to?: string;
+                format?: "pdf" | "html";
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AccountDocumentsController_supplierStatement: {
+        parameters: {
+            query?: {
+                from?: string;
+                to?: string;
+                format?: "pdf" | "html";
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AccountDocumentsController_receipt: {
+        parameters: {
+            query?: {
+                format?: "pdf" | "html";
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AccountDocumentsController_payment: {
+        parameters: {
+            query?: {
+                format?: "pdf" | "html";
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AccountDocumentsController_payout: {
+        parameters: {
+            query?: {
+                format?: "pdf" | "html";
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReceiptsController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                partyId?: string;
+                status?: string;
+                from?: string;
+                to?: string;
+                onAccount?: "true" | "false";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptListItemDto"][];
+                };
+            };
+        };
+    };
+    ReceiptsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReceiptCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptDetailDto"];
+                };
+            };
+        };
+    };
+    ReceiptsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptDetailDto"];
+                };
+            };
+        };
+    };
+    ReceiptsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReceiptUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptDetailDto"];
+                };
+            };
+        };
+    };
+    ReceiptsController_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReceiptActionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptDetailDto"];
+                };
+            };
+        };
+    };
+    ReceiptsController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReceiptActionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptDetailDto"];
+                };
+            };
+        };
+    };
+    ReceiptsController_reverse: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReceiptReverseDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptDetailDto"];
+                };
+            };
+        };
+    };
+    SupplierPaymentsController_list: {
+        parameters: {
+            query?: {
+                q?: string;
+                partyId?: string;
+                status?: string;
+                from?: string;
+                to?: string;
+                onAccount?: "true" | "false";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptListItemDto"][];
+                };
+            };
+        };
+    };
+    SupplierPaymentsController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReceiptCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptDetailDto"];
+                };
+            };
+        };
+    };
+    SupplierPaymentsController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptDetailDto"];
+                };
+            };
+        };
+    };
+    SupplierPaymentsController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReceiptUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptDetailDto"];
+                };
+            };
+        };
+    };
+    SupplierPaymentsController_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReceiptActionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptDetailDto"];
+                };
+            };
+        };
+    };
+    SupplierPaymentsController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReceiptActionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptDetailDto"];
+                };
+            };
+        };
+    };
+    SupplierPaymentsController_reverse: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReceiptReverseDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReceiptDetailDto"];
+                };
+            };
+        };
+    };
+    PartyAccountsController_customerOpenItems: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenItemsDto"];
+                };
+            };
+        };
+    };
+    PartyAccountsController_customerSuggestion: {
+        parameters: {
+            query: {
+                amount: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AllocationSuggestionDto"];
+                };
+            };
+        };
+    };
+    PartyAccountsController_customerApply: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApplyCreditDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenItemsDto"];
+                };
+            };
+        };
+    };
+    PartyAccountsController_customerStatement: {
+        parameters: {
+            query?: {
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PartyStatementDto"];
+                };
+            };
+        };
+    };
+    PartyAccountsController_supplierOpenItems: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenItemsDto"];
+                };
+            };
+        };
+    };
+    PartyAccountsController_supplierSuggestion: {
+        parameters: {
+            query: {
+                amount: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AllocationSuggestionDto"];
+                };
+            };
+        };
+    };
+    PartyAccountsController_supplierApply: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApplyCreditDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpenItemsDto"];
+                };
+            };
+        };
+    };
+    PartyAccountsController_supplierStatement: {
+        parameters: {
+            query?: {
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PartyStatementDto"];
+                };
+            };
+        };
+    };
+    CreditControlController_aging: {
+        parameters: {
+            query: {
+                partyType: "CUSTOMER" | "SUPPLIER";
+                asOf?: string;
+                q?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AgingReportDto"];
+                };
+            };
+        };
+    };
+    CreditControlController_blocked: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlockedOrderItemDto"][];
+                };
+            };
+        };
+    };
+    CreditControlController_runNightly: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CommissionController_entries: {
+        parameters: {
+            query?: {
+                salesmanId?: string;
+                status?: "Accrued" | "Paid";
+                from?: string;
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommissionEntryItemDto"][];
+                };
+            };
+        };
+    };
+    CommissionController_summary: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommissionSummaryDto"][];
+                };
+            };
+        };
+    };
+    CommissionController_payouts: {
+        parameters: {
+            query: {
+                salesmanId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PayoutListItemDto"][];
+                };
+            };
+        };
+    };
+    CommissionController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PayoutCreateDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PayoutDetailDto"];
+                };
+            };
+        };
+    };
+    CommissionController_payout: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PayoutDetailDto"];
+                };
+            };
+        };
+    };
+    CommissionController_pay: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PayoutPayDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PayoutDetailDto"];
+                };
+            };
+        };
+    };
+    CommissionController_cancel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PayoutActionDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PayoutDetailDto"];
                 };
             };
         };
