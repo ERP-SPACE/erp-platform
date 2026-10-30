@@ -2612,6 +2612,150 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/today": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReportsController_today"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReportsController_catalogue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/pivot": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ReportsController_pivot"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/pivots": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReportsController_listPivots"];
+        put?: never;
+        post: operations["ReportsController_createPivot"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/pivots/{pivotId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReportsController_getPivot"];
+        put: operations["ReportsController_updatePivot"];
+        post?: never;
+        delete: operations["ReportsController_deletePivot"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/exports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReportsController_listExports"];
+        put?: never;
+        post: operations["ReportsController_requestExport"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/exports/{exportId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReportsController_getExport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/exports/{exportId}/download": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReportsController_download"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/reports/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ReportsController_report"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -5291,6 +5435,339 @@ export interface components {
         };
         PayoutActionDto: {
             version: number;
+        };
+        TodayResponseDto: {
+            /** Format: date */
+            date: string;
+            asOf: string;
+            /** @enum {string} */
+            view: "all" | "warehouse" | "accounts" | "sales";
+            sentence: string | null;
+            kpis: {
+                ordersToday: {
+                    count: number;
+                    value: string;
+                } | null;
+                invoicesToday: {
+                    count: number;
+                    value: string;
+                } | null;
+                collectionsToday: {
+                    count: number;
+                    value: string;
+                } | null;
+                creditBlocks: {
+                    count: number;
+                    exposure: string;
+                } | null;
+                unmappedRolls: {
+                    count: number;
+                    olderThanAlert: number;
+                } | null;
+                grossMargin: {
+                    value: string;
+                    percent: string | null;
+                } | null;
+            };
+            needsYou: {
+                /** @enum {string} */
+                kind: "rateApproval" | "creditHold" | "supplierPaymentApproval" | "irnFailed" | "unmappedRolls" | "challanToInvoice" | "challanToPick" | "returnToInspect" | "moneyOnAccount" | "overdueCustomer";
+                label: string;
+                count: number;
+                amount: string | null;
+                oldestHours: number;
+                href: string;
+            }[];
+            charts: {
+                salesTrend: {
+                    /** Format: date */
+                    date: string;
+                    value: string;
+                }[] | null;
+                arAging: {
+                    label: string;
+                    amount: string;
+                }[] | null;
+                stockHeatmap: {
+                    gsm: number;
+                    widthIn: string;
+                    metres: string;
+                    avgAgeDays: number;
+                }[] | null;
+            };
+        };
+        ReportCatalogueDto: {
+            reports: {
+                /** @enum {string} */
+                id: "stock-by-sku" | "stock-by-batch" | "stock-by-supplier" | "unmapped-rolls" | "batch-aging" | "dead-stock" | "po-variance" | "dc-pending-invoice" | "so-backorder" | "sales-trend" | "sku-sales" | "override-frequency" | "discount-impact" | "churn-risk" | "salesman-performance" | "supplier-reliability" | "landed-cost-trend" | "supplier-lead-time" | "credit-utilisation" | "collection-efficiency" | "allocation-status" | "gross-margin" | "price-vs-cogs" | "scrap-impact" | "commission-summary";
+                title: string;
+                /** @enum {string} */
+                section: "operational" | "sales" | "purchase" | "credit" | "profitability";
+                description: string;
+                prd: string;
+                /** @enum {string} */
+                source: "view" | "live";
+                dated: boolean;
+            }[];
+            linked: {
+                title: string;
+                /** @enum {string} */
+                section: "operational" | "sales" | "purchase" | "credit" | "profitability";
+                prd: string;
+                href: string;
+            }[];
+            asOf: string | null;
+        };
+        PivotSpecDto: {
+            rows: ("sku" | "category" | "gsm" | "quality" | "width" | "customer" | "customerGroup" | "supplier" | "salesman" | "day" | "month" | "quarter" | "fy")[];
+            cols: ("sku" | "category" | "gsm" | "quality" | "width" | "customer" | "customerGroup" | "supplier" | "salesman" | "day" | "month" | "quarter" | "fy")[];
+            measures: ("metres" | "rolls" | "value" | "cogs" | "margin" | "marginPct")[];
+            /** Format: date */
+            from: string;
+            /** Format: date */
+            to: string;
+            /** @default {} */
+            filters: {
+                customerIds?: string[];
+                customerGroupIds?: string[];
+                supplierIds?: string[];
+                salesmanIds?: string[];
+                skuIds?: string[];
+                categoryIds?: string[];
+            };
+        };
+        PivotResponseDto: {
+            rowKeys: string[][];
+            colKeys: string[][];
+            cells: ({
+                metres: string;
+                rolls: number;
+                value: string;
+                cogs?: string;
+                margin?: string;
+                marginPct?: string | null;
+            } | null)[][];
+            rowTotals: {
+                metres: string;
+                rolls: number;
+                value: string;
+                cogs?: string;
+                margin?: string;
+                marginPct?: string | null;
+            }[];
+            colTotals: {
+                metres: string;
+                rolls: number;
+                value: string;
+                cogs?: string;
+                margin?: string;
+                marginPct?: string | null;
+            }[];
+            grandTotal: {
+                metres: string;
+                rolls: number;
+                value: string;
+                cogs?: string;
+                margin?: string;
+                marginPct?: string | null;
+            };
+            hiddenMeasures: ("metres" | "rolls" | "value" | "cogs" | "margin" | "marginPct")[];
+            truncated: boolean;
+            asOf: string | null;
+        };
+        SavedPivotDto: {
+            id: string;
+            name: string;
+            spec: {
+                rows: ("sku" | "category" | "gsm" | "quality" | "width" | "customer" | "customerGroup" | "supplier" | "salesman" | "day" | "month" | "quarter" | "fy")[];
+                cols: ("sku" | "category" | "gsm" | "quality" | "width" | "customer" | "customerGroup" | "supplier" | "salesman" | "day" | "month" | "quarter" | "fy")[];
+                measures: ("metres" | "rolls" | "value" | "cogs" | "margin" | "marginPct")[];
+                /** Format: date */
+                from: string;
+                /** Format: date */
+                to: string;
+                /** @default {} */
+                filters: {
+                    customerIds?: string[];
+                    customerGroupIds?: string[];
+                    supplierIds?: string[];
+                    salesmanIds?: string[];
+                    skuIds?: string[];
+                    categoryIds?: string[];
+                };
+            };
+            /**
+             * @default custom
+             * @enum {string}
+             */
+            range: "custom" | "thisMonth" | "lastMonth" | "thisQuarter" | "thisFy" | "last30" | "last90";
+            sharedWithRoles: string[];
+            ownerId: string;
+            ownerName: string;
+            mine: boolean;
+            version: number;
+            updatedAt: string;
+        };
+        SavedPivotInputDto: {
+            name: string;
+            spec: {
+                rows: ("sku" | "category" | "gsm" | "quality" | "width" | "customer" | "customerGroup" | "supplier" | "salesman" | "day" | "month" | "quarter" | "fy")[];
+                cols: ("sku" | "category" | "gsm" | "quality" | "width" | "customer" | "customerGroup" | "supplier" | "salesman" | "day" | "month" | "quarter" | "fy")[];
+                measures: ("metres" | "rolls" | "value" | "cogs" | "margin" | "marginPct")[];
+                /** Format: date */
+                from: string;
+                /** Format: date */
+                to: string;
+                /** @default {} */
+                filters: {
+                    customerIds?: string[];
+                    customerGroupIds?: string[];
+                    supplierIds?: string[];
+                    salesmanIds?: string[];
+                    skuIds?: string[];
+                    categoryIds?: string[];
+                };
+            };
+            /**
+             * @default custom
+             * @enum {string}
+             */
+            range: "custom" | "thisMonth" | "lastMonth" | "thisQuarter" | "thisFy" | "last30" | "last90";
+            /** @default [] */
+            sharedWithRoles: string[];
+        };
+        SavedPivotUpdateDto: {
+            name: string;
+            spec: {
+                rows: ("sku" | "category" | "gsm" | "quality" | "width" | "customer" | "customerGroup" | "supplier" | "salesman" | "day" | "month" | "quarter" | "fy")[];
+                cols: ("sku" | "category" | "gsm" | "quality" | "width" | "customer" | "customerGroup" | "supplier" | "salesman" | "day" | "month" | "quarter" | "fy")[];
+                measures: ("metres" | "rolls" | "value" | "cogs" | "margin" | "marginPct")[];
+                /** Format: date */
+                from: string;
+                /** Format: date */
+                to: string;
+                /** @default {} */
+                filters: {
+                    customerIds?: string[];
+                    customerGroupIds?: string[];
+                    supplierIds?: string[];
+                    salesmanIds?: string[];
+                    skuIds?: string[];
+                    categoryIds?: string[];
+                };
+            };
+            /**
+             * @default custom
+             * @enum {string}
+             */
+            range: "custom" | "thisMonth" | "lastMonth" | "thisQuarter" | "thisFy" | "last30" | "last90";
+            /** @default [] */
+            sharedWithRoles: string[];
+            version: number;
+        };
+        ExportRequestDto: {
+            /** @enum {string} */
+            kind: "report" | "pivot";
+            /** @enum {string} */
+            reportId?: "stock-by-sku" | "stock-by-batch" | "stock-by-supplier" | "unmapped-rolls" | "batch-aging" | "dead-stock" | "po-variance" | "dc-pending-invoice" | "so-backorder" | "sales-trend" | "sku-sales" | "override-frequency" | "discount-impact" | "churn-risk" | "salesman-performance" | "supplier-reliability" | "landed-cost-trend" | "supplier-lead-time" | "credit-utilisation" | "collection-efficiency" | "allocation-status" | "gross-margin" | "price-vs-cogs" | "scrap-impact" | "commission-summary";
+            query?: {
+                /** Format: date */
+                from?: string;
+                /** Format: date */
+                to?: string;
+                /** @enum {string} */
+                grain?: "day" | "month" | "quarter" | "fy";
+                groupBy?: string;
+                customerId?: string;
+                customerGroupId?: string;
+                supplierId?: string;
+                salesmanId?: string;
+                skuId?: string;
+                q?: string;
+                sort?: string;
+                /** @enum {string} */
+                dir?: "asc" | "desc";
+                /** @default 1 */
+                page: number;
+                /** @default 100 */
+                pageSize: number;
+            };
+            spec?: {
+                rows: ("sku" | "category" | "gsm" | "quality" | "width" | "customer" | "customerGroup" | "supplier" | "salesman" | "day" | "month" | "quarter" | "fy")[];
+                cols: ("sku" | "category" | "gsm" | "quality" | "width" | "customer" | "customerGroup" | "supplier" | "salesman" | "day" | "month" | "quarter" | "fy")[];
+                measures: ("metres" | "rolls" | "value" | "cogs" | "margin" | "marginPct")[];
+                /** Format: date */
+                from: string;
+                /** Format: date */
+                to: string;
+                /** @default {} */
+                filters: {
+                    customerIds?: string[];
+                    customerGroupIds?: string[];
+                    supplierIds?: string[];
+                    salesmanIds?: string[];
+                    skuIds?: string[];
+                    categoryIds?: string[];
+                };
+            };
+            /** @enum {string} */
+            format: "csv" | "xlsx" | "pdf";
+        };
+        ExportItemDto: {
+            id: string;
+            title: string;
+            /** @enum {string} */
+            format: "csv" | "xlsx" | "pdf";
+            /** @enum {string} */
+            status: "Queued" | "Running" | "Ready" | "Failed" | "Expired";
+            rowCount: number | null;
+            sizeBytes: number | null;
+            error: string | null;
+            createdAt: string;
+            readyAt: string | null;
+            expiresAt: string | null;
+            downloadUrl: string | null;
+        };
+        ReportResponseDto: {
+            /** @enum {string} */
+            id: "stock-by-sku" | "stock-by-batch" | "stock-by-supplier" | "unmapped-rolls" | "batch-aging" | "dead-stock" | "po-variance" | "dc-pending-invoice" | "so-backorder" | "sales-trend" | "sku-sales" | "override-frequency" | "discount-impact" | "churn-risk" | "salesman-performance" | "supplier-reliability" | "landed-cost-trend" | "supplier-lead-time" | "credit-utilisation" | "collection-efficiency" | "allocation-status" | "gross-margin" | "price-vs-cogs" | "scrap-impact" | "commission-summary";
+            title: string;
+            columns: {
+                key: string;
+                label: string;
+                /** @enum {string} */
+                kind: "text" | "code" | "date" | "money" | "metres" | "count" | "percent" | "days" | "hours";
+                total?: boolean;
+                cost?: boolean;
+            }[];
+            rows: {
+                cells: {
+                    [key: string]: string | number | null;
+                };
+                links?: {
+                    [key: string]: {
+                        /** @enum {string} */
+                        kind: "customer" | "supplier" | "salesman" | "sku" | "roll" | "so" | "dc" | "si" | "po" | "grn" | "pi" | "receipt" | "payment";
+                        id: string;
+                    };
+                };
+                /** @enum {string} */
+                tone?: "warning" | "danger";
+            }[];
+            totals: {
+                [key: string]: string | number | null;
+            } | null;
+            total: number;
+            page: number;
+            pageSize: number;
+            asOf: string | null;
+            from: string | null;
+            to: string | null;
+            series?: {
+                key: string;
+                label: string;
+                value: string;
+            }[];
         };
     };
     responses: never;
@@ -10002,6 +10479,292 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PayoutDetailDto"];
+                };
+            };
+        };
+    };
+    ReportsController_today: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TodayResponseDto"];
+                };
+            };
+        };
+    };
+    ReportsController_catalogue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportCatalogueDto"];
+                };
+            };
+        };
+    };
+    ReportsController_pivot: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PivotSpecDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PivotResponseDto"];
+                };
+            };
+        };
+    };
+    ReportsController_listPivots: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedPivotDto"][];
+                };
+            };
+        };
+    };
+    ReportsController_createPivot: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedPivotInputDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedPivotDto"];
+                };
+            };
+        };
+    };
+    ReportsController_getPivot: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pivotId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedPivotDto"];
+                };
+            };
+        };
+    };
+    ReportsController_updatePivot: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pivotId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SavedPivotUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SavedPivotDto"];
+                };
+            };
+        };
+    };
+    ReportsController_deletePivot: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pivotId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReportsController_listExports: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExportItemDto"][];
+                };
+            };
+        };
+    };
+    ReportsController_requestExport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExportRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExportItemDto"];
+                };
+            };
+        };
+    };
+    ReportsController_getExport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                exportId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExportItemDto"];
+                };
+            };
+        };
+    };
+    ReportsController_download: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                exportId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ReportsController_report: {
+        parameters: {
+            query?: {
+                from?: string;
+                to?: string;
+                grain?: "day" | "month" | "quarter" | "fy";
+                groupBy?: string;
+                customerId?: string;
+                customerGroupId?: string;
+                supplierId?: string;
+                salesmanId?: string;
+                skuId?: string;
+                q?: string;
+                sort?: string;
+                dir?: "asc" | "desc";
+                page?: number;
+                pageSize?: number;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportResponseDto"];
                 };
             };
         };

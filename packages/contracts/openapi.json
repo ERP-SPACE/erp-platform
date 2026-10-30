@@ -7710,6 +7710,492 @@
           "collections"
         ]
       }
+    },
+    "/api/today": {
+      "get": {
+        "operationId": "ReportsController_today",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TodayResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      }
+    },
+    "/api/reports": {
+      "get": {
+        "operationId": "ReportsController_catalogue",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportCatalogueDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      }
+    },
+    "/api/reports/pivot": {
+      "post": {
+        "operationId": "ReportsController_pivot",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PivotSpecDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PivotResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      }
+    },
+    "/api/reports/pivots": {
+      "get": {
+        "operationId": "ReportsController_listPivots",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SavedPivotDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      },
+      "post": {
+        "operationId": "ReportsController_createPivot",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SavedPivotInputDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedPivotDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      }
+    },
+    "/api/reports/pivots/{pivotId}": {
+      "get": {
+        "operationId": "ReportsController_getPivot",
+        "parameters": [
+          {
+            "name": "pivotId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedPivotDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      },
+      "put": {
+        "operationId": "ReportsController_updatePivot",
+        "parameters": [
+          {
+            "name": "pivotId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SavedPivotUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SavedPivotDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      },
+      "delete": {
+        "operationId": "ReportsController_deletePivot",
+        "parameters": [
+          {
+            "name": "pivotId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      }
+    },
+    "/api/reports/exports": {
+      "post": {
+        "operationId": "ReportsController_requestExport",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExportRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportItemDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      },
+      "get": {
+        "operationId": "ReportsController_listExports",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExportItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      }
+    },
+    "/api/reports/exports/{exportId}": {
+      "get": {
+        "operationId": "ReportsController_getExport",
+        "parameters": [
+          {
+            "name": "exportId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExportItemDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      }
+    },
+    "/api/reports/exports/{exportId}/download": {
+      "get": {
+        "operationId": "ReportsController_download",
+        "parameters": [
+          {
+            "name": "exportId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      }
+    },
+    "/api/reports/{id}": {
+      "get": {
+        "operationId": "ReportsController_report",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "from",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "to",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "format": "date",
+              "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "grain",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "month",
+                "quarter",
+                "fy"
+              ]
+            }
+          },
+          {
+            "name": "groupBy",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 40,
+              "type": "string"
+            }
+          },
+          {
+            "name": "customerId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "customerGroupId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "supplierId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "salesmanId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "skuId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 80,
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "maxLength": 40,
+              "type": "string"
+            }
+          },
+          {
+            "name": "dir",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 9007199254740991,
+              "default": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "pageSize",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "minimum": 1,
+              "maximum": 500,
+              "default": 100,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      }
     }
   },
   "info": {
@@ -21804,6 +22290,1927 @@
         },
         "required": [
           "version"
+        ]
+      },
+      "TodayResponseDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "asOf": {
+            "type": "string"
+          },
+          "view": {
+            "type": "string",
+            "enum": [
+              "all",
+              "warehouse",
+              "accounts",
+              "sales"
+            ]
+          },
+          "sentence": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "kpis": {
+            "type": "object",
+            "properties": {
+              "ordersToday": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "count",
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "invoicesToday": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "count",
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "collectionsToday": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "count",
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "creditBlocks": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "exposure": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "count",
+                      "exposure"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "unmappedRolls": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "count": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "olderThanAlert": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": [
+                      "count",
+                      "olderThanAlert"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "grossMargin": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "value": {
+                        "type": "string"
+                      },
+                      "percent": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "value",
+                      "percent"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "ordersToday",
+              "invoicesToday",
+              "collectionsToday",
+              "creditBlocks",
+              "unmappedRolls",
+              "grossMargin"
+            ]
+          },
+          "needsYou": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "rateApproval",
+                    "creditHold",
+                    "supplierPaymentApproval",
+                    "irnFailed",
+                    "unmappedRolls",
+                    "challanToInvoice",
+                    "challanToPick",
+                    "returnToInspect",
+                    "moneyOnAccount",
+                    "overdueCustomer"
+                  ]
+                },
+                "label": {
+                  "type": "string"
+                },
+                "count": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "amount": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "oldestHours": {
+                  "type": "number"
+                },
+                "href": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "label",
+                "count",
+                "amount",
+                "oldestHours",
+                "href"
+              ]
+            }
+          },
+          "charts": {
+            "type": "object",
+            "properties": {
+              "salesTrend": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "date": {
+                          "type": "string",
+                          "format": "date",
+                          "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                        },
+                        "value": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "date",
+                        "value"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "arAging": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "label": {
+                          "type": "string"
+                        },
+                        "amount": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "label",
+                        "amount"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "stockHeatmap": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "gsm": {
+                          "type": "number"
+                        },
+                        "widthIn": {
+                          "type": "string"
+                        },
+                        "metres": {
+                          "type": "string"
+                        },
+                        "avgAgeDays": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "gsm",
+                        "widthIn",
+                        "metres",
+                        "avgAgeDays"
+                      ]
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "salesTrend",
+              "arAging",
+              "stockHeatmap"
+            ]
+          }
+        },
+        "required": [
+          "date",
+          "asOf",
+          "view",
+          "sentence",
+          "kpis",
+          "needsYou",
+          "charts"
+        ]
+      },
+      "ReportCatalogueDto": {
+        "type": "object",
+        "properties": {
+          "reports": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "enum": [
+                    "stock-by-sku",
+                    "stock-by-batch",
+                    "stock-by-supplier",
+                    "unmapped-rolls",
+                    "batch-aging",
+                    "dead-stock",
+                    "po-variance",
+                    "dc-pending-invoice",
+                    "so-backorder",
+                    "sales-trend",
+                    "sku-sales",
+                    "override-frequency",
+                    "discount-impact",
+                    "churn-risk",
+                    "salesman-performance",
+                    "supplier-reliability",
+                    "landed-cost-trend",
+                    "supplier-lead-time",
+                    "credit-utilisation",
+                    "collection-efficiency",
+                    "allocation-status",
+                    "gross-margin",
+                    "price-vs-cogs",
+                    "scrap-impact",
+                    "commission-summary"
+                  ]
+                },
+                "title": {
+                  "type": "string"
+                },
+                "section": {
+                  "type": "string",
+                  "enum": [
+                    "operational",
+                    "sales",
+                    "purchase",
+                    "credit",
+                    "profitability"
+                  ]
+                },
+                "description": {
+                  "type": "string"
+                },
+                "prd": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "view",
+                    "live"
+                  ]
+                },
+                "dated": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "id",
+                "title",
+                "section",
+                "description",
+                "prd",
+                "source",
+                "dated"
+              ]
+            }
+          },
+          "linked": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "section": {
+                  "type": "string",
+                  "enum": [
+                    "operational",
+                    "sales",
+                    "purchase",
+                    "credit",
+                    "profitability"
+                  ]
+                },
+                "prd": {
+                  "type": "string"
+                },
+                "href": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "title",
+                "section",
+                "prd",
+                "href"
+              ]
+            }
+          },
+          "asOf": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "reports",
+          "linked",
+          "asOf"
+        ]
+      },
+      "PivotSpecDto": {
+        "type": "object",
+        "properties": {
+          "rows": {
+            "maxItems": 3,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "sku",
+                "category",
+                "gsm",
+                "quality",
+                "width",
+                "customer",
+                "customerGroup",
+                "supplier",
+                "salesman",
+                "day",
+                "month",
+                "quarter",
+                "fy"
+              ]
+            }
+          },
+          "cols": {
+            "maxItems": 2,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "sku",
+                "category",
+                "gsm",
+                "quality",
+                "width",
+                "customer",
+                "customerGroup",
+                "supplier",
+                "salesman",
+                "day",
+                "month",
+                "quarter",
+                "fy"
+              ]
+            }
+          },
+          "measures": {
+            "minItems": 1,
+            "maxItems": 6,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "metres",
+                "rolls",
+                "value",
+                "cogs",
+                "margin",
+                "marginPct"
+              ]
+            }
+          },
+          "from": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "to": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+          },
+          "filters": {
+            "default": {},
+            "type": "object",
+            "properties": {
+              "customerIds": {
+                "maxItems": 200,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "customerGroupIds": {
+                "maxItems": 50,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "supplierIds": {
+                "maxItems": 200,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "salesmanIds": {
+                "maxItems": 50,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "skuIds": {
+                "maxItems": 500,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "categoryIds": {
+                "maxItems": 50,
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "rows",
+          "cols",
+          "measures",
+          "from",
+          "to"
+        ]
+      },
+      "PivotResponseDto": {
+        "type": "object",
+        "properties": {
+          "rowKeys": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "colKeys": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "cells": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "metres": {
+                        "type": "string"
+                      },
+                      "rolls": {
+                        "type": "integer",
+                        "minimum": -9007199254740991,
+                        "maximum": 9007199254740991
+                      },
+                      "value": {
+                        "type": "string"
+                      },
+                      "cogs": {
+                        "type": "string"
+                      },
+                      "margin": {
+                        "type": "string"
+                      },
+                      "marginPct": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "metres",
+                      "rolls",
+                      "value"
+                    ]
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          },
+          "rowTotals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "metres": {
+                  "type": "string"
+                },
+                "rolls": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "value": {
+                  "type": "string"
+                },
+                "cogs": {
+                  "type": "string"
+                },
+                "margin": {
+                  "type": "string"
+                },
+                "marginPct": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "metres",
+                "rolls",
+                "value"
+              ]
+            }
+          },
+          "colTotals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "metres": {
+                  "type": "string"
+                },
+                "rolls": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "value": {
+                  "type": "string"
+                },
+                "cogs": {
+                  "type": "string"
+                },
+                "margin": {
+                  "type": "string"
+                },
+                "marginPct": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              },
+              "required": [
+                "metres",
+                "rolls",
+                "value"
+              ]
+            }
+          },
+          "grandTotal": {
+            "type": "object",
+            "properties": {
+              "metres": {
+                "type": "string"
+              },
+              "rolls": {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              "value": {
+                "type": "string"
+              },
+              "cogs": {
+                "type": "string"
+              },
+              "margin": {
+                "type": "string"
+              },
+              "marginPct": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "metres",
+              "rolls",
+              "value"
+            ]
+          },
+          "hiddenMeasures": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "metres",
+                "rolls",
+                "value",
+                "cogs",
+                "margin",
+                "marginPct"
+              ]
+            }
+          },
+          "truncated": {
+            "type": "boolean"
+          },
+          "asOf": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "rowKeys",
+          "colKeys",
+          "cells",
+          "rowTotals",
+          "colTotals",
+          "grandTotal",
+          "hiddenMeasures",
+          "truncated",
+          "asOf"
+        ]
+      },
+      "SavedPivotDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "spec": {
+            "type": "object",
+            "properties": {
+              "rows": {
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "sku",
+                    "category",
+                    "gsm",
+                    "quality",
+                    "width",
+                    "customer",
+                    "customerGroup",
+                    "supplier",
+                    "salesman",
+                    "day",
+                    "month",
+                    "quarter",
+                    "fy"
+                  ]
+                }
+              },
+              "cols": {
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "sku",
+                    "category",
+                    "gsm",
+                    "quality",
+                    "width",
+                    "customer",
+                    "customerGroup",
+                    "supplier",
+                    "salesman",
+                    "day",
+                    "month",
+                    "quarter",
+                    "fy"
+                  ]
+                }
+              },
+              "measures": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "metres",
+                    "rolls",
+                    "value",
+                    "cogs",
+                    "margin",
+                    "marginPct"
+                  ]
+                }
+              },
+              "from": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "to": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "filters": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "customerIds": {
+                    "maxItems": 200,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "customerGroupIds": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "supplierIds": {
+                    "maxItems": 200,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "salesmanIds": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "skuIds": {
+                    "maxItems": 500,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "categoryIds": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "rows",
+              "cols",
+              "measures",
+              "from",
+              "to"
+            ]
+          },
+          "range": {
+            "default": "custom",
+            "type": "string",
+            "enum": [
+              "custom",
+              "thisMonth",
+              "lastMonth",
+              "thisQuarter",
+              "thisFy",
+              "last30",
+              "last90"
+            ]
+          },
+          "sharedWithRoles": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ownerId": {
+            "type": "string"
+          },
+          "ownerName": {
+            "type": "string"
+          },
+          "mine": {
+            "type": "boolean"
+          },
+          "version": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "spec",
+          "sharedWithRoles",
+          "ownerId",
+          "ownerName",
+          "mine",
+          "version",
+          "updatedAt"
+        ]
+      },
+      "SavedPivotInputDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "spec": {
+            "type": "object",
+            "properties": {
+              "rows": {
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "sku",
+                    "category",
+                    "gsm",
+                    "quality",
+                    "width",
+                    "customer",
+                    "customerGroup",
+                    "supplier",
+                    "salesman",
+                    "day",
+                    "month",
+                    "quarter",
+                    "fy"
+                  ]
+                }
+              },
+              "cols": {
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "sku",
+                    "category",
+                    "gsm",
+                    "quality",
+                    "width",
+                    "customer",
+                    "customerGroup",
+                    "supplier",
+                    "salesman",
+                    "day",
+                    "month",
+                    "quarter",
+                    "fy"
+                  ]
+                }
+              },
+              "measures": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "metres",
+                    "rolls",
+                    "value",
+                    "cogs",
+                    "margin",
+                    "marginPct"
+                  ]
+                }
+              },
+              "from": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "to": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "filters": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "customerIds": {
+                    "maxItems": 200,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "customerGroupIds": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "supplierIds": {
+                    "maxItems": 200,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "salesmanIds": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "skuIds": {
+                    "maxItems": 500,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "categoryIds": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "rows",
+              "cols",
+              "measures",
+              "from",
+              "to"
+            ]
+          },
+          "range": {
+            "default": "custom",
+            "type": "string",
+            "enum": [
+              "custom",
+              "thisMonth",
+              "lastMonth",
+              "thisQuarter",
+              "thisFy",
+              "last30",
+              "last90"
+            ]
+          },
+          "sharedWithRoles": {
+            "default": [],
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "spec"
+        ]
+      },
+      "SavedPivotUpdateDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "spec": {
+            "type": "object",
+            "properties": {
+              "rows": {
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "sku",
+                    "category",
+                    "gsm",
+                    "quality",
+                    "width",
+                    "customer",
+                    "customerGroup",
+                    "supplier",
+                    "salesman",
+                    "day",
+                    "month",
+                    "quarter",
+                    "fy"
+                  ]
+                }
+              },
+              "cols": {
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "sku",
+                    "category",
+                    "gsm",
+                    "quality",
+                    "width",
+                    "customer",
+                    "customerGroup",
+                    "supplier",
+                    "salesman",
+                    "day",
+                    "month",
+                    "quarter",
+                    "fy"
+                  ]
+                }
+              },
+              "measures": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "metres",
+                    "rolls",
+                    "value",
+                    "cogs",
+                    "margin",
+                    "marginPct"
+                  ]
+                }
+              },
+              "from": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "to": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "filters": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "customerIds": {
+                    "maxItems": 200,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "customerGroupIds": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "supplierIds": {
+                    "maxItems": 200,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "salesmanIds": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "skuIds": {
+                    "maxItems": 500,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "categoryIds": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "rows",
+              "cols",
+              "measures",
+              "from",
+              "to"
+            ]
+          },
+          "range": {
+            "default": "custom",
+            "type": "string",
+            "enum": [
+              "custom",
+              "thisMonth",
+              "lastMonth",
+              "thisQuarter",
+              "thisFy",
+              "last30",
+              "last90"
+            ]
+          },
+          "sharedWithRoles": {
+            "default": [],
+            "maxItems": 20,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "version": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "name",
+          "spec",
+          "version"
+        ]
+      },
+      "ExportRequestDto": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "report",
+              "pivot"
+            ]
+          },
+          "reportId": {
+            "type": "string",
+            "enum": [
+              "stock-by-sku",
+              "stock-by-batch",
+              "stock-by-supplier",
+              "unmapped-rolls",
+              "batch-aging",
+              "dead-stock",
+              "po-variance",
+              "dc-pending-invoice",
+              "so-backorder",
+              "sales-trend",
+              "sku-sales",
+              "override-frequency",
+              "discount-impact",
+              "churn-risk",
+              "salesman-performance",
+              "supplier-reliability",
+              "landed-cost-trend",
+              "supplier-lead-time",
+              "credit-utilisation",
+              "collection-efficiency",
+              "allocation-status",
+              "gross-margin",
+              "price-vs-cogs",
+              "scrap-impact",
+              "commission-summary"
+            ]
+          },
+          "query": {
+            "type": "object",
+            "properties": {
+              "from": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "to": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "grain": {
+                "type": "string",
+                "enum": [
+                  "day",
+                  "month",
+                  "quarter",
+                  "fy"
+                ]
+              },
+              "groupBy": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "customerId": {
+                "type": "string"
+              },
+              "customerGroupId": {
+                "type": "string"
+              },
+              "supplierId": {
+                "type": "string"
+              },
+              "salesmanId": {
+                "type": "string"
+              },
+              "skuId": {
+                "type": "string"
+              },
+              "q": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "sort": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "dir": {
+                "type": "string",
+                "enum": [
+                  "asc",
+                  "desc"
+                ]
+              },
+              "page": {
+                "default": 1,
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "pageSize": {
+                "default": 100,
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 500
+              }
+            }
+          },
+          "spec": {
+            "type": "object",
+            "properties": {
+              "rows": {
+                "maxItems": 3,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "sku",
+                    "category",
+                    "gsm",
+                    "quality",
+                    "width",
+                    "customer",
+                    "customerGroup",
+                    "supplier",
+                    "salesman",
+                    "day",
+                    "month",
+                    "quarter",
+                    "fy"
+                  ]
+                }
+              },
+              "cols": {
+                "maxItems": 2,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "sku",
+                    "category",
+                    "gsm",
+                    "quality",
+                    "width",
+                    "customer",
+                    "customerGroup",
+                    "supplier",
+                    "salesman",
+                    "day",
+                    "month",
+                    "quarter",
+                    "fy"
+                  ]
+                }
+              },
+              "measures": {
+                "minItems": 1,
+                "maxItems": 6,
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "metres",
+                    "rolls",
+                    "value",
+                    "cogs",
+                    "margin",
+                    "marginPct"
+                  ]
+                }
+              },
+              "from": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "to": {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              "filters": {
+                "default": {},
+                "type": "object",
+                "properties": {
+                  "customerIds": {
+                    "maxItems": 200,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "customerGroupIds": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "supplierIds": {
+                    "maxItems": 200,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "salesmanIds": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "skuIds": {
+                    "maxItems": 500,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "categoryIds": {
+                    "maxItems": 50,
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "required": [
+              "rows",
+              "cols",
+              "measures",
+              "from",
+              "to"
+            ]
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "csv",
+              "xlsx",
+              "pdf"
+            ]
+          }
+        },
+        "required": [
+          "kind",
+          "format"
+        ]
+      },
+      "ExportItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "csv",
+              "xlsx",
+              "pdf"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Queued",
+              "Running",
+              "Ready",
+              "Failed",
+              "Expired"
+            ]
+          },
+          "rowCount": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sizeBytes": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": -9007199254740991,
+                "maximum": 9007199254740991
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "readyAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "expiresAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "downloadUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "format",
+          "status",
+          "rowCount",
+          "sizeBytes",
+          "error",
+          "createdAt",
+          "readyAt",
+          "expiresAt",
+          "downloadUrl"
+        ]
+      },
+      "ReportResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": [
+              "stock-by-sku",
+              "stock-by-batch",
+              "stock-by-supplier",
+              "unmapped-rolls",
+              "batch-aging",
+              "dead-stock",
+              "po-variance",
+              "dc-pending-invoice",
+              "so-backorder",
+              "sales-trend",
+              "sku-sales",
+              "override-frequency",
+              "discount-impact",
+              "churn-risk",
+              "salesman-performance",
+              "supplier-reliability",
+              "landed-cost-trend",
+              "supplier-lead-time",
+              "credit-utilisation",
+              "collection-efficiency",
+              "allocation-status",
+              "gross-margin",
+              "price-vs-cogs",
+              "scrap-impact",
+              "commission-summary"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "columns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "text",
+                    "code",
+                    "date",
+                    "money",
+                    "metres",
+                    "count",
+                    "percent",
+                    "days",
+                    "hours"
+                  ]
+                },
+                "total": {
+                  "type": "boolean"
+                },
+                "cost": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "key",
+                "label",
+                "kind"
+              ]
+            }
+          },
+          "rows": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "cells": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {
+                    "type": [
+                      "string",
+                      "number",
+                      "null"
+                    ]
+                  }
+                },
+                "links": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string",
+                        "enum": [
+                          "customer",
+                          "supplier",
+                          "salesman",
+                          "sku",
+                          "roll",
+                          "so",
+                          "dc",
+                          "si",
+                          "po",
+                          "grn",
+                          "pi",
+                          "receipt",
+                          "payment"
+                        ]
+                      },
+                      "id": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "id"
+                    ]
+                  }
+                },
+                "tone": {
+                  "type": "string",
+                  "enum": [
+                    "warning",
+                    "danger"
+                  ]
+                }
+              },
+              "required": [
+                "cells"
+              ]
+            }
+          },
+          "totals": {
+            "anyOf": [
+              {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {
+                  "type": [
+                    "string",
+                    "number",
+                    "null"
+                  ]
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "total": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "page": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "pageSize": {
+            "type": "integer",
+            "minimum": -9007199254740991,
+            "maximum": 9007199254740991
+          },
+          "asOf": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "from": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "to": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "series": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "key",
+                "label",
+                "value"
+              ]
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "columns",
+          "rows",
+          "totals",
+          "total",
+          "page",
+          "pageSize",
+          "asOf",
+          "from",
+          "to"
         ]
       }
     }

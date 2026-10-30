@@ -28,5 +28,6 @@ import { StatementsService } from "./statements.service.js";
     CommissionController,
   ],
   providers: [ReceiptsService, StatementsService, AccountDocumentsService],
+  exports: [StatementsService],
 })
 export class CollectionsModule {}

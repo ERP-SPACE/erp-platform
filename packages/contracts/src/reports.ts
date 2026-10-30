@@ -516,15 +516,19 @@ export type TodayResponse = z.infer<typeof todayResponse>;
 export const EXPORT_FORMATS = ["csv", "xlsx", "pdf"] as const;
 export const EXPORT_STATUSES = ["Queued", "Running", "Ready", "Failed", "Expired"] as const;
 
-export const exportRequest = z.discriminatedUnion("kind", [
-  z.object({
-    kind: z.literal("report"),
-    reportId,
-    query: reportQuery,
+/** A report (`reportId` + `query`) or a pivot (`spec`). One flat object so it has one OpenAPI schema. */
+export const exportRequest = z
+  .object({
+    kind: z.enum(["report", "pivot"]),
+    reportId: reportId.optional(),
+    query: reportQuery.optional(),
+    spec: pivotSpec.optional(),
     format: z.enum(EXPORT_FORMATS),
-  }),
-  z.object({ kind: z.literal("pivot"), spec: pivotSpec, format: z.enum(EXPORT_FORMATS) }),
-]);
+  })
+  .refine((r) => (r.kind === "report" ? !!r.reportId : !!r.spec), {
+    message: "Say which report or pivot to export",
+    path: ["kind"],
+  });
 export type ExportRequest = z.infer<typeof exportRequest>;
 
 export const exportItem = z.object({
