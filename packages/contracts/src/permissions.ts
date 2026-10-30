@@ -63,6 +63,11 @@ export const PERMISSIONS = {
   "payables.payment.approve": "Approve supplier payments above the approval threshold",
   "commission.view": "View salesman commission entries, payouts and statements",
   "commission.payout.manage": "Create and pay commission payout batches",
+  // Stage 5 — reports, analytics & Today
+  "reports.view": "Open reports, the pivot builder and Today (within the user's customer scope)",
+  "reports.margin.view": "See cost, COGS and margin in reports, pivots and exports (Q36)",
+  "reports.pivot.share": "Share saved pivots with other roles",
+  "reports.export": "Export reports and pivots as CSV, XLSX or PDF",
 } as const;
 
 export type PermissionCode = keyof typeof PERMISSIONS;
@@ -118,6 +123,7 @@ export const SYSTEM_ROLES = [
       "collections.*",
       "payables.*",
       "commission.*",
+      "reports.*",
     ],
   },
   {
@@ -139,6 +145,10 @@ export const SYSTEM_ROLES = [
       "inventory.view_cost",
       "inventory.map",
       "labels.print",
+      "reports.view",
+      "reports.margin.view",
+      "reports.pivot.share",
+      "reports.export",
     ],
   },
   {
@@ -163,6 +173,10 @@ export const SYSTEM_ROLES = [
       "sales.note.manage",
       "collections.view",
       "commission.view",
+      "reports.view",
+      "reports.margin.view",
+      "reports.pivot.share",
+      "reports.export",
     ],
   },
   {
@@ -178,6 +192,7 @@ export const SYSTEM_ROLES = [
       "inventory.view",
       "sales.view",
       "sales.order.manage",
+      "reports.view",
     ],
   },
   {
@@ -195,6 +210,7 @@ export const SYSTEM_ROLES = [
       "sales.view",
       "sales.dispatch.manage",
       "sales.return.manage",
+      "reports.view",
     ],
   },
   {
@@ -223,6 +239,10 @@ export const SYSTEM_ROLES = [
       "commission.view",
       "commission.payout.manage",
       "compliance.einvoice.manage",
+      "reports.view",
+      "reports.margin.view",
+      "reports.pivot.share",
+      "reports.export",
     ],
   },
 ] as const;

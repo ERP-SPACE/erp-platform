@@ -8070,7 +8070,11 @@
                 "payables.payment.manage",
                 "payables.payment.approve",
                 "commission.view",
-                "commission.payout.manage"
+                "commission.payout.manage",
+                "reports.view",
+                "reports.margin.view",
+                "reports.pivot.share",
+                "reports.export"
               ]
             }
           },

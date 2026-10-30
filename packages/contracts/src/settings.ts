@@ -249,6 +249,31 @@ export const SETTINGS = {
     schema: z.number().int().min(0),
     default: 500000,
   },
+  "reports.churnDays": {
+    label: "Churn risk: customers with no confirmed order for this many days (Q38)",
+    group: "Reports",
+    schema: z.number().int().min(7).max(730),
+    default: 60,
+  },
+  "reports.agingHighlightDays": {
+    label: "Batch aging: highlight stock older than these days",
+    group: "Reports",
+    schema: z
+      .array(z.number().int().min(1).max(3650))
+      .min(1)
+      .max(3)
+      .refine(
+        (b) => b.every((d, i) => i === 0 || d > b[i - 1]!),
+        "Each threshold must be longer than the last",
+      ),
+    default: [90, 180],
+  },
+  "reports.exportLinkDays": {
+    label: "Export download links expire after (days)",
+    group: "Reports",
+    schema: z.number().int().min(1).max(90),
+    default: 7,
+  },
   "analytics.refresh": {
     label: "Analytics refresh (ADR-0005)",
     group: "System",
