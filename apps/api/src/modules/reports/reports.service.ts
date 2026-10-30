@@ -285,7 +285,10 @@ export class ReportsService {
         ? Object.fromEntries(
             Object.entries(def.links)
               .filter(([k, l]) => columns.some((c) => c.key === k) && r[l.idKey])
-              .map(([k, l]) => [k, { kind: l.kind, id: String(r[l.idKey]) }]),
+              .map(([k, l]) => [
+                k,
+                { kind: (l.kindKey ? r[l.kindKey] : l.kind) as typeof l.kind, id: String(r[l.idKey]) },
+              ]),
           )
         : undefined;
       const tone = def.tone?.(r, fullCtx);

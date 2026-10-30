@@ -19,6 +19,7 @@ import { Route as AppCatalogueRouteImport } from './routes/_app/catalogue'
 import { Route as AppCollectionsRouteImport } from './routes/_app/collections'
 import { Route as AppInventoryRouteImport } from './routes/_app/inventory'
 import { Route as AppPurchaseRouteImport } from './routes/_app/purchase'
+import { Route as AppReportsRouteImport } from './routes/_app/reports'
 import { Route as AppSalesRouteImport } from './routes/_app/sales'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
 import { Route as AppSuppliersRouteImport } from './routes/_app/suppliers'
@@ -37,6 +38,10 @@ import { Route as AppInventoryIndexRouteImport } from './routes/_app/inventory/i
 import { Route as AppInventoryRollsRouteImport } from './routes/_app/inventory/rolls'
 import { Route as AppInventoryUnmappedRouteImport } from './routes/_app/inventory/unmapped'
 import { Route as AppPricingBulkRevisionRouteImport } from './routes/_app/pricing/bulk-revision'
+import { Route as AppReportsIndexRouteImport } from './routes/_app/reports/index'
+import { Route as AppReportsReportIdRouteImport } from './routes/_app/reports/$reportId'
+import { Route as AppReportsExportsRouteImport } from './routes/_app/reports/exports'
+import { Route as AppReportsPivotRouteImport } from './routes/_app/reports/pivot'
 import { Route as AppSalesIndexRouteImport } from './routes/_app/sales/index'
 import { Route as AppSalesIrnRouteImport } from './routes/_app/sales/irn'
 import { Route as AppSalesmenIndexRouteImport } from './routes/_app/salesmen/index'
@@ -134,6 +139,11 @@ const AppPurchaseRoute = AppPurchaseRouteImport.update({
   path: '/purchase',
   getParentRoute: () => AppRoute,
 } as any)
+const AppReportsRoute = AppReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSalesRoute = AppSalesRouteImport.update({
   id: '/sales',
   path: '/sales',
@@ -223,6 +233,26 @@ const AppPricingBulkRevisionRoute = AppPricingBulkRevisionRouteImport.update({
   id: '/pricing/bulk-revision',
   path: '/pricing/bulk-revision',
   getParentRoute: () => AppRoute,
+} as any)
+const AppReportsIndexRoute = AppReportsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppReportsRoute,
+} as any)
+const AppReportsReportIdRoute = AppReportsReportIdRouteImport.update({
+  id: '/$reportId',
+  path: '/$reportId',
+  getParentRoute: () => AppReportsRoute,
+} as any)
+const AppReportsExportsRoute = AppReportsExportsRouteImport.update({
+  id: '/exports',
+  path: '/exports',
+  getParentRoute: () => AppReportsRoute,
+} as any)
+const AppReportsPivotRoute = AppReportsPivotRouteImport.update({
+  id: '/pivot',
+  path: '/pivot',
+  getParentRoute: () => AppReportsRoute,
 } as any)
 const AppSalesIndexRoute = AppSalesIndexRouteImport.update({
   id: '/',
@@ -478,6 +508,7 @@ export interface FileRoutesByFullPath {
   '/collections': typeof AppCollectionsRouteWithChildren
   '/inventory': typeof AppInventoryRouteWithChildren
   '/purchase': typeof AppPurchaseRouteWithChildren
+  '/reports': typeof AppReportsRouteWithChildren
   '/sales': typeof AppSalesRouteWithChildren
   '/settings': typeof AppSettingsRouteWithChildren
   '/suppliers': typeof AppSuppliersRoute
@@ -494,6 +525,9 @@ export interface FileRoutesByFullPath {
   '/inventory/rolls': typeof AppInventoryRollsRoute
   '/inventory/unmapped': typeof AppInventoryUnmappedRoute
   '/pricing/bulk-revision': typeof AppPricingBulkRevisionRoute
+  '/reports/$reportId': typeof AppReportsReportIdRoute
+  '/reports/exports': typeof AppReportsExportsRoute
+  '/reports/pivot': typeof AppReportsPivotRoute
   '/sales/irn': typeof AppSalesIrnRoute
   '/salesmen/$salesmanId': typeof AppSalesmenSalesmanIdRoute
   '/settings/audit': typeof AppSettingsAuditRoute
@@ -503,6 +537,7 @@ export interface FileRoutesByFullPath {
   '/settings/users': typeof AppSettingsUsersRoute
   '/customers/': typeof AppCustomersIndexRoute
   '/inventory/': typeof AppInventoryIndexRoute
+  '/reports/': typeof AppReportsIndexRoute
   '/sales/': typeof AppSalesIndexRoute
   '/salesmen/': typeof AppSalesmenIndexRoute
   '/settings/': typeof AppSettingsIndexRoute
@@ -566,6 +601,9 @@ export interface FileRoutesByTo {
   '/inventory/rolls': typeof AppInventoryRollsRoute
   '/inventory/unmapped': typeof AppInventoryUnmappedRoute
   '/pricing/bulk-revision': typeof AppPricingBulkRevisionRoute
+  '/reports/$reportId': typeof AppReportsReportIdRoute
+  '/reports/exports': typeof AppReportsExportsRoute
+  '/reports/pivot': typeof AppReportsPivotRoute
   '/sales/irn': typeof AppSalesIrnRoute
   '/salesmen/$salesmanId': typeof AppSalesmenSalesmanIdRoute
   '/settings/audit': typeof AppSettingsAuditRoute
@@ -575,6 +613,7 @@ export interface FileRoutesByTo {
   '/settings/users': typeof AppSettingsUsersRoute
   '/customers': typeof AppCustomersIndexRoute
   '/inventory': typeof AppInventoryIndexRoute
+  '/reports': typeof AppReportsIndexRoute
   '/sales': typeof AppSalesIndexRoute
   '/salesmen': typeof AppSalesmenIndexRoute
   '/settings': typeof AppSettingsIndexRoute
@@ -627,6 +666,7 @@ export interface FileRoutesById {
   '/_app/collections': typeof AppCollectionsRouteWithChildren
   '/_app/inventory': typeof AppInventoryRouteWithChildren
   '/_app/purchase': typeof AppPurchaseRouteWithChildren
+  '/_app/reports': typeof AppReportsRouteWithChildren
   '/_app/sales': typeof AppSalesRouteWithChildren
   '/_app/settings': typeof AppSettingsRouteWithChildren
   '/_app/suppliers': typeof AppSuppliersRoute
@@ -644,6 +684,9 @@ export interface FileRoutesById {
   '/_app/inventory/rolls': typeof AppInventoryRollsRoute
   '/_app/inventory/unmapped': typeof AppInventoryUnmappedRoute
   '/_app/pricing/bulk-revision': typeof AppPricingBulkRevisionRoute
+  '/_app/reports/$reportId': typeof AppReportsReportIdRoute
+  '/_app/reports/exports': typeof AppReportsExportsRoute
+  '/_app/reports/pivot': typeof AppReportsPivotRoute
   '/_app/sales/irn': typeof AppSalesIrnRoute
   '/_app/salesmen/$salesmanId': typeof AppSalesmenSalesmanIdRoute
   '/_app/settings/audit': typeof AppSettingsAuditRoute
@@ -653,6 +696,7 @@ export interface FileRoutesById {
   '/_app/settings/users': typeof AppSettingsUsersRoute
   '/_app/customers/': typeof AppCustomersIndexRoute
   '/_app/inventory/': typeof AppInventoryIndexRoute
+  '/_app/reports/': typeof AppReportsIndexRoute
   '/_app/sales/': typeof AppSalesIndexRoute
   '/_app/salesmen/': typeof AppSalesmenIndexRoute
   '/_app/settings/': typeof AppSettingsIndexRoute
@@ -706,6 +750,7 @@ export interface FileRouteTypes {
     | '/collections'
     | '/inventory'
     | '/purchase'
+    | '/reports'
     | '/sales'
     | '/settings'
     | '/suppliers'
@@ -722,6 +767,9 @@ export interface FileRouteTypes {
     | '/inventory/rolls'
     | '/inventory/unmapped'
     | '/pricing/bulk-revision'
+    | '/reports/$reportId'
+    | '/reports/exports'
+    | '/reports/pivot'
     | '/sales/irn'
     | '/salesmen/$salesmanId'
     | '/settings/audit'
@@ -731,6 +779,7 @@ export interface FileRouteTypes {
     | '/settings/users'
     | '/customers/'
     | '/inventory/'
+    | '/reports/'
     | '/sales/'
     | '/salesmen/'
     | '/settings/'
@@ -794,6 +843,9 @@ export interface FileRouteTypes {
     | '/inventory/rolls'
     | '/inventory/unmapped'
     | '/pricing/bulk-revision'
+    | '/reports/$reportId'
+    | '/reports/exports'
+    | '/reports/pivot'
     | '/sales/irn'
     | '/salesmen/$salesmanId'
     | '/settings/audit'
@@ -803,6 +855,7 @@ export interface FileRouteTypes {
     | '/settings/users'
     | '/customers'
     | '/inventory'
+    | '/reports'
     | '/sales'
     | '/salesmen'
     | '/settings'
@@ -854,6 +907,7 @@ export interface FileRouteTypes {
     | '/_app/collections'
     | '/_app/inventory'
     | '/_app/purchase'
+    | '/_app/reports'
     | '/_app/sales'
     | '/_app/settings'
     | '/_app/suppliers'
@@ -871,6 +925,9 @@ export interface FileRouteTypes {
     | '/_app/inventory/rolls'
     | '/_app/inventory/unmapped'
     | '/_app/pricing/bulk-revision'
+    | '/_app/reports/$reportId'
+    | '/_app/reports/exports'
+    | '/_app/reports/pivot'
     | '/_app/sales/irn'
     | '/_app/salesmen/$salesmanId'
     | '/_app/settings/audit'
@@ -880,6 +937,7 @@ export interface FileRouteTypes {
     | '/_app/settings/users'
     | '/_app/customers/'
     | '/_app/inventory/'
+    | '/_app/reports/'
     | '/_app/sales/'
     | '/_app/salesmen/'
     | '/_app/settings/'
@@ -1000,6 +1058,13 @@ declare module '@tanstack/react-router' {
       path: '/purchase'
       fullPath: '/purchase'
       preLoaderRoute: typeof AppPurchaseRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/reports': {
+      id: '/_app/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/sales': {
@@ -1127,6 +1192,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/pricing/bulk-revision'
       preLoaderRoute: typeof AppPricingBulkRevisionRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/_app/reports/': {
+      id: '/_app/reports/'
+      path: '/'
+      fullPath: '/reports/'
+      preLoaderRoute: typeof AppReportsIndexRouteImport
+      parentRoute: typeof AppReportsRoute
+    }
+    '/_app/reports/$reportId': {
+      id: '/_app/reports/$reportId'
+      path: '/$reportId'
+      fullPath: '/reports/$reportId'
+      preLoaderRoute: typeof AppReportsReportIdRouteImport
+      parentRoute: typeof AppReportsRoute
+    }
+    '/_app/reports/exports': {
+      id: '/_app/reports/exports'
+      path: '/exports'
+      fullPath: '/reports/exports'
+      preLoaderRoute: typeof AppReportsExportsRouteImport
+      parentRoute: typeof AppReportsRoute
+    }
+    '/_app/reports/pivot': {
+      id: '/_app/reports/pivot'
+      path: '/pivot'
+      fullPath: '/reports/pivot'
+      preLoaderRoute: typeof AppReportsPivotRouteImport
+      parentRoute: typeof AppReportsRoute
     }
     '/_app/sales/': {
       id: '/_app/sales/'
@@ -1539,6 +1632,24 @@ const AppPurchaseRouteWithChildren = AppPurchaseRoute._addFileChildren(
   AppPurchaseRouteChildren,
 )
 
+interface AppReportsRouteChildren {
+  AppReportsReportIdRoute: typeof AppReportsReportIdRoute
+  AppReportsExportsRoute: typeof AppReportsExportsRoute
+  AppReportsPivotRoute: typeof AppReportsPivotRoute
+  AppReportsIndexRoute: typeof AppReportsIndexRoute
+}
+
+const AppReportsRouteChildren: AppReportsRouteChildren = {
+  AppReportsReportIdRoute: AppReportsReportIdRoute,
+  AppReportsExportsRoute: AppReportsExportsRoute,
+  AppReportsPivotRoute: AppReportsPivotRoute,
+  AppReportsIndexRoute: AppReportsIndexRoute,
+}
+
+const AppReportsRouteWithChildren = AppReportsRoute._addFileChildren(
+  AppReportsRouteChildren,
+)
+
 interface AppSalesRouteChildren {
   AppSalesIrnRoute: typeof AppSalesIrnRoute
   AppSalesIndexRoute: typeof AppSalesIndexRoute
@@ -1614,6 +1725,7 @@ interface AppRouteChildren {
   AppCollectionsRoute: typeof AppCollectionsRouteWithChildren
   AppInventoryRoute: typeof AppInventoryRouteWithChildren
   AppPurchaseRoute: typeof AppPurchaseRouteWithChildren
+  AppReportsRoute: typeof AppReportsRouteWithChildren
   AppSalesRoute: typeof AppSalesRouteWithChildren
   AppSettingsRoute: typeof AppSettingsRouteWithChildren
   AppSuppliersRoute: typeof AppSuppliersRoute
@@ -1633,6 +1745,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCollectionsRoute: AppCollectionsRouteWithChildren,
   AppInventoryRoute: AppInventoryRouteWithChildren,
   AppPurchaseRoute: AppPurchaseRouteWithChildren,
+  AppReportsRoute: AppReportsRouteWithChildren,
   AppSalesRoute: AppSalesRouteWithChildren,
   AppSettingsRoute: AppSettingsRouteWithChildren,
   AppSuppliersRoute: AppSuppliersRoute,

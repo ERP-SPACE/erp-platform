@@ -271,8 +271,10 @@ export class TodayService {
         JOIN sales_order_lines l ON l.so_id = so.id
         WHERE ${scope} AND so.status = 'Draft' AND l.needs_approval AND l.approved_at IS NULL`,
       creditHold: sql`SELECT count(*)::int AS n, coalesce(sum(so.total), 0)::text AS amount,
-          coalesce(extract(epoch FROM now() - min(so.updated_at)) / 3600, 0) AS hours
+          coalesce(extract(epoch FROM now() - min(coalesce(h.at, so.updated_at))) / 3600, 0) AS hours
         FROM sales_orders so JOIN customers ON customers.id = so.customer_id
+        LEFT JOIN LATERAL (SELECT max(t.at) AS at FROM status_transitions t
+          WHERE t.entity_type = 'SalesOrder' AND t.entity_id = so.id AND t.to_status = 'OnHold') h ON true
         WHERE ${scope} AND so.status = 'OnHold'`,
       supplierPaymentApproval: sql`SELECT count(*)::int AS n, coalesce(sum(r.amount), 0)::text AS amount,
           coalesce(extract(epoch FROM now() - min(r.created_at)) / 3600, 0) AS hours

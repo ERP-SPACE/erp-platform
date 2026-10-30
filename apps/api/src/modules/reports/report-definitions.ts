@@ -36,7 +36,7 @@ export interface ReportDef {
   /** Column keys searched by `q`. */
   search?: string[];
   /** Cell → link, from an id column in the row (id columns are not sent as cells). */
-  links?: Record<string, { kind: Link["kind"]; idKey: string }>;
+  links?: Record<string, { kind: Link["kind"]; idKey: string; kindKey?: string }>;
   tone?: (
     row: Row,
     ctx: ReportCtx & { extra: Record<string, number> },
@@ -637,11 +637,11 @@ export const REPORT_DEFS: Record<ReportId, ReportDef> = {
     ],
     sort: ["unallocated", "desc"],
     search: ["docNo", "party"],
-    links: { docNo: { kind: "receipt", idKey: "doc_id" } },
+    links: { docNo: { kind: "receipt", idKey: "doc_id", kindKey: "link_kind" } },
     tone: (r) => (Number(r.days) > 30 ? "warning" : undefined),
     query: (c) => sql`
       SELECT * FROM (
-        SELECT r.id AS doc_id, r.doc_no AS "docNo", customers.legal_name AS party, 'Receipt' AS kind, r.date::text AS date,
+        SELECT r.id AS doc_id, 'receipt' AS link_kind, r.doc_no AS "docNo", customers.legal_name AS party, 'Receipt' AS kind, r.date::text AS date,
                r.amount, coalesce(a.applied, 0) AS allocated, r.amount - coalesce(a.applied, 0) AS unallocated,
                (current_date - r.date) AS days
         FROM receipts r JOIN customers ON customers.id = r.customer_id
@@ -651,7 +651,7 @@ export const REPORT_DEFS: Record<ReportId, ReportDef> = {
           c.has("payables.view")
             ? sql`
         UNION ALL
-        SELECT r.id, r.doc_no, sup.name, 'Supplier payment', r.date::text, r.amount, coalesce(a.applied, 0),
+        SELECT r.id, 'payment', r.doc_no, sup.name, 'Supplier payment', r.date::text, r.amount, coalesce(a.applied, 0),
                r.amount - coalesce(a.applied, 0), (current_date - r.date)
         FROM receipts r JOIN suppliers sup ON sup.id = r.supplier_id
         LEFT JOIN LATERAL (SELECT sum(x.amount) AS applied FROM allocations x WHERE x.receipt_id = r.id AND x.reversed_at IS NULL) a ON true
