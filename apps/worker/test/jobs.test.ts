@@ -71,9 +71,16 @@ describe("analytics refresh", () => {
         },
       } as never,
     });
-    expect(ANALYTICS_REFRESH_FUNCTIONS).toContain("public.refresh_stock_views");
-    expect(executed).toEqual(["SELECT public.refresh_stock_views()"]);
+    // Stock views (Stage 2) first, then the reporting views (Stage 5).
+    expect(ANALYTICS_REFRESH_FUNCTIONS).toEqual([
+      "public.refresh_stock_views",
+      "public.refresh_report_views",
+    ]);
+    expect(executed).toEqual([
+      "SELECT public.refresh_stock_views()",
+      "SELECT public.refresh_report_views()",
+    ]);
     expect(redisSet).toEqual(["erp:analytics:refreshed-at"]);
-    expect(result).toEqual({ refreshed: 1 });
+    expect(result).toEqual({ refreshed: 2 });
   });
 });
