@@ -16,3 +16,4 @@ export * from "./sales-invoice.js";
 export * from "./einvoice.js";
 export * from "./collections.js";
 export * from "./commission.js";
+export * from "./reports.js";

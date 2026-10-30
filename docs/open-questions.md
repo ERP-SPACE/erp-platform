@@ -32,6 +32,11 @@
 | Q33 | Receipts / supplier payments | **Accounts role records both; supplier payments above ₹5,00,000 need the Owner's approval with password** (owner approved the default, 2026-10-28) | Stage 4 plan |
 | Q34 | Commission payouts | **Monthly batches; mode and reference recorded; optional TDS on the batch** (owner approved the default, 2026-10-28) | Stage 4 plan |
 | Q35 | Nightly credit job | **Unblock automatically for blocks the system placed; manual blocks stay** (owner approved the default, 2026-10-28) | Stage 4 plan |
+| Q36 | Who sees cost, COGS and margin in reports | **Owner, Sales Manager, Purchase Manager, Accounts; never salesmen or warehouse** (owner approved the default, 2026-10-30) | Stage 5 plan |
+| Q37 | Gross margin basis | **Revenue − landed COGS only; commission shown separately** (owner approved the default, 2026-10-30) | Stage 5 plan |
+| Q38 | Churn risk | **No confirmed order in 60 days; only customers who ordered at least once** (owner approved the default, 2026-10-30) | Stage 5 plan |
+| Q39 | Saved pivots | **Private by default; shared with chosen roles** (owner approved the default, 2026-10-30) | Stage 5 plan |
+| Q40 | Morning email of Today | **Not now; on screen only** (owner approved the default, 2026-10-30) | Stage 5 plan |
 
 ## Deferred by owner
 
