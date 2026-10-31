@@ -275,10 +275,10 @@ export const SETTINGS = {
     default: 7,
   },
   "golive.date": {
-    label: "Go-live date: opening balances are dated the day before (PRD §5.10)",
+    label: "Go-live date (empty until decided): opening balances are dated the day before (PRD §5.10)",
     group: "Go-live",
-    schema: z.iso.date().nullable(),
-    default: null,
+    schema: z.union([z.iso.date(), z.literal("")]),
+    default: "",
   },
   "backup.retentionDays": {
     label: "Keep nightly database backups for (days)",

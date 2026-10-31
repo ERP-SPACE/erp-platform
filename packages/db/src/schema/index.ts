@@ -11,3 +11,4 @@ export * from "./inventory.js";
 export * from "./sales.js";
 export * from "./collections.js";
 export * from "./reports.js";
+export * from "./opening.js";

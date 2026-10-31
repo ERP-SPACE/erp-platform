@@ -92,6 +92,20 @@
       "when": 1793339360521,
       "tag": "0012_reports_sql",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1793431774367,
+      "tag": "0013_opening",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1793431776601,
+      "tag": "0014_opening_sql",
+      "breakpoints": true
     }
   ]
 }

@@ -4654,7 +4654,7 @@ export interface components {
             outstanding: string;
             version: number;
             /** @enum {string} */
-            source: "DC" | "DIRECT" | "PROFORMA";
+            source: "DC" | "DIRECT" | "PROFORMA" | "OPENING";
             dcs: {
                 id: string;
                 dcNo: string;

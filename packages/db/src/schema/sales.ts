@@ -16,6 +16,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import { skus } from "./catalogue.js";
+import { openingBatches } from "./opening.js";
 import { audited, createdOnly, id } from "./columns.js";
 import { user } from "./identity.js";
 import { rolls } from "./inventory.js";
@@ -55,7 +56,7 @@ export const einvoiceStatus = pgEnum("einvoice_status", [
   "Cancelled",
 ]);
 export const supplyType = pgEnum("supply_type", ["B2B", "B2C", "SEZWP", "SEZWOP"]);
-export const siSource = pgEnum("si_source", ["DC", "DIRECT", "PROFORMA"]);
+export const siSource = pgEnum("si_source", ["DC", "DIRECT", "PROFORMA", "OPENING"]);
 export const salesLineKind = pgEnum("sales_line_kind", ["GOODS", "CHARGE"]);
 export const noteKind = pgEnum("note_kind", ["CREDIT", "DEBIT"]);
 export const noteReason = pgEnum("note_reason", [
@@ -375,6 +376,9 @@ export const salesInvoices = pgTable(
     ...header(),
     /** Numbered on posting (ADR-0003); ≤ 16 characters for GST. */
     siNo: text("si_no"),
+    /** Opening receivables (Stage 6, source OPENING): the old invoice number and its batch. */
+    legacyNo: text("legacy_no"),
+    openingBatchId: uuid("opening_batch_id").references(() => openingBatches.id),
     date: date("date").notNull(),
     dueDate: date("due_date").notNull(),
     status: purchaseDocStatus("status").notNull().default("Draft"),

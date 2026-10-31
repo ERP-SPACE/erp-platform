@@ -380,7 +380,7 @@ export const siListItem = z.object({
   version: z.number().int(),
 });
 export const siDetail = siListItem.extend({
-  source: z.enum(["DC", "DIRECT", "PROFORMA"]),
+  source: z.enum(["DC", "DIRECT", "PROFORMA", "OPENING"]),
   dcs: z.array(z.object({ id: z.string(), dcNo: z.string() })),
   soIds: z.array(z.string()),
   proformaId: z.string().nullable(),

@@ -348,7 +348,7 @@ describe("Stage 6 additions", async () => {
   });
 
   it("settings and series: go-live date unset by default, archive after 13 months, OB numbered on post", () => {
-    expect(c.SETTINGS["golive.date"].default).toBeNull();
+    expect(c.SETTINGS["golive.date"].default).toBe("");
     expect(c.parseSetting("golive.date", "2027-04-01")).toBe("2027-04-01");
     expect(() => c.parseSetting("audit.archiveAfterMonths", 6)).toThrow();
     expect(c.SETTINGS["backup.retentionDays"].default).toBe(30);

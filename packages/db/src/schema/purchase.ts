@@ -16,6 +16,7 @@ import {
 import { user } from "./identity.js";
 import { audited, createdOnly, id } from "./columns.js";
 import { skus } from "./catalogue.js";
+import { openingBatches } from "./opening.js";
 import { suppliers } from "./parties.js";
 import { branches, companies } from "./tenancy.js";
 
@@ -149,6 +150,8 @@ export const goodsReceipts = pgTable(
     notes: text("notes"),
     /** Set at posting: the batch its rolls belong to. */
     batchId: uuid("batch_id").references(() => batches.id),
+    /** Set on opening stock GRNs (Stage 6, series OB). */
+    openingBatchId: uuid("opening_batch_id").references(() => openingBatches.id),
     postedAt: timestamp("posted_at", { withTimezone: true }),
     postedBy: text("posted_by").references(() => user.id),
     overReceiptApprovedBy: text("over_receipt_approved_by").references(() => user.id),
@@ -206,6 +209,8 @@ export const purchaseInvoices = pgTable(
     ...docHeader(),
     /** Internal reference, numbered on posting. */
     piNo: text("pi_no"),
+    /** Set on opening payables (Stage 6): no lines, no GST; the supplier invoice no. is the old one. */
+    openingBatchId: uuid("opening_batch_id").references(() => openingBatches.id),
     supplierInvoiceNo: text("supplier_invoice_no").notNull(),
     supplierInvoiceDate: date("supplier_invoice_date").notNull(),
     poId: uuid("po_id").references(() => purchaseOrders.id),
