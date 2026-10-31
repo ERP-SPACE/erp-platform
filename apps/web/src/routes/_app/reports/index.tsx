@@ -1,10 +1,12 @@
 import { REPORT_SECTIONS } from "@erp/contracts";
-import { Badge, Card, PageHeader, SearchInput, Skeleton } from "@erp/ui";
-import { useQuery } from "@tanstack/react-query";
+import { Badge, Button, Card, PageHeader, SearchInput, Skeleton, useToast } from "@erp/ui";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { ChevronRight, Clock, Radio } from "lucide-react";
+import { ChevronRight, Clock, Radio, RefreshCw } from "lucide-react";
 import { useState } from "react";
-import { SECTION_LABEL, asOfLabel, catalogueQuery } from "../../../lib/reports.js";
+import { api, call } from "../../../lib/api.js";
+import { useApiErrorToast } from "../../../lib/errors.js";
+import { SECTION_LABEL, asOfLabel, catalogueQuery, reportKeys } from "../../../lib/reports.js";
 
 export const Route = createFileRoute("/_app/reports/")({ component: ReportsIndex });
 
@@ -14,6 +16,22 @@ function ReportsIndex() {
   const [q, setQ] = useState("");
   const needle = q.trim().toLowerCase();
   const match = (s: string) => !needle || s.toLowerCase().includes(needle);
+  const queryClient = useQueryClient();
+  const toast = useToast();
+  const onError = useApiErrorToast();
+  const refresh = useMutation({
+    mutationFn: () =>
+      call<{ refreshed: boolean; asOf: string | null }>(() => api.POST("/api/reports/refresh", {})),
+    onSuccess: async (r) => {
+      toast({
+        tone: "success",
+        title: r.refreshed ? "Figures refreshed" : "Figures are already up to date",
+        description: asOfLabel(r.asOf) ?? undefined,
+      });
+      await queryClient.invalidateQueries({ queryKey: reportKeys.all });
+    },
+    onError: (e) => onError(e),
+  });
   return (
     <div className="grid gap-6">
       <PageHeader
@@ -21,14 +39,24 @@ function ReportsIndex() {
         description={`Operations, sales, purchase, credit and profitability (PRD §9)${data?.asOf ? ` · figures ${asOfLabel(data.asOf)}, refreshed every 3 minutes in business hours` : ""}.`}
         breadcrumbs={[{ label: "Reports" }]}
         actions={
-          <div className="w-64">
-            <SearchInput
-              value={q}
-              onChange={(e) => setQ(e.target.value)}
-              placeholder="Find a report"
-              aria-label="Find a report"
-            />
-          </div>
+          <>
+            <Button
+              variant="secondary"
+              icon={RefreshCw}
+              busy={refresh.isPending}
+              onClick={() => refresh.mutate()}
+            >
+              Refresh now
+            </Button>
+            <div className="w-64">
+              <SearchInput
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Find a report"
+                aria-label="Find a report"
+              />
+            </div>
+          </>
         }
       />
       {isLoading ? <Skeleton className="h-64" /> : null}

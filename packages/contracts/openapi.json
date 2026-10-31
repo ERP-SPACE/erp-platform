@@ -7753,6 +7753,27 @@
         ]
       }
     },
+    "/api/reports/refresh": {
+      "post": {
+        "operationId": "ReportsController_refresh",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshResultDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "reports"
+        ]
+      }
+    },
     "/api/reports/pivot": {
       "post": {
         "operationId": "ReportsController_pivot",
@@ -22757,6 +22778,24 @@
         "required": [
           "reports",
           "linked",
+          "asOf"
+        ]
+      },
+      "RefreshResultDto": {
+        "type": "object",
+        "properties": {
+          "refreshed": {
+            "type": "boolean"
+          },
+          "asOf": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "refreshed",
           "asOf"
         ]
       },

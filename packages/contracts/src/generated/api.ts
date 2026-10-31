@@ -2644,6 +2644,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/reports/refresh": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ReportsController_refresh"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/reports/pivot": {
         parameters: {
             query?: never;
@@ -5516,6 +5532,10 @@ export interface components {
                 prd: string;
                 href: string;
             }[];
+            asOf: string | null;
+        };
+        RefreshResultDto: {
+            refreshed: boolean;
             asOf: string | null;
         };
         PivotSpecDto: {
@@ -10517,6 +10537,25 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReportCatalogueDto"];
+                };
+            };
+        };
+    };
+    ReportsController_refresh: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RefreshResultDto"];
                 };
             };
         };

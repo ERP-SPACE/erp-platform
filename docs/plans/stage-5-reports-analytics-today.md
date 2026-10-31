@@ -65,6 +65,26 @@ Not in Stage 5 (Accounting stage): ledger extract and GST summary (PRD 9.5).
 6. **Web:** Today page with KPIs, Needs-you list and the three visx charts; Reports section (index grouped as PRD §9, a shared report page layout); pivot builder; export menu and a "My exports" list. **→ screenshots to you for review.**
 7. **Gate:** Today < 1.5 s p95 on 50k rolls; reconciliation tests for every report; Playwright: Today per role, a report drill-down, a saved and shared pivot, an XLSX export downloaded; axe light and dark; docs; full isolated run.
 
+## Gate results (2026-10-31)
+
+| Check | Result |
+|---|---|
+| Today p95 on 50,000 seeded rolls (`perf.int.test.ts`) | **79 ms** (budget 1.5 s); a report page p95 75 ms (budget 300 ms) |
+| Reconciliation (`reports.int.test.ts`) | Pass: gross margin = posted invoices − credit notes, per customer; a 2-roll line splits to the paisa; SKU sales after a return; discounts from invoice lines; stock reports = rolls in stock; PO vs GRN vs PI = PO lines; commission summary = commission entries; credit utilisation = the live credit check; unallocated money |
+| Every report | All 25 answer, and each report's totals equal the sum of its rows |
+| Cost hiding (Q36) | A sales executive gets 403 on margin reports and exports; cost columns and measures are removed from responses, not just hidden |
+| Browser (`e2e/stage5.gate.spec.ts`) | Pass: Refresh now; Today (sentence, KPIs, Needs you, three charts); gross margin agrees with the invoice and price-vs-COGS drills down to it; pivot adds up, saved and shared with a role (Q39); XLSX export built in the background and downloaded |
+| Accessibility (axe, WCAG 2.1 A/AA) | Pass in light and dark: Today, Reports, six report pages, pivot builder, save-pivot dialog, My exports |
+| API integration tests | 110 pass (reports 15, performance 5, earlier stages 90) |
+| Domain tests | 129 pass, coverage 99.6 % |
+| Full isolated E2E run (`pnpm test:e2e:isolated`, Stages 0–5) | 139 pass |
+
+Added during the gate: **Refresh now** on Reports (`POST /api/reports/refresh`, at most once every 30 s) so figures can be brought up to date without waiting for the worker's 3-minute run.
+
+Upgrading an existing database: run `pnpm --filter @erp/db seed` once (idempotent) so roles get the new `reports.*` permissions.
+
+Still open: Q31 (allocation swap overshoot).
+
 ## Questions (defaults are what I will build if you agree)
 
 | # | Question | Default |

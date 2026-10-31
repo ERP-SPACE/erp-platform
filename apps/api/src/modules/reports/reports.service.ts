@@ -100,6 +100,19 @@ export class ReportsService {
     return at ? new Date(at).toISOString() : null;
   }
 
+  /**
+   * Refreshes the reporting views now instead of waiting for the worker's next run
+   * ("Refresh now" on Reports; the e2e gate). At most once every 30 s, whoever asks.
+   */
+  async refreshNow(): Promise<{ refreshed: boolean; asOf: string | null }> {
+    const last = await this.asOf("mv_sales_lines");
+    if (last && Date.now() - Date.parse(last) < 30_000) return { refreshed: false, asOf: last };
+    await this.uow.db.execute(
+      sql`SELECT public.refresh_stock_views(), public.refresh_report_views()`,
+    );
+    return { refreshed: true, asOf: await this.asOf("mv_sales_lines") };
+  }
+
   async catalogue() {
     const views = [...new Set(REPORT_IDS.map((id) => REPORT_DEFS[id].view).filter(Boolean))];
     const stamps = await Promise.all(views.map((v) => this.asOf(v)));
@@ -287,7 +300,10 @@ export class ReportsService {
               .filter(([k, l]) => columns.some((c) => c.key === k) && r[l.idKey])
               .map(([k, l]) => [
                 k,
-                { kind: (l.kindKey ? r[l.kindKey] : l.kind) as typeof l.kind, id: String(r[l.idKey]) },
+                {
+                  kind: (l.kindKey ? r[l.kindKey] : l.kind) as typeof l.kind,
+                  id: String(r[l.idKey]),
+                },
               ]),
           )
         : undefined;

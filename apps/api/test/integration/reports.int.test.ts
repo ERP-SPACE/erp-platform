@@ -364,6 +364,17 @@ describe("reports, pivot, Today and exports (Stage 5 gate)", () => {
     expect(a.rows[0]!.cells).toMatchObject({ unallocated: "1000.00" });
   });
 
+  it("Refresh now refreshes the views, at most once every 30 s", async () => {
+    const first = json<{ refreshed: boolean; asOf: string | null }>(
+      await post(owner, "/api/reports/refresh", {}),
+    );
+    const second = json<{ refreshed: boolean; asOf: string | null }>(
+      await post(exec, "/api/reports/refresh", {}),
+    );
+    expect(first.asOf).not.toBeNull();
+    expect(second).toEqual({ refreshed: false, asOf: first.asOf });
+  });
+
   it("every report answers, and its totals equal the sum of its rows", async () => {
     for (const id of REPORT_IDS) {
       const r = await owner.get(`/api/reports/${id}?pageSize=500`);

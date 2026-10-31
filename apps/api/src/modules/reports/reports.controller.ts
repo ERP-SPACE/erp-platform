@@ -21,6 +21,7 @@ import {
   PivotSpecDto,
   ReportCatalogueDto,
   ReportQueryDto,
+  RefreshResultDto,
   ReportResponseDto,
   SavedPivotDto,
   SavedPivotInputDto,
@@ -58,6 +59,14 @@ export class ReportsController {
   }
 
   // Fixed paths before `reports/:id`.
+  @RequirePermission("reports.view")
+  @HttpCode(200)
+  @ApiOkResponse({ type: RefreshResultDto })
+  @Post("reports/refresh")
+  refresh() {
+    return this.reports.refreshNow();
+  }
+
   @RequirePermission("reports.view")
   @HttpCode(200)
   @ApiOkResponse({ type: PivotResponseDto })
