@@ -49,4 +49,7 @@ export const handlers: Record<JobName, Handler> = {
 };
 
 /** Stage 2: stock by SKU / batch / supplier. Stage 5 adds its own. */
-export const ANALYTICS_REFRESH_FUNCTIONS: readonly string[] = ["public.refresh_stock_views"];
+export const ANALYTICS_REFRESH_FUNCTIONS: readonly string[] = [
+  "public.refresh_stock_views",
+  "public.refresh_report_views",
+];

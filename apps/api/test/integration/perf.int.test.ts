@@ -149,6 +149,8 @@ describe("performance budgets (Stage 3 gate)", () => {
       );
       for (let i = 0; i < 30; i++) barcodes.push(codes[Math.floor(Math.random() * SEEDED)]!);
       await db.query("ANALYZE rolls");
+      // Stage 5 reads the reporting views; build them over the seeded stock.
+      await db.query("SELECT public.refresh_stock_views(), public.refresh_report_views()");
       const n = await db.query<{ n: number }>("SELECT count(*)::int AS n FROM rolls");
       expect(n.rows[0]!.n).toBeGreaterThanOrEqual(SEEDED);
     } finally {
@@ -181,6 +183,26 @@ describe("performance budgets (Stage 3 gate)", () => {
       expect(r.statusCode).toBe(200);
     });
     console.info(`perf · roll list p95 ${ms.toFixed(0)} ms (budget 300 ms)`);
+    expect(ms).toBeLessThan(300);
+  });
+
+  it("Today p95 < 1.5 s (Stage 5 gate)", async () => {
+    const ms = await p95(20, async () => {
+      const r = await owner.get("/api/today");
+      expect(r.statusCode, r.body).toBe(200);
+    });
+    console.info(`perf · Today p95 ${ms.toFixed(0)} ms (budget 1500 ms)`);
+    expect(ms).toBeLessThan(1500);
+  });
+
+  it("report page p95 < 300 ms on 50k rolls (batch aging, stock by SKU)", async () => {
+    const ms = await p95(20, async (i) => {
+      const r = await owner.get(
+        i % 2 ? "/api/reports/batch-aging?pageSize=100" : "/api/reports/stock-by-sku",
+      );
+      expect(r.statusCode, r.body).toBe(200);
+    });
+    console.info(`perf · report page p95 ${ms.toFixed(0)} ms (budget 300 ms)`);
     expect(ms).toBeLessThan(300);
   });
 });

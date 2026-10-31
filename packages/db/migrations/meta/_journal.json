@@ -78,6 +78,20 @@
       "when": 1793188444650,
       "tag": "0010_receipt_drafts",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1793339358980,
+      "tag": "0011_reports",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1793339360521,
+      "tag": "0012_reports_sql",
+      "breakpoints": true
     }
   ]
 }

@@ -1,3 +1,4 @@
+import type { ReportMeta } from "../src/reports.js";
 import { formatDocNo, validateGstSeries } from "@erp/domain";
 import { describe, expect, it } from "vitest";
 import {
@@ -258,5 +259,77 @@ describe("Stage 4 additions", () => {
     expect(
       payoutPay.safeParse({ version: 1, paidOn: "2026-10-31", mode: "NEFT", tds: "41.01" }).success,
     ).toBe(true);
+  });
+});
+
+describe("Stage 5 additions", async () => {
+  const c = await import("../src/index.js");
+  const roles = Object.fromEntries(c.SYSTEM_ROLES.map((r) => [r.code, c.expandGrants(r.grants)]));
+
+  it("roles: cost and margin only for owner, managers, admin and accounts (Q36)", () => {
+    for (const r of ["owner", "admin", "purchase_manager", "sales_manager", "accountant"])
+      expect(roles[r]).toContain("reports.margin.view");
+    for (const r of ["sales_executive", "warehouse"]) {
+      expect(roles[r]).toContain("reports.view");
+      expect(roles[r]).not.toContain("reports.margin.view");
+      expect(roles[r]).not.toContain("reports.export");
+    }
+  });
+
+  it("catalogue: every report names a section and PRD row; cost reports say so", () => {
+    expect(c.REPORT_IDS.length).toBeGreaterThanOrEqual(25);
+    for (const id of c.REPORT_IDS) {
+      const r: ReportMeta = c.REPORTS[id];
+      expect(c.REPORT_SECTIONS).toContain(r.section);
+      expect(r.prd).toMatch(/^9\.[1-6]$/);
+      if (r.permission === "reports.margin.view") expect(r.hasCost).toBe(true);
+      if (r.permission) expect(Object.keys(c.PERMISSIONS)).toContain(r.permission);
+    }
+  });
+
+  it("report query: dates in order, paging bounded", () => {
+    expect(c.reportQuery.parse({}).page).toBe(1);
+    expect(c.reportQuery.safeParse({ from: "2026-10-28", to: "2026-10-01" }).success).toBe(false);
+    expect(c.reportQuery.safeParse({ pageSize: 5000 }).success).toBe(false);
+  });
+
+  it("pivot spec: a dimension once, at least one measure, dates in order", () => {
+    const spec = {
+      rows: ["customer"],
+      cols: ["month"],
+      measures: ["value"],
+      from: "2026-04-01",
+      to: "2026-10-31",
+    };
+    expect(c.pivotSpec.safeParse(spec).success).toBe(true);
+    expect(c.pivotSpec.safeParse({ ...spec, cols: ["customer"] }).success).toBe(false);
+    expect(c.pivotSpec.safeParse({ ...spec, measures: [] }).success).toBe(false);
+    expect(
+      c.pivotSpec.safeParse({ ...spec, rows: ["fy"], cols: ["month"], to: "2026-01-01" }).success,
+    ).toBe(false);
+    expect(c.savedPivotInput.parse({ name: "Monthly by customer", spec }).sharedWithRoles).toEqual(
+      [],
+    );
+  });
+
+  it("settings: churn 60 days, aging highlights grow, links last 7 days", () => {
+    expect(c.SETTINGS["reports.churnDays"].default).toBe(60);
+    expect(() => c.parseSetting("reports.agingHighlightDays", [180, 90])).toThrow();
+    expect(c.SETTINGS["reports.exportLinkDays"].default).toBe(7);
+  });
+
+  it("exports: a report or a pivot, in CSV / XLSX / PDF", () => {
+    expect(
+      c.exportRequest.safeParse({
+        kind: "report",
+        reportId: "gross-margin",
+        query: {},
+        format: "xlsx",
+      }).success,
+    ).toBe(true);
+    expect(
+      c.exportRequest.safeParse({ kind: "report", reportId: "nope", query: {}, format: "xlsx" })
+        .success,
+    ).toBe(false);
   });
 });

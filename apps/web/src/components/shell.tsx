@@ -57,7 +57,7 @@ interface NavItem {
 }
 
 const NAV: { heading?: string; items: NavItem[] }[] = [
-  { items: [{ label: "Dashboard", icon: LayoutDashboard, to: "/" }] },
+  { items: [{ label: "Today", icon: LayoutDashboard, to: "/" }] },
   {
     heading: "Masters",
     items: [
@@ -75,7 +75,7 @@ const NAV: { heading?: string; items: NavItem[] }[] = [
       { label: "Purchase", icon: ShoppingCart, to: "/purchase", permission: "purchase.view" },
       { label: "Inventory", icon: Boxes, to: "/inventory", permission: "inventory.view" },
       { label: "Collections", icon: Wallet, to: "/collections", permission: "collections.view" },
-      { label: "Reports", icon: BarChart3, stage: 5 },
+      { label: "Reports", icon: BarChart3, to: "/reports", permission: "reports.view" },
     ],
   },
   { items: [{ label: "Settings", icon: Settings, to: "/settings", permission: "settings.view" }] },

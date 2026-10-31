@@ -30,6 +30,7 @@ import { InventoryModule } from "./modules/inventory/inventory.module.js";
 import { CollectionsModule } from "./modules/collections/collections.module.js";
 import { ComplianceModule } from "./modules/compliance/compliance.module.js";
 import { SalesModule } from "./modules/sales/sales.module.js";
+import { ReportsModule } from "./modules/reports/reports.module.js";
 import { StorageModule } from "./storage/storage.module.js";
 import { RedisModule } from "./redis/redis.module.js";
 
@@ -88,6 +89,7 @@ export class AppModule implements NestModule {
         SalesModule,
         ComplianceModule,
         CollectionsModule,
+        ReportsModule,
       ],
       controllers: [HealthController],
       providers: [
