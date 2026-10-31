@@ -37,6 +37,14 @@
 | Q38 | Churn risk | **No confirmed order in 60 days; only customers who ordered at least once** (owner approved the default, 2026-10-30) | Stage 5 plan |
 | Q39 | Saved pivots | **Private by default; shared with chosen roles** (owner approved the default, 2026-10-30) | Stage 5 plan |
 | Q40 | Morning email of Today | **Not now; on screen only** (owner approved the default, 2026-10-30) | Stage 5 plan |
+| Q25 | Source of opening balances | **Both stock routes (roll list or per-SKU totals); AR/AP from spreadsheets saved as CSV in the template columns** (owner approved the default, 2026-10-31) | Stage 6 plan |
+| Q41 | Per-SKU opening stock | **Rolls of the standard length (1,000 m), the last one shorter; new barcodes; labels printed** (owner approved the default, 2026-10-31) | Stage 6 plan |
+| Q42 | Opening invoices | **Keep the old invoice number, date and due date, with an Opening badge** (owner approved the default, 2026-10-31) | Stage 6 plan |
+| Q43 | Totals vs books | **Must match exactly, to the paisa** (owner approved the default, 2026-10-31) | Stage 6 plan |
+| Q44 | Go-Live lock | **Automatic on the first live posting, or earlier by hand (Owner, password)** (owner approved the default, 2026-10-31) | Stage 6 plan |
+| Q45 | Audit archival | **After 13 months, still searchable; deleted only after 7 years** (owner approved the default, 2026-10-31) | Stage 6 plan |
+| Q46 | Load test profile | **15 concurrent users → 45 virtual users** (owner approved the default, 2026-10-31) | Stage 6 plan |
+| Q47 | User guides | **English, one short illustrated page per role** (owner approved the default, 2026-10-31) | Stage 6 plan |
 
 ## Deferred by owner
 
@@ -69,5 +77,4 @@
 
 | # | Question | Why it matters | Linked |
 |---|---|---|---|
-| Q25 | Where do opening balances come from: Tally export, spreadsheets? Is a roll-by-roll stock list possible? | Opening Balance Wizard importers. | PRD §5.10 |
 | Q26 | Target go-live date? | Plan, UAT, training. | — |
