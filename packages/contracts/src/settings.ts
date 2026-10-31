@@ -274,6 +274,30 @@ export const SETTINGS = {
     schema: z.number().int().min(1).max(90),
     default: 7,
   },
+  "golive.date": {
+    label: "Go-live date: opening balances are dated the day before (PRD §5.10)",
+    group: "Go-live",
+    schema: z.iso.date().nullable(),
+    default: null,
+  },
+  "backup.retentionDays": {
+    label: "Keep nightly database backups for (days)",
+    group: "System",
+    schema: z.number().int().min(7).max(365),
+    default: 30,
+  },
+  "audit.archiveAfterMonths": {
+    label: "Move audit log months to the archive after (months, Q45)",
+    group: "System",
+    schema: z.number().int().min(13).max(84),
+    default: 13,
+  },
+  "api.rateLimitPerMinute": {
+    label: "Requests per user per minute before the API slows them down",
+    group: "System",
+    schema: z.number().int().min(60).max(10000),
+    default: 600,
+  },
   "analytics.refresh": {
     label: "Analytics refresh (ADR-0005)",
     group: "System",

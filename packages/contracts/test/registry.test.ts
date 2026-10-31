@@ -333,3 +333,55 @@ describe("Stage 5 additions", async () => {
     ).toBe(false);
   });
 });
+
+describe("Stage 6 additions", async () => {
+  const c = await import("../src/index.js");
+  const roles = Object.fromEntries(c.SYSTEM_ROLES.map((r) => [r.code, c.expandGrants(r.grants)]));
+
+  it("accounts and admin import opening balances; only the Owner goes live, with a fresh login", () => {
+    expect(roles.accountant).toContain("opening.manage");
+    expect(roles.admin).toContain("opening.manage");
+    for (const r of ["admin", "accountant", "sales_manager", "purchase_manager", "warehouse"])
+      expect(roles[r]).not.toContain("golive.lock");
+    expect(roles.owner).toContain("golive.lock");
+    expect(c.STEP_UP_PERMISSIONS).toContain("golive.lock");
+  });
+
+  it("settings and series: go-live date unset by default, archive after 13 months, OB numbered on post", () => {
+    expect(c.SETTINGS["golive.date"].default).toBeNull();
+    expect(c.parseSetting("golive.date", "2027-04-01")).toBe("2027-04-01");
+    expect(() => c.parseSetting("audit.archiveAfterMonths", 6)).toThrow();
+    expect(c.SETTINGS["backup.retentionDays"].default).toBe(30);
+    expect(c.DOC_TYPES.OB).toMatchObject({ numberedOn: "post", gst: false });
+  });
+
+  it("uploads default to a dry run; templates have the columns the parser reads", () => {
+    expect(c.openingUpload.parse({ kind: "AR", fileName: "ar.csv", csv: "a" }).dryRun).toBe(true);
+    expect(c.openingUpload.safeParse({ kind: "AR", fileName: "ar.csv", csv: "" }).success).toBe(
+      false,
+    );
+    expect(c.OPENING_TEMPLATES.AR.csv.split("\r\n")[0]).toBe(
+      "customer,invoice_no,date,amount,due_date",
+    );
+    expect(c.BATCH_CHAPTER.STOCK_SKU).toBe("STOCK");
+  });
+
+  it("bank accounts need a bank name; balances may be negative (overdraft); go live must be typed", () => {
+    const bank = { name: "HDFC current", kind: "BANK", balance: "-1250.50", asOf: "2027-03-31" };
+    expect(c.cashAccountInput.safeParse(bank).success).toBe(false);
+    expect(
+      c.cashAccountInput.safeParse({ ...bank, bankName: "HDFC Bank", accountLast4: "4521" })
+        .success,
+    ).toBe(true);
+    expect(
+      c.cashAccountInput.safeParse({
+        name: "Cash in hand",
+        kind: "CASH",
+        balance: "8000",
+        asOf: "2027-03-31",
+      }).success,
+    ).toBe(true);
+    expect(c.goLiveRequest.safeParse({ confirm: "go live" }).success).toBe(false);
+    expect(c.chapterConfirm.safeParse({ booksTotal: "1,000" }).success).toBe(false);
+  });
+});

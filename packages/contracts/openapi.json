@@ -8581,7 +8581,9 @@
                 "reports.view",
                 "reports.margin.view",
                 "reports.pivot.share",
-                "reports.export"
+                "reports.export",
+                "opening.manage",
+                "golive.lock"
               ]
             }
           },

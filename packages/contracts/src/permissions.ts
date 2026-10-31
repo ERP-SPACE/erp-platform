@@ -68,6 +68,10 @@ export const PERMISSIONS = {
   "reports.margin.view": "See cost, COGS and margin in reports, pivots and exports (Q36)",
   "reports.pivot.share": "Share saved pivots with other roles",
   "reports.export": "Export reports and pivots as CSV, XLSX or PDF",
+  // Stage 6 — opening balances & go-live
+  "opening.manage":
+    "Import, confirm and discard opening stock, receivables, payables and bank balances",
+  "golive.lock": "Lock the opening balances and go live",
 } as const;
 
 export type PermissionCode = keyof typeof PERMISSIONS;
@@ -89,6 +93,7 @@ export const STEP_UP_PERMISSIONS: readonly PermissionCode[] = [
   "collections.receipt.reverse",
   "payables.payment.approve",
   "commission.payout.manage",
+  "golive.lock",
 ];
 
 const MASTERS_VIEW = [
@@ -124,6 +129,7 @@ export const SYSTEM_ROLES = [
       "payables.*",
       "commission.*",
       "reports.*",
+      "opening.manage",
     ],
   },
   {
@@ -243,6 +249,7 @@ export const SYSTEM_ROLES = [
       "reports.margin.view",
       "reports.pivot.share",
       "reports.export",
+      "opening.manage",
     ],
   },
 ] as const;
