@@ -196,7 +196,7 @@ export function Select({
               <RSelect.Item
                 key={option.value}
                 value={option.value}
-                className="relative flex h-8 cursor-default select-none items-center rounded-md pl-8 pr-3 text-sm text-fg outline-none data-[highlighted]:bg-muted"
+                className="relative flex h-8 cursor-pointer select-none items-center rounded-md pl-8 pr-3 text-sm text-fg outline-none data-[disabled]:cursor-not-allowed data-[highlighted]:bg-muted"
               >
                 <RSelect.ItemIndicator className="absolute left-2.5 text-primary">
                   <Check className="size-4" />
@@ -236,14 +236,14 @@ export function Checkbox({
         aria-label={ariaLabel}
         onCheckedChange={(v) => onCheckedChange(v === true)}
         disabled={disabled}
-        className="flex size-4 shrink-0 items-center justify-center rounded-sm border border-border-strong bg-surface data-[state=checked]:border-primary data-[state=checked]:bg-primary disabled:opacity-50"
+        className="flex size-4 shrink-0 cursor-pointer items-center justify-center rounded-sm border border-border-strong bg-surface data-[state=checked]:border-primary data-[state=checked]:bg-primary disabled:cursor-not-allowed disabled:opacity-50"
       >
         <RCheckbox.Indicator className="text-primary-fg">
           <Check className="size-3" strokeWidth={3} />
         </RCheckbox.Indicator>
       </RCheckbox.Root>
       {label ? (
-        <label htmlFor={boxId} className="text-sm text-fg">
+        <label htmlFor={boxId} className="cursor-pointer text-sm text-fg">
           {label}
         </label>
       ) : null}
@@ -272,12 +272,12 @@ export function Switch({
         checked={checked}
         onCheckedChange={onCheckedChange}
         disabled={disabled}
-        className="relative mt-0.5 h-5 w-9 shrink-0 rounded-full bg-border-strong transition-colors data-[state=checked]:bg-primary disabled:opacity-50"
+        className="relative mt-0.5 h-5 w-9 shrink-0 cursor-pointer rounded-full bg-border-strong transition-colors data-[state=checked]:bg-primary disabled:cursor-not-allowed disabled:opacity-50"
       >
         <RSwitch.Thumb className="block size-4 translate-x-0.5 rounded-full bg-white shadow-card transition-transform duration-150 data-[state=checked]:translate-x-[18px]" />
       </RSwitch.Root>
       <span className="flex flex-col">
-        <label htmlFor={id} className="text-sm font-medium text-fg">
+        <label htmlFor={id} className="cursor-pointer text-sm font-medium text-fg">
           {label}
         </label>
         {description ? <span className="text-xs text-fg-3">{description}</span> : null}

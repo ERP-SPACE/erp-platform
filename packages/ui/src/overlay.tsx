@@ -229,8 +229,8 @@ export function DropdownMenu({
                 disabled={item.disabled}
                 onSelect={item.onSelect}
                 className={cn(
-                  "flex h-8 cursor-default select-none items-center gap-2 rounded-md px-2.5 text-sm outline-none",
-                  "data-[highlighted]:bg-muted data-[disabled]:opacity-50",
+                  "flex h-8 cursor-pointer select-none items-center gap-2 rounded-md px-2.5 text-sm outline-none",
+                  "data-[highlighted]:bg-muted data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
                   item.tone === "danger" ? "text-danger" : "text-fg",
                 )}
               >
@@ -280,7 +280,7 @@ export function Tabs({
           <RTabs.Trigger
             key={tab.value}
             value={tab.value}
-            className="-mb-px inline-flex items-center gap-2 whitespace-nowrap border-b-2 border-transparent pb-2.5 pt-1 text-sm font-medium text-fg-3 transition-colors hover:text-fg data-[state=active]:border-primary data-[state=active]:text-primary"
+            className="-mb-px inline-flex cursor-pointer items-center gap-2 whitespace-nowrap border-b-2 border-transparent pb-2.5 pt-1 text-sm font-medium text-fg-3 transition-colors hover:text-fg data-[state=active]:border-primary data-[state=active]:text-primary"
           >
             {tab.label}
             {tab.count !== undefined ? (

@@ -28,7 +28,7 @@ const columns: ColumnDef<SoListItem, unknown>[] = [
     header: "Customer",
     cell: (c) => <span className="font-medium">{c.getValue() as string}</span>,
   },
-  { accessorKey: "salesmanName", header: "Salesman", cell: (c) => (c.getValue() as string) ?? "—" },
+  { accessorKey: "salesmanName", header: "Agent", cell: (c) => (c.getValue() as string) ?? "—" },
   {
     id: "progress",
     header: "Dispatched",

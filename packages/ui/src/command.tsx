@@ -67,7 +67,7 @@ export function CommandPalette({
                           item.onRun();
                         }}
                         className={cn(
-                          "flex h-9 cursor-default items-center justify-between gap-3 rounded-md px-3 text-sm text-fg",
+                          "flex h-9 cursor-pointer items-center justify-between gap-3 rounded-md px-3 text-sm text-fg",
                           "data-[selected=true]:bg-primary-soft data-[selected=true]:text-primary",
                         )}
                       >

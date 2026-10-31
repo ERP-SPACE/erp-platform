@@ -258,7 +258,7 @@ export function DataTable<T>({
                         <button
                           type="button"
                           className={cn(
-                            "inline-flex items-center gap-1 hover:text-fg",
+                            "inline-flex cursor-pointer items-center gap-1 hover:text-fg",
                             right && "flex-row-reverse",
                           )}
                           onClick={header.column.getToggleSortingHandler()}

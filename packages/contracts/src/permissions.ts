@@ -14,7 +14,7 @@ export const PERMISSIONS = {
   "roles.manage": "Edit roles and the permission matrix",
   "audit.view": "View the audit log",
   // Stage 1 — masters
-  "catalogue.view": "View the product catalogue",
+  "catalogue.view": "View products",
   "catalogue.manage": "Add and edit categories, qualities, products and SKUs (incl. HSN/GST)",
   "suppliers.view": "View suppliers",
   "suppliers.manage": "Add and edit suppliers",
@@ -25,9 +25,9 @@ export const PERMISSIONS = {
   "customers.credit.manage": "Change credit limits and block/unblock customers",
   "customers.rates.manage": "Set and revise customer rates",
   "rates.bulk_revise": "Run bulk rate revisions",
-  "salesmen.view": "View salesmen",
-  "salesmen.manage": "Add and edit salesmen, their defaults and KYC documents",
-  "commission.manage": "Set salesman commission rules",
+  "salesmen.view": "View agents and brokers",
+  "salesmen.manage": "Add and edit agents and brokers, their defaults and KYC documents",
+  "commission.manage": "Set agent commission rules",
   "pricing.override.approve": "Approve rate overrides beyond the tolerance",
   // Stage 2 — purchase & inventory
   "purchase.view": "View purchase orders, goods receipts, purchase invoices and returns",
@@ -61,7 +61,7 @@ export const PERMISSIONS = {
   "payables.view": "View supplier payments, statements and AP aging",
   "payables.payment.manage": "Record and post supplier payments and allocate them to invoices",
   "payables.payment.approve": "Approve supplier payments above the approval threshold",
-  "commission.view": "View salesman commission entries, payouts and statements",
+  "commission.view": "View agent commission entries, payouts and statements",
   "commission.payout.manage": "Create and pay commission payout batches",
   // Stage 5 — reports, analytics & Today
   "reports.view": "Open reports, the pivot builder and Today (within the user's customer scope)",

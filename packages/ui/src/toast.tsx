@@ -62,13 +62,13 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                   <RToast.Action
                     altText={item.action.label}
                     onClick={item.action.onClick}
-                    className="mt-2 text-sm font-semibold text-primary hover:underline"
+                    className="mt-2 cursor-pointer text-sm font-semibold text-primary hover:underline"
                   >
                     {item.action.label}
                   </RToast.Action>
                 ) : null}
               </div>
-              <RToast.Close aria-label="Dismiss" className="rounded-sm text-fg-3 hover:text-fg">
+              <RToast.Close aria-label="Dismiss" className="cursor-pointer rounded-sm text-fg-3 hover:text-fg">
                 <X className="size-4" />
               </RToast.Close>
             </RToast.Root>

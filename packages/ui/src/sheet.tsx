@@ -71,7 +71,7 @@ export function StatCard({
       {...(onClick ? { type: "button" as const, onClick } : {})}
       className={cn(
         "flex flex-col gap-3 rounded-lg border border-border bg-surface p-5 text-left shadow-card",
-        onClick && "transition-colors hover:border-border-strong",
+        onClick && "cursor-pointer transition-colors hover:border-border-strong",
       )}
     >
       <div className="flex items-center justify-between gap-3">

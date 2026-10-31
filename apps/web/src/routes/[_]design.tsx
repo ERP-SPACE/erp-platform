@@ -319,7 +319,7 @@ function DesignPage() {
                       { label: "GSTIN", value: <Mono>24AAACB1234C1Z5</Mono> },
                       { label: "Credit limit", value: <Money value="100000" /> },
                       { label: "Credit days", value: "30 + 15 grace" },
-                      { label: "Salesman", value: "Ketan Shah" },
+                      { label: "Agent", value: "Ketan Shah" },
                       { label: "Status", value: <Badge tone="success">Active</Badge> },
                     ]}
                   />
