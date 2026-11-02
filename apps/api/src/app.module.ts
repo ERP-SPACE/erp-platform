@@ -9,6 +9,7 @@ import { LoggerModule } from "nestjs-pino";
 import { ZodValidationPipe } from "nestjs-zod";
 import { AuthModule } from "./auth/auth.module.js";
 import { IdempotencyInterceptor } from "./common/idempotency.interceptor.js";
+import { RateLimitInterceptor } from "./common/rate-limit.interceptor.js";
 import { ProblemFilter } from "./common/problem.filter.js";
 import { RequestContextMiddleware } from "./common/request-context.middleware.js";
 import { ENV, type Env } from "./config/env.js";
@@ -97,6 +98,7 @@ export class AppModule implements NestModule {
       providers: [
         { provide: APP_PIPE, useClass: ZodValidationPipe },
         { provide: APP_FILTER, useClass: ProblemFilter },
+        { provide: APP_INTERCEPTOR, useClass: RateLimitInterceptor },
         { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
       ],
     };
