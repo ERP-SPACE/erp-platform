@@ -65,12 +65,17 @@ function findPgError(e: unknown): PgError | undefined {
 }
 
 /**
- * Turns unique (23505) and exclusion (23P01) violations into 409 problems with a field issue,
+ * Turns unique (23505) and exclusion (23P01) violations, and the Go-Live lock, into 409 problems,
  * so the database stays the source of truth (e.g. the Stage 1 overlapping-rate gate) and the
  * user still gets a readable message. Returns undefined for anything else.
  */
 export function fromPgError(e: unknown): AppError | undefined {
   const pg = findPgError(e);
+  // The Go-Live lock is enforced by triggers (migration 0014).
+  const message = (pg as { message?: string } | undefined)?.message ?? "";
+  if (pg?.code === "P0001" && message.startsWith("OPENING_LOCKED:")) {
+    return new AppError(409, "OPENING_LOCKED", message.slice("OPENING_LOCKED:".length).trim());
+  }
   if (!pg || (pg.code !== "23505" && pg.code !== "23P01")) return undefined;
   const known = pg.constraint ? CONSTRAINTS[pg.constraint] : undefined;
   const issues: Problem["issues"] = known ? [known] : undefined;

@@ -2772,6 +2772,166 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/opening": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OpeningController_status"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/opening/templates/{kind}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OpeningController_template"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/opening/uploads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["OpeningController_upload"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/opening/batches/{id}/discard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["OpeningController_discard"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/opening/chapters/{chapter}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["OpeningController_confirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/opening/chapters/{chapter}/not-needed": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["OpeningController_notNeeded"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/opening/cash": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["OpeningController_listCash"];
+        put?: never;
+        post: operations["OpeningController_addCash"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/opening/cash/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["OpeningController_updateCash"];
+        post?: never;
+        delete: operations["OpeningController_removeCash"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/opening/cash/{id}/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["OpeningController_confirmCash"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/opening/go-live": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["OpeningController_goLive"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -5788,6 +5948,140 @@ export interface components {
                 label: string;
                 value: string;
             }[];
+        };
+        OpeningStatusDto: {
+            goLiveDate: string | null;
+            openingDate: string | null;
+            lockedAt: string | null;
+            lockedByName: string | null;
+            lockedBy: string | null;
+            chapters: {
+                /** @enum {string} */
+                chapter: "STOCK" | "AR" | "AP" | "CASH";
+                /** @enum {string} */
+                status: "Empty" | "Draft" | "Confirmed" | "NotNeeded";
+                total: string;
+                booksTotal: string | null;
+                difference: string | null;
+                notNeededReason: string | null;
+                confirmedAt: string | null;
+                confirmedByName: string | null;
+                batches: {
+                    id: string;
+                    /** @enum {string} */
+                    kind: "STOCK_ROLLS" | "STOCK_SKU" | "AR" | "AP";
+                    /** @enum {string} */
+                    status: "Imported" | "Discarded";
+                    fileName: string;
+                    rowCount: number;
+                    total: string;
+                    metres: number | null;
+                    documents: {
+                        id: string;
+                        docNo: string;
+                    }[];
+                    createdAt: string;
+                    createdByName: string | null;
+                    discardedAt: string | null;
+                    discardReason: string | null;
+                    discardable: boolean;
+                }[];
+            }[];
+            cash: {
+                id: string;
+                name: string;
+                /** @enum {string} */
+                kind: "BANK" | "CASH";
+                bankName: string | null;
+                accountLast4: string | null;
+                balance: string;
+                asOf: string;
+                confirmedAt: string | null;
+                confirmedByName: string | null;
+                version: number;
+            }[];
+            blockers: string[];
+        };
+        OpeningUploadDto: {
+            /** @enum {string} */
+            kind: "STOCK_ROLLS" | "STOCK_SKU" | "AR" | "AP";
+            fileName: string;
+            csv: string;
+            /** @default true */
+            dryRun: boolean;
+        };
+        OpeningCheckReportDto: {
+            /** @enum {string} */
+            kind: "STOCK_ROLLS" | "STOCK_SKU" | "AR" | "AP";
+            rowCount: number;
+            okCount: number;
+            errors: {
+                line: number;
+                column?: string;
+                message: string;
+            }[];
+            warnings: {
+                line: number;
+                column?: string;
+                message: string;
+            }[];
+            total: string;
+            metres: number | null;
+            rolls: number | null;
+            preview: {
+                [key: string]: string | number | null;
+            }[];
+            batchId: string | null;
+        };
+        BatchDiscardDto: {
+            reason: string;
+        };
+        ChapterConfirmDto: {
+            booksTotal: string;
+        };
+        ChapterNotNeededDto: {
+            reason: string;
+        };
+        CashAccountDto: {
+            id: string;
+            name: string;
+            /** @enum {string} */
+            kind: "BANK" | "CASH";
+            bankName: string | null;
+            accountLast4: string | null;
+            balance: string;
+            asOf: string;
+            confirmedAt: string | null;
+            confirmedByName: string | null;
+            version: number;
+        };
+        CashAccountInputDto: {
+            name: string;
+            /** @enum {string} */
+            kind: "BANK" | "CASH";
+            bankName?: string | null;
+            accountLast4?: string | null;
+            balance: string;
+            /** Format: date */
+            asOf: string;
+        };
+        CashAccountUpdateDto: {
+            name: string;
+            /** @enum {string} */
+            kind: "BANK" | "CASH";
+            bankName?: string | null;
+            accountLast4?: string | null;
+            balance: string;
+            /** Format: date */
+            asOf: string;
+            version: number;
+        };
+        CashConfirmDto: {
+            version: number;
+        };
+        GoLiveRequestDto: {
+            /** @constant */
+            confirm: "GO LIVE";
         };
     };
     responses: never;
@@ -10804,6 +11098,276 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReportResponseDto"];
+                };
+            };
+        };
+    };
+    OpeningController_status: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpeningStatusDto"];
+                };
+            };
+        };
+    };
+    OpeningController_template: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                kind: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OpeningController_upload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OpeningUploadDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpeningCheckReportDto"];
+                };
+            };
+        };
+    };
+    OpeningController_discard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BatchDiscardDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    OpeningController_confirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chapter: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChapterConfirmDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpeningStatusDto"];
+                };
+            };
+        };
+    };
+    OpeningController_notNeeded: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                chapter: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChapterNotNeededDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpeningStatusDto"];
+                };
+            };
+        };
+    };
+    OpeningController_listCash: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CashAccountDto"][];
+                };
+            };
+        };
+    };
+    OpeningController_addCash: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CashAccountInputDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CashAccountDto"][];
+                };
+            };
+        };
+    };
+    OpeningController_updateCash: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CashAccountUpdateDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CashAccountDto"][];
+                };
+            };
+        };
+    };
+    OpeningController_removeCash: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CashAccountDto"][];
+                };
+            };
+        };
+    };
+    OpeningController_confirmCash: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CashConfirmDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CashAccountDto"][];
+                };
+            };
+        };
+    };
+    OpeningController_goLive: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GoLiveRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OpeningStatusDto"];
                 };
             };
         };
