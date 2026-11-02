@@ -27,7 +27,9 @@ const dir = resolve(root, process.env.BACKUP_DIR ?? ".backups");
 const source = databaseName();
 const scratch = `${source}_restore_drill`;
 
-const dumps = (await readdir(dir)).filter((f) => f.startsWith(`${source}-`) && f.endsWith(".dump")).sort();
+const dumps = (await readdir(dir))
+  .filter((f) => f.startsWith(`${source}-`) && f.endsWith(".dump"))
+  .sort();
 const pickedName = args.includes("--file") ? args[args.indexOf("--file") + 1] : dumps.at(-1);
 if (!pickedName) {
   console.error(`No backups in ${dir}. Run pnpm db:backup first.`);
@@ -48,15 +50,24 @@ console.log(`Restore drill: ${pickedName} → ${scratch}`);
 const hash = createHash("sha256");
 await pipeline(createReadStream(dumpPath), hash);
 const sha = hash.digest("hex");
-check("backup file checksum", sha === manifest.sha256, sha === manifest.sha256 ? undefined : "the file changed since it was written");
+check(
+  "backup file checksum",
+  sha === manifest.sha256,
+  sha === manifest.sha256 ? undefined : "the file changed since it was written",
+);
 
 // 2. Restore into a fresh scratch database owned like the original.
 await psql("postgres", `DROP DATABASE IF EXISTS ${scratch} WITH (FORCE)`);
-const [[owner]] = await psql("postgres", `SELECT pg_get_userbyid(datdba) FROM pg_database WHERE datname = '${source}'`);
+const [[owner]] = await psql(
+  "postgres",
+  `SELECT pg_get_userbyid(datdba) FROM pg_database WHERE datname = '${source}'`,
+);
 await psql("postgres", `CREATE DATABASE ${scratch} OWNER ${owner}`);
 const restoreStarted = Date.now();
 try {
-  await pgTool("pg_restore", ["-d", scratch, "--exit-on-error", "--no-password"], { stdin: createReadStream(dumpPath) });
+  await pgTool("pg_restore", ["-d", scratch, "--exit-on-error", "--no-password"], {
+    stdin: createReadStream(dumpPath),
+  });
   check("pg_restore", true, `${((Date.now() - restoreStarted) / 1000).toFixed(1)} s`);
 } catch (e) {
   check("pg_restore", false, String(e.message).slice(0, 300));
@@ -78,7 +89,11 @@ await safe("row counts", async () => {
     const [[n]] = await q(`SELECT count(*) FROM ${t}`);
     if (Number(n) < (manifest.counts[t] ?? 0)) short.push(`${t} ${n} < ${manifest.counts[t]}`);
   }
-  check("row counts", short.length === 0, short.length ? short.join(", ") : `${COUNTED_TABLES.length} tables`);
+  check(
+    "row counts",
+    short.length === 0,
+    short.length ? short.join(", ") : `${COUNTED_TABLES.length} tables`,
+  );
 });
 
 await safe("migration level", async () => {
@@ -113,7 +128,11 @@ await safe("audit log still append-only", async () => {
   const [[grants]] = await q(`
     SELECT count(*) FROM information_schema.role_table_grants
     WHERE grantee = 'erp_app' AND table_schema = 'audit' AND privilege_type IN ('UPDATE', 'DELETE', 'TRUNCATE')`);
-  check("audit log still append-only", Number(grants) === 0, Number(grants) ? `${grants} write grants for erp_app` : undefined);
+  check(
+    "audit log still append-only",
+    Number(grants) === 0,
+    Number(grants) ? `${grants} write grants for erp_app` : undefined,
+  );
 });
 
 await safe("app role can read", async () => {
@@ -123,8 +142,17 @@ await safe("app role can read", async () => {
 
 // 4. Report and clean up.
 const pass = results.every((r) => r.pass);
-const report = { dump: pickedName, scratch, pass, seconds: Math.round((Date.now() - started) / 100) / 10, at: new Date().toISOString(), results };
+const report = {
+  dump: pickedName,
+  scratch,
+  pass,
+  seconds: Math.round((Date.now() - started) / 100) / 10,
+  at: new Date().toISOString(),
+  results,
+};
 await writeFile(dumpPath.replace(/\.dump$/, ".drill.json"), JSON.stringify(report, null, 2));
 if (!keep) await psql("postgres", `DROP DATABASE IF EXISTS ${scratch} WITH (FORCE)`);
-console.log(`${pass ? "PASS" : "FAIL"}: restore drill ${pass ? "succeeded" : "failed"} in ${report.seconds} s${keep ? ` (kept ${scratch})` : ""}`);
+console.log(
+  `${pass ? "PASS" : "FAIL"}: restore drill ${pass ? "succeeded" : "failed"} in ${report.seconds} s${keep ? ` (kept ${scratch})` : ""}`,
+);
 process.exit(pass ? 0 : 1);

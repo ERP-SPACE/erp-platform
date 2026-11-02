@@ -30,7 +30,10 @@ for (const t of COUNTED_TABLES) {
   const [[n]] = await psql(db, `SELECT count(*) FROM ${t}`);
   counts[t] = Number(n);
 }
-const [[migration]] = await psql(db, "SELECT max(created_at)::text FROM drizzle.__drizzle_migrations");
+const [[migration]] = await psql(
+  db,
+  "SELECT max(created_at)::text FROM drizzle.__drizzle_migrations",
+);
 
 const started = Date.now();
 await pgTool("pg_dump", ["-d", db, "-Fc", "--no-password"], { stdout: createWriteStream(file) });
@@ -52,7 +55,9 @@ await writeFile(resolve(dir, `${base}.json`), JSON.stringify(manifest, null, 2))
 
 // Retention: delete dumps (and their manifests) older than the setting, never the newest.
 const cutoff = Date.now() - retentionDays * 86_400_000;
-const dumps = (await readdir(dir)).filter((f) => f.startsWith(`${db}-`) && f.endsWith(".dump")).sort();
+const dumps = (await readdir(dir))
+  .filter((f) => f.startsWith(`${db}-`) && f.endsWith(".dump"))
+  .sort();
 let pruned = 0;
 for (const f of dumps.slice(0, -1)) {
   const p = resolve(dir, f);
@@ -62,4 +67,12 @@ for (const f of dumps.slice(0, -1)) {
     pruned += 1;
   }
 }
-console.log(JSON.stringify({ ok: true, file: manifest.file, sizeBytes: size, seconds: manifest.seconds, pruned }));
+console.log(
+  JSON.stringify({
+    ok: true,
+    file: manifest.file,
+    sizeBytes: size,
+    seconds: manifest.seconds,
+    pruned,
+  }),
+);

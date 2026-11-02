@@ -27,6 +27,7 @@
     "db:seed:demo:txn": "pnpm --filter @erp/db seed:demo:txn",
     "db:backup": "node scripts/db-backup.mjs",
     "db:restore-drill": "node scripts/db-restore-drill.mjs",
+    "load:test": "node scripts/load-test.mjs",
     "api:gen": "pnpm --filter @erp/api openapi && pnpm --filter @erp/contracts generate"
   },
   "devDependencies": {

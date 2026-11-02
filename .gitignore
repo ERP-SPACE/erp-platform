@@ -20,3 +20,4 @@ apps/web/test-results/
 apps/web/e2e/.auth/
 .storage-e2e/
 .backups/
+.storage-load/

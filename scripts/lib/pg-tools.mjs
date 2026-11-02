@@ -29,7 +29,9 @@ export function pgTool(tool, args, { stdout, stdin } = {}) {
     ? [tool, args.map((a, i) => (args[i - 1] === "-d" ? hostUrl(a) : a))]
     : ["docker", [...COMPOSE, "exec", "-T", "postgres", tool, "-U", "postgres", ...args]];
   return new Promise((resolvePromise, reject) => {
-    const child = spawn(cmd, argv, { stdio: [stdin ? "pipe" : "ignore", stdout ? "pipe" : "pipe", "pipe"] });
+    const child = spawn(cmd, argv, {
+      stdio: [stdin ? "pipe" : "ignore", stdout ? "pipe" : "pipe", "pipe"],
+    });
     let out = "";
     let err = "";
     if (stdout) child.stdout.pipe(stdout);
@@ -38,7 +40,9 @@ export function pgTool(tool, args, { stdout, stdin } = {}) {
     if (stdin) stdin.pipe(child.stdin);
     child.on("error", reject);
     child.on("close", (code) =>
-      code === 0 ? resolvePromise(out) : reject(new Error(`${tool} exited ${code}: ${err.trim().slice(0, 800)}`)),
+      code === 0
+        ? resolvePromise(out)
+        : reject(new Error(`${tool} exited ${code}: ${err.trim().slice(0, 800)}`)),
     );
   });
 }
@@ -54,7 +58,19 @@ function hostUrl(db) {
 
 /** One SQL statement through psql, rows as arrays of strings (tab-separated, no headers). */
 export async function psql(db, statement) {
-  const text = await pgTool("psql", ["-d", db, "-X", "-A", "-t", "-F", "\t", "-v", "ON_ERROR_STOP=1", "-c", statement]);
+  const text = await pgTool("psql", [
+    "-d",
+    db,
+    "-X",
+    "-A",
+    "-t",
+    "-F",
+    "\t",
+    "-v",
+    "ON_ERROR_STOP=1",
+    "-c",
+    statement,
+  ]);
   return text
     .split("\n")
     .filter((l) => l.length)
