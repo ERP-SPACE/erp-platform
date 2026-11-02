@@ -574,12 +574,12 @@ export function CustomerForm({ customer }: { customer?: CustomerDetail }) {
         </FormSection>
 
         <FormSection
-          title="Salesman & groups"
+          title="Agent & groups"
           description={
             isNew ? "Choosing a salesman pre-fills credit terms and starting rates." : undefined
           }
         >
-          <Field label="Salesman" error={errors.salesmanId}>
+          <Field label="Agent" error={errors.salesmanId}>
             {(p) => (
               <Select
                 {...p}

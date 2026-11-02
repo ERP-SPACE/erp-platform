@@ -64,7 +64,7 @@ const DIM_LABEL: Record<PivotDimension, string> = {
   customer: "Customer",
   customerGroup: "Customer group",
   supplier: "Supplier",
-  salesman: "Salesman",
+  salesman: "Agent",
   day: "Day",
   month: "Month",
   quarter: "Quarter",

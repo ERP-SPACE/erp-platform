@@ -94,9 +94,9 @@ function TodayPage() {
     },
     {
       id: "hsn",
-      label: "Add HSN codes to catalogue categories",
+      label: "Add HSN codes to product categories",
       done: summary ? summary.categoriesMissingTax === 0 : false,
-      to: "/catalogue",
+      to: "/products",
     },
     {
       id: "customer",

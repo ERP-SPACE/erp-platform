@@ -37,7 +37,7 @@ export const Route = createFileRoute("/_app/collections/commission/")({
 const summaryColumns: ColumnDef<CommissionSummary, unknown>[] = [
   {
     accessorKey: "salesmanName",
-    header: "Salesman",
+    header: "Agent",
     cell: (c) => <span className="font-medium">{c.getValue() as string}</span>,
   },
   {
@@ -116,7 +116,7 @@ const entryColumns: ColumnDef<CommissionEntryItem, unknown>[] = [
 
 const payoutColumns: ColumnDef<PayoutListItem, unknown>[] = [
   { accessorKey: "payoutNo", header: "Payout", cell: (c) => <Mono>{c.getValue() as string}</Mono> },
-  { accessorKey: "salesmanName", header: "Salesman" },
+  { accessorKey: "salesmanName", header: "Agent" },
   { accessorKey: "upTo", header: "Up to" },
   {
     accessorKey: "net",
@@ -262,7 +262,7 @@ function NewPayoutDialog({
       }
     >
       <div className="grid gap-4 sm:grid-cols-2">
-        <Field label="Salesman" required>
+        <Field label="Agent" required>
           {(p) => (
             <Select
               {...p}

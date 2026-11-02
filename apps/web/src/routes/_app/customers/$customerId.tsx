@@ -241,7 +241,7 @@ function Customer360() {
           },
           {
             value: "salesman",
-            label: "Salesman & commission",
+            label: "Agent & commission",
             content: <SalesmanTab c={c} canView={can(me, "salesmen.view")} />,
           },
           { value: "whatsapp", label: "WhatsApp", content: <WhatsAppTab c={c} /> },
@@ -285,7 +285,7 @@ function OverviewTab({ c }: { c: CustomerDetail }) {
           }
         />
         <StatCard
-          label="Salesman"
+          label="Agent"
           value={c.salesmanName ?? "—"}
           hint={c.accountManagerName ? `Account manager: ${c.accountManagerName}` : undefined}
         />
@@ -594,7 +594,7 @@ function RatesTab({ c, editable }: { c: CustomerDetail; editable: boolean }) {
         ({
           manual: "Manual",
           bulk_revision: "Bulk revision",
-          salesman_default: "Salesman default",
+          salesman_default: "Agent default",
         })[x.getValue() as PartyRateItem["source"]],
     },
     {
@@ -890,20 +890,20 @@ function SalesmanTab({ c, canView }: { c: CustomerDetail; canView: boolean }) {
     ...commissionRulesQuery(c.salesmanId ?? "none"),
     enabled: canView && Boolean(c.salesmanId),
   });
-  if (!c.salesmanId) return <EmptyState title="No salesman" hint="Assign one from Edit." />;
+  if (!c.salesmanId) return <EmptyState title="No agent" hint="Assign one from Edit." />;
   const mine = (rules ?? []).filter((r) => r.customerId === c.id);
   return (
     <Card
-      title={c.salesmanName ?? "Salesman"}
+      title={c.salesmanName ?? "Agent"}
       actions={
         canView ? (
           <Button asChild size="sm" variant="secondary">
             <Link
-              to="/salesmen/$salesmanId"
-              params={{ salesmanId: c.salesmanId }}
+              to="/agents/$agentId"
+              params={{ agentId: c.salesmanId }}
               search={{ tab: "customers" }}
             >
-              Open salesman
+              Open agent
             </Link>
           </Button>
         ) : null

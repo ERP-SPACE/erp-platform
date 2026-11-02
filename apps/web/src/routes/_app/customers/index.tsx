@@ -70,7 +70,7 @@ const columns: ColumnDef<CustomerListItem, unknown>[] = [
   },
   {
     accessorKey: "salesmanName",
-    header: "Salesman",
+    header: "Agent",
     cell: (c) => (c.getValue() as string | null) ?? "—",
   },
   {
@@ -232,7 +232,7 @@ function CustomersPage() {
             {salesmen ? (
               <div className="w-48">
                 <Select
-                  aria-label="Salesman"
+                  aria-label="Agent"
                   value={search.salesman ?? "all"}
                   onValueChange={(v) => setSearch({ salesman: v === "all" ? undefined : v })}
                   options={[

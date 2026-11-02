@@ -15,9 +15,9 @@ import { Route as FloorRouteImport } from './routes/floor'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as Setup2faRouteImport } from './routes/setup-2fa'
 import { Route as AppIndexRouteImport } from './routes/_app/index'
-import { Route as AppCatalogueRouteImport } from './routes/_app/catalogue'
 import { Route as AppCollectionsRouteImport } from './routes/_app/collections'
 import { Route as AppInventoryRouteImport } from './routes/_app/inventory'
+import { Route as AppProductsRouteImport } from './routes/_app/products'
 import { Route as AppPurchaseRouteImport } from './routes/_app/purchase'
 import { Route as AppReportsRouteImport } from './routes/_app/reports'
 import { Route as AppSalesRouteImport } from './routes/_app/sales'
@@ -29,6 +29,8 @@ import { Route as FloorInspectRouteImport } from './routes/floor/inspect'
 import { Route as FloorMapRouteImport } from './routes/floor/map'
 import { Route as FloorPickRouteImport } from './routes/floor/pick'
 import { Route as FloorReceiveRouteImport } from './routes/floor/receive'
+import { Route as AppAgentsIndexRouteImport } from './routes/_app/agents/index'
+import { Route as AppAgentsAgentIdRouteImport } from './routes/_app/agents/$agentId'
 import { Route as AppCollectionsAgingRouteImport } from './routes/_app/collections/aging'
 import { Route as AppCollectionsBlockedRouteImport } from './routes/_app/collections/blocked'
 import { Route as AppCustomersIndexRouteImport } from './routes/_app/customers/index'
@@ -44,8 +46,6 @@ import { Route as AppReportsExportsRouteImport } from './routes/_app/reports/exp
 import { Route as AppReportsPivotRouteImport } from './routes/_app/reports/pivot'
 import { Route as AppSalesIndexRouteImport } from './routes/_app/sales/index'
 import { Route as AppSalesIrnRouteImport } from './routes/_app/sales/irn'
-import { Route as AppSalesmenIndexRouteImport } from './routes/_app/salesmen/index'
-import { Route as AppSalesmenSalesmanIdRouteImport } from './routes/_app/salesmen/$salesmanId'
 import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/index'
 import { Route as AppSettingsAuditRouteImport } from './routes/_app/settings/audit'
 import { Route as AppSettingsCompanyRouteImport } from './routes/_app/settings/company'
@@ -119,11 +119,6 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
-const AppCatalogueRoute = AppCatalogueRouteImport.update({
-  id: '/catalogue',
-  path: '/catalogue',
-  getParentRoute: () => AppRoute,
-} as any)
 const AppCollectionsRoute = AppCollectionsRouteImport.update({
   id: '/collections',
   path: '/collections',
@@ -132,6 +127,11 @@ const AppCollectionsRoute = AppCollectionsRouteImport.update({
 const AppInventoryRoute = AppInventoryRouteImport.update({
   id: '/inventory',
   path: '/inventory',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProductsRoute = AppProductsRouteImport.update({
+  id: '/products',
+  path: '/products',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPurchaseRoute = AppPurchaseRouteImport.update({
@@ -188,6 +188,16 @@ const FloorReceiveRoute = FloorReceiveRouteImport.update({
   id: '/receive',
   path: '/receive',
   getParentRoute: () => FloorRoute,
+} as any)
+const AppAgentsIndexRoute = AppAgentsIndexRouteImport.update({
+  id: '/agents/',
+  path: '/agents/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAgentsAgentIdRoute = AppAgentsAgentIdRouteImport.update({
+  id: '/agents/$agentId',
+  path: '/agents/$agentId',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppCollectionsAgingRoute = AppCollectionsAgingRouteImport.update({
   id: '/aging',
@@ -263,16 +273,6 @@ const AppSalesIrnRoute = AppSalesIrnRouteImport.update({
   id: '/irn',
   path: '/irn',
   getParentRoute: () => AppSalesRoute,
-} as any)
-const AppSalesmenIndexRoute = AppSalesmenIndexRouteImport.update({
-  id: '/salesmen/',
-  path: '/salesmen/',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppSalesmenSalesmanIdRoute = AppSalesmenSalesmanIdRouteImport.update({
-  id: '/salesmen/$salesmanId',
-  path: '/salesmen/$salesmanId',
-  getParentRoute: () => AppRoute,
 } as any)
 const AppSettingsIndexRoute = AppSettingsIndexRouteImport.update({
   id: '/',
@@ -504,9 +504,9 @@ export interface FileRoutesByFullPath {
   '/floor': typeof FloorRouteWithChildren
   '/login': typeof LoginRoute
   '/setup-2fa': typeof Setup2faRoute
-  '/catalogue': typeof AppCatalogueRoute
   '/collections': typeof AppCollectionsRouteWithChildren
   '/inventory': typeof AppInventoryRouteWithChildren
+  '/products': typeof AppProductsRoute
   '/purchase': typeof AppPurchaseRouteWithChildren
   '/reports': typeof AppReportsRouteWithChildren
   '/sales': typeof AppSalesRouteWithChildren
@@ -518,6 +518,7 @@ export interface FileRoutesByFullPath {
   '/floor/pick': typeof FloorPickRoute
   '/floor/receive': typeof FloorReceiveRoute
   '/floor/': typeof FloorIndexRoute
+  '/agents/$agentId': typeof AppAgentsAgentIdRoute
   '/collections/aging': typeof AppCollectionsAgingRoute
   '/collections/blocked': typeof AppCollectionsBlockedRoute
   '/customers/$customerId': typeof AppCustomersCustomerIdRoute
@@ -529,17 +530,16 @@ export interface FileRoutesByFullPath {
   '/reports/exports': typeof AppReportsExportsRoute
   '/reports/pivot': typeof AppReportsPivotRoute
   '/sales/irn': typeof AppSalesIrnRoute
-  '/salesmen/$salesmanId': typeof AppSalesmenSalesmanIdRoute
   '/settings/audit': typeof AppSettingsAuditRoute
   '/settings/company': typeof AppSettingsCompanyRoute
   '/settings/general': typeof AppSettingsGeneralRoute
   '/settings/series': typeof AppSettingsSeriesRoute
   '/settings/users': typeof AppSettingsUsersRoute
+  '/agents/': typeof AppAgentsIndexRoute
   '/customers/': typeof AppCustomersIndexRoute
   '/inventory/': typeof AppInventoryIndexRoute
   '/reports/': typeof AppReportsIndexRoute
   '/sales/': typeof AppSalesIndexRoute
-  '/salesmen/': typeof AppSalesmenIndexRoute
   '/settings/': typeof AppSettingsIndexRoute
   '/collections/$kind/$moneyId': typeof AppCollectionsKindMoneyIdRoute
   '/collections/$kind/new': typeof AppCollectionsKindNewRoute
@@ -583,8 +583,8 @@ export interface FileRoutesByTo {
   '/_design': typeof DesignRoute
   '/login': typeof LoginRoute
   '/setup-2fa': typeof Setup2faRoute
-  '/catalogue': typeof AppCatalogueRoute
   '/collections': typeof AppCollectionsRouteWithChildren
+  '/products': typeof AppProductsRoute
   '/purchase': typeof AppPurchaseRouteWithChildren
   '/suppliers': typeof AppSuppliersRoute
   '/transporters': typeof AppTransportersRoute
@@ -594,6 +594,7 @@ export interface FileRoutesByTo {
   '/floor/receive': typeof FloorReceiveRoute
   '/': typeof AppIndexRoute
   '/floor': typeof FloorIndexRoute
+  '/agents/$agentId': typeof AppAgentsAgentIdRoute
   '/collections/aging': typeof AppCollectionsAgingRoute
   '/collections/blocked': typeof AppCollectionsBlockedRoute
   '/customers/$customerId': typeof AppCustomersCustomerIdRoute
@@ -605,17 +606,16 @@ export interface FileRoutesByTo {
   '/reports/exports': typeof AppReportsExportsRoute
   '/reports/pivot': typeof AppReportsPivotRoute
   '/sales/irn': typeof AppSalesIrnRoute
-  '/salesmen/$salesmanId': typeof AppSalesmenSalesmanIdRoute
   '/settings/audit': typeof AppSettingsAuditRoute
   '/settings/company': typeof AppSettingsCompanyRoute
   '/settings/general': typeof AppSettingsGeneralRoute
   '/settings/series': typeof AppSettingsSeriesRoute
   '/settings/users': typeof AppSettingsUsersRoute
+  '/agents': typeof AppAgentsIndexRoute
   '/customers': typeof AppCustomersIndexRoute
   '/inventory': typeof AppInventoryIndexRoute
   '/reports': typeof AppReportsIndexRoute
   '/sales': typeof AppSalesIndexRoute
-  '/salesmen': typeof AppSalesmenIndexRoute
   '/settings': typeof AppSettingsIndexRoute
   '/collections/$kind/$moneyId': typeof AppCollectionsKindMoneyIdRoute
   '/collections/$kind/new': typeof AppCollectionsKindNewRoute
@@ -662,9 +662,9 @@ export interface FileRoutesById {
   '/floor': typeof FloorRouteWithChildren
   '/login': typeof LoginRoute
   '/setup-2fa': typeof Setup2faRoute
-  '/_app/catalogue': typeof AppCatalogueRoute
   '/_app/collections': typeof AppCollectionsRouteWithChildren
   '/_app/inventory': typeof AppInventoryRouteWithChildren
+  '/_app/products': typeof AppProductsRoute
   '/_app/purchase': typeof AppPurchaseRouteWithChildren
   '/_app/reports': typeof AppReportsRouteWithChildren
   '/_app/sales': typeof AppSalesRouteWithChildren
@@ -677,6 +677,7 @@ export interface FileRoutesById {
   '/floor/receive': typeof FloorReceiveRoute
   '/_app/': typeof AppIndexRoute
   '/floor/': typeof FloorIndexRoute
+  '/_app/agents/$agentId': typeof AppAgentsAgentIdRoute
   '/_app/collections/aging': typeof AppCollectionsAgingRoute
   '/_app/collections/blocked': typeof AppCollectionsBlockedRoute
   '/_app/customers/$customerId': typeof AppCustomersCustomerIdRoute
@@ -688,17 +689,16 @@ export interface FileRoutesById {
   '/_app/reports/exports': typeof AppReportsExportsRoute
   '/_app/reports/pivot': typeof AppReportsPivotRoute
   '/_app/sales/irn': typeof AppSalesIrnRoute
-  '/_app/salesmen/$salesmanId': typeof AppSalesmenSalesmanIdRoute
   '/_app/settings/audit': typeof AppSettingsAuditRoute
   '/_app/settings/company': typeof AppSettingsCompanyRoute
   '/_app/settings/general': typeof AppSettingsGeneralRoute
   '/_app/settings/series': typeof AppSettingsSeriesRoute
   '/_app/settings/users': typeof AppSettingsUsersRoute
+  '/_app/agents/': typeof AppAgentsIndexRoute
   '/_app/customers/': typeof AppCustomersIndexRoute
   '/_app/inventory/': typeof AppInventoryIndexRoute
   '/_app/reports/': typeof AppReportsIndexRoute
   '/_app/sales/': typeof AppSalesIndexRoute
-  '/_app/salesmen/': typeof AppSalesmenIndexRoute
   '/_app/settings/': typeof AppSettingsIndexRoute
   '/_app/collections/$kind/$moneyId': typeof AppCollectionsKindMoneyIdRoute
   '/_app/collections/$kind/new': typeof AppCollectionsKindNewRoute
@@ -746,9 +746,9 @@ export interface FileRouteTypes {
     | '/floor'
     | '/login'
     | '/setup-2fa'
-    | '/catalogue'
     | '/collections'
     | '/inventory'
+    | '/products'
     | '/purchase'
     | '/reports'
     | '/sales'
@@ -760,6 +760,7 @@ export interface FileRouteTypes {
     | '/floor/pick'
     | '/floor/receive'
     | '/floor/'
+    | '/agents/$agentId'
     | '/collections/aging'
     | '/collections/blocked'
     | '/customers/$customerId'
@@ -771,17 +772,16 @@ export interface FileRouteTypes {
     | '/reports/exports'
     | '/reports/pivot'
     | '/sales/irn'
-    | '/salesmen/$salesmanId'
     | '/settings/audit'
     | '/settings/company'
     | '/settings/general'
     | '/settings/series'
     | '/settings/users'
+    | '/agents/'
     | '/customers/'
     | '/inventory/'
     | '/reports/'
     | '/sales/'
-    | '/salesmen/'
     | '/settings/'
     | '/collections/$kind/$moneyId'
     | '/collections/$kind/new'
@@ -825,8 +825,8 @@ export interface FileRouteTypes {
     | '/_design'
     | '/login'
     | '/setup-2fa'
-    | '/catalogue'
     | '/collections'
+    | '/products'
     | '/purchase'
     | '/suppliers'
     | '/transporters'
@@ -836,6 +836,7 @@ export interface FileRouteTypes {
     | '/floor/receive'
     | '/'
     | '/floor'
+    | '/agents/$agentId'
     | '/collections/aging'
     | '/collections/blocked'
     | '/customers/$customerId'
@@ -847,17 +848,16 @@ export interface FileRouteTypes {
     | '/reports/exports'
     | '/reports/pivot'
     | '/sales/irn'
-    | '/salesmen/$salesmanId'
     | '/settings/audit'
     | '/settings/company'
     | '/settings/general'
     | '/settings/series'
     | '/settings/users'
+    | '/agents'
     | '/customers'
     | '/inventory'
     | '/reports'
     | '/sales'
-    | '/salesmen'
     | '/settings'
     | '/collections/$kind/$moneyId'
     | '/collections/$kind/new'
@@ -903,9 +903,9 @@ export interface FileRouteTypes {
     | '/floor'
     | '/login'
     | '/setup-2fa'
-    | '/_app/catalogue'
     | '/_app/collections'
     | '/_app/inventory'
+    | '/_app/products'
     | '/_app/purchase'
     | '/_app/reports'
     | '/_app/sales'
@@ -918,6 +918,7 @@ export interface FileRouteTypes {
     | '/floor/receive'
     | '/_app/'
     | '/floor/'
+    | '/_app/agents/$agentId'
     | '/_app/collections/aging'
     | '/_app/collections/blocked'
     | '/_app/customers/$customerId'
@@ -929,17 +930,16 @@ export interface FileRouteTypes {
     | '/_app/reports/exports'
     | '/_app/reports/pivot'
     | '/_app/sales/irn'
-    | '/_app/salesmen/$salesmanId'
     | '/_app/settings/audit'
     | '/_app/settings/company'
     | '/_app/settings/general'
     | '/_app/settings/series'
     | '/_app/settings/users'
+    | '/_app/agents/'
     | '/_app/customers/'
     | '/_app/inventory/'
     | '/_app/reports/'
     | '/_app/sales/'
-    | '/_app/salesmen/'
     | '/_app/settings/'
     | '/_app/collections/$kind/$moneyId'
     | '/_app/collections/$kind/new'
@@ -1032,13 +1032,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
-    '/_app/catalogue': {
-      id: '/_app/catalogue'
-      path: '/catalogue'
-      fullPath: '/catalogue'
-      preLoaderRoute: typeof AppCatalogueRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/_app/collections': {
       id: '/_app/collections'
       path: '/collections'
@@ -1051,6 +1044,13 @@ declare module '@tanstack/react-router' {
       path: '/inventory'
       fullPath: '/inventory'
       preLoaderRoute: typeof AppInventoryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/products': {
+      id: '/_app/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof AppProductsRouteImport
       parentRoute: typeof AppRoute
     }
     '/_app/purchase': {
@@ -1129,6 +1129,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/floor/receive'
       preLoaderRoute: typeof FloorReceiveRouteImport
       parentRoute: typeof FloorRoute
+    }
+    '/_app/agents/': {
+      id: '/_app/agents/'
+      path: '/agents'
+      fullPath: '/agents/'
+      preLoaderRoute: typeof AppAgentsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/agents/$agentId': {
+      id: '/_app/agents/$agentId'
+      path: '/agents/$agentId'
+      fullPath: '/agents/$agentId'
+      preLoaderRoute: typeof AppAgentsAgentIdRouteImport
+      parentRoute: typeof AppRoute
     }
     '/_app/collections/aging': {
       id: '/_app/collections/aging'
@@ -1234,20 +1248,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/sales/irn'
       preLoaderRoute: typeof AppSalesIrnRouteImport
       parentRoute: typeof AppSalesRoute
-    }
-    '/_app/salesmen/': {
-      id: '/_app/salesmen/'
-      path: '/salesmen'
-      fullPath: '/salesmen/'
-      preLoaderRoute: typeof AppSalesmenIndexRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/_app/salesmen/$salesmanId': {
-      id: '/_app/salesmen/$salesmanId'
-      path: '/salesmen/$salesmanId'
-      fullPath: '/salesmen/$salesmanId'
-      preLoaderRoute: typeof AppSalesmenSalesmanIdRouteImport
-      parentRoute: typeof AppRoute
     }
     '/_app/settings/': {
       id: '/_app/settings/'
@@ -1721,9 +1721,9 @@ const AppSettingsRouteWithChildren = AppSettingsRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
-  AppCatalogueRoute: typeof AppCatalogueRoute
   AppCollectionsRoute: typeof AppCollectionsRouteWithChildren
   AppInventoryRoute: typeof AppInventoryRouteWithChildren
+  AppProductsRoute: typeof AppProductsRoute
   AppPurchaseRoute: typeof AppPurchaseRouteWithChildren
   AppReportsRoute: typeof AppReportsRouteWithChildren
   AppSalesRoute: typeof AppSalesRouteWithChildren
@@ -1731,19 +1731,19 @@ interface AppRouteChildren {
   AppSuppliersRoute: typeof AppSuppliersRoute
   AppTransportersRoute: typeof AppTransportersRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppAgentsAgentIdRoute: typeof AppAgentsAgentIdRoute
   AppCustomersCustomerIdRoute: typeof AppCustomersCustomerIdRoute
   AppCustomersNewRoute: typeof AppCustomersNewRoute
   AppPricingBulkRevisionRoute: typeof AppPricingBulkRevisionRoute
-  AppSalesmenSalesmanIdRoute: typeof AppSalesmenSalesmanIdRoute
+  AppAgentsIndexRoute: typeof AppAgentsIndexRoute
   AppCustomersIndexRoute: typeof AppCustomersIndexRoute
-  AppSalesmenIndexRoute: typeof AppSalesmenIndexRoute
   AppCustomersEditCustomerIdRoute: typeof AppCustomersEditCustomerIdRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppCatalogueRoute: AppCatalogueRoute,
   AppCollectionsRoute: AppCollectionsRouteWithChildren,
   AppInventoryRoute: AppInventoryRouteWithChildren,
+  AppProductsRoute: AppProductsRoute,
   AppPurchaseRoute: AppPurchaseRouteWithChildren,
   AppReportsRoute: AppReportsRouteWithChildren,
   AppSalesRoute: AppSalesRouteWithChildren,
@@ -1751,12 +1751,12 @@ const AppRouteChildren: AppRouteChildren = {
   AppSuppliersRoute: AppSuppliersRoute,
   AppTransportersRoute: AppTransportersRoute,
   AppIndexRoute: AppIndexRoute,
+  AppAgentsAgentIdRoute: AppAgentsAgentIdRoute,
   AppCustomersCustomerIdRoute: AppCustomersCustomerIdRoute,
   AppCustomersNewRoute: AppCustomersNewRoute,
   AppPricingBulkRevisionRoute: AppPricingBulkRevisionRoute,
-  AppSalesmenSalesmanIdRoute: AppSalesmenSalesmanIdRoute,
+  AppAgentsIndexRoute: AppAgentsIndexRoute,
   AppCustomersIndexRoute: AppCustomersIndexRoute,
-  AppSalesmenIndexRoute: AppSalesmenIndexRoute,
   AppCustomersEditCustomerIdRoute: AppCustomersEditCustomerIdRoute,
 }
 

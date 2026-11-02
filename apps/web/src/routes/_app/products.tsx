@@ -33,7 +33,7 @@ import {
 } from "../../lib/masters.js";
 import { can, keys, meQuery, settingsQuery } from "../../lib/queries.js";
 
-export const Route = createFileRoute("/_app/catalogue")({
+export const Route = createFileRoute("/_app/products")({
   validateSearch: z.object({
     category: z.string().optional(),
     product: z.string().optional(),
@@ -120,9 +120,9 @@ function CataloguePage() {
   return (
     <div className="grid gap-6">
       <PageHeader
-        title="Catalogue"
+        title="Products"
         description="Category → quality → GSM → width. Rates are quoted per metre at 44″; other widths derive by ratio."
-        breadcrumbs={[{ label: "Masters" }, { label: "Catalogue" }]}
+        breadcrumbs={[{ label: "Masters" }, { label: "Products" }]}
         actions={
           editable ? (
             <Button variant="primary" icon={Plus} onClick={() => setNewProduct(true)}>

@@ -138,7 +138,7 @@ export function linkTarget(link: { kind: string; id: string }): {
     case "supplier":
       return { to: "/suppliers", search: { id: link.id } };
     case "salesman":
-      return { to: "/salesmen/$salesmanId", params: { salesmanId: link.id } };
+      return { to: "/agents/$agentId", params: { agentId: link.id } };
     case "roll":
       return { to: "/inventory/roll/$rollId", params: { rollId: link.id } };
     case "so":

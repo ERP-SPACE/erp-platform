@@ -54,17 +54,17 @@ import { can, keys, meQuery } from "../../../lib/queries.js";
 
 const TABS = ["profile", "defaults", "customers", "kyc", "blocking"] as const;
 
-export const Route = createFileRoute("/_app/salesmen/$salesmanId")({
+export const Route = createFileRoute("/_app/agents/$agentId")({
   validateSearch: z.object({ tab: z.enum(TABS).optional() }),
-  component: SalesmanPage,
+  component: AgentPage,
 });
 
-function SalesmanPage() {
-  const { salesmanId } = Route.useParams();
+function AgentPage() {
+  const { agentId } = Route.useParams();
   const { tab = "profile" } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
   const { data: me } = useQuery(meQuery);
-  const { data: s } = useQuery(salesmanQuery(salesmanId));
+  const { data: s } = useQuery(salesmanQuery(agentId));
   if (!s) return null;
   const editable = can(me, "salesmen.manage");
 
@@ -87,7 +87,7 @@ function SalesmanPage() {
         }
         breadcrumbs={[
           { label: "Masters" },
-          { label: "Salesmen", href: "/salesmen" },
+          { label: "Agents", href: "/agents" },
           { label: s.name },
         ]}
         renderLink={(crumb, className) => (
@@ -238,7 +238,7 @@ function ProfileTab({ s, editable }: { s: SalesmanDetail; editable: boolean }) {
     >
       <FormSection
         title="Contact"
-        description="Salesmen don't sign in; the office keeps their details here."
+        description="Agents don't sign in; the office keeps their details here."
       >
         {text("name", "Name")}
         {text("email", "Email", { type: "email" })}

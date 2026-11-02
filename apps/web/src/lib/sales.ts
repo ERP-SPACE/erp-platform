@@ -200,7 +200,7 @@ export const CREDIT_REASON_LABEL: Record<CreditCheck["reasons"][number], string>
 };
 export const RATE_SOURCE_LABEL: Record<RateQuote["source"], string> = {
   PARTY_RATE: "Customer rate",
-  SALESMAN_DEFAULT: "Salesman default",
+  SALESMAN_DEFAULT: "Agent default",
   NONE: "No rate on file",
 };
 export const NOTE_REASON_LABEL: Record<string, string> = {

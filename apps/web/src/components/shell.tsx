@@ -61,11 +61,11 @@ const NAV: { heading?: string; items: NavItem[] }[] = [
   {
     heading: "Masters",
     items: [
-      { label: "Catalogue", icon: Package, to: "/catalogue", permission: "catalogue.view" },
+      { label: "Products", icon: Package, to: "/products", permission: "catalogue.view" },
       { label: "Customers", icon: Users, to: "/customers", permission: "customers.view" },
       { label: "Suppliers", icon: Warehouse, to: "/suppliers", permission: "suppliers.view" },
       { label: "Transporters", icon: Truck, to: "/transporters", permission: "transporters.view" },
-      { label: "Salesmen", icon: UserCog, to: "/salesmen", permission: "salesmen.view" },
+      { label: "Agents", icon: UserCog, to: "/agents", permission: "salesmen.view" },
     ],
   },
   {
@@ -618,10 +618,10 @@ const MASTER_PAGES = [
     keywords: ["party", "buyer"],
   },
   {
-    to: "/catalogue",
-    label: "Catalogue",
+    to: "/products",
+    label: "Products",
     permission: "catalogue.view",
-    keywords: ["products", "sku", "gsm", "hsn"],
+    keywords: ["catalogue", "catalog", "sku", "gsm", "hsn"],
   },
   {
     to: "/suppliers",
@@ -636,10 +636,10 @@ const MASTER_PAGES = [
     keywords: ["carrier", "courier"],
   },
   {
-    to: "/salesmen",
-    label: "Salesmen",
+    to: "/agents",
+    label: "Agents",
     permission: "salesmen.view",
-    keywords: ["broker", "agent", "commission"],
+    keywords: ["broker", "salesman", "salesmen", "commission"],
   },
   { to: "/sales", label: "Sales Board", permission: "sales.view", keywords: ["orders", "hold"] },
   { to: "/sales/orders", label: "Sales orders", permission: "sales.view", keywords: ["so"] },
@@ -691,7 +691,7 @@ const RECORD_GROUPS: Record<SearchResult["type"], string> = {
   customer: "Customers",
   supplier: "Suppliers",
   transporter: "Transporters",
-  salesman: "Salesmen",
+  salesman: "Agents",
   product: "Products",
 };
 
@@ -700,12 +700,12 @@ function recordLink(r: SearchResult) {
     case "customer":
       return { to: "/customers/$customerId", params: { customerId: r.id } } as const;
     case "salesman":
-      return { to: "/salesmen/$salesmanId", params: { salesmanId: r.id } } as const;
+      return { to: "/agents/$agentId", params: { agentId: r.id } } as const;
     case "supplier":
       return { to: "/suppliers", search: { id: r.id } } as const;
     case "transporter":
       return { to: "/transporters", search: { id: r.id } } as const;
     case "product":
-      return { to: "/catalogue", search: { product: r.id } } as const;
+      return { to: "/products", search: { product: r.id } } as const;
   }
 }

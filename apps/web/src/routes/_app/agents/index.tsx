@@ -20,7 +20,7 @@ import { useApiErrorToast } from "../../../lib/errors.js";
 import { flattenIssues, nullable, salesmenQuery } from "../../../lib/masters.js";
 import { can, keys, meQuery } from "../../../lib/queries.js";
 
-export const Route = createFileRoute("/_app/salesmen/")({ component: SalesmenPage });
+export const Route = createFileRoute("/_app/agents/")({ component: AgentsPage });
 
 const BLOCK_TONE = { None: "success", All: "danger", Selective: "warning" } as const;
 
@@ -33,7 +33,7 @@ const columns: ColumnDef<SalesmanItem, unknown>[] = [
   },
   {
     accessorKey: "name",
-    header: "Salesman",
+    header: "Agent",
     cell: (c) => <span className="font-medium">{c.getValue() as string}</span>,
   },
   { accessorKey: "phone", header: "Phone", cell: (c) => (c.getValue() as string | null) ?? "—" },
@@ -70,43 +70,43 @@ const columns: ColumnDef<SalesmanItem, unknown>[] = [
   },
 ];
 
-function SalesmenPage() {
+function AgentsPage() {
   const { data: me } = useQuery(meQuery);
   const { data, isLoading } = useQuery(salesmenQuery("all"));
   const navigate = useNavigate();
   const [creating, setCreating] = useState(false);
   const open = (s: SalesmanItem) =>
-    void navigate({ to: "/salesmen/$salesmanId", params: { salesmanId: s.id } });
+    void navigate({ to: "/agents/$agentId", params: { agentId: s.id } });
 
   return (
     <div className="grid gap-6">
       <PageHeader
-        title="Salesmen"
-        description="Salesmen and brokers. Their default terms and rates pre-fill the customers they bring in."
-        breadcrumbs={[{ label: "Masters" }, { label: "Salesmen" }]}
+        title="Agents"
+        description="Agents and brokers. Their default terms and rates pre-fill the customers they bring in."
+        breadcrumbs={[{ label: "Masters" }, { label: "Agents" }]}
         actions={
           can(me, "salesmen.manage") ? (
             <Button variant="primary" icon={Plus} onClick={() => setCreating(true)}>
-              New salesman
+              New agent
             </Button>
           ) : null
         }
       />
       <DataTable
-        caption="Salesmen"
+        caption="Agents"
         data={data ?? []}
         loading={isLoading}
         columns={columns}
         getRowId={(s) => s.id}
         onRowClick={open}
-        searchPlaceholder="Search salesmen"
+        searchPlaceholder="Search agents"
       />
-      {creating ? <NewSalesmanDialog onClose={() => setCreating(false)} /> : null}
+      {creating ? <NewAgentDialog onClose={() => setCreating(false)} /> : null}
     </div>
   );
 }
 
-function NewSalesmanDialog({ onClose }: { onClose: () => void }) {
+function NewAgentDialog({ onClose }: { onClose: () => void }) {
   const queryClient = useQueryClient();
   const toast = useToast();
   const onError = useApiErrorToast();
@@ -129,8 +129,8 @@ function NewSalesmanDialog({ onClose }: { onClose: () => void }) {
       });
       await queryClient.invalidateQueries({ queryKey: keys.salesmen });
       void navigate({
-        to: "/salesmen/$salesmanId",
-        params: { salesmanId: s.id },
+        to: "/agents/$agentId",
+        params: { agentId: s.id },
         search: { tab: "defaults" },
       });
     },
@@ -144,7 +144,7 @@ function NewSalesmanDialog({ onClose }: { onClose: () => void }) {
       open
       width="sm"
       onOpenChange={(o) => !o && onClose()}
-      title="New salesman"
+      title="New agent"
       footer={
         <>
           <Button variant="secondary" onClick={onClose}>
@@ -156,7 +156,7 @@ function NewSalesmanDialog({ onClose }: { onClose: () => void }) {
             busy={save.isPending}
             onClick={() => save.mutate()}
           >
-            Add salesman
+            Add agent
           </Button>
         </>
       }

@@ -22,6 +22,7 @@
     "seed": "tsx --env-file-if-exists=../../.env src/scripts/seed.ts",
     "reset": "tsx --env-file-if-exists=../../.env src/scripts/reset.ts",
     "seed:demo": "tsx --env-file-if-exists=../../.env src/scripts/seed-demo.ts",
+    "seed:demo:txn": "tsx --env-file-if-exists=../../.env src/scripts/seed-demo-transactions.ts",
     "bootstrap": "tsx --env-file-if-exists=../../.env src/scripts/bootstrap.ts"
   },
   "dependencies": {
