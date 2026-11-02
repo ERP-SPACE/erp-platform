@@ -19,3 +19,4 @@ apps/web/test-results/
 .storage/
 apps/web/e2e/.auth/
 .storage-e2e/
+.backups/
