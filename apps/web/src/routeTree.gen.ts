@@ -50,6 +50,7 @@ import { Route as AppSettingsIndexRouteImport } from './routes/_app/settings/ind
 import { Route as AppSettingsAuditRouteImport } from './routes/_app/settings/audit'
 import { Route as AppSettingsCompanyRouteImport } from './routes/_app/settings/company'
 import { Route as AppSettingsGeneralRouteImport } from './routes/_app/settings/general'
+import { Route as AppSettingsOpeningRouteImport } from './routes/_app/settings/opening'
 import { Route as AppSettingsSeriesRouteImport } from './routes/_app/settings/series'
 import { Route as AppSettingsUsersRouteImport } from './routes/_app/settings/users'
 import { Route as AppCollectionsKindIndexRouteImport } from './routes/_app/collections/$kind/index'
@@ -294,6 +295,11 @@ const AppSettingsGeneralRoute = AppSettingsGeneralRouteImport.update({
   path: '/general',
   getParentRoute: () => AppSettingsRoute,
 } as any)
+const AppSettingsOpeningRoute = AppSettingsOpeningRouteImport.update({
+  id: '/opening',
+  path: '/opening',
+  getParentRoute: () => AppSettingsRoute,
+} as any)
 const AppSettingsSeriesRoute = AppSettingsSeriesRouteImport.update({
   id: '/series',
   path: '/series',
@@ -533,6 +539,7 @@ export interface FileRoutesByFullPath {
   '/settings/audit': typeof AppSettingsAuditRoute
   '/settings/company': typeof AppSettingsCompanyRoute
   '/settings/general': typeof AppSettingsGeneralRoute
+  '/settings/opening': typeof AppSettingsOpeningRoute
   '/settings/series': typeof AppSettingsSeriesRoute
   '/settings/users': typeof AppSettingsUsersRoute
   '/agents/': typeof AppAgentsIndexRoute
@@ -609,6 +616,7 @@ export interface FileRoutesByTo {
   '/settings/audit': typeof AppSettingsAuditRoute
   '/settings/company': typeof AppSettingsCompanyRoute
   '/settings/general': typeof AppSettingsGeneralRoute
+  '/settings/opening': typeof AppSettingsOpeningRoute
   '/settings/series': typeof AppSettingsSeriesRoute
   '/settings/users': typeof AppSettingsUsersRoute
   '/agents': typeof AppAgentsIndexRoute
@@ -692,6 +700,7 @@ export interface FileRoutesById {
   '/_app/settings/audit': typeof AppSettingsAuditRoute
   '/_app/settings/company': typeof AppSettingsCompanyRoute
   '/_app/settings/general': typeof AppSettingsGeneralRoute
+  '/_app/settings/opening': typeof AppSettingsOpeningRoute
   '/_app/settings/series': typeof AppSettingsSeriesRoute
   '/_app/settings/users': typeof AppSettingsUsersRoute
   '/_app/agents/': typeof AppAgentsIndexRoute
@@ -775,6 +784,7 @@ export interface FileRouteTypes {
     | '/settings/audit'
     | '/settings/company'
     | '/settings/general'
+    | '/settings/opening'
     | '/settings/series'
     | '/settings/users'
     | '/agents/'
@@ -851,6 +861,7 @@ export interface FileRouteTypes {
     | '/settings/audit'
     | '/settings/company'
     | '/settings/general'
+    | '/settings/opening'
     | '/settings/series'
     | '/settings/users'
     | '/agents'
@@ -933,6 +944,7 @@ export interface FileRouteTypes {
     | '/_app/settings/audit'
     | '/_app/settings/company'
     | '/_app/settings/general'
+    | '/_app/settings/opening'
     | '/_app/settings/series'
     | '/_app/settings/users'
     | '/_app/agents/'
@@ -1275,6 +1287,13 @@ declare module '@tanstack/react-router' {
       path: '/general'
       fullPath: '/settings/general'
       preLoaderRoute: typeof AppSettingsGeneralRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/_app/settings/opening': {
+      id: '/_app/settings/opening'
+      path: '/opening'
+      fullPath: '/settings/opening'
+      preLoaderRoute: typeof AppSettingsOpeningRouteImport
       parentRoute: typeof AppSettingsRoute
     }
     '/_app/settings/series': {
@@ -1702,6 +1721,7 @@ interface AppSettingsRouteChildren {
   AppSettingsAuditRoute: typeof AppSettingsAuditRoute
   AppSettingsCompanyRoute: typeof AppSettingsCompanyRoute
   AppSettingsGeneralRoute: typeof AppSettingsGeneralRoute
+  AppSettingsOpeningRoute: typeof AppSettingsOpeningRoute
   AppSettingsSeriesRoute: typeof AppSettingsSeriesRoute
   AppSettingsUsersRoute: typeof AppSettingsUsersRoute
   AppSettingsIndexRoute: typeof AppSettingsIndexRoute
@@ -1711,6 +1731,7 @@ const AppSettingsRouteChildren: AppSettingsRouteChildren = {
   AppSettingsAuditRoute: AppSettingsAuditRoute,
   AppSettingsCompanyRoute: AppSettingsCompanyRoute,
   AppSettingsGeneralRoute: AppSettingsGeneralRoute,
+  AppSettingsOpeningRoute: AppSettingsOpeningRoute,
   AppSettingsSeriesRoute: AppSettingsSeriesRoute,
   AppSettingsUsersRoute: AppSettingsUsersRoute,
   AppSettingsIndexRoute: AppSettingsIndexRoute,

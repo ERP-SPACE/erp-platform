@@ -1,3 +1,4 @@
+import { resolve } from "node:path";
 import { parseSetting } from "@erp/contracts";
 import { createDb, settings } from "@erp/db";
 import { DOCUMENT_QUEUE, type DocumentJobData, type DocumentJobResult } from "@erp/documents";
@@ -19,6 +20,8 @@ const env = z
     REDIS_URL: z.url(),
     QUEUE_PREFIX: z.string().min(1).default("bull"),
     LOG_LEVEL: z.string().default("info"),
+    /** File storage root (ADR-0023), relative to apps/worker like the API's. */
+    STORAGE_DIR: z.string().default("../../.storage"),
   })
   .parse(process.env);
 
@@ -36,6 +39,11 @@ const QUEUE = "erp-system";
 const connection = new Redis(env.REDIS_URL, { maxRetriesPerRequest: null });
 const redis = new Redis(env.REDIS_URL);
 const db = createDb(env.DATABASE_URL, { max: 3 });
+
+const paths = {
+  root: resolve(import.meta.dirname, "..", "..", ".."),
+  storage: resolve(env.STORAGE_DIR),
+};
 
 const queue = new Queue(QUEUE, { connection, prefix: env.QUEUE_PREFIX });
 // Refresh cadence from Settings → analytics.refresh (single company; restart to apply changes).
@@ -71,7 +79,7 @@ const worker = new Worker(
   async (job) => {
     const handler = handlers[job.name as JobName];
     if (!handler) throw new Error(`No handler for job ${job.name}`);
-    return handler({ db, redis, log: log.child({ job: job.name }) });
+    return handler({ db, redis, log: log.child({ job: job.name }), paths });
   },
   { connection, prefix: env.QUEUE_PREFIX, concurrency: 2 },
 );

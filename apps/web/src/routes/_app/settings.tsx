@@ -1,7 +1,15 @@
 import { PageHeader, cn } from "@erp/ui";
 import { useQuery } from "@tanstack/react-query";
 import { Link, Outlet, createFileRoute, useRouterState } from "@tanstack/react-router";
-import { Building2, Hash, History, type LucideIcon, SlidersHorizontal, Users } from "lucide-react";
+import {
+  Building2,
+  Hash,
+  History,
+  Landmark,
+  type LucideIcon,
+  SlidersHorizontal,
+  Users,
+} from "lucide-react";
 import { can, meQuery } from "../../lib/queries.js";
 
 export const Route = createFileRoute("/_app/settings")({ component: SettingsLayout });
@@ -24,6 +32,12 @@ const PAGES: { to: string; label: string; icon: LucideIcon; permission: string }
     label: "Document series",
     icon: Hash,
     permission: "settings.series.view",
+  },
+  {
+    to: "/settings/opening",
+    label: "Opening balances",
+    icon: Landmark,
+    permission: "opening.manage",
   },
   { to: "/settings/users", label: "Users & roles", icon: Users, permission: "users.view" },
   { to: "/settings/audit", label: "Audit log", icon: History, permission: "audit.view" },

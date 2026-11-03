@@ -28,9 +28,11 @@ import {
   approvalRequired,
   notFound,
   reasonRequired,
+  stepUpRequired,
   validationError,
 } from "../../common/errors.js";
 import { recordTransition, writePostingEvent } from "../../db/ledger.js";
+import { ActorService } from "../../auth/actor.service.js";
 import { UnitOfWork } from "../../db/unit-of-work.js";
 import { updateVersioned } from "../../db/versioning.js";
 import { customerScopeFilter, loadCustomerScope } from "../customers/customer-scope.js";
@@ -69,6 +71,7 @@ export class ReceiptsService {
     private readonly settings: SettingsService,
     private readonly commission: CommissionService,
     private readonly creditRecheck: CreditRecheckQueue,
+    private readonly actors: ActorService,
   ) {}
 
   // ── parties ────────────────────────────────────────────────────────────────
@@ -424,6 +427,8 @@ export class ReceiptsService {
               [{ path: "amount", message: "Ask the Owner to post this payment" }],
             );
           }
+          // The approval itself needs the password again (Q33, step-up).
+          if (!(await this.actors.freshUntil(actor()))) throw stepUpRequired();
           approved = true;
         }
       }

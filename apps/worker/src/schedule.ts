@@ -1,6 +1,7 @@
 /**
  * Job schedules (ADR-0005). Cron patterns are evaluated in IST by BullMQ (tz option).
- * Analytics refresh: every 3 minutes from 08:00 to 20:00, every 30 minutes otherwise.
+ * Analytics refresh: every 3 minutes from 08:00 to 20:00, every 30 minutes otherwise; nightly
+ * backup 01:30; audit archival monthly.
  */
 export const TZ = "Asia/Kolkata";
 
@@ -15,6 +16,8 @@ export const JOB_NAMES = [
   "audit.ensure-partitions",
   "idempotency.purge-expired",
   "analytics.refresh",
+  "db.backup",
+  "audit.archive",
 ] as const;
 export type JobName = (typeof JOB_NAMES)[number];
 
@@ -38,6 +41,9 @@ export function buildSchedule(options: {
     { id: "heartbeat", job: "system.heartbeat", pattern: "* * * * *" },
     { id: "audit-partitions", job: "audit.ensure-partitions", pattern: "15 1 * * *" },
     { id: "idempotency-purge", job: "idempotency.purge-expired", pattern: "5 * * * *" },
+    // Stage 6: nightly backup at 01:30 IST; audit months archived on the 1st at 02:45 (Q45).
+    { id: "db-backup", job: "db.backup", pattern: "30 1 * * *" },
+    { id: "audit-archive", job: "audit.archive", pattern: "45 2 1 * *" },
     {
       id: "analytics-business",
       job: "analytics.refresh",

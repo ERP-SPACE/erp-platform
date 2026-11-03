@@ -45,4 +45,15 @@ describe("job schedule (ADR-0005)", () => {
       expect.arrayContaining(["heartbeat", "audit-partitions", "idempotency-purge"]),
     );
   });
+
+  it("backs up nightly at 01:30 IST and archives audit months on the 1st (Stage 6)", () => {
+    const s = buildSchedule({
+      businessMinutes: 3,
+      offHoursMinutes: 30,
+      businessStartHour: 8,
+      businessEndHour: 20,
+    });
+    expect(s.find((x) => x.job === "db.backup")?.pattern).toBe("30 1 * * *");
+    expect(s.find((x) => x.job === "audit.archive")?.pattern).toBe("45 2 1 * *");
+  });
 });

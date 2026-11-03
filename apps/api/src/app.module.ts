@@ -9,6 +9,7 @@ import { LoggerModule } from "nestjs-pino";
 import { ZodValidationPipe } from "nestjs-zod";
 import { AuthModule } from "./auth/auth.module.js";
 import { IdempotencyInterceptor } from "./common/idempotency.interceptor.js";
+import { RateLimitInterceptor } from "./common/rate-limit.interceptor.js";
 import { ProblemFilter } from "./common/problem.filter.js";
 import { RequestContextMiddleware } from "./common/request-context.middleware.js";
 import { ENV, type Env } from "./config/env.js";
@@ -31,6 +32,7 @@ import { CollectionsModule } from "./modules/collections/collections.module.js";
 import { ComplianceModule } from "./modules/compliance/compliance.module.js";
 import { SalesModule } from "./modules/sales/sales.module.js";
 import { ReportsModule } from "./modules/reports/reports.module.js";
+import { OpeningModule } from "./modules/opening/opening.module.js";
 import { StorageModule } from "./storage/storage.module.js";
 import { RedisModule } from "./redis/redis.module.js";
 
@@ -90,11 +92,13 @@ export class AppModule implements NestModule {
         ComplianceModule,
         CollectionsModule,
         ReportsModule,
+        OpeningModule,
       ],
       controllers: [HealthController],
       providers: [
         { provide: APP_PIPE, useClass: ZodValidationPipe },
         { provide: APP_FILTER, useClass: ProblemFilter },
+        { provide: APP_INTERCEPTOR, useClass: RateLimitInterceptor },
         { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
       ],
     };
