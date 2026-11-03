@@ -310,6 +310,7 @@ function UploadPanel({ kind, disabled }: { kind: OpeningBatchKind; disabled: boo
         <input
           ref={input}
           id={`file-${kind}`}
+          aria-label="CSV file to check"
           type="file"
           accept=".csv,text/csv"
           className="sr-only"

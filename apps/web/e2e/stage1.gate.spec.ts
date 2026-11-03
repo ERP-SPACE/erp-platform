@@ -81,7 +81,7 @@ test("GATE: choosing a salesman pre-fills credit terms and starting rates", asyn
   await expect(page.getByLabel("Credit limit")).toHaveValue("100000");
 
   // Keyboard: focus the salesman select, open it, pick the first salesman.
-  const salesman = page.getByLabel("Salesman");
+  const salesman = page.getByLabel("Agent");
   await salesman.focus();
   await page.keyboard.press("Enter");
   const firstSalesman = page.getByRole("option").nth(1);
@@ -106,7 +106,7 @@ test("GATE: choosing a salesman pre-fills credit terms and starting rates", asyn
 
   // The salesman's default rates became this customer's rates from today.
   await page.getByRole("tab", { name: "Rates" }).click();
-  await expect(page.getByRole("cell", { name: "Salesman default" }).first()).toBeVisible();
+  await expect(page.getByRole("cell", { name: "Agent default" }).first()).toBeVisible();
 });
 
 test("Customer 360 shows every tab", async ({ page }) => {
@@ -120,7 +120,7 @@ test("Customer 360 shows every tab", async ({ page }) => {
     ["Profile & contacts", "Billing"],
     ["Credit", "Credit policy"],
     ["Rates", "44″ calculator"],
-    ["Salesman & commission", /commission rule|Open salesman/i],
+    ["Agent & commission", /commission rule|Open agent/i],
     ["WhatsApp", "Consent"],
     ["Activity", /created the customer|Audit access needed/],
   ];

@@ -109,6 +109,25 @@ Chapters, in order: **Stock → Receivables → Payables → Bank & cash → Rev
    - docs
    - → your sign-off, which opens Stage 7
 
+## Gate results (2026-11-03)
+
+| Check | Result |
+|---|---|
+| Restore drill (`pnpm db:restore-drill`, today's backup) | **PASS 8/8** in 14 s: checksum, restore, row counts, migration level, customer ledger = documents (₹2,88,779.50, opening receivables included), stock value across views, audit log append-only, app role access |
+| PRD UAT §11.7 in the browser (`e2e/stage6.gate.spec.ts`) | Pass: opening stock CSV checked then imported → rolls Mapped at their landed cost (₹4.9896 and ₹5.10 /m) under an OB GRN; a paisa off the books is refused, the exact total confirms; an unknown customer is flagged before import; the customer's ledger shows the old invoice numbers and ₹9,760.50 owed; the first live posting on the go-live date locks the wizard (uploads refused with 409) |
+| UAT §11.7 third item (opening balance journal, Dr = Cr) | Accounting stage (A): bank and cash balances are captured; the `OPENING_*` and `GO_LIVE` posting events carry everything the journal needs |
+| API integration tests | 128 pass: opening balances (UAT §11.7, lock enforced in the database), hardening (230 routes: 401 / 403 / step-up sweeps, IDOR for a scoped user), rate limits, earlier stages |
+| Hardening fix found by the sweep | Approving a supplier payment above ₹5,00,000 now asks for the password (Q33) |
+| Load test, 45 users = 3× peak (`pnpm load:test`, 50,000 rolls) | p95: scan 22 ms, lists 17 ms, credit 19 ms, Today 53 ms, reports 59 ms, writes 45 ms; 4,678 requests, 0 failed ([docs/load](../load/README.md)) |
+| Accessibility (axe, WCAG 2.1 A/AA) | Pass in light and dark on every wizard chapter (fixed: the file chooser had no label) |
+| Domain / contracts / documents / labels / worker unit tests | 146 / 27 / 7 / 5 / 8 pass |
+| Full isolated E2E run (`pnpm test:e2e:isolated`, Stages 0–6 — the PRD §11 regression) | **155 pass** (Stage 1 specs updated for the Products / Agents rename) |
+| Runbook and user guides | `docs/runbook.md`; `docs/user-guide/` (Owner, Sales, Warehouse, Accounts, Purchase) |
+
+**Not covered here (by design):** RDS point-in-time recovery, production Terraform and the production deploy are Stage 7 (ADR-0019). The brief's gate "deploy to prod" therefore moves to Stage 7, after your sign-off on local UAT.
+
+**Open:** Q26 (go-live date), Q27 (NIC sandbox credentials for a real IRN run), Q31 (allocation swap overshoot). Follow-up: a screen to set users' customer scopes (enforced everywhere, settable only in the database today).
+
 ## Questions (defaults are what I will build if you agree)
 
 | # | Question | Default |

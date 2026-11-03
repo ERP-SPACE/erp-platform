@@ -9,10 +9,10 @@ const SCREENS: { name: string; path: string; ready: RegExp | string }[] = [
   { name: "dashboard", path: "/", ready: /^Good (morning|afternoon|evening)/ },
   { name: "customers list", path: "/customers", ready: "Customers" },
   { name: "new customer form", path: "/customers/new", ready: "New customer" },
-  { name: "catalogue", path: "/catalogue", ready: "Catalogue" },
+  { name: "products", path: "/products", ready: "Products" },
   { name: "suppliers", path: "/suppliers", ready: "Suppliers" },
   { name: "transporters", path: "/transporters", ready: "Transporters" },
-  { name: "salesmen", path: "/salesmen", ready: "Salesmen" },
+  { name: "agents", path: "/agents", ready: "Agents" },
   { name: "bulk rate revision", path: "/pricing/bulk-revision", ready: "Bulk rate revision" },
 ];
 
@@ -52,9 +52,9 @@ for (const theme of themes) {
           .analyze();
         expect(r.violations.map((v) => `${tab} · ${v.id}`)).toEqual([]);
       }
-      await page.goto("/salesmen");
+      await page.goto("/agents");
       await page.getByRole("row").nth(1).click();
-      await expect(page).toHaveURL(/\/salesmen\/[0-9a-f-]{36}/);
+      await expect(page).toHaveURL(/\/agents\/[0-9a-f-]{36}/);
       for (const tab of ["Profile", "Defaults", "KYC documents"]) {
         await page.getByRole("tab", { name: new RegExp(`^${tab}`) }).click();
         await page.waitForLoadState("networkidle");
