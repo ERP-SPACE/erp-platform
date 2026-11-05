@@ -6,7 +6,7 @@ import { useState } from "react";
 import { AuthLayout } from "../components/auth-layout.js";
 import { ApiError } from "../lib/api.js";
 import { authClient } from "../lib/auth.js";
-import { keys, meQuery } from "../lib/queries.js";
+import { fetchMe, keys } from "../lib/queries.js";
 import { totpVerifyErrorMessage } from "../lib/totp-errors.js";
 
 const ENROLMENT_STORAGE_KEY = "erp:totp-enrol:v1";
@@ -44,7 +44,7 @@ function clearStoredEnrolment() {
 export const Route = createFileRoute("/setup-2fa")({
   beforeLoad: async ({ context }) => {
     try {
-      await context.queryClient.fetchQuery(meQuery);
+      await fetchMe(context.queryClient);
     } catch (error) {
       if (error instanceof ApiError && error.status === 401) throw redirect({ to: "/login" });
       throw error;

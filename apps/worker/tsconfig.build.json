@@ -3,7 +3,10 @@
   "compilerOptions": {
     "types": [],
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    // Unchanged files are not re-emitted, so `pnpm dev` doesn't restart the worker on startup.
+    "incremental": true,
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
   "include": ["src"]
 }

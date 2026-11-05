@@ -3,6 +3,9 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
+    // Unchanged files are not re-emitted, so `pnpm dev` doesn't restart the API on startup.
+    "incremental": true,
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
     "declaration": false,
     "declarationMap": false
   },

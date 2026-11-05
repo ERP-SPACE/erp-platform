@@ -11,11 +11,29 @@ import type {
 import { QueryClient, queryOptions } from "@tanstack/react-query";
 import { ApiError, api, call } from "./api.js";
 
+/**
+ * The API can't be reached yet: the dev proxy's 503 API_UNAVAILABLE, a gateway error, or a
+ * network failure. Typical right after `pnpm dev`, before the API has finished starting.
+ */
+export function serverUnavailable(error: unknown): boolean {
+  if (error instanceof ApiError)
+    return error.code === "API_UNAVAILABLE" || [502, 503, 504].includes(error.status);
+  return error instanceof TypeError; // fetch() itself failed
+}
+
+/** Retry server errors twice; keep retrying for ~30 s while the server is starting. */
+const retry = (count: number, error: unknown) =>
+  serverUnavailable(error)
+    ? count < 15
+    : !(error instanceof ApiError && error.status < 500) && count < 2;
+const retryDelay = (attempt: number) => Math.min(500 * 2 ** attempt, 2_000);
+
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 30_000,
-      retry: (count, error) => !(error instanceof ApiError && error.status < 500) && count < 2,
+      retry,
+      retryDelay,
       refetchOnWindowFocus: true,
     },
   },
@@ -47,7 +65,25 @@ export const meQuery = queryOptions({
   queryKey: keys.me,
   queryFn: () => call<MeResponse>(() => api.GET("/api/me")),
   staleTime: 60_000,
+  retry,
+  retryDelay,
 });
+
+/**
+ * Loads /me for a route guard, waiting while the server is still starting (right after
+ * `pnpm dev`). It retries itself rather than relying on TanStack Query's retries, which are
+ * cancelled when the last component watching the query unmounts (as happens on first load).
+ */
+export async function fetchMe(client: QueryClient): Promise<MeResponse> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await client.fetchQuery({ ...meQuery, retry: false });
+    } catch (error) {
+      if (!serverUnavailable(error) || attempt >= 15) throw error;
+      await new Promise((r) => setTimeout(r, retryDelay(attempt)));
+    }
+  }
+}
 
 export const settingsQuery = queryOptions({
   queryKey: keys.settings,

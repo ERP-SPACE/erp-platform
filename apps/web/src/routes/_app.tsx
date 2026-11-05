@@ -1,7 +1,7 @@
 import { Outlet, createFileRoute, redirect } from "@tanstack/react-router";
 import { Shell } from "../components/shell.js";
 import { ApiError } from "../lib/api.js";
-import { meQuery } from "../lib/queries.js";
+import { fetchMe } from "../lib/queries.js";
 
 /** Authenticated layout: signed-out → /login; Owner without TOTP → /setup-2fa (ADR-0021). */
 export const Route = createFileRoute("/_app")({
@@ -9,7 +9,7 @@ export const Route = createFileRoute("/_app")({
     try {
       // fetchQuery, not ensureQueryData: after sign-in or TOTP enrolment the cached /me is
       // invalidated, and the guard must see the fresh value, not the stale one.
-      const me = await context.queryClient.fetchQuery(meQuery);
+      const me = await fetchMe(context.queryClient);
       if (me.totpEnrolmentRequired) throw redirect({ to: "/setup-2fa" });
       return { me };
     } catch (error) {

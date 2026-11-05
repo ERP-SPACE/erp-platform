@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { ApiError } from "../lib/api.js";
 import { useOnline } from "../lib/floor.js";
-import { can, meQuery } from "../lib/queries.js";
+import { can, fetchMe, meQuery } from "../lib/queries.js";
 import { useRealtime } from "../lib/realtime.js";
 
 /**
@@ -22,7 +22,7 @@ import { useRealtime } from "../lib/realtime.js";
 export const Route = createFileRoute("/floor")({
   beforeLoad: async ({ context, location }) => {
     try {
-      const me = await context.queryClient.fetchQuery(meQuery);
+      const me = await fetchMe(context.queryClient);
       if (me.totpEnrolmentRequired) throw redirect({ to: "/setup-2fa" });
       return { me };
     } catch (error) {
