@@ -8,7 +8,7 @@
   },
   "scripts": {
     "setup:local": "node scripts/setup-local.mjs",
-    "dev": "turbo run dev --parallel --filter=./apps/*",
+    "dev": "pnpm db:up && turbo run dev --parallel --filter=./apps/*",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
